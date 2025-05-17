@@ -65,4 +65,9 @@ group :test do
 end
 
 gem 'devise'
+
 gem 'pagy'
+
+gem 'sorbet', group: :development
+gem 'sorbet-runtime'
+gem 'tapioca', require: false, group: %i[development test]
