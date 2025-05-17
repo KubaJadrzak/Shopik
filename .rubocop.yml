@@ -1,8 +1,169 @@
-# Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+---
+inherit_mode:
+  merge:
+  - Exclude
+  - Include
 
-# Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+AllCops:
+  EnabledByDefault: true
+  SuggestExtensions: false
+  Exclude:
+    - bin/*
+    - db/schema.rb
+    - vendor/bundle/**/*
+    - tmp/**/*
+    - Gemfile.lock
+    - "**/*.rbi"
+    - sorbet/**/*
+
+Layout/EmptyLines:
+  Enabled: false
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+Layout/EmptyLinesAroundExceptionHandlingKeywords:
+  Enabled: false
+
+Layout/ClassStructure:
+  Enabled: false
+Layout/ExtraSpacing:
+  Enabled: false
+Layout/FirstMethodArgumentLineBreak:
+  Enabled: false
+Layout/RedundantLineBreak:
+  Enabled: false
+Layout/MultilineAssignmentLayout:
+  Enabled: false
+
+Lint/ConstantResolution:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: true
+  Exclude:
+    - config/routes.rb
+    - db/migrate/*
+    - test/**/*
+    - config/**/*
+Metrics/ClassLength:
+  Max: 200
+  Exclude:
+    - db/migrate/*
+    - test/**/*
+    - config/**/*
+Metrics/ModuleLength:
+  Max: 400
+  Exclude:
+    - db/migrate/*
+    - test/**/*
+    - config/**/*
+Metrics/CyclomaticComplexity:
+  Max: 12
+Metrics/MethodLength:
+  Max: 40
+Metrics/PerceivedComplexity:
+  Max: 12
+
+Style/ArrayCoercion:
+  Enabled: false
+Style/Alias:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/ClassMethodsDefinitions:
+  EnforcedStyle: self_class
+Style/ConstantVisibility:
+  Enabled: false
+Style/Copyright:
+  Enabled: false
+Style/DisableCopsWithinSourceCodeDirective:
+  Enabled: false
+Style/InlineComment:
+  Enabled: false
+Style/IpAddresses:
+  Exclude:
+    - test/**/*
+Style/MethodCallWithArgsParentheses:
+  Enabled: false
+Style/ModuleFunction:
+  EnforcedStyle: extend_self
+Style/RedundantArgument:
+  Enabled: false
+Style/StringHashKeys:
+  Enabled: false
+Style/RedundantConstantBase:
+  Enabled: false
+Metrics/ParameterLists:
+  Enabled: false
+Style/MissingElse:
+  Enabled: false
+Style/RequireOrder:
+  Enabled: false
+Lint/NumberConversion:
+  Enabled: false
+Style/Lambda:
+  EnforcedStyle: literal
+Style/AsciiComments:
+  Enabled: false
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
+Lint/AmbiguousOperatorPrecedence:
+  Enabled: false
+Style/ClassVars:
+  Enabled: false
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: false
+Style/LambdaCall:
+  Enabled: false
+Style/DateTime:
+  Enabled: false
+Style/EndlessMethod:
+  Enabled: false
+Lint/MissingSuper:
+  Enabled: false
+Style/ArgumentsForwarding:
+  Enabled: false
+Style/RedundantBegin:
+  Enabled: false
+Style/Semicolon:
+  AllowAsExpressionSeparator: true
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: false
+Style/IfUnlessModifier:
+  Enabled: false
+Layout/EmptyLinesAroundMethodBody:
+  Enabled: false
+Naming/AccessorMethodName:
+  Enabled: false
+Style/CommentedKeyword:
+  Enabled: false
+Bundler/DuplicatedGem:
+  Enabled: false
+Style/DocumentationMethod:
+  Enabled: false
+Style/NumericLiterals:
+  Enabled: false
+Layout/MultilineMethodArgumentLineBreaks:
+  Enabled: false
+Layout/FirstArrayElementLineBreak:
+  Enabled: false
+Naming/MethodParameterName:
+  Enabled: false
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+Style/NumericPredicate:
+  Enabled: false
+Lint/EmptyWhen:
+  Enabled: false
+Style/ArrayFirstLast:
+  Enabled: false

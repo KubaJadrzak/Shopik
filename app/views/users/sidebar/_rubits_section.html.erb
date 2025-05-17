@@ -1,0 +1,10 @@
+<div id="rubits-section" class="content-section" data-user-sidebar-target="rubitsSection">
+  <h4>Your Rubits</h4>
+  <% if @rubits.any? %>
+    <% @rubits.each do |rubit| %>
+      <%= render partial: "rubits/rubit", locals: { rubit: rubit } %>
+    <% end %>
+  <% else %>
+    <p>You haven't posted any rubits yet.</p>
+  <% end %>
+</div>

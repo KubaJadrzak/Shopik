@@ -1,0 +1,10 @@
+<%= form_with(model: Rubit.new, class: "d-flex align-items-center gap-2") do |form| %>
+  <%= form.text_area :content,
+                     rows: 1,
+                     class: "form-control flex-grow-1",
+                     placeholder: "What's on your mind?",
+                     required: true %>
+  <%= form.button type: "submit", class: "btn btn-comment" do %>
+    <i class="bi bi-check2"></i>
+  <% end %>
+<% end %>

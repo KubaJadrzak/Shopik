@@ -1,0 +1,7 @@
+<% if user_signed_in? %>
+  <%= turbo_frame_tag "rubit_#{rubit.id}_like_section" do %>
+    <%= render partial: "likes/like_button", locals: { rubit: rubit } %>
+  <% end %>
+<% else %>
+  <%= render partial: 'likes/like_button', locals: { rubit: rubit } %>
+<% end %>

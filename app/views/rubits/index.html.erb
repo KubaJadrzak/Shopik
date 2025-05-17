@@ -1,10 +1,12 @@
-<h1>Welcome, this is the home page</h1>
-<button
-  type="button"
-  class="btn btn-lg btn-danger"
-  data-bs-toggle="popover"
-  title="Popover title"
-  data-bs-content="Amazing content, right ?"
->
-  Click to toggle popover
-</button>
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+    <div id="new_rubit_form">
+      <%= render "form" %>
+    </div>
+    <hr>
+    <div id="rubits">
+      <%= render partial: "rubits/rubit", collection: @rubits %>
+      <%= render partial: "next_page" %>
+    </div>
+  </div>
+</div>

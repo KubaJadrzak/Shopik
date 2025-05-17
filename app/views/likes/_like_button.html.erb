@@ -1,0 +1,20 @@
+<div class="d-flex align-items-center">
+  <% if current_user && rubit.likes_by_users.include?(current_user) %>
+    <% like = rubit.likes.find { |l| l.user_id == current_user.id } %>
+    <%= button_to like_path(id: like.id, rubit_id: rubit.id), method: :delete, class: "btn btn-sm" do %>
+      <i class="bi bi-heart-fill" style="font-size: 1.5rem; color: #9B111E;"></i>
+    <% end %>
+  <% elsif current_user %>
+    <%= button_to likes_path(rubit_id: rubit.id), method: :post, class: "btn btn-sm" do %>
+      <i class="bi bi-heart" style="font-size: 1.5rem; color: #9B111E;"></i>
+    <% end %>
+  <% else %>
+    <!-- Logged out user, show disabled heart or link to login -->
+    <%= link_to new_user_session_path, class: "btn btn-sm", data: { turbo: false } do %>
+      <i class="bi bi-heart" style="font-size: 1.5rem; color: #9B111E;"></i>
+    <% end %>
+  <% end %>
+  <span class="ms-2 text-muted">
+    <%= rubit.likes_count %> <%= "Like".pluralize(rubit.likes_count) %>
+  </span>
+</div>

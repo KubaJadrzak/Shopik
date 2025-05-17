@@ -1,4 +1,39 @@
-$h1-font-size: 1rem;
+body {
+  background-color: #fdfdff !important;
+}
+
+.navbar-icon {
+  width: 50px;
+  height: 50px;
+}
+
+.btn-primary {
+  background-color: #9B111E !important;
+  border-color: #9B111E !important;
+}
+
+.flash-message {
+  animation: flashMessage 6s forwards;
+}
+@keyframes flashMessage {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-100%);
+  }
+  8% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  92% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-100%);
+  }
+}
+
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
 

@@ -1,0 +1,18 @@
+<div id="flash" class="position-fixed top-0 start-50 translate-middle-x mt-4 z-index-5" style="min-width: 300px;">
+  <% flash.each do |type, message| %>
+    <% bs_alert_class = type == 'notice' ? 'alert-success' : 'alert-warning' %>
+    <% bs_icon = if type == 'notice'
+        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2 text-success" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>'
+      else
+        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2 text-warning" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01M6.062 20h11.876c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>'
+      end %>
+    <div class="alert <%= bs_alert_class %> alert-dismissible fade show d-flex align-items-center shadow flash-message" role="alert"
+         data-controller="flash"
+         data-action="animationend->flash#remove"
+      style="position: relative; left: 50%;">
+      <%= bs_icon.html_safe %>
+      <div><%= message %></div>
+      <button type="button" class="btn-close ms-auto" data-action="flash#remove" aria-label="Close"></button>
+    </div>
+  <% end %>
+</div>

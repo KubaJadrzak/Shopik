@@ -4,5 +4,11 @@
 
 import { application } from "./application"
 
+import FlashController from "./flash_controller"
+application.register("flash", FlashController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import UserSidebarController from "./user_sidebar_controller"
+application.register("user-sidebar", UserSidebarController)
