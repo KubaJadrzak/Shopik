@@ -329,8 +329,31 @@ class Rubit
   end
 
   module GeneratedAssociationMethods
+    sig { params(args: T.untyped, blk: T.untyped).returns(::Rubit) }
+    def build_parent_rubit(*args, &blk); end
+
     sig { params(args: T.untyped, blk: T.untyped).returns(::User) }
     def build_user(*args, &blk); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def child_rubit_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def child_rubit_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `Rubit` class because it declared `has_many :child_rubits`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::Rubit::PrivateCollectionProxy) }
+    def child_rubits; end
+
+    sig { params(value: T::Enumerable[::Rubit]).void }
+    def child_rubits=(value); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(::Rubit) }
+    def create_parent_rubit(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(::Rubit) }
+    def create_parent_rubit!(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(::User) }
     def create_user(*args, &blk); end
@@ -366,8 +389,26 @@ class Rubit
     sig { params(value: T::Enumerable[::User]).void }
     def likes_by_users=(value); end
 
+    sig { returns(T.nilable(::Rubit)) }
+    def parent_rubit; end
+
+    sig { params(value: T.nilable(::Rubit)).void }
+    def parent_rubit=(value); end
+
+    sig { returns(T::Boolean) }
+    def parent_rubit_changed?; end
+
+    sig { returns(T::Boolean) }
+    def parent_rubit_previously_changed?; end
+
+    sig { returns(T.nilable(::Rubit)) }
+    def reload_parent_rubit; end
+
     sig { returns(T.nilable(::User)) }
     def reload_user; end
+
+    sig { void }
+    def reset_parent_rubit; end
 
     sig { void }
     def reset_user; end
@@ -397,6 +438,9 @@ class Rubit
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def arel_columns(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def child_rubits(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def create_with(*args, &blk); end
@@ -499,6 +543,9 @@ class Rubit
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def rewhere(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def root_rubits(*args, &blk); end
 
     sig { params(args: T.untyped).returns(PrivateAssociationRelation) }
     sig { params(blk: T.proc.params(record: ::Rubit).returns(BasicObject)).returns(T::Array[::Rubit]) }
@@ -756,6 +803,51 @@ class Rubit
     sig { void }
     def likes_count_will_change!; end
 
+    sig { returns(T.nilable(::Integer)) }
+    def parent_rubit_id; end
+
+    sig { params(value: T.nilable(::Integer)).returns(T.nilable(::Integer)) }
+    def parent_rubit_id=(value); end
+
+    sig { returns(T::Boolean) }
+    def parent_rubit_id?; end
+
+    sig { returns(T.nilable(::Integer)) }
+    def parent_rubit_id_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def parent_rubit_id_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def parent_rubit_id_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
+    def parent_rubit_id_change; end
+
+    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
+    def parent_rubit_id_change_to_be_saved; end
+
+    sig { params(from: T.nilable(::Integer), to: T.nilable(::Integer)).returns(T::Boolean) }
+    def parent_rubit_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::Integer)) }
+    def parent_rubit_id_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
+    def parent_rubit_id_previous_change; end
+
+    sig { params(from: T.nilable(::Integer), to: T.nilable(::Integer)).returns(T::Boolean) }
+    def parent_rubit_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::Integer)) }
+    def parent_rubit_id_previously_was; end
+
+    sig { returns(T.nilable(::Integer)) }
+    def parent_rubit_id_was; end
+
+    sig { void }
+    def parent_rubit_id_will_change!; end
+
     sig { void }
     def restore_content!; end
 
@@ -770,6 +862,9 @@ class Rubit
 
     sig { void }
     def restore_likes_count!; end
+
+    sig { void }
+    def restore_parent_rubit_id!; end
 
     sig { void }
     def restore_updated_at!; end
@@ -806,6 +901,12 @@ class Rubit
 
     sig { returns(T::Boolean) }
     def saved_change_to_likes_count?; end
+
+    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
+    def saved_change_to_parent_rubit_id; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_parent_rubit_id?; end
 
     sig { returns(T.nilable([::ActiveSupport::TimeWithZone, ::ActiveSupport::TimeWithZone])) }
     def saved_change_to_updated_at; end
@@ -925,6 +1026,9 @@ class Rubit
     def will_save_change_to_likes_count?; end
 
     sig { returns(T::Boolean) }
+    def will_save_change_to_parent_rubit_id?; end
+
+    sig { returns(T::Boolean) }
     def will_save_change_to_updated_at?; end
 
     sig { returns(T::Boolean) }
@@ -943,6 +1047,9 @@ class Rubit
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def arel_columns(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def child_rubits(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def create_with(*args, &blk); end
@@ -1045,6 +1152,9 @@ class Rubit
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def rewhere(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def root_rubits(*args, &blk); end
 
     sig { params(args: T.untyped).returns(PrivateRelation) }
     sig { params(blk: T.proc.params(record: ::Rubit).returns(BasicObject)).returns(T::Array[::Rubit]) }

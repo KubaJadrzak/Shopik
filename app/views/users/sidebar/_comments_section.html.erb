@@ -1,0 +1,10 @@
+<div id="comments-section" class="content-section d-none" data-user-sidebar-target="commentsSection">
+  <h4>Your Comments</h4>
+  <% if @comments.any? %>
+    <% @comments.each do |rubit| %>
+      <%= render partial: "rubits/rubit", locals: { rubit: rubit, with_context: true} %>
+    <% end %>
+  <% else %>
+    <p>You don't have any comments yet.</p>
+  <% end %>
+</div>

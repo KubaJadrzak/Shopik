@@ -4,6 +4,7 @@ export default class extends Controller {
     static targets = [
       "rubitsSection",
       "likesSection",
+      "commentsSection",
     ]
 
 
@@ -15,6 +16,10 @@ export default class extends Controller {
       this.toggleContent("likes")
     }
 
+    toggleCommentsSection() {
+      this.toggleContent("comments")
+    }
+
     toggleContent(contentType) {
       this.hideAllSections()
       const section = this[`${contentType}SectionTarget`]
@@ -24,5 +29,6 @@ export default class extends Controller {
     hideAllSections() {
       this.rubitsSectionTarget.classList.add("d-none")
       this.likesSectionTarget.classList.add("d-none")
+      this.commentsSectionTarget.classList.add("d-none")
   }
 }

@@ -1,11 +1,9 @@
 <div class="row justify-content-center">
   <div class="col-lg-6">
-    <div id="new_rubit_form">
-      <%= render "form" %>
-    </div>
+    <%= render "form", parent_rubit: nil %>
     <hr>
     <div id="rubits">
-      <%= render partial: "rubits/rubit", collection: @rubits %>
+      <%= render partial: "rubit", collection: @rubits %>
       <%= render partial: "next_page" %>
     </div>
   </div>

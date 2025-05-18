@@ -3,7 +3,20 @@ class UsersController < ApplicationController
 
   def account
     @user = current_user
-    @rubits = current_user.rubits.order(created_at: :desc)
-    @liked_rubits = current_user.liked_rubits.order(created_at: :desc)
+
+    @rubits = current_user.rubits
+                          .root_rubits
+                          .includes(:user, :likes, :likes_by_users, :parent_rubit)
+                          .order(created_at: :desc)
+
+    @liked_rubits = current_user.liked_rubits
+                                .includes(:user, :likes, :likes_by_users, :parent_rubit)
+                                .order(created_at: :desc)
+
+    @comments = current_user.rubits
+                            .child_rubits
+                            .includes(:user, :likes, :likes_by_users, :parent_rubit)
+                            .order(created_at: :desc)
+
   end
 end

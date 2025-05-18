@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   }
 
   root to: 'rubits#index', via: %i[get post]
-  resources :rubits, only: %i[create destroy]
+  resources :rubits, only: %i[show create destroy]
   resources :likes, only: %i[create destroy]
 
   get 'account', to: 'users#account', as: 'account'

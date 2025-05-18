@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_17_190549) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_18_115707) do
   create_table "likes", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "rubit_id", null: false
@@ -27,6 +27,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_17_190549) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "likes_count", default: 0, null: false
+    t.integer "parent_rubit_id"
+    t.index ["parent_rubit_id"], name: "index_rubits_on_parent_rubit_id"
     t.index ["user_id"], name: "index_rubits_on_user_id"
   end
 
@@ -46,5 +48,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_17_190549) do
 
   add_foreign_key "likes", "rubits"
   add_foreign_key "likes", "users"
+  add_foreign_key "rubits", "rubits", column: "parent_rubit_id"
   add_foreign_key "rubits", "users"
 end
