@@ -1,0 +1,16 @@
+<div class="row">
+  <% @products.each do |product| %>
+    <div class="col-sl-12 col-md-6 col-lg-4">
+      <div class="card mb-4" style="min-height: 320px;">
+        <img src="<%= image_url('default_product_image.svg') %>"
+               class="card-img-top"
+               alt="<%= product.title %>"
+               style="height: 180px; object-fit: contain;">
+        <div class="card-body">
+          <h6 class="card-title"><%= product.title %></h6>
+          <p class="card-text" style="font-size: 0.9rem;"><%= truncate(product.description, length: 100) %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

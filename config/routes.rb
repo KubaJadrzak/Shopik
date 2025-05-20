@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :rubits, only: %i[show create destroy] do
     resources :likes, only: %i[create destroy]
   end
+  resources :products, only: [:index]
 
   get 'account', to: 'users#account', as: 'account'
 
