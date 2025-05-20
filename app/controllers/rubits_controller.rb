@@ -96,7 +96,7 @@ class RubitsController < ApplicationController
 
   private
 
-  sig { returns(T::Hash[Symbol, T.untyped]) }
+  sig { returns(ActionController::Parameters) }
   def rubit_params
     params.require(:rubit).permit(:content, :parent_rubit_id)
   end

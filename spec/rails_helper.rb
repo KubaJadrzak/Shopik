@@ -9,6 +9,7 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 # return unless Rails.env.test?
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
+require 'factory_bot'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -69,7 +70,12 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-end
 
-require 'factory_bot'
-config.include FactoryBot::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
+
+  config.before(:each) do
+    FactoryBot.reload
+  end
+
+  config.include Devise::Test::IntegrationHelpers, type: :request
+end
