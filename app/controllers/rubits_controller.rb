@@ -77,7 +77,7 @@ class RubitsController < ApplicationController
 
   sig { void }
   def destroy
-    if @rubit&.destroy
+    if T.must(@rubit).destroy
       flash.now[:notice] = 'Rubit deleted'
     else
       flash.now[:alert] = 'Failed to delete Rubit'
@@ -86,7 +86,7 @@ class RubitsController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
-          turbo_stream.remove("rubit_#{@rubit&.id}"),
+          turbo_stream.remove("rubit_#{T.must(@rubit).id}"),
           turbo_stream.replace('flash', partial: 'shared/flash'),
         ]
       end
@@ -101,8 +101,10 @@ class RubitsController < ApplicationController
     params.require(:rubit).permit(:content, :parent_rubit_id)
   end
 
-  sig { void }
+  sig { returns(Rubit) }
   def set_rubit
     @rubit = Rubit.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path, alert: 'Rubit not found.'
   end
 end

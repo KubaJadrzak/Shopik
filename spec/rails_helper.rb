@@ -78,4 +78,9 @@ RSpec.configure do |config|
   end
 
   config.include Devise::Test::IntegrationHelpers, type: :request
+
+  # this was added due to issues with Rails 8 route helpers not being loaded properly in tests: https://github.com/heartcombo/devise/issues/5705
+  config.before(:each, type: :request) do
+    Rails.application.reload_routes_unless_loaded
+  end
 end
