@@ -142,6 +142,8 @@ module Pagy::Backend
   #
   # source://pagy//lib/pagy/backend.rb#39
   def pagy_get_page(vars, force_integer: T.unsafe(nil)); end
+
+  def pagy_countless(collection, vars = {}); end
 end
 
 # Core default: constant for easy access, but mutable for customizable defaults

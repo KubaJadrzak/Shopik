@@ -1,6 +1,11 @@
+# typed: strict
+
 class LikesController < ApplicationController
+  extend T::Sig
+
   before_action :authenticate_user!, only: %i[create destroy]
 
+  sig { void }
   def create
     rubit = Rubit.find(params[:rubit_id])
     rubit.likes.create!(user: current_user)
@@ -12,6 +17,7 @@ class LikesController < ApplicationController
     end
   end
 
+  sig { void }
   def destroy
     rubit = Rubit.find(params[:rubit_id])
     like = rubit.likes.find_by!(user: current_user)

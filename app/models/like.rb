@@ -1,3 +1,5 @@
+# typed: strict
+
 class Like < ApplicationRecord
   belongs_to :rubit, counter_cache: true
   belongs_to :user

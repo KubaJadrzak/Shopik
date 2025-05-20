@@ -1,3 +1,5 @@
+# typed: strict
+
 class Rubit < ApplicationRecord
   belongs_to :user
   belongs_to :parent_rubit, class_name: 'Rubit', optional: true
