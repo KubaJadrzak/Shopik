@@ -7,8 +7,9 @@
       <a class="navbar-brand me-2" href="<%= products_path %>" >
         <%= image_tag "product.png", alt: "Product", class: "navbar-icon" %>
       </a>
-      <a class="navbar-brand me-2" href="<%= cart_path %>" >
-        <%= image_tag "shopping_cart.svg", alt: "Login", class: "navbar-icon" %>
+      <a class="navbar-brand me-2 position-relative" href="<%= cart_path %>">
+        <%= image_tag "shopping_cart.svg", alt: "Cart", class: "navbar-icon" %>
+        <%= render "layouts/cart_count_icon" %>
       </a>
       <a class="navbar-brand" href="<%= account_path %>">
         <%= image_tag "account.svg", alt: "Account", class: "navbar-icon" %>

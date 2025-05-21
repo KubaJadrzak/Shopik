@@ -20,7 +20,10 @@ class CartItemsController < ApplicationController
       if success
         flash.now[:notice] = "#{@product.title} added to cart!"
         format.turbo_stream do
-          render turbo_stream: turbo_stream.replace('flash', partial: 'shared/flash')
+          render turbo_stream: [
+            turbo_stream.replace('flash', partial: 'shared/flash'),
+            turbo_stream.replace('cart-items-count', partial: 'layouts/cart_count_icon'),
+          ]
         end
         format.html { redirect_to products_path, notice: "#{@product.title} added to cart!" }
       else
@@ -44,6 +47,8 @@ class CartItemsController < ApplicationController
             turbo_stream.remove("cart_item_#{@cart_item.id}"),
             turbo_stream.replace('cart_total_price', partial: 'carts/total_price',
                                                      locals:  { price: @cart.total_price },),
+            turbo_stream.replace('cart-items-count',
+                                 partial: 'layouts/cart_count_icon',),
           ]
         end
         format.html { redirect_to cart_path, notice: 'Cart Item deleted' }
