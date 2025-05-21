@@ -4,6 +4,7 @@ class LikesController < ApplicationController
 
   before_action :authenticate_user!, only: %i[create destroy]
   before_action :set_rubit, only: %i[create destroy]
+  before_action :set_like, only: [:destroy]
 
   def create
     like = @rubit.likes.create(user: current_user)
@@ -38,9 +39,7 @@ class LikesController < ApplicationController
   end
 
   def destroy
-    like = @rubit.likes.find_by!(user: current_user)
-
-    if like.destroy
+    if @like.destroy
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
@@ -74,5 +73,9 @@ class LikesController < ApplicationController
 
   def set_rubit
     @rubit = Rubit.find(params[:rubit_id])
+  end
+
+  def set_like
+    @like = @rubit.likes.find_by!(user: current_user)
   end
 end
