@@ -3,11 +3,16 @@
     <a href="/" class="navbar-brand">
       <%= image_tag "logo.svg", alt: "Rubitter Logo", class: "navbar-icon" %>
     </a>
-    <div class="position-absolute start-50 translate-middle-x">
-      <%= link_to "PURCHASE MERCHANDISE", products_path, class: "btn btn-primary" %>
+    <div>
+      <a class="navbar-brand me-2" href="<%= products_path %>" >
+        <%= image_tag "product.png", alt: "Product", class: "navbar-icon" %>
+      </a>
+      <a class="navbar-brand me-2" href="<%= cart_path %>" >
+        <%= image_tag "shopping_cart.svg", alt: "Login", class: "navbar-icon" %>
+      </a>
+      <a class="navbar-brand" href="<%= account_path %>">
+        <%= image_tag "account.svg", alt: "Account", class: "navbar-icon" %>
+      </a>
     </div>
-    <a class="navbar-brand" href="<%= account_path %>">
-      <%= image_tag "account.svg", alt: "Account", class: "navbar-icon" %>
-    </a>
   </div>
 </nav>

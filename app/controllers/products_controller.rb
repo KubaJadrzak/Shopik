@@ -3,7 +3,7 @@
 class ProductsController < ApplicationController
   extend T::Sig
 
-  sig { returns(T.nilable(T::Array[Product])) }
+  sig { returns(T.nilable(Product::PrivateRelation)) }
   attr_accessor :products
 
   sig { void }

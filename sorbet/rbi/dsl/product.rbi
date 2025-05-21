@@ -6,6 +6,7 @@
 
 
 class Product
+  include GeneratedAssociationMethods
   include GeneratedAttributeMethods
   extend CommonRelationMethods
   extend GeneratedRelationMethods
@@ -325,6 +326,36 @@ class Product
 
     sig { returns(::Product) }
     def third_to_last!; end
+  end
+
+  module GeneratedAssociationMethods
+    sig { returns(T::Array[T.untyped]) }
+    def cart_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def cart_ids=(ids); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def cart_item_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def cart_item_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `Product` class because it declared `has_many :cart_items`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::CartItem::PrivateCollectionProxy) }
+    def cart_items; end
+
+    sig { params(value: T::Enumerable[::CartItem]).void }
+    def cart_items=(value); end
+
+    # This method is created by ActiveRecord on the `Product` class because it declared `has_many :carts, through: :cart_items`.
+    # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
+    sig { returns(::Cart::PrivateCollectionProxy) }
+    def carts; end
+
+    sig { params(value: T::Enumerable[::Cart]).void }
+    def carts=(value); end
   end
 
   module GeneratedAssociationRelationMethods

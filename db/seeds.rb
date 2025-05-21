@@ -13,6 +13,7 @@ Rubit.destroy_all
 Like.destroy_all
 User.destroy_all
 Product.destroy_all
+Cart.destroy_all
 
 
 user = []
@@ -24,7 +25,7 @@ user = []
     password_confirmation: 'password',
     username:              "user#{i + 1}",
   )
-
+  new_user.create_cart!
   user << new_user
 end
 

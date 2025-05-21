@@ -64,33 +64,40 @@ class RubitsController < ApplicationController
       flash.now[:alert] = 'Failed to create Rubit'
 
       respond_to do |format|
-        format.html { render :new }
         format.turbo_stream do
           render turbo_stream: [
             turbo_stream.replace('new_rubit_form', partial: 'rubits/form', locals: { parent_rubit: parent_rubit }),
             turbo_stream.replace('flash', partial: 'shared/flash'),
           ]
         end
+        format.html { render :new }
       end
     end
   end
 
   sig { void }
   def destroy
-    if T.must(@rubit).destroy
-      flash.now[:notice] = 'Rubit deleted'
-    else
-      flash.now[:alert] = 'Failed to delete Rubit'
-    end
+    rubit = T.must(@rubit)
 
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: [
-          turbo_stream.remove("rubit_#{T.must(@rubit).id}"),
-          turbo_stream.replace('flash', partial: 'shared/flash'),
-        ]
+    if rubit.destroy
+      respond_to do |format|
+        flash.now[:notice] = 'Rubit deleted'
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.remove("rubit_#{rubit.id}"),
+            turbo_stream.replace('flash', partial: 'shared/flash'),
+          ]
+        end
+        format.html { redirect_to root_path, notice: 'Rubit deleted' }
       end
-      format.html { redirect_to root_path }
+    else
+      respond_to do |format|
+        flash.now[:alert] = 'Failed to delete Rubit'
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace('flash', partial: 'shared/flash')
+        end
+        format.html { redirect_to root_path, alert: 'Failed to delete Rubit' }
+      end
     end
   end
 
@@ -104,7 +111,5 @@ class RubitsController < ApplicationController
   sig { returns(Rubit) }
   def set_rubit
     @rubit = Rubit.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to root_path, alert: 'Rubit not found.'
   end
 end
