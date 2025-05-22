@@ -761,49 +761,49 @@ class OrderItem
     def order_id_will_change!; end
 
     sig { returns(::BigDecimal) }
-    def price; end
+    def price_at_purchase; end
 
     sig { params(value: ::BigDecimal).returns(::BigDecimal) }
-    def price=(value); end
+    def price_at_purchase=(value); end
 
     sig { returns(T::Boolean) }
-    def price?; end
+    def price_at_purchase?; end
 
     sig { returns(T.nilable(::BigDecimal)) }
-    def price_before_last_save; end
+    def price_at_purchase_before_last_save; end
 
     sig { returns(T.untyped) }
-    def price_before_type_cast; end
+    def price_at_purchase_before_type_cast; end
 
     sig { returns(T::Boolean) }
-    def price_came_from_user?; end
+    def price_at_purchase_came_from_user?; end
 
     sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
-    def price_change; end
+    def price_at_purchase_change; end
 
     sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
-    def price_change_to_be_saved; end
+    def price_at_purchase_change_to_be_saved; end
 
     sig { params(from: ::BigDecimal, to: ::BigDecimal).returns(T::Boolean) }
-    def price_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+    def price_at_purchase_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::BigDecimal)) }
-    def price_in_database; end
+    def price_at_purchase_in_database; end
 
     sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
-    def price_previous_change; end
+    def price_at_purchase_previous_change; end
 
     sig { params(from: ::BigDecimal, to: ::BigDecimal).returns(T::Boolean) }
-    def price_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+    def price_at_purchase_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::BigDecimal)) }
-    def price_previously_was; end
+    def price_at_purchase_previously_was; end
 
     sig { returns(T.nilable(::BigDecimal)) }
-    def price_was; end
+    def price_at_purchase_was; end
 
     sig { void }
-    def price_will_change!; end
+    def price_at_purchase_will_change!; end
 
     sig { returns(::Integer) }
     def product_id; end
@@ -908,7 +908,7 @@ class OrderItem
     def restore_order_id!; end
 
     sig { void }
-    def restore_price!; end
+    def restore_price_at_purchase!; end
 
     sig { void }
     def restore_product_id!; end
@@ -944,10 +944,10 @@ class OrderItem
     def saved_change_to_order_id?; end
 
     sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
-    def saved_change_to_price; end
+    def saved_change_to_price_at_purchase; end
 
     sig { returns(T::Boolean) }
-    def saved_change_to_price?; end
+    def saved_change_to_price_at_purchase?; end
 
     sig { returns(T.nilable([::Integer, ::Integer])) }
     def saved_change_to_product_id; end
@@ -1025,7 +1025,7 @@ class OrderItem
     def will_save_change_to_order_id?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_price?; end
+    def will_save_change_to_price_at_purchase?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_product_id?; end

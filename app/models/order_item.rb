@@ -1,13 +1,16 @@
+# typed: strict
+
 class OrderItem < ApplicationRecord
+  extend T::Sig
   belongs_to :order
   belongs_to :product
 
   validates :quantity, presence: true
   validates :price_at_purchase, presence: true
-  validates :shipping_address, presence: true
 
+  sig { returns(BigDecimal) }
   def total_price
-    pricee * quantity
+    price_at_purchase * quantity
   end
 
 end

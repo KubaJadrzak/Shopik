@@ -742,6 +742,61 @@ class Order
     sig { void }
     def order_number_will_change!; end
 
+    sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
+    def ordered_at; end
+
+    sig { params(value: T.nilable(::ActiveSupport::TimeWithZone)).returns(T.nilable(::ActiveSupport::TimeWithZone)) }
+    def ordered_at=(value); end
+
+    sig { returns(T::Boolean) }
+    def ordered_at?; end
+
+    sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
+    def ordered_at_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def ordered_at_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def ordered_at_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
+    def ordered_at_change; end
+
+    sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
+    def ordered_at_change_to_be_saved; end
+
+    sig do
+      params(
+        from: T.nilable(::ActiveSupport::TimeWithZone),
+        to: T.nilable(::ActiveSupport::TimeWithZone)
+      ).returns(T::Boolean)
+    end
+    def ordered_at_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
+    def ordered_at_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
+    def ordered_at_previous_change; end
+
+    sig do
+      params(
+        from: T.nilable(::ActiveSupport::TimeWithZone),
+        to: T.nilable(::ActiveSupport::TimeWithZone)
+      ).returns(T::Boolean)
+    end
+    def ordered_at_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
+    def ordered_at_previously_was; end
+
+    sig { returns(T.nilable(::ActiveSupport::TimeWithZone)) }
+    def ordered_at_was; end
+
+    sig { void }
+    def ordered_at_will_change!; end
+
     sig { returns(::String) }
     def payment_status; end
 
@@ -787,51 +842,6 @@ class Order
     sig { void }
     def payment_status_will_change!; end
 
-    sig { returns(::BigDecimal) }
-    def price; end
-
-    sig { params(value: ::BigDecimal).returns(::BigDecimal) }
-    def price=(value); end
-
-    sig { returns(T::Boolean) }
-    def price?; end
-
-    sig { returns(T.nilable(::BigDecimal)) }
-    def price_before_last_save; end
-
-    sig { returns(T.untyped) }
-    def price_before_type_cast; end
-
-    sig { returns(T::Boolean) }
-    def price_came_from_user?; end
-
-    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
-    def price_change; end
-
-    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
-    def price_change_to_be_saved; end
-
-    sig { params(from: ::BigDecimal, to: ::BigDecimal).returns(T::Boolean) }
-    def price_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::BigDecimal)) }
-    def price_in_database; end
-
-    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
-    def price_previous_change; end
-
-    sig { params(from: ::BigDecimal, to: ::BigDecimal).returns(T::Boolean) }
-    def price_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::BigDecimal)) }
-    def price_previously_was; end
-
-    sig { returns(T.nilable(::BigDecimal)) }
-    def price_was; end
-
-    sig { void }
-    def price_will_change!; end
-
     sig { void }
     def restore_created_at!; end
 
@@ -848,16 +858,19 @@ class Order
     def restore_order_number!; end
 
     sig { void }
-    def restore_payment_status!; end
+    def restore_ordered_at!; end
 
     sig { void }
-    def restore_price!; end
+    def restore_payment_status!; end
 
     sig { void }
     def restore_shipping_address!; end
 
     sig { void }
     def restore_status!; end
+
+    sig { void }
+    def restore_total_price!; end
 
     sig { void }
     def restore_updated_at!; end
@@ -895,17 +908,17 @@ class Order
     sig { returns(T::Boolean) }
     def saved_change_to_order_number?; end
 
+    sig { returns(T.nilable([T.nilable(::ActiveSupport::TimeWithZone), T.nilable(::ActiveSupport::TimeWithZone)])) }
+    def saved_change_to_ordered_at; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_ordered_at?; end
+
     sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_payment_status; end
 
     sig { returns(T::Boolean) }
     def saved_change_to_payment_status?; end
-
-    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
-    def saved_change_to_price; end
-
-    sig { returns(T::Boolean) }
-    def saved_change_to_price?; end
 
     sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_shipping_address; end
@@ -918,6 +931,12 @@ class Order
 
     sig { returns(T::Boolean) }
     def saved_change_to_status?; end
+
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
+    def saved_change_to_total_price; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_total_price?; end
 
     sig { returns(T.nilable([::ActiveSupport::TimeWithZone, ::ActiveSupport::TimeWithZone])) }
     def saved_change_to_updated_at; end
@@ -1020,6 +1039,51 @@ class Order
 
     sig { void }
     def status_will_change!; end
+
+    sig { returns(::BigDecimal) }
+    def total_price; end
+
+    sig { params(value: ::BigDecimal).returns(::BigDecimal) }
+    def total_price=(value); end
+
+    sig { returns(T::Boolean) }
+    def total_price?; end
+
+    sig { returns(T.nilable(::BigDecimal)) }
+    def total_price_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def total_price_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def total_price_came_from_user?; end
+
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
+    def total_price_change; end
+
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
+    def total_price_change_to_be_saved; end
+
+    sig { params(from: ::BigDecimal, to: ::BigDecimal).returns(T::Boolean) }
+    def total_price_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::BigDecimal)) }
+    def total_price_in_database; end
+
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
+    def total_price_previous_change; end
+
+    sig { params(from: ::BigDecimal, to: ::BigDecimal).returns(T::Boolean) }
+    def total_price_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::BigDecimal)) }
+    def total_price_previously_was; end
+
+    sig { returns(T.nilable(::BigDecimal)) }
+    def total_price_was; end
+
+    sig { void }
+    def total_price_will_change!; end
 
     sig { returns(::ActiveSupport::TimeWithZone) }
     def updated_at; end
@@ -1127,16 +1191,19 @@ class Order
     def will_save_change_to_order_number?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_payment_status?; end
+    def will_save_change_to_ordered_at?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_price?; end
+    def will_save_change_to_payment_status?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_shipping_address?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_status?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_total_price?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_updated_at?; end
