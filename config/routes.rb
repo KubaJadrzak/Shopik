@@ -18,6 +18,15 @@ Rails.application.routes.draw do
 
   get 'account', to: 'users#account', as: 'account'
 
+  namespace :espago do
+    namespace :secure_web_page do
+      post 'payments/start_payment', to: 'payments#start_payment'
+      get  'payments/success',       to: 'payments#payment_success'
+      get  'payments/failure',       to: 'payments#payment_failure'
+      post '/back_request',          to: 'espago_back_requests#handle_back_request', as: 'espago_back_request'
+    end
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
