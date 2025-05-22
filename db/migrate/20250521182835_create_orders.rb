@@ -6,8 +6,10 @@ class CreateOrders < ActiveRecord::Migration[8.0]
       t.string :email, null: false
       t.string :status, null: false
       t.string :payment_status, null: false
-      t.decimal :price, precision: 10, scale: 2, null: false
+      t.decimal :total_price, precision: 10, scale: 2, null: false
       t.text :shipping_address, null: false
+      t.datetime :ordered_at
+
       t.timestamps
     end
 
