@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   get 'cart', to: 'carts#show', as: 'cart'
   resources :cart_items, only: [:destroy]
 
+  resources :orders, only: %i[new create show]
+
   get 'account', to: 'users#account', as: 'account'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

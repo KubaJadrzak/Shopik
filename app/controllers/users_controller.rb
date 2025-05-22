@@ -22,5 +22,7 @@ class UsersController < ApplicationController
                 .child_rubits
                 .includes(:user, :likes, :likes_by_users, :parent_rubit)
                 .order(created_at: :desc)
+
+    @orders = current_user.orders.order(created_at: :desc)
   end
 end

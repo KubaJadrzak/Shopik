@@ -9,4 +9,5 @@ class User < ApplicationRecord
   has_many :rubits, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :liked_rubits, through: :likes, source: :rubit
+  has_many :orders, dependent: :destroy
 end

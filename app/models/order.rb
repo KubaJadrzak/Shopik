@@ -9,6 +9,7 @@ class Order < ApplicationRecord
   validates :status, presence: true
   validates :shipping_address, presence: true
   validates :ordered_at, presence: true
+  validate :must_have_order_items
 
   before_create :generate_order_number
 
@@ -27,4 +28,12 @@ class Order < ApplicationRecord
   def generate_order_number
     self.order_number = SecureRandom.hex(10).upcase
   end
+
+  sig { void }
+  def must_have_order_items
+    return unless order_items.empty?
+
+    errors.add(:order_items, 'order must have at least one item.')
+  end
+
 end
