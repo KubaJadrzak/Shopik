@@ -1,14 +1,19 @@
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #fdfdff;">
-  <div class="container-fluid">
-    <div class="d-flex w-100 justify-content-between align-items-center">
-      <a href="/" class="navbar-brand">
-        <%= image_tag "logo.svg", alt: "Rubitter Logo", class: "navbar-icon" %>
+  <div class="container-fluid position-relative d-flex justify-content-between align-items-center">
+    <a href="/" class="navbar-brand">
+      <%= image_tag "logo.svg", alt: "Rubitter Logo", class: "navbar-icon" %>
+    </a>
+    <div>
+      <a class="navbar-brand me-2" href="<%= products_path %>" >
+        <%= image_tag "product.png", alt: "Product", class: "navbar-icon" %>
       </a>
-      <div class="d-flex">
-        <a class="navbar-brand" href="<%= account_path %>" >
-          <%= image_tag "account.svg", alt: "Account", class: "navbar-icon" %>
-        </a>
-      </div>
+      <a class="navbar-brand me-2 position-relative" href="<%= cart_path %>">
+        <%= image_tag "shopping_cart.svg", alt: "Cart", class: "navbar-icon" %>
+        <%= render "layouts/cart_count_icon" %>
+      </a>
+      <a class="navbar-brand" href="<%= account_path %>">
+        <%= image_tag "account.svg", alt: "Account", class: "navbar-icon" %>
+      </a>
     </div>
   </div>
 </nav>

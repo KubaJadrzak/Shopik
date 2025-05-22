@@ -13,7 +13,16 @@ module GeneratedPathHelpersModule
   def account_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def add_to_cart_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def cancel_user_registration_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def cart_item_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def cart_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def destroy_user_session_path(*args); end
@@ -23,6 +32,9 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def edit_user_registration_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def new_order_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_rails_conductor_inbound_email_path(*args); end
@@ -38,6 +50,15 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def new_user_session_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def order_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def orders_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def products_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def rails_blob_path(*args); end

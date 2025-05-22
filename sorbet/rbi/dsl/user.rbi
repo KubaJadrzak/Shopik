@@ -335,6 +335,21 @@ class User
   end
 
   module GeneratedAssociationMethods
+    sig { params(args: T.untyped, blk: T.untyped).returns(::Cart) }
+    def build_cart(*args, &blk); end
+
+    sig { returns(T.nilable(::Cart)) }
+    def cart; end
+
+    sig { params(value: T.nilable(::Cart)).void }
+    def cart=(value); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(::Cart) }
+    def create_cart(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(::Cart) }
+    def create_cart!(*args, &blk); end
+
     sig { returns(T::Array[T.untyped]) }
     def like_ids; end
 
@@ -362,6 +377,26 @@ class User
 
     sig { params(value: T::Enumerable[::Like]).void }
     def likes=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def order_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def order_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :orders`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::Order::PrivateCollectionProxy) }
+    def orders; end
+
+    sig { params(value: T::Enumerable[::Order]).void }
+    def orders=(value); end
+
+    sig { returns(T.nilable(::Cart)) }
+    def reload_cart; end
+
+    sig { void }
+    def reset_cart; end
 
     sig { returns(T::Array[T.untyped]) }
     def rubit_ids; end

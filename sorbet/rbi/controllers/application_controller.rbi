@@ -4,4 +4,13 @@ class ApplicationController < ActionController::Base
 
   sig { returns(String) }
   def root_path; end
+
+  sig { returns(String) }
+  def products_path; end
+
+  sig { returns(String) }
+  def cart_path; end
+
+  sig { params(order: Order).returns(String) }
+  def order_path(order); end
 end

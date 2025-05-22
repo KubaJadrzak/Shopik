@@ -8,6 +8,14 @@ Rails.application.routes.draw do
     resources :likes, only: %i[create destroy]
   end
 
+  resources :products, only: [:index]
+  post 'add_to_cart/:product_id', to: 'cart_items#create', as: 'add_to_cart'
+
+  get 'cart', to: 'carts#show', as: 'cart'
+  resources :cart_items, only: [:destroy]
+
+  resources :orders, only: %i[new create show]
+
   get 'account', to: 'users#account', as: 'account'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -22,4 +30,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  match '*unmatched', to: 'application#raise_not_found', via: :all
 end

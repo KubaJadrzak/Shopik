@@ -27,7 +27,10 @@ class ApplicationController
     include ::Pagy::UrlHelpers
     include ::Pagy::Frontend
     include ::ApplicationHelper
+    include ::CartItemsHelper
+    include ::CartsHelper
     include ::LikesHelper
+    include ::ProductsHelper
     include ::RubitsHelper
     include ::UsersHelper
     include ::DeviseHelper

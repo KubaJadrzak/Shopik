@@ -1,34 +1,62 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = [
-      "rubitsSection",
-      "likesSection",
-      "commentsSection",
-    ]
+  static targets = [
+    "rubitsSection",
+    "likesSection",
+    "commentsSection",
+    "ordersSection"
+  ]
 
+  connect() {
+    this.showSectionFromHash()
+    window.addEventListener("hashchange", this.showSectionFromHash.bind(this))
+  }
 
-    toggleRubitsSection() {
+  disconnect() {
+    window.removeEventListener("hashchange", this.showSectionFromHash.bind(this))
+  }
+
+  showSectionFromHash() {
+    const hash = window.location.hash.replace("#", "")
+    if (["rubits", "likes", "comments", "orders"].includes(hash)) {
+      this.toggleContent(hash)
+    } else {
       this.toggleContent("rubits")
     }
+  }
 
-    toggleLikesSection() {
-      this.toggleContent("likes")
-    }
+  toggleRubitsSection() {
+    this.setHash("rubits")
+  }
 
-    toggleCommentsSection() {
-      this.toggleContent("comments")
-    }
+  toggleLikesSection() {
+    this.setHash("likes")
+  }
 
-    toggleContent(contentType) {
-      this.hideAllSections()
-      const section = this[`${contentType}SectionTarget`]
-      if (section) section.classList.remove("d-none")
-    }
+  toggleCommentsSection() {
+    this.setHash("comments")
+  }
 
-    hideAllSections() {
-      this.rubitsSectionTarget.classList.add("d-none")
-      this.likesSectionTarget.classList.add("d-none")
-      this.commentsSectionTarget.classList.add("d-none")
+  toggleOrdersSection() {
+    this.setHash("orders")
+  }
+
+  setHash(section) {
+    history.pushState(null, "", `#${section}`)
+    this.toggleContent(section)
+  }
+
+  toggleContent(contentType) {
+    this.hideAllSections()
+    const section = this[`${contentType}SectionTarget`]
+    if (section) section.classList.remove("d-none")
+  }
+
+  hideAllSections() {
+    this.rubitsSectionTarget.classList.add("d-none")
+    this.likesSectionTarget.classList.add("d-none")
+    this.commentsSectionTarget.classList.add("d-none")
+    this.ordersSectionTarget.classList.add("d-none")
   }
 }

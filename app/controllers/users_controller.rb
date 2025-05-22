@@ -1,23 +1,9 @@
-# typed: strict
+# typed: true
 
 class UsersController < ApplicationController
-  extend T::Sig
-
-  sig { returns(T.nilable(User)) }
-  attr_accessor :user
-
-  sig { returns(T.nilable(ActiveRecord::Relation)) }
-  attr_accessor :rubits
-
-  sig { returns(T.nilable(ActiveRecord::Relation)) }
-  attr_accessor :liked_rubits
-
-  sig { returns(T.nilable(ActiveRecord::Relation)) }
-  attr_accessor :comments
 
   before_action :authenticate_user!, only: [:account]
 
-  sig { void }
   def account
     @user = current_user
 
@@ -31,11 +17,12 @@ class UsersController < ApplicationController
                     .liked_rubits.includes(:user, :likes, :likes_by_users,
                                            :parent_rubit,).order(created_at: :desc)
 
-
     @comments = current_user
                 .rubits
                 .child_rubits
                 .includes(:user, :likes, :likes_by_users, :parent_rubit)
                 .order(created_at: :desc)
+
+    @orders = current_user.orders.includes(order_items: :product).order(created_at: :desc)
   end
 end
