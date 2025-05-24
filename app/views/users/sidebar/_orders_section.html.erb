@@ -38,16 +38,16 @@
                     <% order.order_items.each do |item| %>
                       <tr>
                         <td><%= item.product.title %></td>
-                        <td>$<%= item.price_at_purchase %></td>
+                        <td><%= number_to_currency(item.price_at_purchase) %></td>
                         <td><%= item.quantity %></td>
-                        <td>$<%= item.total_price %></td>
+                        <td><%= number_to_currency(item.total_price) %></td>
                       </tr>
                     <% end %>
                     <tr>
                       <td><b>Total</b></td>
                       <td></td>
                       <td></td>
-                      <td><b>$<%= order.total_price %></b></td>
+                      <td><b><%= number_to_currency(order.total_price) %></b></td>
                     </tr>
                   </tbody>
                 </table>

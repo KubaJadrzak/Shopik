@@ -52,16 +52,16 @@
               <% @order.order_items.each do |order_item| %>
                 <tr>
                   <td><%= order_item.product.title %></td>
-                  <td>$<%= order_item.price_at_purchase %></td>
+                  <td><%= number_to_currency(order_item.price_at_purchase) %></td>
                   <td><%= order_item.quantity %></td>
-                  <td>$<%= order_item.total_price %></td>
+                  <td><%= number_to_currency(order_item.total_price) %></td>
                 </tr>
               <% end %>
               <tr>
                 <td><b>Total</b></td>
                 <td></td>
                 <td></td>
-                <td><b>$<%= @order.total_price %></b></td>
+                <td><b><%= number_to_currency(@order.total_price) %></b></td>
               </tr>
             </tbody>
           </table>
