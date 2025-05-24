@@ -3,7 +3,7 @@ module Espago
     class ClientService
 
       def initialize
-        base_url = ENV.fetch('ESPAGO_BASE_URL')
+        base_url = ENV.fetch('ESPAGO_SWP_BASE_URL')
         @user = Rails.application.credentials.dig(:espago, :app_id)
         @password = Rails.application.credentials.dig(:espago, :password)
 
@@ -33,30 +33,56 @@ module Espago
         Response.new(success: true, status: response.status, body: response.body)
 
       rescue Faraday::TimeoutError => e
-        Rails.logger.error("Secure Web Page ClientService timeout: #{e.message}")
-        Response.new(success: false, status: :timeout, body: e.message)
+        handle_error(:timeout, e)
 
       rescue Faraday::ConnectionFailed => e
-        Rails.logger.error("Secure Web Page ClientService connection failed: #{e.message}")
-        Response.new(success: false, status: :connection_failed, body: e.message)
+        handle_error(:connection_failed, e)
+
+      rescue Faraday::SSLError => e
+        handle_error(:ssl_error, e)
+
+      rescue Faraday::ClientError => e
+        handle_error_from_response(:client_error, e)
+
+      rescue Faraday::ServerError => e
+        handle_error_from_response(:server_error, e)
+
+      rescue Faraday::ParsingError => e
+        handle_error(:parsing_error, e)
+
+      rescue Faraday::TooManyRequestsError => e
+        handle_error(:too_many_requests, e)
+
+      rescue URI::InvalidURIError, URI::BadURIError => e
+        handle_error(:invalid_uri, e)
 
       rescue Faraday::Error => e
-        if e.respond_to?(:response) && e.response
-          status = e.response[:status]
-          body = e.response[:body]
+        handle_error(:unknown_faraday_error, e)
 
-          Rails.logger.error("Secure Web Page ClientService error status: #{status}, body: #{body}")
-          return Response.new(success: false, status: status, body: body)
-        end
-
-        Rails.logger.error("Secure Web Page ClientService unknown Faraday error: #{e.message}")
-        Response.new(success: false, status: :error, body: e.message)
+      rescue StandardError => e
+        handle_error(:unexpected_error, e)
       end
 
       private
 
       def encoded_credentials
         Base64.strict_encode64("#{@user}:#{@password}")
+      end
+
+      def handle_error(type, exception)
+        Rails.logger.error("Secure Web Page ClientService #{type}: #{exception.message}")
+        Response.new(success: false, status: type, body: exception.message)
+      end
+
+      def handle_error_from_response(default_type, exception)
+        if exception.respond_to?(:response) && exception.response
+          status = exception.response[:status]
+          body = exception.response[:body]
+          Rails.logger.error("Secure Web Page ClientService error status: #{status}, body: #{body}")
+          Response.new(success: false, status: status, body: body)
+        else
+          handle_error(default_type, exception)
+        end
       end
     end
   end

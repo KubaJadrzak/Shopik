@@ -17,7 +17,7 @@ class OrdersController < ApplicationController
       shipping_address: order_params[:shipping_address],
       total_price:      current_user.cart.total_price,
       status:           'New',
-      payment_status:   'New',
+      payment_status:   'new',
       ordered_at:       Time.current,
     )
     @order.build_order_items_from_cart(current_user.cart)
