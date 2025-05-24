@@ -13,4 +13,7 @@ class ApplicationController < ActionController::Base
 
   sig { params(order: Order).returns(String) }
   def order_path(order); end
+
+  sig { params(order: Order).returns(String) }
+  def espago_secure_web_page_start_payment_path(order); end
 end

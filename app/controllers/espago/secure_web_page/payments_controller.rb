@@ -6,7 +6,7 @@ module Espago
       before_action :authenticate_user!
 
       def start_payment
-        @order = Order.find(params[:order_id])
+        @order = Order.find(params[:id])
 
         payment_service = Espago::SecureWebPage::PaymentService.new(@order)
         response = payment_service.create_payment

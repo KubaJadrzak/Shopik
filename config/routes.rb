@@ -20,10 +20,10 @@ Rails.application.routes.draw do
 
   namespace :espago do
     namespace :secure_web_page do
-      post 'payments/start_payment', to: 'payments#start_payment'
+      get 'payments/:id/start_payment', to: 'payments#start_payment', as: 'start_payment'
       get  'payments/success',       to: 'payments#payment_success'
       get  'payments/failure',       to: 'payments#payment_failure'
-      post '/back_request',          to: 'espago_back_requests#handle_back_request', as: 'espago_back_request'
+      post '/back_request',          to: 'back_requests#handle_back_request', as: 'back_request'
     end
   end
 

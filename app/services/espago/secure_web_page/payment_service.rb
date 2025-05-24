@@ -8,7 +8,7 @@ module Espago
       end
 
       def create_payment
-        base_host = ENV.fetch('APP_HOST_URL')
+        app_host = ENV.fetch('APP_HOST_URL')
         session_id = SecureRandom.hex(16)
         amount = @order.total_price
         ts = Time.now.to_i
@@ -34,8 +34,8 @@ module Espago
             session_id:   session_id,
             title:        "Order ##{@order.order_number}",
             checksum:     checksum,
-            positive_url: "#{base_host}/payments/payment_success?order_number=#{@order.order_number}",
-            negative_url: "#{base_host}/payments/payment_failure?order_number=#{@order.order_number}",
+            positive_url: "#{app_host}/espago/secure_web_page/payments/success?order_number=#{@order.order_number}",
+            negative_url: "#{app_host}/espago/secure_web_page/payments/failure?order_number=#{@order.order_number}",
           },
         )
 

@@ -34,16 +34,16 @@ module GeneratedPathHelpersModule
   def edit_user_registration_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_secure_web_page_espago_back_request_path(*args); end
+  def espago_secure_web_page_back_request_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def espago_secure_web_page_payments_failure_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_secure_web_page_payments_start_payment_path(*args); end
+  def espago_secure_web_page_payments_success_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_secure_web_page_payments_success_path(*args); end
+  def espago_secure_web_page_start_payment_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_order_path(*args); end

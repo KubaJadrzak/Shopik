@@ -81,3 +81,5 @@ gem 'faraday'
 gem 'base64'
 
 gem 'digest'
+
+gem 'dotenv-rails', groups: %i[development test]

@@ -24,7 +24,7 @@ class OrdersController < ApplicationController
 
     if @order.save
       current_user.cart.cart_items.destroy_all
-      redirect_to order_path(@order), notice: 'Order placed successfully!'
+      redirect_to espago_secure_web_page_start_payment_path(@order)
     else
       flash.now[:alert] = 'There was a problem placing your order.'
       render :new, status: :unprocessable_entity

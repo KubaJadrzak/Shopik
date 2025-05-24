@@ -1,17 +1,17 @@
 module Espago
   module SecureWebPage
     class ClientService
-      BASE_URL = 'https://sandbox.espago.com'
+
 
       def initialize
+        base_url = ENV.fetch('ESPAGO_BASE_URL')
         @user = Rails.application.credentials.dig(:espago, :app_id)
         @password = Rails.application.credentials.dig(:espago, :password)
 
-        @conn = Faraday.new(url: BASE_URL) do |faraday|
+        @conn = Faraday.new(url: base_url) do |faraday|
           faraday.request :json
           faraday.response :raise_error
           faraday.response :json
-          faraday.response :logger if Rails.env.development?
           faraday.adapter Faraday.default_adapter
         end
       end
@@ -30,11 +30,11 @@ module Espago
           status = e.response[:status]
           body = e.response[:body]
 
-          Rails.logger.error("EspagoClientService status: #{status}, body: #{body}")
+          Rails.logger.error("Secure Web Page ClientService status: #{status}, body: #{body}")
           return Response.new(success: false, status: status, body: body)
         end
 
-        Rails.logger.error("EspagoClientService connection issue: #{e.message}")
+        Rails.logger.error("Secure Web Page ClientService status: #{e.message}")
         Response.new(success: false, status: :connection_failed, body: e.message)
       end
 
