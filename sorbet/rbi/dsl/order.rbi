@@ -797,6 +797,51 @@ class Order
     sig { void }
     def ordered_at_will_change!; end
 
+    sig { returns(T.nilable(::String)) }
+    def payment_id; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def payment_id=(value); end
+
+    sig { returns(T::Boolean) }
+    def payment_id?; end
+
+    sig { returns(T.nilable(::String)) }
+    def payment_id_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def payment_id_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def payment_id_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def payment_id_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def payment_id_change_to_be_saved; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def payment_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def payment_id_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def payment_id_previous_change; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def payment_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def payment_id_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def payment_id_was; end
+
+    sig { void }
+    def payment_id_will_change!; end
+
     sig { returns(::String) }
     def payment_status; end
 
@@ -861,6 +906,9 @@ class Order
     def restore_ordered_at!; end
 
     sig { void }
+    def restore_payment_id!; end
+
+    sig { void }
     def restore_payment_status!; end
 
     sig { void }
@@ -913,6 +961,12 @@ class Order
 
     sig { returns(T::Boolean) }
     def saved_change_to_ordered_at?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_payment_id; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_payment_id?; end
 
     sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_payment_status; end
@@ -1192,6 +1246,9 @@ class Order
 
     sig { returns(T::Boolean) }
     def will_save_change_to_ordered_at?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_payment_id?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_payment_status?; end

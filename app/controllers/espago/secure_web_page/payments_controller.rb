@@ -8,7 +8,7 @@ module Espago
       def start_payment
         @order = Order.find(params[:id])
 
-        payment_service = Espago::SecureWebPage::PaymentService.new(@order)
+        payment_service = Espago::SecureWebPageService.new(@order)
         response = payment_service.create_payment
 
         if response.success?
@@ -17,7 +17,7 @@ module Espago
           redirect_to data['redirect_url'], allow_other_host: true
 
         else
-          @order.update(payment_status: response.status.to_s, status: 'Payment Error')
+          @order.update_status_by_payment_status(response.status.to_s)
           Rails.logger.warn("Payment rejected with status #{response.status} for Order ##{@order.id}")
           redirect_to order_path(@order),
                       alert: 'We could not process your payment due to a technical issue'
