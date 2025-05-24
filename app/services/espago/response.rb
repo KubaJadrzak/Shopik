@@ -1,3 +1,5 @@
+# typed: true
+
 module Espago
   class Response
     attr_reader :success, :status, :body

@@ -1,3 +1,5 @@
+# typed: true
+
 module Espago
   class PaymentStatusService
     def initialize(payment_id:)

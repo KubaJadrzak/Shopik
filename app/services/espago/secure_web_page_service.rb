@@ -1,3 +1,5 @@
+# typed: true
+
 require 'digest'
 
 module Espago
