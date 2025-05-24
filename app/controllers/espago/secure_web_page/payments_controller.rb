@@ -15,9 +15,12 @@ module Espago
           data = response.body
           @order.update(payment_id: data['id'])
           redirect_to data['redirect_url'], allow_other_host: true
+
         else
-          @order.update(payment_status: 'connection failed', status: 'Connection Failed')
-          redirect_to order_path(@order), alert: 'We are experiencing an issue with payment service'
+          @order.update(payment_status: response.status.to_s, status: 'Payment Failed')
+          Rails.logger.warn("Payment rejected with status #{response.status} for Order ##{@order.id}")
+          redirect_to order_path(@order),
+                      alert: 'We could not process your payment due to a technical issue'
         end
       end
 

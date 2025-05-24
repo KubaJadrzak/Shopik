@@ -34,7 +34,7 @@ class OrdersController < ApplicationController
   private
 
   def set_order
-    @order = Order.find_by!(id: params[:id])
+    @order = Order.includes(order_items: :product).find_by!(id: params[:id])
   end
 
   def order_params

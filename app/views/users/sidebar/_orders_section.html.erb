@@ -15,9 +15,7 @@
                   </div>
                   <div class="col-lg-6 d-flex justify-content-between align-items-center">
                     <strong>Payment Status:</strong>
-                    <span class="badge <%= payment_status_badge_class(order.payment_status) %> w-50 text-center">
-                      <%= order.payment_status.presence&.capitalize || "Unknown" %>
-                    </span>
+                    <span class="badge bg-secondary w-50 text-center"><%= order.payment_status.presence.capitalize %></span>
                   </div>
                 </div>
               </div>
