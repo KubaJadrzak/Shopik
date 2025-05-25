@@ -1,8 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe 'Rubit System Test', type: :system do
+RSpec.describe 'Rubit Like System Test', type: :system do
   let(:user) { create(:user) }
-  let!(:rubit) { create(:rubit, content: 'This is an example Rubit number 1') }
+  let(:other_user) { create(:user) }
+  let!(:rubit) { create(:rubit, content: 'This is an example Rubit number 1', user: other_user) }
 
   context 'Rubit Creation Form' do
     context 'when user is authorized' do
@@ -35,7 +36,7 @@ RSpec.describe 'Rubit System Test', type: :system do
     end
 
     context 'when user is unauthorized' do
-      it "doesn't create rubit and redirects to login page and shows error message" do
+      it "doesn't create rubit with valid content and redirects to login page and shows error message" do
         visit root_path
 
         within '#new_rubit_form' do
@@ -53,9 +54,10 @@ RSpec.describe 'Rubit System Test', type: :system do
       sign_in user
     end
 
-    it 'is visible when Rubit does belong to current user' do
+    it 'is visible only when Rubit does belong to current user' do
       visit root_path
       expect(page).to have_content('This is an example Rubit number 1')
+      expect(page).not_to have_selector('button.btn.btn-sm.text-dark.p-1', wait: 3)
 
       within '#new_rubit_form' do
         fill_in 'rubit_content', with: 'This is my rubit'
@@ -65,13 +67,6 @@ RSpec.describe 'Rubit System Test', type: :system do
       expect(page).to have_content('Rubit created', wait: 3)
       expect(page).to have_content('This is my rubit', wait: 3)
       expect(page).to have_selector('button.btn.btn-sm.text-dark.p-1', wait: 3)
-    end
-
-    it "is not visible when Rubit doesn't belong to current user" do
-      visit root_path
-      expect(page).to have_content('This is an example Rubit number 1')
-
-      expect(page).not_to have_selector('button.btn.btn-sm.text-dark.p-1', wait: 3)
     end
 
     it 'allows to delete Rubit' do

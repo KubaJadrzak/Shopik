@@ -51,12 +51,22 @@ class RubitsController < ApplicationController
             turbo_stream.replace('flash', partial: 'shared/flash'),
           ]
         end
-        format.html { render :new }
+        format.html { redirect_to root_path, alert: 'Failed to create Rubit' }
       end
     end
   end
 
   def destroy
+    unless @rubit.user == current_user
+      respond_to do |format|
+        flash[:alert] = 'You are not authorized to delete this Rubit'
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace('flash', partial: 'shared/flash')
+        end
+        format.html { redirect_to root_path, alert: 'You are not authorized to delete this Rubit' }
+      end
+      return
+    end
 
     if @rubit.destroy
       respond_to do |format|
