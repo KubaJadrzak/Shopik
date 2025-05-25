@@ -13,6 +13,8 @@ class Order < ApplicationRecord
 
   before_create :generate_order_number
 
+  broadcasts_refreshes
+
   sig { params(cart: Cart).void }
   def build_order_items_from_cart(cart)
     cart.cart_items.each do |cart_item|
