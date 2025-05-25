@@ -1,12 +1,16 @@
-# typed: true
+# typed: strict
 
 module Espago
   class PaymentStatusService
+    extend T::Sig
+
+    sig { params(payment_id: String).void }
     def initialize(payment_id:)
       @payment_id = payment_id
-      @client = ClientService.new
+      @client = T.let(ClientService.new, ClientService)
     end
 
+    sig { returns(T.nilable(String)) }
     def fetch_payment_status
       response = @client.send("api/charges/#{@payment_id}", method: :get)
 
@@ -15,7 +19,7 @@ module Espago
         return
       end
 
-      payment_data = response.body
+      payment_data = T.let(response.body, T::Hash[String, T.untyped])
 
       Rails.logger.info("Successfully fetched payment status for #{@payment_id}: #{payment_data.inspect}")
 

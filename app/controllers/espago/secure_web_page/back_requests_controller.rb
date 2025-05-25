@@ -1,13 +1,16 @@
-# typed: true
+# typed: strict
 
 module Espago
   module SecureWebPage
     class BackRequestsController < ApplicationController
+      extend T::Sig
+
       skip_before_action :verify_authenticity_token, only: [:handle_back_request]
       before_action :authenticate_espago!
 
+      sig { void }
       def handle_back_request
-        payload = JSON.parse(request.body.read)
+        payload = T.let(JSON.parse(request.body.read), T::Hash[String, T.untyped])
         Rails.logger.info("Received Espago response: #{payload.inspect}")
 
         payment_id = payload['id']
@@ -20,13 +23,14 @@ module Espago
           return
         end
 
-        order.update_status_by_payment_status(state)
+        order.update_status_by_payment_status(state.to_s)
 
         head :ok
       end
 
       private
 
+      sig { returns(T.untyped) }
       def authenticate_espago!
         authenticate_or_request_with_http_basic do |username, password|
           username == Rails.application.credentials.dig(:espago, :app_id) &&
