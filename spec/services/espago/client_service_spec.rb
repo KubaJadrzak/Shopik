@@ -113,7 +113,7 @@ RSpec.describe Espago::ClientService, type: :service do
           .to_raise(error)
       end
 
-      it 'returns the client error response code' do
+      it 'returns the server error response code' do
         response = client.send('api/secure_web_page_register', method: :post)
         expect(response.success?).to eq(false)
         expect(response.status).to eq(500)
