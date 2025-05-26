@@ -53,8 +53,7 @@ module Espago
       handle_error_from_response(:server_error, e)
     rescue Faraday::ParsingError => e
       handle_error(:parsing_error, e)
-    rescue Faraday::TooManyRequestsError => e
-      handle_error(:too_many_requests, e)
+
     rescue URI::InvalidURIError, URI::BadURIError => e
       handle_error(:invalid_uri, e)
     rescue Faraday::Error => e
@@ -81,8 +80,8 @@ module Espago
     sig { params(default_type: Symbol, exception: Faraday::Error).returns(Response) }
     def handle_error_from_response(default_type, exception)
       if exception.respond_to?(:response) && exception.response
-        status = exception.response[:status]
-        body = exception.response[:body]
+        status = exception.response.status
+        body = exception.response.body
 
         Rails.logger.error("Espago Client Service error status: #{status}, body: #{body}")
 
