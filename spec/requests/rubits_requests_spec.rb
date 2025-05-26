@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Rubits Requests Test', type: :request do
+RSpec.describe 'RubitsController Requests Test', type: :request do
   let(:user) { create(:user) }
   let!(:rubits) { create_list(:rubit, 3, user: user) }
   let(:rubit) { rubits.first }

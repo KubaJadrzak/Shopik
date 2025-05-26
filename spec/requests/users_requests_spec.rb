@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Users Requests Test', type: :request do
+RSpec.describe 'UsersController Requests Test', type: :request do
   describe 'GET /account' do
     let(:user) { create(:user) }
 

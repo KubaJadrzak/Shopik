@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Carts Requests Test', type: :request do
+RSpec.describe 'CartsController Requests Test', type: :request do
   let(:user) { create(:user) }
   let(:other_user) { create(:user) }
 

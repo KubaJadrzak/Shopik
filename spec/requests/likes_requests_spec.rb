@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Likes Requests Test', type: :request do
+RSpec.describe 'LikesController Requests Test', type: :request do
   let(:user) { create(:user) }
   let(:rubit) { create(:rubit) }
 

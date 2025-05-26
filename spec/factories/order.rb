@@ -5,6 +5,8 @@ FactoryBot.define do
     shipping_address { 'Poland, Main Street 123, 00-000' }
     status { 'New' }
     payment_status { 'new' }
+    payment_id { 'payment_id' }
+    order_number { 'order_number' }
     ordered_at { Time.current }
     total_price { 30 }
 

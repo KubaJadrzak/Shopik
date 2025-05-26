@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Orders Requests Test', type: :request do
+RSpec.describe 'OrdersController Requests Test', type: :request do
   let(:user) { create(:user) }
   let(:product) { create(:product) }
   before do
