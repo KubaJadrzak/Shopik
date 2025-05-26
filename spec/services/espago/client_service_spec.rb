@@ -77,10 +77,15 @@ RSpec.describe Espago::ClientService, type: :service do
 
     context 'when a client error occurs with response' do
       before do
-        response_double = instance_double(Faraday::Response,
-                                          status: 401,
-                                          body:   { 'error' => 'Client Error' },)
-        error = Faraday::ClientError.new('client error', response_double)
+        response_hash = {
+          status:  401,
+          body:    { 'error' => 'Client Error' },
+          headers: {},
+        }
+
+        error = Faraday::ClientError.new('client error')
+        allow(error).to receive(:response).and_return(response_hash)
+
         stub_request(:post, 'https://sandbox.espago.com/api/secure_web_page_register')
           .to_raise(error)
       end
@@ -95,19 +100,24 @@ RSpec.describe Espago::ClientService, type: :service do
 
     context 'when a server error occurs with response' do
       before do
-        response_double = instance_double(Faraday::Response,
-                                          status: 500,
-                                          body:   { 'error' => 'Server error' },)
-        error = Faraday::ServerError.new('server error', response_double)
+        response_hash = {
+          status:  500,
+          body:    { 'error' => 'Server Error' },
+          headers: {},
+        }
+
+        error = Faraday::ServerError.new('server error')
+        allow(error).to receive(:response).and_return(response_hash)
+
         stub_request(:post, 'https://sandbox.espago.com/api/secure_web_page_register')
           .to_raise(error)
       end
 
-      it 'returns the server error response code' do
+      it 'returns the client error response code' do
         response = client.send('api/secure_web_page_register', method: :post)
         expect(response.success?).to eq(false)
         expect(response.status).to eq(500)
-        expect(response.body).to eq({ 'error' => 'Server error' })
+        expect(response.body).to eq({ 'error' => 'Server Error' })
       end
     end
 

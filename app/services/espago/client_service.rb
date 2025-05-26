@@ -80,8 +80,8 @@ module Espago
     sig { params(default_type: Symbol, exception: Faraday::Error).returns(Response) }
     def handle_error_from_response(default_type, exception)
       if exception.respond_to?(:response) && exception.response
-        status = exception.response.status
-        body = exception.response.body
+        status = exception.response[:status]
+        body = exception.response[:body]
 
         Rails.logger.error("Espago Client Service error status: #{status}, body: #{body}")
 
