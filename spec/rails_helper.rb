@@ -84,4 +84,16 @@ RSpec.configure do |config|
   config.before(:each, type: :request) do
     Rails.application.reload_routes_unless_loaded
   end
+
+  # this was added due to issues with Rails 8 route helpers not being loaded properly in tests: https://github.com/heartcombo/devise/issues/5705
+  config.before(:each, type: :system) do
+    Rails.application.reload_routes_unless_loaded
+  end
+
+  WebMock.disable_net_connect!(
+    allow_localhost: true,
+    allow:           [
+      'sandbox.espago.com',
+    ],
+  )
 end
