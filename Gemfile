@@ -87,3 +87,5 @@ gem 'dotenv-rails', groups: %i[development test]
 gem 'faraday-retry'
 
 gem 'webmock', group: [:test]
+
+gem 'sidekiq'
