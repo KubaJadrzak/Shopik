@@ -61,6 +61,7 @@ RSpec.describe 'Cart CartItem System Test', type: :system do
       visit root_path
       find('img[alt="Cart"]').click
       expect(page).to have_content('Sign In')
+      expect(page).to have_content('You need to sign in or sign up before continuing.')
     end
   end
 end

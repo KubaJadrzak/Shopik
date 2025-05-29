@@ -62,6 +62,7 @@ RSpec.describe 'Espago Secure Web Page Payment Test', type: :system do
       expect(page).to have_content(order.payment_id)
       expect(page).to have_content(order.order_number)
 
+      # mock redirect to failure to avoid going through external service
       visit "/espago/secure_web_page/payments/failure?order_number=#{order.order_number}"
       expect(page).to have_content('Payment failed!')
       expect(page).to have_content(order.status)

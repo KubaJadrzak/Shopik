@@ -41,6 +41,7 @@ RSpec.describe 'Likes System Test', type: :system do
 
       find('form.button_to .bi-heart').click
       expect(page).to have_content('Sign In')
+      expect(page).to have_content('You need to sign in or sign up before continuing.')
     end
   end
 end

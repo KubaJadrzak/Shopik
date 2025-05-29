@@ -12,10 +12,10 @@ FactoryBot.define do
 
     after(:build) do |order|
       product1 = create(:product, price: 15)
-      product2 = create(:product, price: 15)
+      product2 = create(:product, price: 25)
 
       order.order_items << build(:order_item, order: order, product: product1, quantity: 1, price_at_purchase: 15)
-      order.order_items << build(:order_item, order: order, product: product2, quantity: 1, price_at_purchase: 15)
+      order.order_items << build(:order_item, order: order, product: product2, quantity: 1, price_at_purchase: 25)
     end
   end
 end

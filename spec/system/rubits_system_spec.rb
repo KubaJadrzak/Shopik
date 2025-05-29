@@ -83,6 +83,7 @@ RSpec.describe 'Rubits System Test', type: :system do
       expect(page).to have_selector('turbo-frame#new_rubit_form', wait: 3)
       expect(page).to_not have_content('This is another Rubit', wait: 3)
     end
+
     it 'user cannot add Rubit and is redirected to sign in page' do
       visit root_path
       expect(page).to_not have_content('This is my test Rubit')
@@ -93,6 +94,7 @@ RSpec.describe 'Rubits System Test', type: :system do
       end
 
       expect(page).to have_content('Sign In')
+      expect(page).to have_content('You need to sign in or sign up before continuing.')
     end
 
     it 'user cannot comment on rubit and is redirected to sign in page' do
@@ -110,6 +112,7 @@ RSpec.describe 'Rubits System Test', type: :system do
       end
 
       expect(page).to have_content('Sign In')
+      expect(page).to have_content('You need to sign in or sign up before continuing.')
     end
   end
 end

@@ -36,12 +36,29 @@ RSpec.describe 'Order OrderItem System Test', type: :system do
     end
   end
 
-  context 'whne cart is empty' do
+  context 'when cart is empty' do
     it 'user cannot place order' do
       visit cart_path
       expect(page).to have_content('Your Cart')
       expect(page).to have_content('Your cart is empty.')
       expect(page).to_not have_content('Place Order')
+    end
+  end
+
+  context 'when user has orders' do
+    let!(:order) { create(:order, user: user, order_number: 'qwerty1234') }
+    it 'user can visit order show page' do
+      visit root_path
+      find('img[alt="Account"]').click
+      click_button 'Orders'
+      expect(page).to have_content('Your Order')
+      expect(page).to have_content(order.order_number)
+      expect(page).to have_content(order.total_price)
+
+      find('a', text: order.order_number).click
+      expect(page).to have_content(order.order_number)
+      expect(page).to have_content(order.total_price)
+      expect(page).to_not have_content('Your Order')
     end
   end
 end
