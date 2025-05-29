@@ -24,5 +24,7 @@ class UsersController < ApplicationController
                 .order(created_at: :desc)
 
     @orders = current_user.orders.includes(order_items: :product).order(created_at: :desc)
+
+    Espago::UpdatePaymentStatusJob.perform_later(current_user.id)
   end
 end

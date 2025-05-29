@@ -21,7 +21,7 @@ class Espago::PaymentStatusService
 
     payment_data = T.let(response.body, T::Hash[String, T.untyped])
 
-    Rails.logger.debug("Successfully fetched payment status for #{@payment_id}: #{response.inspect}")
+    Rails.logger.info("Successfully fetched payment status for #{@payment_id}: #{response.inspect}")
 
     payment_data['state']
   end
