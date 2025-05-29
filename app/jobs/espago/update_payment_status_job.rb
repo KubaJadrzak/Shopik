@@ -1,6 +1,10 @@
+# typed: strict
+
 class Espago::UpdatePaymentStatusJob < ApplicationJob
+  extend T::Sig
   queue_as :default
 
+  sig { params(user_id: Integer).void }
   def perform(user_id)
     user = User.find_by(id: user_id)
     return unless user
@@ -9,7 +13,7 @@ class Espago::UpdatePaymentStatusJob < ApplicationJob
       next unless order.payment_id.present?
 
       begin
-        status = Espago::PaymentStatusService.new(payment_id: order.payment_id).fetch_payment_status
+        status = Espago::PaymentStatusService.new(payment_id: T.must(order.payment_id)).fetch_payment_status
         order.update_status_by_payment_status(status) if status.present? && status != order.payment_status
       rescue StandardError => e
         Rails.logger.error("Failed to update payment status for order #{order.id}: #{e.message}")
