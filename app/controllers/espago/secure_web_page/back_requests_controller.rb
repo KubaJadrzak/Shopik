@@ -1,42 +1,38 @@
 # typed: strict
 
-module Espago
-  module SecureWebPage
-    class BackRequestsController < ApplicationController
-      extend T::Sig
+class Espago::SecureWebPage::BackRequestsController < ApplicationController
+  extend T::Sig
 
-      skip_before_action :verify_authenticity_token, only: [:handle_back_request]
-      before_action :authenticate_espago!
+  skip_before_action :verify_authenticity_token, only: [:handle_back_request]
+  before_action :authenticate_espago!
 
-      sig { void }
-      def handle_back_request
-        payload = T.let(JSON.parse(request.body.read), T::Hash[String, T.untyped])
-        Rails.logger.info("Received Espago response: #{payload.inspect}")
+  sig { void }
+  def handle_back_request
+    payload = T.let(JSON.parse(request.body.read), T::Hash[String, T.untyped])
+    Rails.logger.info("Received Espago response: #{payload.inspect}")
 
-        payment_id = payload['id']
-        state = payload['state']
-        order = Order.find_by(payment_id: payment_id)
+    payment_id = payload['id']
+    state = payload['state']
+    order = Order.find_by(payment_id: payment_id)
 
-        if order.nil?
-          Rails.logger.warn("Order not found for payment_id: #{payment_id}")
-          head :not_found
-          return
-        end
+    if order.nil?
+      Rails.logger.warn("Order not found for payment_id: #{payment_id}")
+      head :not_found
+      return
+    end
 
-        order.update_status_by_payment_status(state.to_s)
+    order.update_status_by_payment_status(state.to_s)
 
-        head :ok
-      end
+    head :ok
+  end
 
-      private
+  private
 
-      sig { returns(T.untyped) }
-      def authenticate_espago!
-        authenticate_or_request_with_http_basic do |username, password|
-          username == Rails.application.credentials.dig(:espago, :app_id) &&
-            password == Rails.application.credentials.dig(:espago, :password)
-        end
-      end
+  sig { returns(T.untyped) }
+  def authenticate_espago!
+    authenticate_or_request_with_http_basic do |username, password|
+      username == Rails.application.credentials.dig(:espago, :app_id) &&
+        password == Rails.application.credentials.dig(:espago, :password)
     end
   end
 end
