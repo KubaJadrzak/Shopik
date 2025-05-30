@@ -169,6 +169,9 @@ module GeneratedUrlHelpersModule
   def rubits_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def sidekiq_web_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def turbo_recede_historical_location_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }

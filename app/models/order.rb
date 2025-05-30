@@ -2,7 +2,7 @@
 
 class Order < ApplicationRecord
   extend T::Sig
-  belongs_to :user, optional: true
+  belongs_to :user, optional: true, touch: true
   has_many :order_items, dependent: :destroy
 
   validates :total_price, presence: true
