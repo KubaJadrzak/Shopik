@@ -2,9 +2,7 @@
   <h4>Your Orders</h4>
   <% if @orders.any? %>
     <div class="row mt-4">
-      <% @orders.each do |order| %>
-        <%= render partial: "users/sidebar/order", locals: {order: order} %>
-      <% end %>
+      <%= render partial: "users/sidebar/order", collection: @orders %>
     </div>
   <% else %>
     <p>You have no orders yet.</p>
