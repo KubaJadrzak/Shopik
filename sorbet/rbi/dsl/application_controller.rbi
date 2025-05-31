@@ -30,6 +30,8 @@ class ApplicationController
     include ::CartItemsHelper
     include ::CartsHelper
     include ::LikesHelper
+    include ::OrderItemsHelper
+    include ::OrdersHelper
     include ::ProductsHelper
     include ::RubitsHelper
     include ::UsersHelper

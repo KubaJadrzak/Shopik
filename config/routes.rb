@@ -1,4 +1,8 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+  mount Sidekiq::Web => '/sidekiq'
+
   devise_for :users, controllers: {
     registrations: 'users/registrations',
   }
@@ -17,6 +21,15 @@ Rails.application.routes.draw do
   resources :orders, only: %i[new create show]
 
   get 'account', to: 'users#account', as: 'account'
+
+  namespace :espago do
+    namespace :secure_web_page do
+      get 'payments/:id/start_payment', to: 'payments#start_payment', as: 'start_payment'
+      get  'payments/success',       to: 'payments#payment_success'
+      get  'payments/failure',       to: 'payments#payment_failure'
+      post '/back_request',          to: 'back_requests#handle_back_request', as: 'back_request'
+    end
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

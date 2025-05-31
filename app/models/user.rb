@@ -10,4 +10,6 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :liked_rubits, through: :likes, source: :rubit
   has_many :orders, dependent: :destroy
+
+  broadcasts_refreshes
 end

@@ -17,14 +17,14 @@ class OrdersController < ApplicationController
       shipping_address: order_params[:shipping_address],
       total_price:      current_user.cart.total_price,
       status:           'New',
-      payment_status:   'New',
+      payment_status:   'new',
       ordered_at:       Time.current,
     )
     @order.build_order_items_from_cart(current_user.cart)
 
     if @order.save
       current_user.cart.cart_items.destroy_all
-      redirect_to order_path(@order), notice: 'Order placed successfully!'
+      redirect_to espago_secure_web_page_start_payment_path(@order)
     else
       flash.now[:alert] = 'There was a problem placing your order.'
       render :new, status: :unprocessable_entity
@@ -34,7 +34,7 @@ class OrdersController < ApplicationController
   private
 
   def set_order
-    @order = Order.find_by!(id: params[:id])
+    @order = Order.includes(order_items: :product).find_by!(id: params[:id])
   end
 
   def order_params

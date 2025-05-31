@@ -10,7 +10,7 @@
       <%= form.text_field :shipping_address, class: "form-control", required: true %>
     </div>
     <div class="d-grid">
-      <%= form.submit "Purchase", class: "btn btn-primary btn-lg" %>
+      <%= form.submit "Purchase", class: "btn btn-primary btn-lg", data: { turbo: false } %>
     </div>
   <% end %>
 </div>

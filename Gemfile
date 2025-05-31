@@ -75,3 +75,17 @@ gem 'pagy'
 gem 'sorbet', group: :development
 gem 'sorbet-runtime'
 gem 'tapioca', require: false, group: %i[development test]
+
+gem 'faraday'
+
+gem 'base64'
+
+gem 'digest'
+
+gem 'dotenv-rails', groups: %i[development test]
+
+gem 'faraday-retry'
+
+gem 'webmock', group: [:test]
+
+gem 'sidekiq'

@@ -1,3 +1,4 @@
+<%= turbo_stream_from @order %>
 <div class="container mt-4">
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
     <h3><%= @order.order_number %></h3>
@@ -8,16 +9,7 @@
       <div class="card shadow-sm border-light">
         <div class="card-body">
           <h5 class="card-title mb-3">Order Details</h5>
-          <div class="row">
-            <div class="col-lg-6 d-flex justify-content-between align-items-center">
-              <strong>Status:</strong>
-              <span class="badge bg-secondary w-50 text-center"><%= @order.status %></span>
-            </div>
-            <div class="col-lg-6 d-flex justify-content-between align-items-center">
-              <strong>Payment Status:</strong>
-              <span class="badge bg-secondary w-50 text-center"><%= @order.payment_status.presence%></span>
-            </div>
-          </div>
+          <%= render "order_statuses", order: @order %>
           <div class="row">
             <div class="col-md-6">
               <div class="d-flex justify-content-between">
@@ -48,16 +40,16 @@
               <% @order.order_items.each do |order_item| %>
                 <tr>
                   <td><%= order_item.product.title %></td>
-                  <td>$<%= order_item.price_at_purchase %></td>
+                  <td><%= number_to_currency(order_item.price_at_purchase) %></td>
                   <td><%= order_item.quantity %></td>
-                  <td>$<%= order_item.total_price %></td>
+                  <td><%= number_to_currency(order_item.total_price) %></td>
                 </tr>
               <% end %>
               <tr>
                 <td><b>Total</b></td>
                 <td></td>
                 <td></td>
-                <td><b>$<%= @order.total_price %></b></td>
+                <td><b><%= number_to_currency(@order.total_price) %></b></td>
               </tr>
             </tbody>
           </table>

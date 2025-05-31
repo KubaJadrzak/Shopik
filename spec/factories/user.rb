@@ -4,5 +4,10 @@ FactoryBot.define do
     password { 'password' }
     password_confirmation { 'password' }
     sequence(:username) { |n| "user#{n}" }
+
+
+    after(:create) do |user|
+      user.create_cart!
+    end
   end
 end

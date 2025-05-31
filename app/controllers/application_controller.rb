@@ -9,6 +9,11 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::InvalidForeignKey, with: :handle_invalid_foreign_key
   rescue_from ActionController::RoutingError, with: :handle_routing_error
 
+  def after_sign_in_path_for(resource)
+    Espago::UpdatePaymentStatusJob.perform_later(resource.id)
+    super
+  end
+
   def raise_not_found
     raise ActionController::RoutingError.new("No route matches #{request.path.inspect}")
   end

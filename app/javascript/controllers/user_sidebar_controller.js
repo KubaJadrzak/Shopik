@@ -8,13 +8,22 @@ export default class extends Controller {
     "ordersSection"
   ]
 
-  connect() {
-    this.showSectionFromHash()
-    window.addEventListener("hashchange", this.showSectionFromHash.bind(this))
-  }
+connect() {
+  this.boundShowSection = this.showSectionFromHash.bind(this)
+  this.boundHandleMorph = this.handleMorph.bind(this)
 
-  disconnect() {
-    window.removeEventListener("hashchange", this.showSectionFromHash.bind(this))
+  this.showSectionFromHash()
+  window.addEventListener("hashchange", this.boundShowSection)
+  document.addEventListener("turbo:morph", this.boundHandleMorph)
+}
+
+disconnect() {
+  window.removeEventListener("hashchange", this.boundShowSection)
+  document.removeEventListener("turbo:morph", this.boundHandleMorph)
+}
+
+  handleMorph() {
+    this.showSectionFromHash()
   }
 
   showSectionFromHash() {
@@ -50,13 +59,15 @@ export default class extends Controller {
   toggleContent(contentType) {
     this.hideAllSections()
     const section = this[`${contentType}SectionTarget`]
-    if (section) section.classList.remove("d-none")
+    if (section) {
+      section.classList.remove("d-none")
+    }
   }
 
   hideAllSections() {
-    this.rubitsSectionTarget.classList.add("d-none")
-    this.likesSectionTarget.classList.add("d-none")
-    this.commentsSectionTarget.classList.add("d-none")
-    this.ordersSectionTarget.classList.add("d-none")
+    if (this.hasRubitsSectionTarget) this.rubitsSectionTarget.classList.add("d-none")
+    if (this.hasLikesSectionTarget) this.likesSectionTarget.classList.add("d-none")  
+    if (this.hasCommentsSectionTarget) this.commentsSectionTarget.classList.add("d-none")
+    if (this.hasOrdersSectionTarget) this.ordersSectionTarget.classList.add("d-none")
   }
 }

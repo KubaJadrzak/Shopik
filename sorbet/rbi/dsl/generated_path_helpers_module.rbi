@@ -34,6 +34,18 @@ module GeneratedPathHelpersModule
   def edit_user_registration_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def espago_secure_web_page_back_request_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def espago_secure_web_page_payments_failure_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def espago_secure_web_page_payments_success_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def espago_secure_web_page_start_payment_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def new_order_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -155,6 +167,9 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def rubits_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def sidekiq_web_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def turbo_recede_historical_location_path(*args); end
