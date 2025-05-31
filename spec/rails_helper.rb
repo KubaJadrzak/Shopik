@@ -79,6 +79,7 @@ RSpec.configure do |config|
 
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::IntegrationHelpers, type: :system
+  config.include Devise::Test::IntegrationHelpers, type: :job
 
   # this was added due to issues with Rails 8 route helpers not being loaded properly in tests: https://github.com/heartcombo/devise/issues/5705
   config.before(:each, type: :request) do
@@ -87,6 +88,11 @@ RSpec.configure do |config|
 
   # this was added due to issues with Rails 8 route helpers not being loaded properly in tests: https://github.com/heartcombo/devise/issues/5705
   config.before(:each, type: :system) do
+    Rails.application.reload_routes_unless_loaded
+  end
+
+  # this was added due to issues with Rails 8 route helpers not being loaded properly in tests: https://github.com/heartcombo/devise/issues/5705
+  config.before(:each, type: :job) do
     Rails.application.reload_routes_unless_loaded
   end
 

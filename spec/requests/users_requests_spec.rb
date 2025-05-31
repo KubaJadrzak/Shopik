@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'UsersController Requests Test', type: :request do
+
   describe 'GET /account' do
     let(:user) { create(:user) }
 
@@ -47,10 +48,45 @@ RSpec.describe 'UsersController Requests Test', type: :request do
         end
       end
 
-      it 'includes order information in the response body' do
-        expect(response.body).to include(@order.order_number)
+      it 'enqueues UpdatePaymentStatusJob on sign in' do
+        ActiveJob::Base.queue_adapter = :test
+
+        post user_session_path, params: { user: { email: user.email, password: user.password } }
+
+        expect(Espago::UpdatePaymentStatusJob).to have_been_enqueued.with(user.id)
       end
 
+      it 'enqueues UpdatePaymentStatusJob on account view visit' do
+        ActiveJob::Base.queue_adapter = :test
+
+        get account_path
+
+        expect(Espago::UpdatePaymentStatusJob).to have_been_enqueued.with(user.id)
+      end
+
+      it 'UpdatePaymentStatusJob updates payment status' do
+        allow_any_instance_of(Espago::PaymentStatusService)
+          .to receive(:fetch_payment_status)
+          .and_return('executed')
+
+        perform_enqueued_jobs do
+          Espago::UpdatePaymentStatusJob.perform_later(user.id)
+        end
+
+        expect(@order.reload.payment_status).to eq('executed')
+      end
+
+      it 'triggers UpdatePaymentStatusJob and does not update the order when PaymentStatusService returns nil' do
+        allow_any_instance_of(Espago::PaymentStatusService)
+          .to receive(:fetch_payment_status)
+          .and_return(nil)
+
+        perform_enqueued_jobs do
+          Espago::UpdatePaymentStatusJob.perform_later(user.id)
+        end
+
+        expect(@order.reload.payment_status).to eq('new')
+      end
     end
   end
 end

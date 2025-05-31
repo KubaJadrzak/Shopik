@@ -10,18 +10,21 @@ class Espago::UpdatePaymentStatusJob < ApplicationJob
     return unless user
 
     user.orders.where(payment_status: 'new').each do |order|
-      return order.update_status_by_payment_status('unexpected_error') unless order.payment_id.present?
+      unless order.payment_id.present?
+        order.update_status_by_payment_status('unexpected_error')
+        next
+      end
 
-      begin
-        status = Espago::PaymentStatusService.new(payment_id: T.must(order.payment_id)).fetch_payment_status
-        if status.present? && status != order.payment_status
-          order.update_status_by_payment_status(status)
-        elsif order.created_at < 90.minutes.ago
-          order.update_status_by_payment_status('resigned')
-        end
-      rescue StandardError => e
-        Rails.logger.error("Failed to update payment status for order #{order.id}: #{e.message}")
+      new_status = Espago::PaymentStatusService
+                   .new(payment_id: T.must(order.payment_id))
+                   .fetch_payment_status
+
+      if new_status.present? && new_status != order.payment_status
+        order.update_status_by_payment_status(new_status)
+      elsif order.created_at < 90.minutes.ago
+        order.update_status_by_payment_status('resigned')
       end
     end
+
   end
 end
