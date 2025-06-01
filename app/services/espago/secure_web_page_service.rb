@@ -34,8 +34,8 @@ class Espago::SecureWebPageService
         session_id:   session_id,
         title:        "Order ##{@order.order_number}",
         checksum:     checksum,
-        positive_url: "#{app_host}/espago/secure_web_page/payments/success?order_number=#{@order.order_number}",
-        negative_url: "#{app_host}/espago/secure_web_page/payments/failure?order_number=#{@order.order_number}",
+        positive_url: "#{app_host}/espago/payments/success?order_number=#{@order.order_number}",
+        negative_url: "#{app_host}/espago/payments/failure?order_number=#{@order.order_number}",
       },
     )
   end

@@ -66,7 +66,7 @@ disconnect() {
 
   hideAllSections() {
     if (this.hasRubitsSectionTarget) this.rubitsSectionTarget.classList.add("d-none")
-    if (this.hasLikesSectionTarget) this.likesSectionTarget.classList.add("d-none")  
+    if (this.hasLikesSectionTarget) this.likesSectionTarget.classList.add("d-none")
     if (this.hasCommentsSectionTarget) this.commentsSectionTarget.classList.add("d-none")
     if (this.hasOrdersSectionTarget) this.ordersSectionTarget.classList.add("d-none")
   }

@@ -32,6 +32,7 @@ class Espago::ClientService
     ).returns(Espago::Response)
   end
   def send(path, body: nil, method: :get)
+    Rails.logger.info(body)
     response = @conn.send(method) do |req|
       req.url path
       req.headers['Accept'] = 'application/vnd.espago.v3+json'

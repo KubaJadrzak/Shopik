@@ -34,16 +34,19 @@ module GeneratedUrlHelpersModule
   def edit_user_registration_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_secure_web_page_back_request_url(*args); end
+  def espago_back_request_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_secure_web_page_payments_failure_url(*args); end
+  def espago_payments_awaiting_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_secure_web_page_payments_success_url(*args); end
+  def espago_payments_failure_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_secure_web_page_start_payment_url(*args); end
+  def espago_payments_success_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def espago_start_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_order_url(*args); end

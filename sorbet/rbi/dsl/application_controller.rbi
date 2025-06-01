@@ -8,37 +8,4 @@
 class ApplicationController
   include GeneratedUrlHelpersModule
   include GeneratedPathHelpersModule
-
-  sig { returns(HelperProxy) }
-  def helpers; end
-
-  module HelperMethods
-    include ::Turbo::DriveHelper
-    include ::Turbo::FramesHelper
-    include ::Turbo::IncludesHelper
-    include ::Turbo::StreamsHelper
-    include ::ActionView::Helpers::CaptureHelper
-    include ::ActionView::Helpers::OutputSafetyHelper
-    include ::ActionView::Helpers::TagHelper
-    include ::Turbo::Streams::ActionHelper
-    include ::ActionText::ContentHelper
-    include ::ActionText::TagHelper
-    include ::ActionController::Base::HelperMethods
-    include ::Pagy::UrlHelpers
-    include ::Pagy::Frontend
-    include ::ApplicationHelper
-    include ::CartItemsHelper
-    include ::CartsHelper
-    include ::LikesHelper
-    include ::OrderItemsHelper
-    include ::OrdersHelper
-    include ::ProductsHelper
-    include ::RubitsHelper
-    include ::UsersHelper
-    include ::DeviseHelper
-  end
-
-  class HelperProxy < ::ActionView::Base
-    include HelperMethods
-  end
 end
