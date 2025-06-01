@@ -3,6 +3,14 @@ style="max-width: 400px; margin: 40px auto; padding: 20px; box-shadow: 0 0 10px 
   <%= form_with model: @order, html: { id: "order_form", data: { "payment-method-target": "form", "espago-iframe-target": "form" } } do |form| %>
     <h3 class="mb-4 text-center">Place Order</h3>
     <div class="mb-3">
+      <%= form.label :email, "Email", class: "form-label" %>
+      <%= form.email_field :email, value: current_user.email, class: "form-control", required: true %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :shipping_address, "Shipping Address", class: "form-label" %>
+      <%= form.text_field :shipping_address, class: "form-control", required: true %>
+    </div>
+    <div class="mb-3">
       <label class="form-label">Payment Method</label>
       <div>
         <input type="radio" id="one_time_option" name="payment_mode" value="one_time" checked data-payment-method-target="radio">
@@ -12,14 +20,6 @@ style="max-width: 400px; margin: 40px auto; padding: 20px; box-shadow: 0 0 10px 
         <input type="radio" id="secure_option" name="payment_mode" value="secure_web_page" data-payment-method-target="radio">
         <label for="secure_option">Secure Web Page</label>
       </div>
-    </div>
-    <div class="mb-3">
-      <%= form.label :email, "Email", class: "form-label" %>
-      <%= form.email_field :email, value: current_user.email, class: "form-control", required: true %>
-    </div>
-    <div class="mb-3">
-      <%= form.label :shipping_address, "Shipping Address", class: "form-label" %>
-      <%= form.text_field :shipping_address, class: "form-control", required: true %>
     </div>
     <%= form.submit "Process Order", class: "btn btn-success btn-lg d-none", id: "process_order_btn", data: {
       turbo: false,

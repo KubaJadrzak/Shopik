@@ -39,7 +39,7 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(:email, :shipping_address, :card_token)
+    params.require(:order).permit(:email, :shipping_address)
   end
 
   def ensure_cart_has_items

@@ -5,6 +5,7 @@ class Order < ApplicationRecord
   belongs_to :user, optional: true, touch: true
   has_many :order_items, dependent: :destroy
 
+  validates :email, presence: true
   validates :total_price, presence: true
   validates :status, presence: true
   validates :shipping_address, presence: true
