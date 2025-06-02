@@ -1,7 +1,6 @@
-# spec/requests/espago/secure_web_page/back_requests_spec.rb
 require 'rails_helper'
 
-RSpec.describe 'Espago::SecureWebPage::BackRequestsController Requests Test', type: :request do
+RSpec.describe 'Espago::BackRequestsController Requests Test', type: :request do
   let(:app_id) { Rails.application.credentials.dig(:espago, :app_id) }
   let(:password) { Rails.application.credentials.dig(:espago, :password) }
   let(:headers) do
@@ -12,7 +11,7 @@ RSpec.describe 'Espago::SecureWebPage::BackRequestsController Requests Test', ty
     }
   end
 
-  describe 'POST /espago/secure_web_page/back_request' do
+  describe 'POST /espago/back_request' do
     let(:payment_id) { 'espago_123' }
     let(:payload) do
       {
@@ -26,7 +25,7 @@ RSpec.describe 'Espago::SecureWebPage::BackRequestsController Requests Test', ty
         let!(:order) { create(:order, payment_id: payment_id) }
 
         it 'updates the order status and returns :ok' do
-          post '/espago/secure_web_page/back_request', params: payload.to_json, headers: headers
+          post '/espago/back_request', params: payload.to_json, headers: headers
 
           expect(response).to have_http_status(:ok)
           expect(order.reload.status).to eq('Preparing for Shipment')
@@ -36,7 +35,7 @@ RSpec.describe 'Espago::SecureWebPage::BackRequestsController Requests Test', ty
 
       context 'when the order does not exist' do
         it 'returns :not_found and does not raise error' do
-          post '/espago/secure_web_page/back_request', params: payload.to_json, headers: headers
+          post '/espago/back_request', params: payload.to_json, headers: headers
 
           expect(response).to have_http_status(:not_found)
         end
@@ -53,7 +52,7 @@ RSpec.describe 'Espago::SecureWebPage::BackRequestsController Requests Test', ty
       end
 
       it 'returns :unauthorized' do
-        post '/espago/secure_web_page/back_request', params: payload.to_json, headers: headers
+        post '/espago/back_request', params: payload.to_json, headers: headers
 
         expect(response).to have_http_status(:unauthorized)
       end

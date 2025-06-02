@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Espago Secure Web Page Payment Test', type: :system do
+RSpec.describe 'Espago Secure Web Page Test', type: :system do
   let(:user) { create(:user) }
   let(:cart) { user.cart }
   let!(:product_in_cart) { create(:product, title: 'This is Product in Cart', price: 15) }
@@ -27,7 +27,8 @@ RSpec.describe 'Espago Secure Web Page Payment Test', type: :system do
 
       fill_in 'Shipping Address', with: 'Shipping Address'
 
-      click_button 'Purchase'
+      choose('Secure Web Page')
+      click_button 'Pay'
       expect(page).to have_current_path(/secure_web_page/, wait: 3)
       order = Order.last
       expect(page).to have_content(order.total_price)
@@ -35,7 +36,7 @@ RSpec.describe 'Espago Secure Web Page Payment Test', type: :system do
       expect(page).to have_content(order.order_number)
 
       # mock redirect to success to avoid going through external service
-      visit "/espago/secure_web_page/payments/success?order_number=#{order.order_number}"
+      visit "/espago/payments/success?order_number=#{order.order_number}"
       expect(page).to have_content('Payment successful!')
       expect(page).to have_content(order.status)
       expect(page).to have_content(order.payment_status.capitalize)
@@ -55,7 +56,8 @@ RSpec.describe 'Espago Secure Web Page Payment Test', type: :system do
 
       fill_in 'Shipping Address', with: 'Shipping Address'
 
-      click_button 'Purchase'
+      choose('Secure Web Page')
+      click_button 'Pay'
       expect(page).to have_current_path(/secure_web_page/, wait: 3)
       order = Order.last
       expect(page).to have_content(order.total_price)
@@ -63,7 +65,7 @@ RSpec.describe 'Espago Secure Web Page Payment Test', type: :system do
       expect(page).to have_content(order.order_number)
 
       # mock redirect to failure to avoid going through external service
-      visit "/espago/secure_web_page/payments/failure?order_number=#{order.order_number}"
+      visit "/espago/payments/failure?order_number=#{order.order_number}"
       expect(page).to have_content('Payment failed!')
       expect(page).to have_content(order.status)
       expect(page).to have_content(order.payment_status.capitalize)

@@ -45,8 +45,6 @@ class Espago::PaymentsController < ApplicationController
       redirect_to order_path(@order),
                   alert: 'We could not process your payment due to a technical issue'
     end
-
-    Rails.logger.info(response)
   end
 
   sig { void }
