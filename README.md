@@ -55,7 +55,7 @@ ESPAGO_BASE_URL=https://sandbox.espago.com
 ESPAGO_PUBLIC_KEY=your_espago_public_key
 ```
 
-RubitterRewritten is using `Rails credentials`. You will have to remove existing encrypted credentials since encrypted `credentails.yml.enc` is included in the repository, simply run the following commands (replace `nano` with editor of choice): 
+RubitterRewritten is using `Rails credentials`. You will have to remove existing encrypted credentials since encrypted `credentials.yml.enc` is included in the repository, simply run the following commands (replace `nano` with editor of choice): 
 
 ```
 rm config/credentials.yml.enc
