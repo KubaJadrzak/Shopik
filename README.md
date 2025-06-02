@@ -62,7 +62,7 @@ rm config/credentials.yml.enc
 EDITOR=nano bin/rails credentials:edit
 ```
 
-Your credentails will have to include below information:
+Your credentials will have to include below information:
 
 ```
 espago:
