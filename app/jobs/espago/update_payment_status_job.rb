@@ -9,7 +9,7 @@ class Espago::UpdatePaymentStatusJob < ApplicationJob
     user = User.find_by(id: user_id)
     return unless user
 
-    user.orders.where(payment_status: 'new').each do |order|
+    user.orders.where(status: ['New', 'Waiting for Payment']).each do |order|
       unless order.payment_id.present?
         order.update_status_by_payment_status('unexpected_error')
         next
