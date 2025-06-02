@@ -7,6 +7,7 @@ class OrdersController < ApplicationController
 
   def new
     @order = Order.new
+    @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY', nil)
   end
 
   def show; end
