@@ -1,6 +1,6 @@
 # typed: strict
 
-class Espago::SecureWebPage::BackRequestsController < ApplicationController
+class Espago::BackRequestsController < ApplicationController
   extend T::Sig
 
   skip_before_action :verify_authenticity_token, only: [:handle_back_request]

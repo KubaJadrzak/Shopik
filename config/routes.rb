@@ -23,12 +23,11 @@ Rails.application.routes.draw do
   get 'account', to: 'users#account', as: 'account'
 
   namespace :espago do
-    namespace :secure_web_page do
-      get 'payments/:id/start_payment', to: 'payments#start_payment', as: 'start_payment'
-      get  'payments/success',       to: 'payments#payment_success'
-      get  'payments/failure',       to: 'payments#payment_failure'
-      post '/back_request',          to: 'back_requests#handle_back_request', as: 'back_request'
-    end
+    get 'payments/:id/start_payment', to: 'payments#start_payment', as: 'start_payment'
+    get 'payments/success',       to: 'payments#payment_success'
+    get 'payments/failure',       to: 'payments#payment_failure'
+    get 'payments/awaiting',       to: 'payments#payment_awaiting'
+    post '/back_request',          to: 'back_requests#handle_back_request', as: 'back_request'
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

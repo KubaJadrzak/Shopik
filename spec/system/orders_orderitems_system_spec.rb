@@ -27,7 +27,8 @@ RSpec.describe 'Order OrderItem System Test', type: :system do
 
       fill_in 'Shipping Address', with: 'Shipping Address'
 
-      click_button 'Purchase'
+      choose('Secure Web Page')
+      click_button 'Pay'
       expect(page).to have_current_path(/secure_web_page/, wait: 3)
       order = Order.last
       expect(page).to have_content(order.total_price)

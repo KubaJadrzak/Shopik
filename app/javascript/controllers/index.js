@@ -4,11 +4,17 @@
 
 import { application } from "./application"
 
+import EspagoIframeController from "./espago_iframe_controller"
+application.register("espago-iframe", EspagoIframeController)
+
 import FlashController from "./flash_controller"
 application.register("flash", FlashController)
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import PaymentMethodController from "./payment_method_controller"
+application.register("payment-method", PaymentMethodController)
 
 import UserSidebarController from "./user_sidebar_controller"
 application.register("user-sidebar", UserSidebarController)

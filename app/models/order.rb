@@ -5,6 +5,7 @@ class Order < ApplicationRecord
   belongs_to :user, optional: true, touch: true
   has_many :order_items, dependent: :destroy
 
+  validates :email, presence: true
   validates :total_price, presence: true
   validates :status, presence: true
   validates :shipping_address, presence: true
@@ -47,6 +48,27 @@ class Order < ApplicationRecord
     new_status = status_map[payment_status] || 'Payment Error'
 
     update(payment_status: payment_status, status: new_status)
+  end
+
+  sig { params(payment_status: String).returns(String) }
+  def show_status_by_payment_status(payment_status)
+    status_map = {
+      'executed'            => 'Preparing for Shipment',
+      'rejected'            => 'Payment Rejected',
+      'failed'              => 'Payment Failed',
+      'resigned'            => 'Payment Resigned',
+      'reversed'            => 'Payment Reversed',
+      'preauthorized'       => 'Waiting for Payment',
+      'tds2_challenge'      => 'Waiting for Payment',
+      'tds_redirected'      => 'Waiting for Payment',
+      'dcc_decision'        => 'Waiting for Payment',
+      'blik_redirected'     => 'Waiting for Payment',
+      'transfer_redirected' => 'Waiting for Payment',
+      'new'                 => 'Waiting for Payment',
+      'refunded'            => 'Payment Refunded',
+    }
+
+    status_map[payment_status] || 'Payment Error'
   end
 
   sig { void }
