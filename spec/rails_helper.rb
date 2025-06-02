@@ -102,4 +102,9 @@ RSpec.configure do |config|
       'sandbox.espago.com',
     ],
   )
+
+  Capybara.server_host = 'localhost'
+  Capybara.server_port = 3001
+  Capybara.app_host = 'http://localhost:3001'
+  Capybara.default_driver = :selenium_chrome
 end

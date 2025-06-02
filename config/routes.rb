@@ -24,8 +24,8 @@ Rails.application.routes.draw do
 
   namespace :espago do
     get 'payments/:id/start_payment', to: 'payments#start_payment', as: 'start_payment'
-    get  'payments/success',       to: 'payments#payment_success'
-    get  'payments/failure',       to: 'payments#payment_failure'
+    get 'payments/success',       to: 'payments#payment_success'
+    get 'payments/failure',       to: 'payments#payment_failure'
     get 'payments/awaiting',       to: 'payments#payment_awaiting'
     post '/back_request',          to: 'back_requests#handle_back_request', as: 'back_request'
   end

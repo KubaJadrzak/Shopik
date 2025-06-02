@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Espago Secure Web Page Test', type: :system do
+RSpec.describe 'Secure Web Page Test', type: :system do
   let(:user) { create(:user) }
   let(:cart) { user.cart }
   let!(:product_in_cart) { create(:product, title: 'This is Product in Cart', price: 15) }
@@ -11,7 +11,6 @@ RSpec.describe 'Espago Secure Web Page Test', type: :system do
 
   before do
     sign_in user
-    driven_by(:selenium_chrome_headless)
   end
 
   context 'when payment is successfull' do

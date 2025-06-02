@@ -18,12 +18,14 @@ class Espago::PaymentsController < ApplicationController
                  payment_service.create_payment
                end
 
+    Rails.logger.info(response.inspect)
     if response.success?
       data = T.let(response.body, T::Hash[String, T.untyped])
       @order.update(payment_id: data['id'])
 
-      if data.key?('redirect_url')
-        redirect_to data['redirect_url'], allow_other_host: true
+      redirect_url = data['redirect_url'] || data.dig('dcc_decision_information', 'redirect_url')
+      if redirect_url
+        redirect_to redirect_url, allow_other_host: true
       elsif data.key?('state')
         state = data['state']
         @order.update_status_by_payment_status(state)
@@ -31,11 +33,11 @@ class Espago::PaymentsController < ApplicationController
         status = @order.show_status_by_payment_status(state)
         case status
         when 'Preparing for Shipment'
-          redirect_to payment_success_path(@order)
+          redirect_to espago_payments_success_path(@order)
         when 'Waiting for Payment'
-          redirect_to payment_awaiting_path(@order)
+          redirect_to espago_payments_awaiting_path(@order)
         else
-          redirect_to payment_failure_path(@order)
+          redirect_to espago_payments_failure_path(@order)
         end
       end
 
