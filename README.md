@@ -80,6 +80,15 @@ RubitterRewritten is using `sidekiq`. To correctly run background jobs, simply s
 
 RubitterRewritten is using `RSpec` tests. You can run test suite with: `bundle exec rspec`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some tests make real requests to Espago and will otherwise fail.
 
+### Sorbet/Tapioca:
+
+RubitterRewritten is using `Sorbet` with `Tapioca`. Although all necessary `rbi` files are committed to this repository, if you encounter any Sorbet related issues, try:
+```
+bundle exec tapioca dsl
+bundle exec tapioca gem
+bundle exec tapioca require
+```
+
 ### Back Requests:
 
 RubitterRewritten is using `back requests` to update the status of payments, however it also requests from Espago status of all payments which are not finished.
