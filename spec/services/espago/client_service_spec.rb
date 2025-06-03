@@ -25,7 +25,7 @@ RSpec.describe Espago::ClientService, type: :service do
         )
 
         expect(response.success?).to eq(true)
-        expect(response.status).to eq(200)
+        expect(response.status).to eq('200')
         expect(response.body['redirect_url']).to eq('https://sandbox.espago.com/secure_web_page/payment_id_123')
       end
     end
@@ -43,7 +43,7 @@ RSpec.describe Espago::ClientService, type: :service do
         )
 
         expect(response.success?).to eq(false)
-        expect(response.status).to eq(:connection_failed)
+        expect(response.status).to eq('connection_failed')
         expect(response.body).to eq({ 'error' => 'Connection failed' })
       end
     end
@@ -56,7 +56,7 @@ RSpec.describe Espago::ClientService, type: :service do
       it 'returns a timeout error' do
         response = client.send('api/secure_web_page_register', method: :post)
         expect(response.success?).to eq(false)
-        expect(response.status).to eq(:timeout)
+        expect(response.status).to eq('timeout')
         expect(response.body).to eq({ 'error' => 'timeout error' })
       end
     end
@@ -70,7 +70,7 @@ RSpec.describe Espago::ClientService, type: :service do
       it 'returns an ssl_error response' do
         response = client.send('api/secure_web_page_register', method: :post)
         expect(response.success?).to eq(false)
-        expect(response.status).to eq(:ssl_error)
+        expect(response.status).to eq('ssl_error')
         expect(response.body).to eq({ 'error' => 'SSL error' })
       end
     end
@@ -93,7 +93,7 @@ RSpec.describe Espago::ClientService, type: :service do
       it 'returns the client error response code' do
         response = client.send('api/secure_web_page_register', method: :post)
         expect(response.success?).to eq(false)
-        expect(response.status).to eq(401)
+        expect(response.status).to eq('401')
         expect(response.body).to eq({ 'error' => 'Client Error' })
       end
     end
@@ -116,7 +116,7 @@ RSpec.describe Espago::ClientService, type: :service do
       it 'returns the server error response code' do
         response = client.send('api/secure_web_page_register', method: :post)
         expect(response.success?).to eq(false)
-        expect(response.status).to eq(500)
+        expect(response.status).to eq('500')
         expect(response.body).to eq({ 'error' => 'Server Error' })
       end
     end
@@ -130,7 +130,7 @@ RSpec.describe Espago::ClientService, type: :service do
       it 'returns a parsing_error response' do
         response = client.send('api/secure_web_page_register', method: :post)
         expect(response.success?).to eq(false)
-        expect(response.status).to eq(:parsing_error)
+        expect(response.status).to eq('parsing_error')
         expect(response.body).to eq({ 'error' => 'parsing error' })
       end
     end
@@ -144,7 +144,7 @@ RSpec.describe Espago::ClientService, type: :service do
       it 'returns unknown_faraday_error' do
         response = client.send('api/secure_web_page_register', method: :post)
         expect(response.success?).to eq(false)
-        expect(response.status).to eq(:unknown_faraday_error)
+        expect(response.status).to eq('unknown_faraday_error')
         expect(response.body).to eq({ 'error' => 'generic faraday error' })
       end
     end
@@ -158,7 +158,7 @@ RSpec.describe Espago::ClientService, type: :service do
       it 'returns an unexpected_error response' do
         response = client.send('api/secure_web_page_register', method: :post)
         expect(response.success?).to eq(false)
-        expect(response.status).to eq(:unexpected_error)
+        expect(response.status).to eq('unexpected_error')
         expect(response.body).to eq({ 'error' => 'something went wrong' })
       end
     end

@@ -13,7 +13,22 @@ class Espago::BackRequestsController < ApplicationController
 
     payment_id = payload['id']
     state = payload['state']
+    description = payload['description']
+
     order = Order.find_by(payment_id: payment_id)
+
+    if order.nil? && description.present?
+      order_number = description[/#([A-Z0-9]+)/, 1]
+      Rails.logger.info("Extracted order number: #{order_number}")
+
+      if order_number.present?
+        order = Order.find_by(order_number: order_number)
+        if order.present?
+          Rails.logger.info("Found order by order_number. Assigning payment_id #{payment_id} to order #{order_number}")
+          order.update!(payment_id: payment_id)
+        end
+      end
+    end
 
     if order.nil?
       Rails.logger.warn("Order not found for payment_id: #{payment_id}")

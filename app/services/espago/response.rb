@@ -1,13 +1,12 @@
 # typed: strict
 
-
 class Espago::Response
   extend T::Sig
 
   sig { returns(T::Boolean) }
   attr_reader :success
 
-  sig { returns(T.any(Integer, Symbol)) }
+  sig { returns(String) }
   attr_reader :status
 
   sig { returns(T::Hash[String, T.untyped]) }
@@ -16,13 +15,13 @@ class Espago::Response
   sig do
     params(
       success: T::Boolean,
-      status:  T.any(Integer, Symbol),
+      status:  T.any(String, Symbol, Integer),
       body:    T::Hash[String, T.untyped],
     ).void
   end
   def initialize(success:, status:, body:)
     @success = success
-    @status = status
+    @status = T.let(status.to_s, String)
     @body = body
   end
 

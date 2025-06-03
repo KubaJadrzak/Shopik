@@ -27,20 +27,36 @@ RSpec.describe Espago::PaymentsController, type: :request do
         end
       end
 
-      context 'when payment creation fails' do
+      context 'when payment creation fails with uncertain error' do
         before do
           service = instance_double(Espago::SecureWebPageService)
-          response = Espago::Response.new(success: false, status: :connection_failed, body: {})
+          response = Espago::Response.new(success: false, status: :timeout, body: {})
           allow(Espago::SecureWebPageService).to receive(:new).with(order).and_return(service)
           allow(service).to receive(:create_payment).and_return(response)
 
           get "/espago/payments/#{order.id}/start_payment"
         end
 
-        it 'updates the order status and redirects back to order page with alert' do
+        it 'updates the order status and redirects to payments/awaiting' do
+          expect(order.reload.status).to eq('Awaiting Payment')
+          expect(order.payment_status).to eq('timeout')
+          expect(response).to redirect_to(espago_payments_awaiting_path(order))
+        end
+      end
+      context 'when payment creation fails' do
+        before do
+          service = instance_double(Espago::SecureWebPageService)
+          response = Espago::Response.new(success: false, status: 401, body: {})
+          allow(Espago::SecureWebPageService).to receive(:new).with(order).and_return(service)
+          allow(service).to receive(:create_payment).and_return(response)
+
+          get "/espago/payments/#{order.id}/start_payment"
+        end
+
+        it 'updates the order status and redirects order show view' do
           expect(order.reload.status).to eq('Payment Error')
+          expect(order.payment_status).to eq('401')
           expect(response).to redirect_to(order_path(order))
-          expect(flash[:alert]).to eq('We could not process your payment due to a technical issue')
         end
       end
     end
@@ -178,6 +194,31 @@ RSpec.describe Espago::PaymentsController, type: :request do
           end
         end
       end
+      context 'when payment fails with uncertain error' do
+        let(:card_token) { 'test_card_token_123' }
+
+        before do
+          allow_any_instance_of(Espago::PaymentsController).to receive(:session).and_return(
+            double('session', delete: card_token),
+          )
+
+          service = instance_double(Espago::OneTimePaymentService)
+          response = Espago::Response.new(success: false, status: :timeout, body: {})
+          allow(Espago::OneTimePaymentService).to receive(:new)
+            .with(card_token: card_token, order: order)
+            .and_return(service)
+          allow(service).to receive(:create_payment).and_return(response)
+
+          get "/espago/payments/#{order.id}/start_payment"
+        end
+
+        it 'updates the order status and redirects to payments/awaiting' do
+          expect(order.reload.status).to eq('Awaiting Payment')
+          expect(order.payment_status).to eq('timeout')
+          expect(response).to redirect_to(espago_payments_awaiting_path(order))
+        end
+      end
+
       context 'when payment fails' do
         let(:card_token) { 'test_card_token_123' }
 
@@ -187,7 +228,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
           )
 
           service = instance_double(Espago::OneTimePaymentService)
-          response = Espago::Response.new(success: false, status: :connection_failed, body: {})
+          response = Espago::Response.new(success: false, status: 401, body: {})
           allow(Espago::OneTimePaymentService).to receive(:new)
             .with(card_token: card_token, order: order)
             .and_return(service)
@@ -196,10 +237,10 @@ RSpec.describe Espago::PaymentsController, type: :request do
           get "/espago/payments/#{order.id}/start_payment"
         end
 
-        it 'updates the order status and redirects back to order page with alert' do
+        it 'updates the order status and redirects to order show page' do
           expect(order.reload.status).to eq('Payment Error')
+          expect(order.payment_status).to eq('401')
           expect(response).to redirect_to(order_path(order))
-          expect(flash[:alert]).to eq('We could not process your payment due to a technical issue')
         end
       end
     end

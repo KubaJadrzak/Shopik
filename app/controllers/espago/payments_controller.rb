@@ -42,11 +42,26 @@ class Espago::PaymentsController < ApplicationController
       end
 
     else
-      @order.update_status_by_payment_status(response.status.to_s)
-      Rails.logger.warn("Payment rejected with status #{response.status} for Order ##{@order.id}")
-      redirect_to order_path(@order),
-                  alert: 'We could not process your payment due to a technical issue'
+      @order.update_status_by_payment_status(response.status)
+
+      awaiting_statuses = Set[
+        'timeout',
+        'connection_failed',
+        'ssl_error',
+        'parsing_error',
+        'unknown_faraday_error',
+        'unexpected_error',
+      ]
+
+      if awaiting_statuses.include?(response.status)
+        redirect_to espago_payments_awaiting_path(@order)
+      else
+        Rails.logger.warn("Payment rejected with status #{response.status} for Order ##{@order.id}")
+        redirect_to order_path(@order),
+                    alert: 'We could not process your payment due to a technical issue'
+      end
     end
+
   end
 
   sig { void }
@@ -76,7 +91,7 @@ class Espago::PaymentsController < ApplicationController
     @order = T.let(Order.find_by(order_number: params[:order_number]), T.nilable(Order))
 
     if @order
-      redirect_to order_path(@order), alert: 'Payment is being processed'
+      redirect_to order_path(@order), alert: 'Payment is being processed!'
     else
       redirect_to "#{account_path}#orders", alert: 'We are experiencing an issue with your order'
     end

@@ -9,6 +9,12 @@ class Espago::UpdatePaymentStatusJob < ApplicationJob
     user = User.find_by(id: user_id)
     return unless user
 
+    user.orders.where(status: 'Awaiting Payment').each do |order|
+      if order.created_at < 120.minutes.ago
+        order.update_status_by_payment_status('failed')
+      end
+    end
+
     user.orders.where(status: ['New', 'Waiting for Payment']).each do |order|
       unless order.payment_id.present?
         order.update_status_by_payment_status('unexpected_error')
@@ -21,7 +27,7 @@ class Espago::UpdatePaymentStatusJob < ApplicationJob
 
       if new_status.present? && new_status != order.payment_status
         order.update_status_by_payment_status(new_status)
-      elsif order.created_at < 90.minutes.ago
+      elsif order.created_at < 120.minutes.ago
         order.update_status_by_payment_status('resigned')
       end
     end

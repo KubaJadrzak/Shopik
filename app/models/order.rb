@@ -27,48 +27,40 @@ class Order < ApplicationRecord
     end
   end
 
+  STATUS_MAP = T.let({
+                       'executed'              => 'Preparing for Shipment',
+                       'rejected'              => 'Payment Rejected',
+                       'failed'                => 'Payment Failed',
+                       'resigned'              => 'Payment Resigned',
+                       'reversed'              => 'Payment Reversed',
+                       'preauthorized'         => 'Waiting for Payment',
+                       'tds2_challenge'        => 'Waiting for Payment',
+                       'tds_redirected'        => 'Waiting for Payment',
+                       'dcc_decision'          => 'Waiting for Payment',
+                       'blik_redirected'       => 'Waiting for Payment',
+                       'transfer_redirected'   => 'Waiting for Payment',
+                       'new'                   => 'Waiting for Payment',
+                       'refunded'              => 'Payment Refunded',
+
+                       'timeout'               => 'Awaiting Payment',
+                       'connection_failed'     => 'Awaiting Payment',
+                       'ssl_error'             => 'Awaiting Payment',
+                       'parsing_error'         => 'Awaiting Payment',
+                       'unknown_faraday_error' => 'Awaiting Payment',
+                       'unexpected_error'      => 'Awaiting Payment',
+
+                       'invalid_uri'           => 'Payment Error',
+                     }, T::Hash[String, String],)
+
   sig { params(payment_status: String).returns(T::Boolean) }
   def update_status_by_payment_status(payment_status)
-    status_map = {
-      'executed'            => 'Preparing for Shipment',
-      'rejected'            => 'Payment Rejected',
-      'failed'              => 'Payment Failed',
-      'resigned'            => 'Payment Resigned',
-      'reversed'            => 'Payment Reversed',
-      'preauthorized'       => 'Waiting for Payment',
-      'tds2_challenge'      => 'Waiting for Payment',
-      'tds_redirected'      => 'Waiting for Payment',
-      'dcc_decision'        => 'Waiting for Payment',
-      'blik_redirected'     => 'Waiting for Payment',
-      'transfer_redirected' => 'Waiting for Payment',
-      'new'                 => 'Waiting for Payment',
-      'refunded'            => 'Payment Refunded',
-    }
-
-    new_status = status_map[payment_status] || 'Payment Error'
-
+    new_status = STATUS_MAP[payment_status] || 'Payment Error'
     update(payment_status: payment_status, status: new_status)
   end
 
   sig { params(payment_status: String).returns(String) }
   def show_status_by_payment_status(payment_status)
-    status_map = {
-      'executed'            => 'Preparing for Shipment',
-      'rejected'            => 'Payment Rejected',
-      'failed'              => 'Payment Failed',
-      'resigned'            => 'Payment Resigned',
-      'reversed'            => 'Payment Reversed',
-      'preauthorized'       => 'Waiting for Payment',
-      'tds2_challenge'      => 'Waiting for Payment',
-      'tds_redirected'      => 'Waiting for Payment',
-      'dcc_decision'        => 'Waiting for Payment',
-      'blik_redirected'     => 'Waiting for Payment',
-      'transfer_redirected' => 'Waiting for Payment',
-      'new'                 => 'Waiting for Payment',
-      'refunded'            => 'Payment Refunded',
-    }
-
-    status_map[payment_status] || 'Payment Error'
+    STATUS_MAP[payment_status] || 'Payment Error'
   end
 
   sig { void }
