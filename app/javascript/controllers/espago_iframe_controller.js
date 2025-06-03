@@ -16,12 +16,5 @@ export default class extends Controller {
       tokenField.value = token
       this.processBtnTarget.click()
     }
-    window.espagoError = function(error) {
-  console.error("Espago Error:", error);
-  };
-
-  window.espagoClosed = function() {
-    console.log("Espago window closed");
-  };
   }
 }

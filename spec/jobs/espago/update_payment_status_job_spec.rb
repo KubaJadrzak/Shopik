@@ -28,7 +28,6 @@ RSpec.describe Espago::UpdatePaymentStatusJob, type: :job do
   end
 
   it 'sets status of order without payment_id and with uncertain error to failed if orders is old' do
-
     order.update!(created_at: 3.hours.ago, payment_id: nil, payment_status: 'timeout', status: 'Awaiting Payment')
     described_class.perform_now(user.id)
 
