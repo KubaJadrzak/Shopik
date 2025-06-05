@@ -44,16 +44,8 @@ class Espago::PaymentsController < ApplicationController
     else
       @order.update_status_by_payment_status(response.status)
 
-      awaiting_statuses = Set[
-        'timeout',
-        'connection_failed',
-        'ssl_error',
-        'parsing_error',
-        'unknown_faraday_error',
-        'unexpected_error',
-      ]
-
-      if awaiting_statuses.include?(response.status)
+      status = @order.show_status_by_payment_status(response.status)
+      if status == 'Awaiting Payment'
         redirect_to espago_payments_awaiting_path(@order)
       else
         Rails.logger.warn("Payment rejected with status #{response.status} for Order ##{@order.id}")
