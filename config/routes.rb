@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   resources :cart_items, only: [:destroy]
 
   resources :orders, only: %i[new create show]
+  resources :subscriptions, only: %i[new]
 
   get 'account', to: 'users#account', as: 'account'
 

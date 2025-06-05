@@ -26,6 +26,13 @@
                                                            class: "list-group-item list-group-item-action text-danger" %>
           <%= button_to "Delete Account", user_registration_path, method: :delete,
                                                                 class: "list-group-item list-group-item-action text-danger" %>
+          <div class="mt-4 p-3 border rounded bg-light text-center">
+            <h5 class="mb-1" style="color: #9B111E;">Rubitter Red</h5>
+            <p class="mb-1 text-muted"><strong>$4.99 / month</strong></p>
+            <p class="mb-3 text-muted">Stand out, support development, and get exclusive features.</p>
+            <%= button_to "Subscribe to Rubitter Red", new_subscription_path, method: :get,
+                                                                      class: "btn btn-primary btn-sm px-4" %>
+          </div>
         </div>
       </div>
       <div class="col-lg-9">

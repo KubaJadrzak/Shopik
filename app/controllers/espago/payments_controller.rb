@@ -48,7 +48,7 @@ class Espago::PaymentsController < ApplicationController
       if status == 'Awaiting Payment'
         redirect_to espago_payments_awaiting_path(@order)
       else
-        Rails.logger.warn("Payment rejected with status #{response.status} for Order ##{@order.id}")
+        Rails.logger.warn("Payment rejected with status #{response.status} for Order ##{@order.order_number}")
         redirect_to order_path(@order),
                     alert: 'We could not process your payment due to a technical issue'
       end

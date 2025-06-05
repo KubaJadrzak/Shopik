@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_22_194011) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_05_133116) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -27,6 +27,33 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_194011) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_carts_on_user_id"
+  end
+
+  create_table "charges", force: :cascade do |t|
+    t.integer "subscription_id", null: false
+    t.string "payment_id", null: false
+    t.integer "amount", null: false
+    t.string "state", default: "new", null: false
+    t.string "reject_reason"
+    t.string "issuer_response_code"
+    t.string "behavior"
+    t.json "raw_response"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payment_id"], name: "index_charges_on_payment_id", unique: true
+    t.index ["state"], name: "index_charges_on_state"
+    t.index ["subscription_id"], name: "index_charges_on_subscription_id"
+  end
+
+  create_table "espago_clients", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "client_id", null: false
+    t.string "company"
+    t.string "last4"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_espago_clients_on_client_id", unique: true
+    t.index ["user_id"], name: "index_espago_clients_on_user_id"
   end
 
   create_table "likes", force: :cascade do |t|
@@ -85,6 +112,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_194011) do
     t.index ["user_id"], name: "index_rubits_on_user_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "espago_client_id", null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.string "status", default: "pending", null: false
+    t.boolean "auto_renew", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["espago_client_id"], name: "index_subscriptions_on_espago_client_id"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -102,6 +142,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_194011) do
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "products"
   add_foreign_key "carts", "users"
+  add_foreign_key "charges", "subscriptions"
+  add_foreign_key "espago_clients", "users"
   add_foreign_key "likes", "rubits"
   add_foreign_key "likes", "users"
   add_foreign_key "order_items", "orders"
@@ -109,4 +151,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_194011) do
   add_foreign_key "orders", "users"
   add_foreign_key "rubits", "rubits", column: "parent_rubit_id"
   add_foreign_key "rubits", "users"
+  add_foreign_key "subscriptions", "espago_clients"
+  add_foreign_key "subscriptions", "users"
 end
