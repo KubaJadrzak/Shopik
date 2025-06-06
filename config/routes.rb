@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   resources :cart_items, only: [:destroy]
 
   resources :orders, only: %i[new create show]
-  resources :subscriptions, only: %i[new]
+  resources :subscriptions, only: %i[new create show]
 
   get 'account', to: 'users#account', as: 'account'
 
@@ -28,6 +28,10 @@ Rails.application.routes.draw do
     get 'payments/success',       to: 'payments#payment_success'
     get 'payments/failure',       to: 'payments#payment_failure'
     get 'payments/awaiting',       to: 'payments#payment_awaiting'
+    get 'charges/:id/start_charge', to: 'charges#start_charge', as: 'start_charge'
+    get 'charges/success', to: 'charges#charge_success'
+    get 'charges/failure', to: 'charges#charge_failure'
+    get 'charges/awaiting', to: 'charges#charge_awaiting'
     post '/back_request',          to: 'back_requests#handle_back_request', as: 'back_request'
   end
 

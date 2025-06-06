@@ -1,5 +1,3 @@
-# typed: strict
-
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -14,4 +12,13 @@ class User < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
 
   broadcasts_refreshes
+
+  def has_active_subscription?
+    subscriptions
+      .joins(:charges)
+      .where(charges: { state: 'executed' })
+      .where('start_date <= ? AND end_date >= ?', Date.today, Date.today)
+      .exists?
+  end
+
 end

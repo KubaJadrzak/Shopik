@@ -9,9 +9,19 @@ class Espago::PaymentsController < ApplicationController
   def start_payment
     @order = Order.find(params[:id])
     @card_token = T.let(session.delete(:card_token), T.nilable(String))
+    app_host = ENV.fetch('APP_HOST_URL')
 
     response = if @card_token
-                 payment_service = Espago::OneTimePaymentService.new(card_token: @card_token, order: @order)
+                 payload = Espago::OneTimePaymentPayload.new(
+                   amount:       @order.total_price,
+                   currency:     'pln',
+                   card:         @card_token,
+                   description:  "Order ##{@order.order_number}",
+                   positive_url: "#{app_host}/espago/payments/success?order_number=#{@order.order_number}",
+                   negative_url: "#{app_host}/espago/payments/failure?order_number=#{@order.order_number}",
+                 )
+
+                 payment_service = Espago::OneTimePaymentService.new(payload: payload)
                  payment_service.create_payment
                else
                  payment_service = Espago::SecureWebPageService.new(@order)

@@ -15,33 +15,48 @@ class Espago::BackRequestsController < ApplicationController
     state = payload['state']
     description = payload['description']
 
-    order = Order.find_by(payment_id: payment_id)
+    # Try to find the record in either Order or Charge
+    record = find_record_by_payment_id(payment_id)
 
-    if order.nil? && description.present?
-      order_number = description[/#([A-Z0-9]+)/, 1]
-      Rails.logger.info("Extracted order number: #{order_number}")
+    # If not found and description is present, try extracting the number and find again
+    if record.nil? && description.present?
+      number = description[/#([A-Z0-9]+)/, 1]
+      Rails.logger.info("Extracted number from description: #{number}")
 
-      if order_number.present?
-        order = Order.find_by(order_number: order_number)
-        if order.present?
-          Rails.logger.info("Found order by order_number. Assigning payment_id #{payment_id} to order #{order_number}")
-          order.update!(payment_id: payment_id)
+      if number.present?
+        # Try Order by order_number first
+        record = Order.find_by(order_number: number)
+        if record.present?
+          Rails.logger.info("Found Order by order_number. Assigning payment_id #{payment_id} to Order #{number}")
+          record.update!(payment_id: payment_id)
+        else
+          # Try Charge by charge_number
+          record = Charge.find_by(charge_number: number)
+          if record.present?
+            Rails.logger.info("Found Charge by charge_number. Assigning payment_id #{payment_id} to Charge #{number}")
+            record.update!(payment_id: payment_id)
+          end
         end
       end
     end
 
-    if order.nil?
-      Rails.logger.warn("Order not found for payment_id: #{payment_id}")
+    if record.nil?
+      Rails.logger.warn("Record not found for payment_id: #{payment_id}")
       head :not_found
       return
     end
 
-    order.update_status_by_payment_status(state.to_s)
+    record.update_status_by_payment_status(state.to_s)
 
     head :ok
   end
 
   private
+
+  sig { params(payment_id: String).returns(T.nilable(T.any(Order, Charge))) }
+  def find_record_by_payment_id(payment_id)
+    Order.find_by(payment_id: payment_id) || Charge.find_by(payment_id: payment_id)
+  end
 
   sig { returns(T.untyped) }
   def authenticate_espago!

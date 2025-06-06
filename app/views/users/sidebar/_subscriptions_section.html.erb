@@ -1,0 +1,10 @@
+<div id="subscription-history-section" class="content-section">
+  <h4>Your Subscriptions</h4>
+  <% if @subscriptions.any? %>
+    <div class="row mt-4">
+      <%= render partial: "users/sidebar/subscription", collection: @subscriptions %>
+    </div>
+  <% else %>
+    <p>You have no subscriptions yet.</p>
+  <% end %>
+</div>

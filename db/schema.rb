@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_05_133116) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_06_124600) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -31,8 +31,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_133116) do
 
   create_table "charges", force: :cascade do |t|
     t.integer "subscription_id", null: false
-    t.string "payment_id", null: false
-    t.integer "amount", null: false
+    t.string "payment_id"
+    t.decimal "amount", precision: 10, scale: 2, null: false
     t.string "state", default: "new", null: false
     t.string "reject_reason"
     t.string "issuer_response_code"
@@ -40,6 +40,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_133116) do
     t.json "raw_response"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "charge_number", null: false
+    t.index ["charge_number"], name: "index_charges_on_charge_number", unique: true
     t.index ["payment_id"], name: "index_charges_on_payment_id", unique: true
     t.index ["state"], name: "index_charges_on_state"
     t.index ["subscription_id"], name: "index_charges_on_subscription_id"
@@ -52,7 +54,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_133116) do
     t.string "last4"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "client_number", null: false
     t.index ["client_id"], name: "index_espago_clients_on_client_id", unique: true
+    t.index ["client_number"], name: "index_espago_clients_on_client_number", unique: true
     t.index ["user_id"], name: "index_espago_clients_on_user_id"
   end
 
@@ -85,7 +89,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_133116) do
     t.string "payment_status", null: false
     t.decimal "total_price", precision: 10, scale: 2, null: false
     t.text "shipping_address", null: false
-    t.datetime "ordered_at"
+    t.datetime "ordered_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "payment_id"
@@ -114,14 +118,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_133116) do
 
   create_table "subscriptions", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.integer "espago_client_id", null: false
+    t.integer "espago_client_id"
     t.date "start_date", null: false
     t.date "end_date", null: false
-    t.string "status", default: "pending", null: false
+    t.string "status", default: "New", null: false
     t.boolean "auto_renew", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "price"
+    t.string "subscription_number"
     t.index ["espago_client_id"], name: "index_subscriptions_on_espago_client_id"
+    t.index ["subscription_number"], name: "index_subscriptions_on_subscription_number", unique: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 

@@ -14,6 +14,9 @@ class ApplicationController < ActionController::Base
   sig { params(order: Order).returns(String) }
   def order_path(order); end
 
+  sig { params(subscription: Subscription).returns(String) }
+  def subscription_path(subscription); end
+
   sig { params(order: Order).returns(String) }
   def espago_start_payment_path(order); end
 
@@ -25,6 +28,15 @@ class ApplicationController < ActionController::Base
 
   sig { params(order: Order).void}
   def espago_payments_awaiting_path(order); end
+
+  sig { params(subscription: Subscription).void}
+  def espago_charges_success_path(subscription); end
+
+  sig { params(subscription: Subscription).void}
+  def espago_charges_failure_path(subscription); end
+
+  sig { params(subscription: Subscription).void}
+  def espago_charges_awaiting_path(subscription); end
 
   sig { returns(String) }
   def account_path; end
