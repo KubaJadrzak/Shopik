@@ -18,14 +18,16 @@ class OrdersController < ApplicationController
       shipping_address: order_params[:shipping_address],
       total_price:      current_user.cart.total_price,
       status:           'New',
-      payment_status:   'new',
       ordered_at:       Time.current,
     )
+
+
     @order.build_order_items_from_cart(current_user.cart)
     if @order.save
+      @charge = @order.charges.create!(amount: @order.total_price)
       current_user.cart.cart_items.destroy_all
       session[:card_token] = params[:card_token] if params[:card_token].present?
-      redirect_to espago_start_payment_path(@order)
+      redirect_to espago_start_charge_path(@charge.charge_number)
 
     else
       flash.now[:alert] = 'There was a problem placing your order.'

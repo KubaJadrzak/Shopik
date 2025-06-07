@@ -17,27 +17,20 @@ class ApplicationController < ActionController::Base
   sig { params(subscription: Subscription).returns(String) }
   def subscription_path(subscription); end
 
-  sig { params(order: Order).returns(String) }
-  def espago_start_payment_path(order); end
-
-  sig { params(order: Order).void}
-  def espago_payments_success_path(order); end
-
-  sig { params(order: Order).void}
-  def espago_payments_failure_path(order); end
-
-  sig { params(order: Order).void}
-  def espago_payments_awaiting_path(order); end
-
-  sig { params(subscription: Subscription).void}
-  def espago_charges_success_path(subscription); end
-
-  sig { params(subscription: Subscription).void}
-  def espago_charges_failure_path(subscription); end
-
-  sig { params(subscription: Subscription).void}
-  def espago_charges_awaiting_path(subscription); end
+  sig { params(charge_number: String).returns(String) }
+  def espago_start_charge_path(charge_number); end
 
   sig { returns(String) }
   def account_path; end
+
+  sig { params(charge: Charge).returns(Charge) }
+  def espago_charges_success_path(charge); end
+
+  sig { params(charge: Charge).returns(Charge) }
+  def espago_charges_awaiting_path(charge); end
+
+  sig { params(charge: Charge).returns(Charge) }
+  def espago_charges_failure_path(charge); end
+
+
 end

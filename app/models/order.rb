@@ -4,6 +4,7 @@ class Order < ApplicationRecord
   extend T::Sig
   belongs_to :user, optional: true, touch: true
   has_many :order_items, dependent: :destroy
+  has_many :charges, dependent: :destroy
 
   validates :email, presence: true
   validates :total_price, presence: true

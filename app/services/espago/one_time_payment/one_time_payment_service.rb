@@ -1,9 +1,9 @@
 # typed: strict
 
-class Espago::OneTimePaymentService
+class Espago::OneTimePayment::OneTimePaymentService
   extend T::Sig
 
-  sig { params(payload: Espago::OneTimePaymentPayload).void }
+  sig { params(payload: Espago::OneTimePayment::OneTimePaymentPayload).void }
   def initialize(payload:)
     @payload = payload
   end

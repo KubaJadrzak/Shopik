@@ -8,12 +8,6 @@ class Subscription < ApplicationRecord
 
   before_create :generate_subscription_number
 
-  def currently_active?
-    charges.executed.exists? &&
-      Date.today >= start_date &&
-      Date.today <= end_date
-  end
-
   def refresh_status!
     if currently_active?
       update!(status: :active)

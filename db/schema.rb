@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_06_124600) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_06_174717) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -30,7 +30,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_124600) do
   end
 
   create_table "charges", force: :cascade do |t|
-    t.integer "subscription_id", null: false
+    t.integer "subscription_id"
     t.string "payment_id"
     t.decimal "amount", precision: 10, scale: 2, null: false
     t.string "state", default: "new", null: false
@@ -41,7 +41,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_124600) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "charge_number", null: false
+    t.integer "order_id"
     t.index ["charge_number"], name: "index_charges_on_charge_number", unique: true
+    t.index ["order_id"], name: "index_charges_on_order_id"
     t.index ["payment_id"], name: "index_charges_on_payment_id", unique: true
     t.index ["state"], name: "index_charges_on_state"
     t.index ["subscription_id"], name: "index_charges_on_subscription_id"
@@ -86,13 +88,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_124600) do
     t.string "order_number", null: false
     t.string "email", null: false
     t.string "status", null: false
-    t.string "payment_status", null: false
     t.decimal "total_price", precision: 10, scale: 2, null: false
     t.text "shipping_address", null: false
     t.datetime "ordered_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "payment_id"
     t.index ["order_number"], name: "index_orders_on_order_number", unique: true
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
@@ -149,6 +149,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_124600) do
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "products"
   add_foreign_key "carts", "users"
+  add_foreign_key "charges", "orders"
   add_foreign_key "charges", "subscriptions"
   add_foreign_key "espago_clients", "users"
   add_foreign_key "likes", "rubits"

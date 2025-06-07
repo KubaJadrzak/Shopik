@@ -1,6 +1,6 @@
 # typed: strict
 
-class Espago::OneTimePaymentPayload
+class Espago::OneTimePayment::OneTimePaymentPayload
   extend T::Sig
 
   sig do

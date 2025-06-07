@@ -19,9 +19,12 @@ class SubscriptionsController < ApplicationController
     Rails.logger.info("Card token: #{params[:card_token]}")
     @subscription = current_user.subscriptions.new(status: 'New')
 
+
+
     if @subscription.save && params[:card_token]
+      @charge = @subscription.charges.create!(amount: @subscription.price)
       session[:card_token] = params[:card_token]
-      redirect_to espago_start_charge_path(@subscription)
+      redirect_to espago_start_charge_path(@charge.charge_number)
     else
       flash.now[:alert] = 'There was a problem with your subscription.'
       render :new, status: :unprocessable_entity
