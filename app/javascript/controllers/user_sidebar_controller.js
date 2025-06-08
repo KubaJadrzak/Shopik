@@ -5,7 +5,8 @@ export default class extends Controller {
     "rubitsSection",
     "likesSection",
     "commentsSection",
-    "ordersSection"
+    "ordersSection",
+    'subscriptionsSection'
   ]
 
 connect() {

@@ -17,6 +17,9 @@ Cart.destroy_all
 CartItem.destroy_all
 Order.destroy_all
 OrderItem.destroy_all
+Subscription.destroy_all
+Charge.destroy_all
+
 
 user = []
 

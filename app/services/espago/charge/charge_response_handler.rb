@@ -15,7 +15,7 @@ class Espago::Charge::ChargeResponseHandler
       state:                data['state'],
       issuer_response_code: data['issuer_response_code'],
       reject_reason:        data['reject_reason'].presence,
-      behavior:             data['behavior'].presence,
+      behaviour:            data['behaviour'].presence,
       raw_response:         data,
     )
 

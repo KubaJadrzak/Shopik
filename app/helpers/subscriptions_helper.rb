@@ -1,4 +1,4 @@
-module OrdersHelper
+module SubscriptionsHelper
   def color_for_status(status)
     case status
     when 'Payment Successful'

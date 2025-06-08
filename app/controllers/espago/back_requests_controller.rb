@@ -13,6 +13,10 @@ class Espago::BackRequestsController < ApplicationController
     state = payload['state']
     description = payload['description']
 
+    reject_reason = payload['reject_reason']
+    behaviour = payload['behaviour']
+    issuer_response_code = payload['issuer_response_code']
+
     charge = Charge.find_by(payment_id: payment_id)
 
     if charge.nil? && description.present?
@@ -35,6 +39,12 @@ class Espago::BackRequestsController < ApplicationController
     end
 
     charge.update_status_by_payment_status(state.to_s)
+    charge.update(
+      reject_reason:        reject_reason,
+      behaviour:            behaviour,
+      issuer_response_code: issuer_response_code,
+      raw_response:         payload,
+    )
 
     head :ok
   end

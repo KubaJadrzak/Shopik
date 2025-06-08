@@ -26,8 +26,7 @@ class Espago::ChargesController < ApplicationController
     when :awaiting
       redirect_to espago_charges_awaiting_path(param)
     when :failure
-      redirect_to espago_charges_failure_path(param),
-                  alert: 'We could not process your charge due to a technical issue'
+      redirect_to espago_charges_failure_path(param)
     end
   end
 
@@ -36,10 +35,10 @@ class Espago::ChargesController < ApplicationController
 
     if @charge&.subscription
       @subscription = @charge.subscription
-      redirect_to subscription_path(T.must(@subscription)), notice: 'Charge successful!'
+      redirect_to subscription_path(@subscription), notice: 'Charge successful!'
     elsif @charge&.order
       @order = @charge.order
-      redirect_to order_path(T.must(@order)), notice: 'Charge successful!'
+      redirect_to order_path(@order), notice: 'Charge successful!'
     else
       redirect_to account_path, alert: 'We are experiencing an issue with your charge'
     end
@@ -50,10 +49,10 @@ class Espago::ChargesController < ApplicationController
 
     if @charge&.subscription
       @subscription = @charge.subscription
-      redirect_to subscription_path(T.must(@subscription)), alert: 'Charge failed!'
+      redirect_to subscription_path(@subscription), alert: 'Charge failed!'
     elsif @charge&.order
       @order = @charge.order
-      redirect_to order_path(T.must(@order)), alert: 'Charge failed!'
+      redirect_to order_path(@order), alert: 'Charge failed!'
     else
       redirect_to account_path, alert: 'We are experiencing an issue with your charge'
     end
@@ -64,10 +63,10 @@ class Espago::ChargesController < ApplicationController
 
     if @charge&.subscription
       @subscription = @charge.subscription
-      redirect_to subscription_path(T.must(@subscription)), alert: 'Payment is being processed!'
+      redirect_to subscription_path(@subscription), alert: 'Charge is being processed!'
     elsif @charge&.order
       @order = @charge.order
-      redirect_to order_path(T.must(@order)), alert: 'Payment is being processed!'
+      redirect_to order_path(@order), alert: 'Charge is being processed!'
     else
       redirect_to account_path, alert: 'We are experiencing an issue with your charge'
     end

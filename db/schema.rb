@@ -36,7 +36,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_174717) do
     t.string "state", default: "new", null: false
     t.string "reject_reason"
     t.string "issuer_response_code"
-    t.string "behavior"
+    t.string "behaviour"
     t.json "raw_response"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

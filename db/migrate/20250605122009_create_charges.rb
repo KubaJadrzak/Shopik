@@ -9,7 +9,7 @@ class CreateCharges < ActiveRecord::Migration[8.0]
       t.string :state, default: 'new', null: false
       t.string :reject_reason
       t.string :issuer_response_code
-      t.string :behavior
+      t.string :behaviour
 
       t.json :raw_response
 

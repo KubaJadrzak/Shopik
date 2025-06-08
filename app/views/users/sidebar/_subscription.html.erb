@@ -3,10 +3,12 @@
     <div class="card shadow-sm border-light">
       <div class="card-body">
         <h5 class="card-title mb-3"><%= subscription.subscription_number %></h5>
-        <p><strong>Status:</strong> <%= subscription.status.humanize %></p>
-        <p><strong>Period:</strong> <%= subscription.start_date.strftime("%b %d, %Y") %> - <%= subscription.end_date.strftime("%b %d, %Y") %></p>
-        <p><strong>Auto Renew:</strong> <%= subscription.auto_renew ? "Yes" : "No" %></p>
-        <p><strong>Price:</strong> <%= number_to_currency(subscription.price) %></p>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <%= render "subscriptions/subscription_statuses", subscription: subscription %>
+        </div>
+        <p class="d-flex justify-content-between"><strong>Period:</strong> <%= subscription.start_date.strftime("%b %d, %Y") %> - <%= subscription.end_date.strftime("%b %d, %Y") %></p>
+        <p class="d-flex justify-content-between"><strong>Auto Renew:</strong> <%= subscription.auto_renew ? "Yes" : "No" %></p>
+        <p class="d-flex justify-content-between"><strong>Price:</strong> <%= number_to_currency(subscription.price) %></p>
       </div>
       <div class="card-footer bg-light">
         <small>Created at <%= subscription.created_at.strftime("%b %d, %Y") %></small>

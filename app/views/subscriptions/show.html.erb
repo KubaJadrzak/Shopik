@@ -8,15 +8,29 @@
       <div class="card shadow-sm border-light">
         <div class="card-body">
           <h5 class="card-title mb-3">Subscription Details</h5>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <%= render "subscription_statuses", subscription: @subscription %>
+          </div>
           <div class="row">
             <div class="col-md-6">
-              <p><strong>Status:</strong> <%= @subscription.status.humanize %></p>
-              <p><strong>Auto Renew:</strong> <%= @subscription.auto_renew ? "Yes" : "No" %></p>
-              <p><strong>Price:</strong> <%= number_to_currency(@subscription.price) %></p>
+              <p class="d-flex justify-content-between">
+                <strong>Auto Renew:</strong>
+                <span><%= @subscription.auto_renew ? "Yes" : "No" %></span>
+              </p>
+              <p class="d-flex justify-content-between">
+                <strong>Price:</strong>
+                <span><%= number_to_currency(@subscription.price) %></span>
+              </p>
             </div>
             <div class="col-md-6">
-              <p><strong>Start Date:</strong> <%= @subscription.start_date.strftime("%B %d, %Y") %></p>
-              <p><strong>End Date:</strong> <%= @subscription.end_date.strftime("%B %d, %Y") %></p>
+              <p class="d-flex justify-content-between">
+                <strong>Start Date:</strong>
+                <span><%= @subscription.start_date.strftime("%B %d, %Y") %></span>
+              </p>
+              <p class="d-flex justify-content-between">
+                <strong>End Date:</strong>
+                <span><%= @subscription.end_date.strftime("%B %d, %Y") %></span>
+              </p>
             </div>
           </div>
         </div>
@@ -27,38 +41,4 @@
     </div>
   </div>
 </div>
-<div class="row mt-4">
-  <div class="col-lg-12">
-    <div class="card shadow-sm border-light">
-      <div class="card-body">
-        <h5 class="card-title mb-3">Charges</h5>
-        <% if @subscription.charges.any? %>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Charge Number</th>
-                <th>Amount</th>
-                <th>State</th>
-                <th>Reject Reason</th>
-                <th>Created At</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @subscription.charges.each do |charge| %>
-                <tr>
-                  <td><%= charge.charge_number %></td>
-                  <td><%= number_to_currency(charge.amount) %></td>
-                  <td><%= charge.state.humanize %></td>
-                  <td><%= charge.reject_reason.presence || "N/A" %></td>
-                  <td><%= charge.created_at.strftime("%B %d, %Y at %I:%M %p") %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        <% else %>
-          <p>No charges found for this subscription.</p>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
+<%= render partial: 'charges/charge', locals: { charges: @subscription.charges } %>
