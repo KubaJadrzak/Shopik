@@ -1,5 +1,5 @@
 class Subscription < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, touch: true
   belongs_to :espago_client, optional: true
   has_many :charges, dependent: :destroy
 
@@ -7,6 +7,8 @@ class Subscription < ApplicationRecord
   before_validation :set_price, on: :create
 
   before_create :generate_subscription_number
+
+  broadcasts_refreshes
 
   def refresh_status!
     if currently_active?
