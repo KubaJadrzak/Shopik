@@ -75,7 +75,7 @@ class Order < ApplicationRecord
   end
 
   sig { returns(T::Boolean) }
-  def has_in_progress_payment?
+  def in_progress_payment?
     in_progress_payment.present?
   end
 

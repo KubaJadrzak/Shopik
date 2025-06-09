@@ -1,4 +1,8 @@
+# typed: strict
+
 class Subscription < ApplicationRecord
+  extend T::Sig
+
   belongs_to :user, touch: true
   belongs_to :espago_client, optional: true
   has_many :payments, dependent: :destroy
@@ -10,37 +14,36 @@ class Subscription < ApplicationRecord
 
   broadcasts_refreshes
 
-  def refresh_status!
-    if currently_active?
-      update!(status: :active)
-    elsif end_date < Date.today
-      update!(status: :expired)
-    else
-      update!(status: :paid)
-    end
-  end
-
+  sig { returns(T.nilable(Payment)) }
   def in_progress_payment
     payments.in_progress.first
   end
 
-  def has_in_progress_payment?
+  sig { returns(T::Boolean) }
+  def in_progress_payment?
     in_progress_payment.present?
+  end
+
+  sig { returns(T::Boolean) }
+  def can_retry_payment?
+    payments.all?(&:retryable?)
   end
 
   private
 
+  sig { void }
   def set_default_dates
-    self.start_date ||= Date.today
-    self.end_date   ||= 30.days.from_now.to_date
+    self.start_date = Date.today if start_date.nil?
+    self.end_date = 30.days.from_now.to_date if end_date.nil?
   end
 
+  sig { void }
   def set_price
-    self.price ||= 4.99
+    self.price ||= BigDecimal('4.99')
   end
 
+  sig { void }
   def generate_subscription_number
     self.subscription_number = SecureRandom.hex(10).upcase
   end
-
 end

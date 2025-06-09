@@ -1,7 +1,9 @@
+# typed: strict
+
 class Espago::Payment::PaymentProcessor
+  extend T::Sig
 
-
-
+  sig { params(payment: Payment, card_token: T.nilable(String)).returns(Espago::Response) }
   def self.process(payment:, card_token:)
     if payment.subscription.present?
       Espago::Payment::SubscriptionPaymentHandler.new(payment, card_token).process

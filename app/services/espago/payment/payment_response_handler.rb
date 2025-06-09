@@ -1,21 +1,23 @@
+# typed: strict
+
 class Espago::Payment::PaymentResponseHandler
   extend T::Sig
 
+  sig { params(payment: Payment, response: Espago::Response).returns([Symbol, String]) }
   def self.handle_response(payment, response)
-    if response.success?
-      handle_success(payment, response.body)
-    else
-      handle_failure(payment, response.status.to_s)
-    end
+    return handle_success(payment, response.body) if response.success?
+
+    handle_failure(payment, response.status.to_s)
   end
 
+  sig { params(payment: Payment, data: T::Hash[String, T.untyped]).returns([Symbol, String]) }
   def self.handle_success(payment, data)
     payment.update!(
       payment_id:           data['id'],
       state:                data['state'],
       issuer_response_code: data['issuer_response_code'],
-      reject_reason:        data['reject_reason'].presence,
-      behaviour:            data['behaviour'].presence,
+      reject_reason:        data['reject_reason']&.presence,
+      behaviour:            data['behaviour']&.presence,
     )
 
     redirect_url = data['redirect_url'] || data.dig('dcc_decision_information', 'redirect_url')
@@ -49,6 +51,7 @@ class Espago::Payment::PaymentResponseHandler
     end
   end
 
+  sig { params(payment: Payment, state: String).returns([Symbol, String]) }
   def self.handle_failure(payment, state)
     payment.update_status_by_payment_status(state)
 

@@ -23,14 +23,14 @@ class ApplicationController < ActionController::Base
   sig { returns(String) }
   def account_path; end
 
-  sig { params(payment: Payment).returns(Payment) }
-  def espago_payments_success_path(payment); end
+  sig { params(payment_number: String).returns(String) }
+  def espago_payments_success_path(payment_number); end
 
-  sig { params(payment: Payment).returns(Payment) }
-  def espago_payments_awaiting_path(payment); end
+  sig { params(payment_number: String).returns(String) }
+  def espago_payments_awaiting_path(payment_number); end
 
-  sig { params(payment: Payment).returns(Payment) }
-  def espago_payments_failure_path(payment); end
+  sig { params(payment_number: String).returns(String) }
+  def espago_payments_failure_path(payment_number); end
 
 
 end

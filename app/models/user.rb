@@ -1,8 +1,12 @@
+# typed: strict
+
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  extend T::Sig
+
+  # Devise modules
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
   has_one :cart, dependent: :destroy
   has_many :rubits, dependent: :destroy
   has_many :likes, dependent: :destroy
@@ -16,15 +20,18 @@ class User < ApplicationRecord
 
   broadcasts_refreshes
 
+  sig { returns(ActiveRecord::Relation) }
   def orders_with_in_progress_payments
     orders.joins(:payments).merge(Payment.in_progress).distinct
   end
 
+  sig { returns(ActiveRecord::Relation) }
   def subscriptions_with_in_progress_payments
     subscriptions.joins(:payments).merge(Payment.in_progress).distinct
   end
 
-  def has_active_subscription?
+  sig { returns(T::Boolean) }
+  def active_subscription?
     subscriptions
       .joins(:payments)
       .where(payments: { state: 'executed' })
@@ -32,9 +39,9 @@ class User < ApplicationRecord
       .exists?
   end
 
+  sig { returns(ActiveRecord::Relation) }
   def payments
     Payment.where(id: order_payments.select(:id))
            .or(Payment.where(id: subscription_payments.select(:id)))
   end
-
 end

@@ -34,7 +34,7 @@
                                                            class: "list-group-item list-group-item-action text-danger" %>
           <%= button_to "Delete Account", user_registration_path, method: :delete,
                                                                 class: "list-group-item list-group-item-action text-danger" %>
-          <% unless @user.has_active_subscription? %>
+          <% unless @user.active_subscription? %>
             <div class="mt-4 p-3 border rounded bg-light text-center">
               <h5 class="mb-1" style="color: #9B111E;">Rubitter Red</h5>
               <p class="mb-1 text-muted"><strong>$4.99 / month</strong></p>

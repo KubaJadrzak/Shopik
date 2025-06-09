@@ -10,7 +10,9 @@ class OrdersController < ApplicationController
     @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY', nil)
   end
 
-  def show; end
+  def show
+    @payments = @order.payments.order(created_at: :desc)
+  end
 
   def create
     @order = current_user.orders.new(

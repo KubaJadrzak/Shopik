@@ -9,7 +9,7 @@ class Espago::UpdatePaymentStatusJob < ApplicationJob
     user = User.find_by(id: user_id)
     return unless user
 
-    user.payments.in_progress.find_each do |payment|
+    Payment.in_progress.where(id: user.payments.select(:id)).find_each do |payment|
       case payment.show_status_by_payment_status(payment.state)
       when 'Awaiting Payment'
         if payment.created_at < 120.minutes.ago
@@ -22,7 +22,7 @@ class Espago::UpdatePaymentStatusJob < ApplicationJob
         end
 
         new_status = Espago::PaymentStatusService
-                     .new(payment_id: payment.payment_id)
+                     .new(payment_id: T.must(payment.payment_id))
                      .fetch_payment_status
         if new_status.present? && new_status != payment.state
           payment.update_status_by_payment_status(new_status)

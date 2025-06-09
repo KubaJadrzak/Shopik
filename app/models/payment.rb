@@ -1,4 +1,4 @@
-# typed: ignore
+# typed: strict
 
 class Payment < ApplicationRecord
   extend T::Sig
@@ -46,9 +46,9 @@ class Payment < ApplicationRecord
     new_status = STATUS_MAP[state] || 'Payment Error'
 
     if subscription.present?
-      subscription.update!(status: new_status)
+      T.must(subscription).update!(status: new_status)
     elsif order.present?
-      order.update!(status: new_status)
+      T.must(order).update!(status: new_status)
     else
       Rails.logger.warn("Payment #{id} does not belong to a subscription or order.")
     end
@@ -93,7 +93,7 @@ class Payment < ApplicationRecord
 
   scope :in_progress, -> { where(state: IN_PROGRESS_STATUSES) }
 
-
+  sig { returns(T::Boolean) }
   def in_progress?
     IN_PROGRESS_STATUSES.include?(state)
   end
@@ -111,12 +111,14 @@ class Payment < ApplicationRecord
 
   private
 
+  sig { void }
   def must_have_subscription_or_order
     return unless subscription.nil? && order.nil?
 
     errors.add(:base, 'Payment must belong to either a subscription or an order')
   end
 
+  sig { void }
   def prevent_duplicate_payment
     if subscription.present?
       if Payment.where(subscription: subscription).where(state: IN_PROGRESS_STATUSES + ['executed']).exists?
@@ -129,6 +131,7 @@ class Payment < ApplicationRecord
     end
   end
 
+  sig { void }
   def generate_payment_number
     self.payment_number = SecureRandom.hex(10).upcase
   end

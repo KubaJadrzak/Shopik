@@ -1,3 +1,5 @@
+# typed: true
+
 class SubscriptionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_subscription, only: [:show]
@@ -8,10 +10,11 @@ class SubscriptionsController < ApplicationController
   end
 
   def show
+    @payments = @subscription.payments.order(created_at: :desc)
   end
 
   def create
-    if current_user.has_active_subscription?
+    if current_user.active_subscription?
       redirect_to "#{account_path}#subscriptions", alert: 'You already have an active subscription.'
       return
     end
