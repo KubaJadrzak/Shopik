@@ -24,7 +24,7 @@ class Espago::UpdatePaymentStatusJob < ApplicationJob
         new_status = Espago::PaymentStatusService
                      .new(payment_id: payment.payment_id)
                      .fetch_payment_status
-
+        Rails.logger.info("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS ##{new_status}")
         if new_status.present? && new_status != payment.state
           payment.update_status_by_payment_status(new_status)
         elsif payment.created_at < 120.minutes.ago

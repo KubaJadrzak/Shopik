@@ -37,13 +37,13 @@ module GeneratedUrlHelpersModule
   def espago_back_request_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_payment_awaiting_url(*args); end
+  def espago_payments_awaiting_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_payment_failure_url(*args); end
+  def espago_payments_failure_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_payment_success_url(*args); end
+  def espago_payments_success_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def espago_start_payment_url(*args); end

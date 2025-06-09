@@ -12,8 +12,6 @@ class Payment < ApplicationRecord
   before_create :prevent_duplicate_payment
 
 
-  sig { returns(ActiveRecord::Relation) }
-
   STATUS_MAP = T.let({
                        'executed'              => 'Payment Successful',
                        'rejected'              => 'Payment Rejected',
@@ -39,6 +37,8 @@ class Payment < ApplicationRecord
                        'invalid_uri'           => 'Payment Error',
                      }, T::Hash[String, String],)
 
+
+  sig { params(state: String).void }
   def update_status_by_payment_status(state)
     self.state = state
     save!
@@ -54,6 +54,7 @@ class Payment < ApplicationRecord
     end
   end
 
+  sig { params(state: String).returns(String) }
   def show_status_by_payment_status(state)
     STATUS_MAP[state] || 'Payment Error'
   end

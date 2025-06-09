@@ -37,13 +37,13 @@ module GeneratedPathHelpersModule
   def espago_back_request_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_payment_awaiting_path(*args); end
+  def espago_payments_awaiting_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_payment_failure_path(*args); end
+  def espago_payments_failure_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_payment_success_path(*args); end
+  def espago_payments_success_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def espago_start_payment_path(*args); end
