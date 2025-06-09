@@ -13,9 +13,9 @@ RSpec.describe Espago::PaymentsController, type: :request do
         let(:response_body) { { 'id' => 'espago_123', 'redirect_url' => 'https://payment.example.com/redirect' } }
 
         before do
-          service = instance_double(Espago::SecureWebPageService)
+          service = instance_double(Espago::SecureWebPage::SecureWebPageService)
           response = Espago::Response.new(success: true, status: 200, body: response_body)
-          allow(Espago::SecureWebPageService).to receive(:new).with(order).and_return(service)
+          allow(Espago::SecureWebPage::SecureWebPageService).to receive(:new).with(order).and_return(service)
           allow(service).to receive(:create_payment).and_return(response)
 
           get "/espago/payments/#{order.id}/start_payment"
@@ -29,9 +29,9 @@ RSpec.describe Espago::PaymentsController, type: :request do
 
       context 'when payment creation fails with uncertain error' do
         before do
-          service = instance_double(Espago::SecureWebPageService)
+          service = instance_double(Espago::SecureWebPage::SecureWebPageService)
           response = Espago::Response.new(success: false, status: :timeout, body: {})
-          allow(Espago::SecureWebPageService).to receive(:new).with(order).and_return(service)
+          allow(Espago::SecureWebPage::SecureWebPageService).to receive(:new).with(order).and_return(service)
           allow(service).to receive(:create_payment).and_return(response)
 
           get "/espago/payments/#{order.id}/start_payment"
@@ -45,9 +45,9 @@ RSpec.describe Espago::PaymentsController, type: :request do
       end
       context 'when payment creation fails' do
         before do
-          service = instance_double(Espago::SecureWebPageService)
+          service = instance_double(Espago::SecureWebPage::SecureWebPageService)
           response = Espago::Response.new(success: false, status: 401, body: {})
-          allow(Espago::SecureWebPageService).to receive(:new).with(order).and_return(service)
+          allow(Espago::SecureWebPage::SecureWebPageService).to receive(:new).with(order).and_return(service)
           allow(service).to receive(:create_payment).and_return(response)
 
           get "/espago/payments/#{order.id}/start_payment"
@@ -70,9 +70,9 @@ RSpec.describe Espago::PaymentsController, type: :request do
             double('session', delete: card_token),
           )
 
-          service = instance_double(Espago::OneTimePaymentService)
+          service = instance_double(Espago::OneTimePayment::OneTimePaymentService)
           response = Espago::Response.new(success: true, status: 200, body: response_body)
-          allow(Espago::OneTimePaymentService).to receive(:new)
+          allow(Espago::OneTimePayment::OneTimePaymentService).to receive(:new)
             .with(card_token: card_token, order: order)
             .and_return(service)
           allow(service).to receive(:create_payment).and_return(response)
@@ -94,9 +94,9 @@ RSpec.describe Espago::PaymentsController, type: :request do
             double('session', delete: card_token),
           )
 
-          service = instance_double(Espago::OneTimePaymentService)
+          service = instance_double(Espago::OneTimePayment::OneTimePaymentService)
           response = Espago::Response.new(success: true, status: 200, body: response_body)
-          allow(Espago::OneTimePaymentService).to receive(:new)
+          allow(Espago::OneTimePayment::OneTimePaymentService).to receive(:new)
             .with(card_token: card_token, order: order)
             .and_return(service)
           allow(service).to receive(:create_payment).and_return(response)
@@ -118,9 +118,9 @@ RSpec.describe Espago::PaymentsController, type: :request do
             double('session', delete: card_token),
           )
 
-          service = instance_double(Espago::OneTimePaymentService)
+          service = instance_double(Espago::OneTimePayment::OneTimePaymentService)
           response = Espago::Response.new(success: true, status: 200, body: response_body)
-          allow(Espago::OneTimePaymentService).to receive(:new)
+          allow(Espago::OneTimePayment::OneTimePaymentService).to receive(:new)
             .with(card_token: card_token, order: order)
             .and_return(service)
           allow(service).to receive(:create_payment).and_return(response)
@@ -150,9 +150,9 @@ RSpec.describe Espago::PaymentsController, type: :request do
               double('session', delete: card_token),
             )
 
-            service = instance_double(Espago::OneTimePaymentService)
+            service = instance_double(Espago::OneTimePayment::OneTimePaymentService)
             response = Espago::Response.new(success: true, status: 200, body: response_body)
-            allow(Espago::OneTimePaymentService).to receive(:new)
+            allow(Espago::OneTimePayment::OneTimePaymentService).to receive(:new)
               .with(card_token: card_token, order: order)
               .and_return(service)
             allow(service).to receive(:create_payment).and_return(response)
@@ -177,9 +177,9 @@ RSpec.describe Espago::PaymentsController, type: :request do
               double('session', delete: card_token),
             )
 
-            service = instance_double(Espago::OneTimePaymentService)
+            service = instance_double(Espago::OneTimePayment::OneTimePaymentService)
             response = Espago::Response.new(success: true, status: 200, body: response_body)
-            allow(Espago::OneTimePaymentService).to receive(:new)
+            allow(Espago::OneTimePayment::OneTimePaymentService).to receive(:new)
               .with(card_token: card_token, order: order)
               .and_return(service)
             allow(service).to receive(:create_payment).and_return(response)
@@ -202,9 +202,9 @@ RSpec.describe Espago::PaymentsController, type: :request do
             double('session', delete: card_token),
           )
 
-          service = instance_double(Espago::OneTimePaymentService)
+          service = instance_double(Espago::OneTimePayment::OneTimePaymentService)
           response = Espago::Response.new(success: false, status: :timeout, body: {})
-          allow(Espago::OneTimePaymentService).to receive(:new)
+          allow(Espago::OneTimePayment::OneTimePaymentService).to receive(:new)
             .with(card_token: card_token, order: order)
             .and_return(service)
           allow(service).to receive(:create_payment).and_return(response)
@@ -227,9 +227,9 @@ RSpec.describe Espago::PaymentsController, type: :request do
             double('session', delete: card_token),
           )
 
-          service = instance_double(Espago::OneTimePaymentService)
+          service = instance_double(Espago::OneTimePayment::OneTimePaymentService)
           response = Espago::Response.new(success: false, status: 401, body: {})
-          allow(Espago::OneTimePaymentService).to receive(:new)
+          allow(Espago::OneTimePayment::OneTimePaymentService).to receive(:new)
             .with(card_token: card_token, order: order)
             .and_return(service)
           allow(service).to receive(:create_payment).and_return(response)

@@ -7,9 +7,9 @@ class Payment < ApplicationRecord
   delegate :espago_client, to: :subscription
 
   validate :must_have_subscription_or_order
+  validate :prevent_duplicate_payment, on: :create
 
   before_create :generate_payment_number
-  before_create :prevent_duplicate_payment
 
 
   STATUS_MAP = T.let({

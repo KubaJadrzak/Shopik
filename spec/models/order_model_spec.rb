@@ -41,32 +41,65 @@ RSpec.describe Order, type: :model do
       end
     end
 
-    context '#update_status_by_payment_status' do
-      let!(:order) { create(:order) }
+    describe '#can_retry_payment?' do
+      let(:order) { create(:order) }
 
-      {
-        'executed'            => 'Preparing for Shipment',
-        'rejected'            => 'Payment Rejected',
-        'failed'              => 'Payment Failed',
-        'resigned'            => 'Payment Resigned',
-        'reversed'            => 'Payment Reversed',
-        'preauthorized'       => 'Waiting for Payment',
-        'tds2_challenge'      => 'Waiting for Payment',
-        'tds_redirected'      => 'Waiting for Payment',
-        'dcc_decision'        => 'Waiting for Payment',
-        'blik_redirected'     => 'Waiting for Payment',
-        'transfer_redirected' => 'Waiting for Payment',
-        'new'                 => 'Waiting for Payment',
-        'refunded'            => 'Payment Refunded',
-        'unknown_status'      => 'Payment Error',
-      }.each do |status, payment_status|
-        it "updates payment status '#{status}' to status '#{payment_status}'" do
-          order.update_status_by_payment_status(status)
-          expect(order.payment_status).to eq(status)
-          expect(order.status).to eq(payment_status)
+      context 'when all payments are retryable' do
+        before do
+          create_list(:payment, 2, :for_order, order: order, state: 'failed')
+        end
+
+        it 'returns true' do
+          expect(order.can_retry_payment?).to be true
+        end
+      end
+
+      context 'when at least one payment is not retryable' do
+        before do
+          create(:payment, :for_order, order: order, state: 'failed')
+          create(:payment, :for_order, order: order, state: 'new')
+        end
+
+        it 'returns false' do
+          expect(order.can_retry_payment?).to be false
         end
       end
     end
 
+    describe '#in_progress_payment and #in_progress_payment?' do
+      let(:order) { create(:order) }
+
+      context 'when there is a payment in progress' do
+        let!(:in_progress_payment) do
+          create(:payment, :for_order, order: order, state: 'in_progress')
+        end
+
+        before do
+          allow(Payment).to receive_message_chain(:in_progress, :first).and_return(in_progress_payment)
+        end
+
+        it 'returns the in-progress payment' do
+          expect(order.in_progress_payment).to eq(in_progress_payment)
+        end
+
+        it 'returns true for in_progress_payment?' do
+          expect(order.in_progress_payment?).to be true
+        end
+      end
+
+      context 'when there is no in-progress payment' do
+        before do
+          allow(Payment).to receive_message_chain(:in_progress, :first).and_return(nil)
+        end
+
+        it 'returns nil for in_progress_payment' do
+          expect(order.in_progress_payment).to be_nil
+        end
+
+        it 'returns false for in_progress_payment?' do
+          expect(order.in_progress_payment?).to be false
+        end
+      end
+    end
   end
 end
