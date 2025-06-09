@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_06_174717) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_09_103900) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -27,26 +27,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_174717) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_carts_on_user_id"
-  end
-
-  create_table "charges", force: :cascade do |t|
-    t.integer "subscription_id"
-    t.string "payment_id"
-    t.decimal "amount", precision: 10, scale: 2, null: false
-    t.string "state", default: "new", null: false
-    t.string "reject_reason"
-    t.string "issuer_response_code"
-    t.string "behaviour"
-    t.json "raw_response"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "charge_number", null: false
-    t.integer "order_id"
-    t.index ["charge_number"], name: "index_charges_on_charge_number", unique: true
-    t.index ["order_id"], name: "index_charges_on_order_id"
-    t.index ["payment_id"], name: "index_charges_on_payment_id", unique: true
-    t.index ["state"], name: "index_charges_on_state"
-    t.index ["subscription_id"], name: "index_charges_on_subscription_id"
   end
 
   create_table "espago_clients", force: :cascade do |t|
@@ -95,6 +75,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_174717) do
     t.datetime "updated_at", null: false
     t.index ["order_number"], name: "index_orders_on_order_number", unique: true
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.integer "subscription_id"
+    t.string "payment_id"
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.string "state", default: "new", null: false
+    t.string "reject_reason"
+    t.string "issuer_response_code"
+    t.string "behaviour"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "payment_number", null: false
+    t.integer "order_id"
+    t.index ["order_id"], name: "index_payments_on_order_id"
+    t.index ["payment_id"], name: "index_payments_on_payment_id", unique: true
+    t.index ["payment_number"], name: "index_payments_on_payment_number", unique: true
+    t.index ["state"], name: "index_payments_on_state"
+    t.index ["subscription_id"], name: "index_payments_on_subscription_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -149,14 +148,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_174717) do
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "products"
   add_foreign_key "carts", "users"
-  add_foreign_key "charges", "orders"
-  add_foreign_key "charges", "subscriptions"
   add_foreign_key "espago_clients", "users"
   add_foreign_key "likes", "rubits"
   add_foreign_key "likes", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "users"
+  add_foreign_key "payments", "orders"
+  add_foreign_key "payments", "subscriptions"
   add_foreign_key "rubits", "rubits", column: "parent_rubit_id"
   add_foreign_key "rubits", "users"
   add_foreign_key "subscriptions", "espago_clients"

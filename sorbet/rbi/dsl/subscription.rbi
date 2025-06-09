@@ -390,20 +390,6 @@ class Subscription
     sig { params(args: T.untyped, blk: T.untyped).returns(::User) }
     def build_user(*args, &blk); end
 
-    sig { returns(T::Array[T.untyped]) }
-    def charge_ids; end
-
-    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def charge_ids=(ids); end
-
-    # This method is created by ActiveRecord on the `Subscription` class because it declared `has_many :charges`.
-    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
-    sig { returns(::Charge::PrivateCollectionProxy) }
-    def charges; end
-
-    sig { params(value: T::Enumerable[::Charge]).void }
-    def charges=(value); end
-
     sig { params(args: T.untyped, blk: T.untyped).returns(::EspagoClient) }
     def create_espago_client(*args, &blk); end
 
@@ -427,6 +413,20 @@ class Subscription
 
     sig { returns(T::Boolean) }
     def espago_client_previously_changed?; end
+
+    sig { returns(T::Array[T.untyped]) }
+    def payment_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def payment_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `Subscription` class because it declared `has_many :payments`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::Payment::PrivateCollectionProxy) }
+    def payments; end
+
+    sig { params(value: T::Enumerable[::Payment]).void }
+    def payments=(value); end
 
     sig { returns(T.nilable(::EspagoClient)) }
     def reload_espago_client; end

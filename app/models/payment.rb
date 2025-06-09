@@ -1,11 +1,18 @@
-class Charge < ApplicationRecord
+# typed: ignore
+
+class Payment < ApplicationRecord
   extend T::Sig
   belongs_to :subscription, optional: true
   belongs_to :order, optional: true
   delegate :espago_client, to: :subscription
 
-  before_create :generate_charge_number
+  validate :must_have_subscription_or_order
 
+  before_create :generate_payment_number
+  before_create :prevent_duplicate_payment
+
+
+  sig { returns(ActiveRecord::Relation) }
 
   STATUS_MAP = T.let({
                        'executed'              => 'Payment Successful',
@@ -43,11 +50,13 @@ class Charge < ApplicationRecord
     elsif order.present?
       order.update!(status: new_status)
     else
-      Rails.logger.warn("Charge #{id} does not belong to a subscription or order.")
+      Rails.logger.warn("Payment #{id} does not belong to a subscription or order.")
     end
   end
 
-
+  def show_status_by_payment_status(state)
+    STATUS_MAP[state] || 'Payment Error'
+  end
 
   IN_PROGRESS_STATUSES = T.let(
     %w[
@@ -81,12 +90,21 @@ class Charge < ApplicationRecord
     T::Array[String],
   )
 
+  scope :in_progress, -> { where(state: IN_PROGRESS_STATUSES) }
+
+
   def in_progress?
-    IN_PROGRESS_STATUSES.include?(payment_status)
+    IN_PROGRESS_STATUSES.include?(state)
   end
 
-  def self.in_progress_for_order(order)
-    order.charges.find { |c| c.in_progress? }
+  sig { returns(T::Boolean) }
+  def successful?
+    state == 'executed'
+  end
+
+  sig { returns(T::Boolean) }
+  def retryable?
+    !in_progress? && !successful?
   end
 
 
@@ -95,11 +113,22 @@ class Charge < ApplicationRecord
   def must_have_subscription_or_order
     return unless subscription.nil? && order.nil?
 
-    errors.add(:base, 'Charge must belong to either a subscription or an order')
-
+    errors.add(:base, 'Payment must belong to either a subscription or an order')
   end
 
-  def generate_charge_number
-    self.charge_number = SecureRandom.hex(10).upcase
+  def prevent_duplicate_payment
+    if subscription.present?
+      if Payment.where(subscription: subscription).where(state: IN_PROGRESS_STATUSES + ['executed']).exists?
+        errors.add(:base, 'Cannot create new payment: subscription already has a payment in progress or successful')
+      end
+    elsif order.present?
+      if Payment.where(order: order).where(state: IN_PROGRESS_STATUSES + ['executed']).exists?
+        errors.add(:base, 'Cannot create new payment: order already has a payment in progress or successful')
+      end
+    end
+  end
+
+  def generate_payment_number
+    self.payment_number = SecureRandom.hex(10).upcase
   end
 end

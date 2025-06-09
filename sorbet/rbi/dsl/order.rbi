@@ -332,20 +332,6 @@ class Order
     sig { params(args: T.untyped, blk: T.untyped).returns(::User) }
     def build_user(*args, &blk); end
 
-    sig { returns(T::Array[T.untyped]) }
-    def charge_ids; end
-
-    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def charge_ids=(ids); end
-
-    # This method is created by ActiveRecord on the `Order` class because it declared `has_many :charges`.
-    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
-    sig { returns(::Charge::PrivateCollectionProxy) }
-    def charges; end
-
-    sig { params(value: T::Enumerable[::Charge]).void }
-    def charges=(value); end
-
     sig { params(args: T.untyped, blk: T.untyped).returns(::User) }
     def create_user(*args, &blk); end
 
@@ -365,6 +351,20 @@ class Order
 
     sig { params(value: T::Enumerable[::OrderItem]).void }
     def order_items=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def payment_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def payment_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `Order` class because it declared `has_many :payments`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::Payment::PrivateCollectionProxy) }
+    def payments; end
+
+    sig { params(value: T::Enumerable[::Payment]).void }
+    def payments=(value); end
 
     sig { returns(T.nilable(::User)) }
     def reload_user; end
@@ -801,51 +801,6 @@ class Order
     sig { void }
     def ordered_at_will_change!; end
 
-    sig { returns(::String) }
-    def payment_status; end
-
-    sig { params(value: ::String).returns(::String) }
-    def payment_status=(value); end
-
-    sig { returns(T::Boolean) }
-    def payment_status?; end
-
-    sig { returns(T.nilable(::String)) }
-    def payment_status_before_last_save; end
-
-    sig { returns(T.untyped) }
-    def payment_status_before_type_cast; end
-
-    sig { returns(T::Boolean) }
-    def payment_status_came_from_user?; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def payment_status_change; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def payment_status_change_to_be_saved; end
-
-    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
-    def payment_status_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def payment_status_in_database; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def payment_status_previous_change; end
-
-    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
-    def payment_status_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def payment_status_previously_was; end
-
-    sig { returns(T.nilable(::String)) }
-    def payment_status_was; end
-
-    sig { void }
-    def payment_status_will_change!; end
-
     sig { void }
     def restore_created_at!; end
 
@@ -863,9 +818,6 @@ class Order
 
     sig { void }
     def restore_ordered_at!; end
-
-    sig { void }
-    def restore_payment_status!; end
 
     sig { void }
     def restore_shipping_address!; end
@@ -917,12 +869,6 @@ class Order
 
     sig { returns(T::Boolean) }
     def saved_change_to_ordered_at?; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def saved_change_to_payment_status; end
-
-    sig { returns(T::Boolean) }
-    def saved_change_to_payment_status?; end
 
     sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_shipping_address; end
@@ -1196,9 +1142,6 @@ class Order
 
     sig { returns(T::Boolean) }
     def will_save_change_to_ordered_at?; end
-
-    sig { returns(T::Boolean) }
-    def will_save_change_to_payment_status?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_shipping_address?; end

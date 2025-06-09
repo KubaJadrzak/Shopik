@@ -3,7 +3,7 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_cart_has_items, only: %i[new create]
-  before_action :set_order, only: [:show]
+  before_action :set_order, only: %i[show retry_order_payment]
 
   def new
     @order = Order.new
@@ -24,16 +24,27 @@ class OrdersController < ApplicationController
 
     @order.build_order_items_from_cart(current_user.cart)
     if @order.save
-      @charge = @order.charges.create!(amount: @order.total_price)
+      @payment = @order.payments.create!(amount: @order.total_price)
       current_user.cart.cart_items.destroy_all
       session[:card_token] = params[:card_token] if params[:card_token].present?
-      redirect_to espago_start_charge_path(@charge.charge_number)
+      redirect_to espago_start_payment_path(@payment.payment_number)
 
     else
       flash.now[:alert] = 'There was a problem placing your order.'
       render :new, status: :unprocessable_entity
     end
   end
+
+  def retry_order_payment
+    unless @order.can_retry_payment?
+      redirect_to order_path(@order), alert: 'Cannot retry payment: payment already in progress or successful.'
+      return
+    end
+
+    payment = @order.payments.create!(amount: @order.total_price)
+    redirect_to espago_start_payment_path(payment.payment_number)
+  end
+
 
   private
 

@@ -4,7 +4,7 @@ class Order < ApplicationRecord
   extend T::Sig
   belongs_to :user, optional: true, touch: true
   has_many :order_items, dependent: :destroy
-  has_many :charges, dependent: :destroy
+  has_many :payments, dependent: :destroy
 
   validates :email, presence: true
   validates :total_price, presence: true
@@ -63,6 +63,23 @@ class Order < ApplicationRecord
   def show_status_by_payment_status(payment_status)
     STATUS_MAP[payment_status] || 'Payment Error'
   end
+
+  sig { returns(T::Boolean) }
+  def can_retry_payment?
+    payments.all?(&:retryable?)
+  end
+
+  sig { returns(T.nilable(Payment)) }
+  def in_progress_payment
+    payments.in_progress.first
+  end
+
+  sig { returns(T::Boolean) }
+  def has_in_progress_payment?
+    in_progress_payment.present?
+  end
+
+  private
 
   sig { void }
   def generate_order_number

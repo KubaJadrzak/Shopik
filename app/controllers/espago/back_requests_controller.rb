@@ -17,33 +17,32 @@ class Espago::BackRequestsController < ApplicationController
     behaviour = payload['behaviour']
     issuer_response_code = payload['issuer_response_code']
 
-    charge = Charge.find_by(payment_id: payment_id)
+    payment = Payment.find_by(payment_id: payment_id)
 
-    if charge.nil? && description.present?
-      charge_number = description[/#([A-Z0-9]+)/, 1]
-      Rails.logger.info("Extracted charge_number from description: #{charge_number}")
+    if payment.nil? && description.present?
+      payment_number = description[/#([A-Z0-9]+)/, 1]
+      Rails.logger.info("Extracted payment_number from description: #{payment_number}")
 
-      if charge_number.present?
-        charge = Charge.find_by(charge_number: charge_number)
-        if charge.present?
-          Rails.logger.info("Found Charge by charge_number. Assigning payment_id #{payment_id} to Charge #{charge_number}")
-          charge.update!(payment_id: payment_id)
+      if payment_number.present?
+        payment = Payment.find_by(payment_number: payment_number)
+        if payment.present?
+          Rails.logger.info("Found Payment by payment_number. Assigning payment_id #{payment_id} to Payment #{payment_number}")
+          payment.update!(payment_id: payment_id)
         end
       end
     end
 
-    if charge.nil?
-      Rails.logger.warn("Charge not found for payment_id: #{payment_id}")
+    if payment.nil?
+      Rails.logger.warn("Payment not found for payment_id: #{payment_id}")
       head :not_found
       return
     end
 
-    charge.update_status_by_payment_status(state.to_s)
-    charge.update(
+    payment.update_status_by_payment_status(state.to_s)
+    payment.update(
       reject_reason:        reject_reason,
       behaviour:            behaviour,
       issuer_response_code: issuer_response_code,
-      raw_response:         payload,
     )
 
     head :ok

@@ -32,8 +32,10 @@ class Rails::Conductor::BaseController
     include ::LikesHelper
     include ::OrderItemsHelper
     include ::OrdersHelper
+    include ::PaymentsHelper
     include ::ProductsHelper
     include ::RubitsHelper
+    include ::SubscriptionsHelper
     include ::UsersHelper
     include ::DeviseHelper
   end

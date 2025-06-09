@@ -1,6 +1,6 @@
-module ChargesHelper
-  def color_for_charge_status(charge_status)
-    case charge_status
+module PaymentsHelper
+  def color_for_payment_status(payment_status)
+    case payment_status
     when 'executed'
       'bg-success'
     when 'refunded'

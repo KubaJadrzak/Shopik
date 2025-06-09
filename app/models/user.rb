@@ -11,14 +11,30 @@ class User < ApplicationRecord
   has_many :espago_clients, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
 
+  has_many :order_payments, through: :orders, source: :payments
+  has_many :subscription_payments, through: :subscriptions, source: :payments
+
   broadcasts_refreshes
+
+  def orders_with_in_progress_payments
+    orders.joins(:payments).merge(Payment.in_progress).distinct
+  end
+
+  def subscriptions_with_in_progress_payments
+    subscriptions.joins(:payments).merge(Payment.in_progress).distinct
+  end
 
   def has_active_subscription?
     subscriptions
-      .joins(:charges)
-      .where(charges: { state: 'executed' })
+      .joins(:payments)
+      .where(payments: { state: 'executed' })
       .where('start_date <= ? AND end_date >= ?', Date.today, Date.today)
       .exists?
+  end
+
+  def payments
+    Payment.where(id: order_payments.select(:id))
+           .or(Payment.where(id: subscription_payments.select(:id)))
   end
 
 end

@@ -11,8 +11,6 @@ class CreateCharges < ActiveRecord::Migration[8.0]
       t.string :issuer_response_code
       t.string :behaviour
 
-      t.json :raw_response
-
       t.timestamps
     end
 

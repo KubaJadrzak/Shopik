@@ -1,7 +1,7 @@
 class Subscription < ApplicationRecord
   belongs_to :user, touch: true
   belongs_to :espago_client, optional: true
-  has_many :charges, dependent: :destroy
+  has_many :payments, dependent: :destroy
 
   before_validation :set_default_dates, on: :create
   before_validation :set_price, on: :create
@@ -18,6 +18,14 @@ class Subscription < ApplicationRecord
     else
       update!(status: :paid)
     end
+  end
+
+  def in_progress_payment
+    payments.in_progress.first
+  end
+
+  def has_in_progress_payment?
+    in_progress_payment.present?
   end
 
   private

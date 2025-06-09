@@ -9,32 +9,27 @@ class Espago::UpdatePaymentStatusJob < ApplicationJob
     user = User.find_by(id: user_id)
     return unless user
 
-    user.orders.where(status: 'Awaiting Payment').each do |order|
-      charge = Charge.in_progress_for_order(order)
-      next unless charge
+    user.payments.in_progress.find_each do |payment|
+      case payment.show_status_by_payment_status(payment.state)
+      when 'Awaiting Payment'
+        if payment.created_at < 120.minutes.ago
+          payment.update_status_by_payment_status('failed')
+        end
+      when 'New', 'Waiting for Payment'
+        unless payment.payment_id.present?
+          payment.update_status_by_payment_status('unexpected_error')
+          next
+        end
 
-      if charge.created_at < 120.minutes.ago
-        charge.update_status_by_payment_status('failed')
-      end
-    end
+        new_status = Espago::PaymentStatusService
+                     .new(payment_id: payment.payment_id)
+                     .fetch_payment_status
 
-    user.orders.where(status: ['New', 'Waiting for Payment']).each do |order|
-      charge = Charge.in_progress_for_order(order)
-      next unless charge
-
-      unless charge.payment_id.present?
-        charge.update_status_by_payment_status('unexpected_error')
-        next
-      end
-
-      new_status = Espago::PaymentStatusService
-                   .new(payment_id: charge.payment_id)
-                   .fetch_payment_status
-
-      if new_status.present? && new_status != charge.payment_status
-        charge.update_status_by_payment_status(new_status)
-      elsif charge.created_at < 120.minutes.ago
-        charge.update_status_by_payment_status('resigned')
+        if new_status.present? && new_status != payment.state
+          payment.update_status_by_payment_status(new_status)
+        elsif payment.created_at < 120.minutes.ago
+          payment.update_status_by_payment_status('resigned')
+        end
       end
     end
   end

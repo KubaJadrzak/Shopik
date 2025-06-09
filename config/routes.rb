@@ -18,16 +18,20 @@ Rails.application.routes.draw do
   get 'cart', to: 'carts#show', as: 'cart'
   resources :cart_items, only: [:destroy]
 
-  resources :orders, only: %i[new create show]
+  resources :orders, only: %i[new create show] do
+    member do
+      post :retry_order_payment
+    end
+  end
   resources :subscriptions, only: %i[new create show]
 
   get 'account', to: 'users#account', as: 'account'
 
   namespace :espago do
-    get 'charges/:charge_number/start_charge', to: 'charges#start_charge', as: 'start_charge'
-    get 'charges/:charge_number/success', to: 'charges#charge_success', as: 'charge_success'
-    get 'charges/:charge_number/failure', to: 'charges#charge_failure', as: 'charge_failure'
-    get 'charges/:charge_number/awaiting', to: 'charges#charge_awaiting', as: 'charge_awaiting'
+    get 'payments/:payment_number/start_payment', to: 'payments#start_payment', as: 'start_payment'
+    get 'payments/:payment_number/success', to: 'payments#payment_success', as: 'payments_success'
+    get 'payments/:payment_number/failure', to: 'payments#payment_failure', as: 'payments_failure'
+    get 'payments/:payment_number/awaiting', to: 'payments#payment_awaiting', as: 'payments_awaiting'
     post '/back_request',   to: 'back_requests#handle_back_request', as: 'back_request'
   end
 

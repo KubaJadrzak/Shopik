@@ -1,22 +1,21 @@
-class Espago::Charge::ChargeResponseHandler
+class Espago::Payment::PaymentResponseHandler
   extend T::Sig
 
-  def self.handle_response(charge, response)
+  def self.handle_response(payment, response)
     if response.success?
-      handle_success(charge, response.body)
+      handle_success(payment, response.body)
     else
-      handle_failure(charge, response.status.to_s)
+      handle_failure(payment, response.status.to_s)
     end
   end
 
-  def self.handle_success(charge, data)
-    charge.update!(
+  def self.handle_success(payment, data)
+    payment.update!(
       payment_id:           data['id'],
       state:                data['state'],
       issuer_response_code: data['issuer_response_code'],
       reject_reason:        data['reject_reason'].presence,
       behaviour:            data['behaviour'].presence,
-      raw_response:         data,
     )
 
     redirect_url = data['redirect_url'] || data.dig('dcc_decision_information', 'redirect_url')
@@ -25,7 +24,7 @@ class Espago::Charge::ChargeResponseHandler
       [:redirect_url, redirect_url]
     elsif data.key?('state')
       state = data['state']
-      charge.update_status_by_payment_status(state)
+      payment.update_status_by_payment_status(state)
 
       waiting_states = %w[
         preauthorized
@@ -39,19 +38,19 @@ class Espago::Charge::ChargeResponseHandler
 
       case state
       when 'executed'
-        [:success, charge.charge_number]
+        [:success, payment.payment_number]
       when *waiting_states
-        [:awaiting, charge.charge_number]
+        [:awaiting, payment.payment_number]
       else
-        [:failure, charge.charge_number]
+        [:failure, payment.payment_number]
       end
     else
-      [:failure, charge.charge_number]
+      [:failure, payment.payment_number]
     end
   end
 
-  def self.handle_failure(charge, state)
-    charge.update_status_by_payment_status(state)
+  def self.handle_failure(payment, state)
+    payment.update_status_by_payment_status(state)
 
     awaiting_states = %w[
       timeout
@@ -63,10 +62,10 @@ class Espago::Charge::ChargeResponseHandler
     ]
 
     if awaiting_states.include?(state)
-      [:awaiting, charge.charge_number]
+      [:awaiting, payment.payment_number]
     else
-      Rails.logger.warn("Charge rejected with status #{state}")
-      [:failure, charge.charge_number]
+      Rails.logger.warn("Payment rejected with status #{state}")
+      [:failure, payment.payment_number]
     end
   end
 end

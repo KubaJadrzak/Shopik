@@ -22,9 +22,9 @@ class SubscriptionsController < ApplicationController
 
 
     if @subscription.save && params[:card_token]
-      @charge = @subscription.charges.create!(amount: @subscription.price)
+      @payment = @subscription.payments.create!(amount: @subscription.price)
       session[:card_token] = params[:card_token]
-      redirect_to espago_start_charge_path(@charge.charge_number)
+      redirect_to espago_start_payment_path(@payment.payment_number)
     else
       flash.now[:alert] = 'There was a problem with your subscription.'
       render :new, status: :unprocessable_entity
