@@ -1,7 +1,7 @@
 module OrdersHelper
   def color_for_status(status)
     case status
-    when 'Payment Successful'
+    when 'Preparing for Shipment'
       'bg-success'
     when 'Payment Rejected', 'Payment Failed', 'Payment Resigned', 'Payment Reversed', 'Payment Error'
       'bg-danger'

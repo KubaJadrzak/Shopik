@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center">
       <%= link_to "Back to Orders", account_path(anchor: 'orders'), class: "btn btn-primary me-2" %>
       <% if @order.can_retry_payment? %>
-        <%= button_to "Retry Payment", retry_order_payment_order_path(@order), method: :post, class: "btn btn-success", data: { turbo: false } %>
+        <%= button_to "Retry Payment", retry_payment_order_path(@order), method: :post, class: "btn btn-success", data: { turbo: false } %>
       <% end %>
     </div>
   </div>

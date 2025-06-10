@@ -7,47 +7,73 @@ class Payment < ApplicationRecord
   delegate :espago_client, to: :subscription
 
   validate :must_have_subscription_or_order
-  validate :prevent_duplicate_payment, on: :create
+  validate :prevent_duplicate_payment_for_order, on: :create
 
   before_create :generate_payment_number
 
 
-  STATUS_MAP = T.let({
-                       'executed'              => 'Payment Successful',
-                       'rejected'              => 'Payment Rejected',
-                       'failed'                => 'Payment Failed',
-                       'resigned'              => 'Payment Resigned',
-                       'reversed'              => 'Payment Reversed',
-                       'preauthorized'         => 'Waiting for Payment',
-                       'tds2_challenge'        => 'Waiting for Payment',
-                       'tds_redirected'        => 'Waiting for Payment',
-                       'dcc_decision'          => 'Waiting for Payment',
-                       'blik_redirected'       => 'Waiting for Payment',
-                       'transfer_redirected'   => 'Waiting for Payment',
-                       'new'                   => 'Waiting for Payment',
-                       'refunded'              => 'Payment Refunded',
+  ORDER_STATUS_MAP = T.let({
+                             'executed'              => 'Preparing for Shipment',
+                             'rejected'              => 'Payment Rejected',
+                             'failed'                => 'Payment Failed',
+                             'resigned'              => 'Payment Resigned',
+                             'reversed'              => 'Payment Reversed',
+                             'preauthorized'         => 'Waiting for Payment',
+                             'tds2_challenge'        => 'Waiting for Payment',
+                             'tds_redirected'        => 'Waiting for Payment',
+                             'dcc_decision'          => 'Waiting for Payment',
+                             'blik_redirected'       => 'Waiting for Payment',
+                             'transfer_redirected'   => 'Waiting for Payment',
+                             'new'                   => 'Waiting for Payment',
+                             'refunded'              => 'Payment Refunded',
 
-                       'timeout'               => 'Awaiting Payment',
-                       'connection_failed'     => 'Awaiting Payment',
-                       'ssl_error'             => 'Awaiting Payment',
-                       'parsing_error'         => 'Awaiting Payment',
-                       'unknown_faraday_error' => 'Awaiting Payment',
-                       'unexpected_error'      => 'Awaiting Payment',
+                             'timeout'               => 'Awaiting Payment',
+                             'connection_failed'     => 'Awaiting Payment',
+                             'ssl_error'             => 'Awaiting Payment',
+                             'parsing_error'         => 'Awaiting Payment',
+                             'unknown_faraday_error' => 'Awaiting Payment',
+                             'unexpected_error'      => 'Awaiting Payment',
 
-                       'invalid_uri'           => 'Payment Error',
-                     }, T::Hash[String, String],)
+                             'invalid_uri'           => 'Payment Error',
+                           }, T::Hash[String, String],)
 
+  SUBSCRIPTION_STATUS_MAP = T.let({
+                                    'executed'              => 'Active',
+                                    'rejected'              => 'Payment Rejected',
+                                    'failed'                => 'Payment Failed',
+                                    'resigned'              => 'Payment Resigned',
+                                    'reversed'              => 'Payment Reversed',
+                                    'preauthorized'         => 'Waiting for Payment',
+                                    'tds2_challenge'        => 'Waiting for Payment',
+                                    'tds_redirected'        => 'Waiting for Payment',
+                                    'dcc_decision'          => 'Waiting for Payment',
+                                    'blik_redirected'       => 'Waiting for Payment',
+                                    'transfer_redirected'   => 'Waiting for Payment',
+                                    'new'                   => 'Waiting for Payment',
+                                    'refunded'              => 'Payment Refunded',
+
+                                    'timeout'               => 'Awaiting Payment',
+                                    'connection_failed'     => 'Awaiting Payment',
+                                    'ssl_error'             => 'Awaiting Payment',
+                                    'parsing_error'         => 'Awaiting Payment',
+                                    'unknown_faraday_error' => 'Awaiting Payment',
+                                    'unexpected_error'      => 'Awaiting Payment',
+
+                                    'invalid_uri'           => 'Payment Error',
+                                  }, T::Hash[String, String],)
 
   sig { params(state: String).void }
   def update_status_by_payment_status(state)
     self.state = state
     save!
 
-    new_status = STATUS_MAP[state] || 'Payment Error'
+
 
     if subscription.present?
+      new_status = SUBSCRIPTION_STATUS_MAP[state] || 'Payment Error'
       T.must(subscription).update!(status: new_status)
     elsif order.present?
+      new_status = ORDER_STATUS_MAP[state] || 'Payment Error'
       T.must(order).update!(status: new_status)
     else
       Rails.logger.warn("Payment #{id} does not belong to a subscription or order.")
@@ -56,7 +82,11 @@ class Payment < ApplicationRecord
 
   sig { params(state: String).returns(String) }
   def show_status_by_payment_status(state)
-    STATUS_MAP[state] || 'Payment Error'
+    if subscription.present?
+      SUBSCRIPTION_STATUS_MAP[state] || 'Payment Error'
+    else
+      ORDER_STATUS_MAP[state] || 'Payment Error'
+    end
   end
 
   IN_PROGRESS_STATUSES = T.let(
@@ -119,16 +149,13 @@ class Payment < ApplicationRecord
   end
 
   sig { void }
-  def prevent_duplicate_payment
-    if subscription.present?
-      if Payment.where(subscription: subscription).where(state: IN_PROGRESS_STATUSES + ['executed']).exists?
-        errors.add(:base, 'Cannot create new payment: subscription already has a payment in progress or successful')
-      end
-    elsif order.present?
-      if Payment.where(order: order).where(state: IN_PROGRESS_STATUSES + ['executed']).exists?
-        errors.add(:base, 'Cannot create new payment: order already has a payment in progress or successful')
-      end
-    end
+  def prevent_duplicate_payment_for_order
+    return unless order.present?
+    return unless Payment.where(order: order).where(state: IN_PROGRESS_STATUSES + ['executed']).exists?
+
+    errors.add(:base, 'Cannot create new payment: order already has a payment in progress or successful')
+
+
   end
 
   sig { void }

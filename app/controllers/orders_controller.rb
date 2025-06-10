@@ -37,7 +37,7 @@ class OrdersController < ApplicationController
     end
   end
 
-  def retry_order_payment
+  def retry_payment
     unless @order.can_retry_payment?
       redirect_to order_path(@order), alert: 'Cannot retry payment: payment already in progress or successful.'
       return

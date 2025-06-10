@@ -2,7 +2,7 @@
 
 class SubscriptionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_subscription, only: [:show]
+  before_action :set_subscription, only: %i[show retry_payment]
 
   def new
     @subscription = Subscription.new
@@ -11,11 +11,15 @@ class SubscriptionsController < ApplicationController
 
   def show
     @payments = @subscription.payments.order(created_at: :desc)
+    @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY', nil)
   end
 
   def create
     if current_user.active_subscription?
       redirect_to "#{account_path}#subscriptions", alert: 'You already have an active subscription.'
+      return
+    elsif current_user.pending_subscription?
+      redirect_to "#{account_path}#subscriptions", alert: 'You already have a pending subscription.'
       return
     end
 
@@ -32,6 +36,20 @@ class SubscriptionsController < ApplicationController
       flash.now[:alert] = 'There was a problem with your subscription.'
       render :new, status: :unprocessable_entity
     end
+  end
+
+  def retry_payment
+    if current_user.active_subscription?
+      redirect_to "#{account_path}#subscriptions", alert: 'You already have an active subscription.'
+      return
+    end
+    unless @subscription.can_retry_payment?
+      redirect_to order_path(@order), alert: 'Cannot retry payment: payment already in progress or successful.'
+      return
+    end
+    @payment = @subscription.payments.create!(amount: @subscription.price)
+    session[:card_token] = params[:card_token]
+    redirect_to espago_start_payment_path(@payment.payment_number)
   end
 
   private

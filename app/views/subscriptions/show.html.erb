@@ -2,7 +2,26 @@
 <div class="container mt-4">
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
     <h3><%= @subscription.subscription_number %></h3>
-    <%= link_to "Back to Subscriptions", account_path(anchor: 'subscriptions'), class: "btn btn-primary mt-2 mt-md-0" %>
+    <div class="d-flex align-items-center">
+      <%= link_to "Back to Subscriptions", account_path(anchor: 'subscriptions'), class: "btn btn-primary me-2" %>
+      <% if @subscription.can_retry_payment? %>
+        <%= form_with url: retry_payment_subscription_path(@subscription), method: :post, html: {
+              id: "subscription_form",
+              data: {
+                controller: "espago-iframe",
+                "espago-iframe-target": "form",
+                "payment-method-target": "form"
+              }
+            } do |form| %>
+          <%= form.submit "Retry Payment", class: "btn btn-success me-2 d-none", id: "process_subscription_btn", data: {
+                turbo: false,
+                "espago-iframe-target": "processBtn",
+                "payment-method-target": "processBtn"
+              } %>
+        <% end %>
+        <a id="pay_btn" data-payment-method-target="payBtn" class="btn btn-success me-2">Retry Payment</a>
+      <% end %>
+    </div>
   </div>
   <div class="row mt-4">
     <div class="col-lg-12 mb-4">
@@ -26,11 +45,11 @@
             <div class="col-md-6">
               <p class="d-flex justify-content-between">
                 <strong>Start Date:</strong>
-                <span><%= @subscription.start_date.strftime("%B %d, %Y") %></span>
+                <span><%= @subscription.start_date&.strftime("%B %d, %Y") %></span>
               </p>
               <p class="d-flex justify-content-between">
                 <strong>End Date:</strong>
-                <span><%= @subscription.end_date.strftime("%B %d, %Y") %></span>
+                <span><%= @subscription.end_date&.strftime("%B %d, %Y") %></span>
               </p>
             </div>
           </div>
@@ -43,3 +62,26 @@
   </div>
 </div>
 <%= render partial: 'payments/payment', locals: { payments: @payments } %>
+<script src="https://js.espago.com/espago-1.3.js"></script>
+<script
+  async
+  data-id="EspagoFrameScript"
+  data-key="<%= @espago_public_key %>"
+  data-live="false"
+  data-button="Pay"
+  data-success="espagoCallback"
+  src="https://js.espago.com/iframe.js"></script>
+<script>
+  document.addEventListener("turbo:load", function() {
+      const payBtn = document.getElementById("pay_btn");
+
+      payBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        if (typeof showEspagoFrame === "function") {
+          showEspagoFrame();
+        } else {
+          alert("Payment system not ready. Please wait and try again.");
+        }
+      });
+    });
+</script>

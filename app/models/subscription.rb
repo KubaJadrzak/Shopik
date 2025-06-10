@@ -7,10 +7,10 @@ class Subscription < ApplicationRecord
   belongs_to :espago_client, optional: true
   has_many :payments, dependent: :destroy
 
-  before_validation :set_default_dates, on: :create
   before_validation :set_price, on: :create
 
   before_create :generate_subscription_number
+  after_update :handle_status_change, if: :saved_change_to_status?
 
   broadcasts_refreshes
 
@@ -32,9 +32,17 @@ class Subscription < ApplicationRecord
   private
 
   sig { void }
-  def set_default_dates
-    self.start_date = Date.today if start_date.nil?
-    self.end_date = 30.days.from_now.to_date if end_date.nil?
+  def handle_status_change
+    return unless status == 'Active'
+
+    if start_date.nil? || end_date.nil?
+      self.start_date = Date.today
+      self.end_date = 30.days.from_now.to_date
+    else
+      self.end_date = end_date + 30.days
+    end
+    save!
+
   end
 
   sig { void }

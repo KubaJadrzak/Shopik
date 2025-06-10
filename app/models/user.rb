@@ -32,11 +32,17 @@ class User < ApplicationRecord
 
   sig { returns(T::Boolean) }
   def active_subscription?
-    subscriptions
-      .joins(:payments)
-      .where(payments: { state: 'executed' })
-      .where('start_date <= ? AND end_date >= ?', Date.today, Date.today)
-      .exists?
+    subscriptions.where(status: 'Active').exists?
+  end
+
+  sig { returns(T::Boolean) }
+  def pending_subscription?
+    subscriptions.where.not(status: %w[Active Expired]).exists?
+  end
+
+  sig { returns(T::Boolean) }
+  def active_or_pending_subscription?
+    subscriptions.where.not(status: 'Expired').exists?
   end
 
   sig { returns(ActiveRecord::Relation) }
