@@ -35,9 +35,19 @@ class User < ApplicationRecord
     subscriptions.where(status: 'Active').exists?
   end
 
+  sig { returns(T.nilable(Subscription)) }
+  def active_subscription
+    subscriptions.find_by(status: 'Active')
+  end
+
   sig { returns(T::Boolean) }
   def pending_subscription?
     subscriptions.where.not(status: %w[Active Expired]).exists?
+  end
+
+  sig { returns(T.nilable(Subscription)) }
+  def pending_subscription
+    subscriptions.where.not(status: %w[Active Expired]).first
   end
 
   sig { returns(T::Boolean) }

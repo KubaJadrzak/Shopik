@@ -2,7 +2,7 @@
 
 class SubscriptionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_subscription, only: %i[show retry_payment]
+  before_action :set_subscription, only: %i[show retry_payment extend_subscription]
 
   def new
     @subscription = Subscription.new
@@ -44,9 +44,22 @@ class SubscriptionsController < ApplicationController
       return
     end
     unless @subscription.can_retry_payment?
-      redirect_to order_path(@order), alert: 'Cannot retry payment: payment already in progress or successful.'
+      redirect_to subscription_path(@subscription),
+                  alert: 'Cannot retry payment: payment already in progress or successful.'
       return
     end
+    @payment = @subscription.payments.create!(amount: @subscription.price)
+    session[:card_token] = params[:card_token]
+    redirect_to espago_start_payment_path(@payment.payment_number)
+  end
+
+  def extend_subscription
+    unless @subscription.can_extend_subscription?
+      redirect_to subscription_path(@subscription),
+                  alert: 'Cannot extend subscription: payment already in progress.'
+      return
+    end
+
     @payment = @subscription.payments.create!(amount: @subscription.price)
     session[:card_token] = params[:card_token]
     redirect_to espago_start_payment_path(@payment.payment_number)

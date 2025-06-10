@@ -66,12 +66,20 @@ class Payment < ApplicationRecord
   def update_status_by_payment_status(state)
     self.state = state
     save!
-
-
-
     if subscription.present?
       new_status = SUBSCRIPTION_STATUS_MAP[state] || 'Payment Error'
-      T.must(subscription).update!(status: new_status)
+
+      # Prevent changing status from Active back to a non-Active status
+      if T.must(subscription).status == 'Active' && new_status != 'Active'
+        Rails.logger.info("Subscription #{T.must(subscription).id} is Active; ignoring downgrade to #{new_status}")
+      else
+        T.must(subscription).update!(status: new_status)
+
+        if new_status == 'Active'
+          T.must(subscription).extend_or_initialize_dates!
+        end
+      end
+
     elsif order.present?
       new_status = ORDER_STATUS_MAP[state] || 'Payment Error'
       T.must(order).update!(status: new_status)

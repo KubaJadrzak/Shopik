@@ -10,8 +10,6 @@ class Subscription < ApplicationRecord
   before_validation :set_price, on: :create
 
   before_create :generate_subscription_number
-  after_update :handle_status_change, if: :saved_change_to_status?
-
   broadcasts_refreshes
 
   sig { returns(T.nilable(Payment)) }
@@ -25,16 +23,17 @@ class Subscription < ApplicationRecord
   end
 
   sig { returns(T::Boolean) }
+  def can_extend_subscription?
+    status == 'Active' && !in_progress_payment?
+  end
+
+  sig { returns(T::Boolean) }
   def can_retry_payment?
     payments.all?(&:retryable?)
   end
 
-  private
-
   sig { void }
-  def handle_status_change
-    return unless status == 'Active'
-
+  def extend_or_initialize_dates!
     if start_date.nil? || end_date.nil?
       self.start_date = Date.today
       self.end_date = 30.days.from_now.to_date
@@ -42,8 +41,10 @@ class Subscription < ApplicationRecord
       self.end_date = end_date + 30.days
     end
     save!
-
   end
+
+  private
+
 
   sig { void }
   def set_price

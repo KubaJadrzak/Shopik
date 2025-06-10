@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   resources :subscriptions, only: %i[new create show] do
     member do
       post :retry_payment
+      post :extend_subscription
     end
   end
 

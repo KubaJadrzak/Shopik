@@ -4,22 +4,39 @@
     <h3><%= @subscription.subscription_number %></h3>
     <div class="d-flex align-items-center">
       <%= link_to "Back to Subscriptions", account_path(anchor: 'subscriptions'), class: "btn btn-primary me-2" %>
+      <% if @subscription.can_extend_subscription? %>
+        <%= form_with url: extend_subscription_subscription_path(@subscription), method: :post, html: {
+          id: "extend_subscription_form",
+          data: {
+            controller: "espago-iframe",
+            "espago-iframe-target": "form",
+            "payment-method-target": "form"
+          }
+        } do |form| %>
+          <%= form.submit "Extend Subscription", class: "btn btn-warning me-2 d-none", id: "extend_subscription_btn", data: {
+            turbo: false,
+            "espago-iframe-target": "processBtn",
+            "payment-method-target": "processBtn"
+          } %>
+        <% end %>
+        <a id="extend_pay_btn" data-payment-method-target="payBtn" class="btn btn-success me-2">Extend Subscription</a>
+      <% end %>
       <% if @subscription.can_retry_payment? %>
         <%= form_with url: retry_payment_subscription_path(@subscription), method: :post, html: {
-              id: "subscription_form",
-              data: {
-                controller: "espago-iframe",
-                "espago-iframe-target": "form",
-                "payment-method-target": "form"
-              }
-            } do |form| %>
-          <%= form.submit "Retry Payment", class: "btn btn-success me-2 d-none", id: "process_subscription_btn", data: {
-                turbo: false,
-                "espago-iframe-target": "processBtn",
-                "payment-method-target": "processBtn"
-              } %>
+          id: "retry_payment_form",
+          data: {
+            controller: "espago-iframe",
+            "espago-iframe-target": "form",
+            "payment-method-target": "form"
+          }
+        } do |form| %>
+          <%= form.submit "Retry Payment", class: "btn btn-success me-2 d-none", id: "retry_payment_btn", data: {
+            turbo: false,
+            "espago-iframe-target": "processBtn",
+            "payment-method-target": "processBtn"
+          } %>
         <% end %>
-        <a id="pay_btn" data-payment-method-target="payBtn" class="btn btn-success me-2">Retry Payment</a>
+        <a id="retry_pay_btn" data-payment-method-target="payBtn" class="btn btn-success me-2">Retry Payment</a>
       <% end %>
     </div>
   </div>
@@ -73,9 +90,8 @@
   src="https://js.espago.com/iframe.js"></script>
 <script>
   document.addEventListener("turbo:load", function() {
-      const payBtn = document.getElementById("pay_btn");
-
-      payBtn.addEventListener("click", function(event) {
+    document.querySelectorAll("[data-payment-method-target='payBtn']").forEach(function(btn) {
+      btn.addEventListener("click", function(event) {
         event.preventDefault();
         if (typeof showEspagoFrame === "function") {
           showEspagoFrame();
@@ -84,4 +100,5 @@
         }
       });
     });
+  });
 </script>
