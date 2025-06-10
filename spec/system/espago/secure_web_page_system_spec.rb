@@ -30,15 +30,16 @@ RSpec.describe 'Secure Web Page Test', type: :system do
       click_button 'Pay'
       expect(page).to have_current_path(/secure_web_page/, wait: 3)
       order = Order.last
+      payment = Payment.last
       expect(page).to have_content(order.total_price)
-      expect(page).to have_content(order.payment_id)
-      expect(page).to have_content(order.order_number)
+      expect(page).to have_content(payment.payment_number)
+      expect(page).to have_content(payment.payment_id)
 
       # mock redirect to success to avoid going through external service
-      visit "/espago/payments/success?order_number=#{order.order_number}"
+      visit "/espago/payments/#{payment.payment_number}/success"
       expect(page).to have_content('Payment successful!')
       expect(page).to have_content(order.status)
-      expect(page).to have_content(order.payment_status.capitalize)
+      expect(page).to have_content(payment.payment_number)
     end
   end
 
@@ -59,15 +60,16 @@ RSpec.describe 'Secure Web Page Test', type: :system do
       click_button 'Pay'
       expect(page).to have_current_path(/secure_web_page/, wait: 3)
       order = Order.last
+      payment = Payment.last
       expect(page).to have_content(order.total_price)
-      expect(page).to have_content(order.payment_id)
-      expect(page).to have_content(order.order_number)
+      expect(page).to have_content(payment.payment_number)
+      expect(page).to have_content(payment.payment_id)
 
       # mock redirect to failure to avoid going through external service
-      visit "/espago/payments/failure?order_number=#{order.order_number}"
+      visit "/espago/payments/#{payment.payment_number}/failure"
       expect(page).to have_content('Payment failed!')
       expect(page).to have_content(order.status)
-      expect(page).to have_content(order.payment_status.capitalize)
+      expect(page).to have_content(payment.payment_number)
     end
   end
 end

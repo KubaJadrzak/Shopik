@@ -50,7 +50,8 @@ RSpec.describe 'OrdersController Requests Test', type: :request do
       it 'creates a new order and redirects to payment' do
         post orders_path, params: valid_params
         order = Order.last
-        expect(response).to redirect_to(espago_start_payment_path(order))
+        payment = Payment.last
+        expect(response).to redirect_to(espago_start_payment_path(payment.payment_number))
         expect(order.email).to eq(user.email)
         expect(order.order_items.count).to eq(1)
         expect(user.cart.cart_items.count).to eq(0)

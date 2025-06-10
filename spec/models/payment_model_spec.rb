@@ -80,83 +80,84 @@ RSpec.describe Payment, type: :model do
       expect(payment.payment_number).to be_present
     end
   end
+  describe 'methods' do
+    describe '#in_progress' do
+      it 'returns only payments with in-progress statuses' do
+        in_progress_payment = create(:payment, :for_order, state: 'new')
+        create(:payment, :for_order, state: 'executed')
 
-  describe '#in_progress' do
-    it 'returns only payments with in-progress statuses' do
-      in_progress_payment = create(:payment, :for_order, state: 'new')
-      create(:payment, :for_order, state: 'executed')
-
-      expect(Payment.in_progress).to include(in_progress_payment)
-      expect(Payment.in_progress.pluck(:state)).to all(satisfy { |s| Payment::IN_PROGRESS_STATUSES.include?(s) })
-    end
-  end
-
-  describe '#in_progress?' do
-    it 'returns true if payment state is in-progress' do
-      payment = build(:payment, state: 'tds_redirected')
-      expect(payment.in_progress?).to be true
+        expect(Payment.in_progress).to include(in_progress_payment)
+        expect(Payment.in_progress.pluck(:state)).to all(satisfy { |s| Payment::IN_PROGRESS_STATUSES.include?(s) })
+      end
     end
 
-    it 'returns false if payment state is not in-progress' do
-      payment = build(:payment, state: 'executed')
-      expect(payment.in_progress?).to be false
-    end
-  end
+    describe '#in_progress?' do
+      it 'returns true if payment state is in-progress' do
+        payment = build(:payment, state: 'tds_redirected')
+        expect(payment.in_progress?).to be true
+      end
 
-  describe '#successful?' do
-    it 'returns true if payment state is executed' do
-      payment = build(:payment, state: 'executed')
-      expect(payment.successful?).to be true
-    end
-
-    it 'returns false if payment state is not executed' do
-      payment = build(:payment, state: 'new')
-      expect(payment.successful?).to be false
-    end
-  end
-
-  describe '#retryable?' do
-    it 'returns false if payment is in progress' do
-      payment = build(:payment, state: 'new')
-      expect(payment.retryable?).to be false
+      it 'returns false if payment state is not in-progress' do
+        payment = build(:payment, state: 'executed')
+        expect(payment.in_progress?).to be false
+      end
     end
 
-    it 'returns false if payment is successful' do
-      payment = build(:payment, state: 'executed')
-      expect(payment.retryable?).to be false
+    describe '#successful?' do
+      it 'returns true if payment state is executed' do
+        payment = build(:payment, state: 'executed')
+        expect(payment.successful?).to be true
+      end
+
+      it 'returns false if payment state is not executed' do
+        payment = build(:payment, state: 'new')
+        expect(payment.successful?).to be false
+      end
     end
 
-    it 'returns true for failed/rejected payment' do
-      payment = build(:payment, state: 'failed')
-      expect(payment.retryable?).to be true
-    end
-  end
+    describe '#retryable?' do
+      it 'returns false if payment is in progress' do
+        payment = build(:payment, state: 'new')
+        expect(payment.retryable?).to be false
+      end
 
-  describe '#show_status_by_payment_status' do
-    it 'returns status of associated order/subscription based on payment state' do
-      payment = build(:payment)
-      expect(payment.show_status_by_payment_status('executed')).to eq('Payment Successful')
-    end
-  end
+      it 'returns false if payment is successful' do
+        payment = build(:payment, state: 'executed')
+        expect(payment.retryable?).to be false
+      end
 
-  describe '#update_status_by_payment_status' do
-    let(:subscription) { create(:subscription) }
-    let(:order)        { create(:order) }
-
-    it 'updates state and associated subscription status' do
-      payment = create(:payment, :for_subscription, subscription: subscription)
-      payment.update_status_by_payment_status('executed')
-
-      expect(payment.state).to eq('executed')
-      expect(subscription.reload.status).to eq('Payment Successful')
+      it 'returns true for failed/rejected payment' do
+        payment = build(:payment, state: 'failed')
+        expect(payment.retryable?).to be true
+      end
     end
 
-    it 'updates state and associated order status' do
-      payment = create(:payment, :for_order, order: order)
-      payment.update_status_by_payment_status('failed')
+    describe '#show_status_by_payment_status' do
+      it 'returns status of associated order/subscription based on payment state' do
+        payment = build(:payment)
+        expect(payment.show_status_by_payment_status('executed')).to eq('Payment Successful')
+      end
+    end
 
-      expect(payment.state).to eq('failed')
-      expect(order.reload.status).to eq('Payment Failed')
+    describe '#update_status_by_payment_status' do
+      let(:subscription) { create(:subscription) }
+      let(:order)        { create(:order) }
+
+      it 'updates state and associated subscription status' do
+        payment = create(:payment, :for_subscription, subscription: subscription)
+        payment.update_status_by_payment_status('executed')
+
+        expect(payment.state).to eq('executed')
+        expect(subscription.reload.status).to eq('Payment Successful')
+      end
+
+      it 'updates state and associated order status' do
+        payment = create(:payment, :for_order, order: order)
+        payment.update_status_by_payment_status('failed')
+
+        expect(payment.state).to eq('failed')
+        expect(order.reload.status).to eq('Payment Failed')
+      end
     end
   end
 end

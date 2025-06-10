@@ -10,20 +10,17 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::RoutingError, with: :handle_routing_error
 
 
-  sig { params(resource: User).void }
   def after_sign_in_path_for(resource)
     Espago::UpdatePaymentStatusJob.perform_later(resource.id)
     super
   end
 
-  sig { void }
   def raise_not_found
     raise ActionController::RoutingError.new("No route matches #{request.path.inspect}")
   end
 
   private
 
-  sig { void }
   def record_not_found
     respond_to do |format|
       format.html { redirect_to root_path, alert: 'Record not found.' }
@@ -35,7 +32,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  sig { params(exception: ActiveRecord::InvalidForeignKey).void }
   def handle_invalid_foreign_key(exception)
     Rails.logger.warn "Foreign key violation: #{exception.message}"
 
@@ -53,7 +49,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  sig { params(exception: ActionController::RoutingError).void }
   def handle_routing_error(exception)
     Rails.logger.warn "Routing error: #{exception.message}"
 

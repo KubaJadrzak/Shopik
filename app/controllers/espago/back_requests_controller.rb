@@ -50,7 +50,7 @@ class Espago::BackRequestsController < ApplicationController
     head :ok
   end
 
-  sig { returns(T::Boolean) }
+  sig { void }
   def authenticate_espago!
     authenticate_or_request_with_http_basic do |username, password|
       username == Rails.application.credentials.dig(:espago, :login_basic_auth) &&

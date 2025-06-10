@@ -23,6 +23,7 @@ RSpec.describe 'UsersController Requests Test', type: :request do
         create(:like, user: user, rubit: liked_rubit)
 
         @order = create(:order, user: user)
+        @payment = create(:payment, :for_order, order: @order, payment_id: 'PAY123')
 
         sign_in user
         get account_path
@@ -73,10 +74,11 @@ RSpec.describe 'UsersController Requests Test', type: :request do
           Espago::UpdatePaymentStatusJob.perform_later(user.id)
         end
 
-        expect(@order.reload.payment_status).to eq('executed')
+        expect(@order.reload.status).to eq('Payment Successful')
+        expect(@payment.reload.state).to eq('executed')
       end
 
-      it 'triggers UpdatePaymentStatusJob and does not update the order when PaymentStatusService returns nil' do
+      it 'triggers UpdatePaymentStatusJob and does not update the payment status when PaymentStatusService returns nil' do
         allow_any_instance_of(Espago::PaymentStatusService)
           .to receive(:fetch_payment_status)
           .and_return(nil)
@@ -85,7 +87,8 @@ RSpec.describe 'UsersController Requests Test', type: :request do
           Espago::UpdatePaymentStatusJob.perform_later(user.id)
         end
 
-        expect(@order.reload.payment_status).to eq('new')
+        expect(@order.reload.status).to eq('New')
+        expect(@payment.reload.state).to eq('new')
       end
     end
   end

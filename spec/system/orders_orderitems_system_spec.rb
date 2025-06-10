@@ -31,9 +31,10 @@ RSpec.describe 'Order OrderItem System Test', type: :system do
       click_button 'Pay'
       expect(page).to have_current_path(/secure_web_page/, wait: 3)
       order = Order.last
+      payment = Payment.last
       expect(page).to have_content(order.total_price)
-      expect(page).to have_content(order.payment_id)
-      expect(page).to have_content(order.order_number)
+      expect(page).to have_content(payment.payment_number)
+      expect(page).to have_content(payment.payment_id)
     end
   end
 
