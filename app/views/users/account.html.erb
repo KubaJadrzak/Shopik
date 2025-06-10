@@ -35,17 +35,27 @@
           <%= button_to "Delete Account", user_registration_path, method: :delete,
                                                                 class: "list-group-item list-group-item-action text-danger" %>
           <% if @user.active_subscription? %>
-            <div class="mt-4 p-3 border rounded bg-light text-center">
-              <h5 class="mb-1" style="color: #9B111E;">Rubitter Red</h5>
-              <p class="mb-1 text-muted">You have an active Rubitter Red subscription!</p>
-              <p class="mb-3 text-muted">Enjoy your exclusive features.</p>
-            </div>
+            <% if @user.active_subscription.last_extension_payment_failed? %>
+              <div class="mt-4 p-3 border rounded bg-light text-center">
+                <h5 class="mb-1" style="color: #9B111E;">Rubitter Red</h5>
+                <p class="mb-1 text-muted">Your payment to extend your Rubitter Red subscription has failed.</p>
+                <p class="mb-3 text-muted">Please update your payment method to continue enjoying your exclusive features without interruption.</p>
+                <%= button_to "Manage Subscription", subscription_path(@user.active_subscription), method: :get,
+                class: "btn btn-primary btn-sm px-4" %>
+              </div>
+            <% else %>
+              <div class="mt-4 p-3 border rounded bg-light text-center">
+                <h5 class="mb-1" style="color: #9B111E;">Rubitter Red</h5>
+                <p class="mb-1 text-muted">You have an active Rubitter Red subscription!</p>
+                <p class="mb-3 text-muted">Enjoy your exclusive features.</p>
+              </div>
+            <% end %>
           <% elsif @user.pending_subscription? %>
             <div class="mt-4 p-3 border rounded text-center">
               <h5 class="mb-1" style="color: #9B111E;">Rubitter Red</h5>
               <p class="mb-1 text-muted">You have a pending Rubitter Red subscription awaiting your action.</p>
               <p class="mb-3 text-muted">Please complete the subscription process to activate your features.</p>
-              <%= button_to "Manage Rubitter Red", subscription_path(@subscriptions.first), method: :get,
+              <%= button_to "Manage Subscription", subscription_path(@subscriptions.first), method: :get,
                                                                       class: "btn btn-primary btn-sm px-4" %>
             </div>
           <% else %>

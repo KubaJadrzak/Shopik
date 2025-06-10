@@ -31,6 +31,11 @@ class Subscription < ApplicationRecord
   def can_retry_payment?
     payments.all?(&:retryable?)
   end
+  sig { returns(T::Boolean) }
+  def last_extension_payment_failed?
+    last_payment = payments.order(created_at: :desc).first
+    last_payment.present? && last_payment.simplified_status == :failure
+  end
 
   sig { void }
   def extend_or_initialize_dates!
@@ -42,6 +47,7 @@ class Subscription < ApplicationRecord
     end
     save!
   end
+
 
   private
 

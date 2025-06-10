@@ -97,6 +97,18 @@ class Payment < ApplicationRecord
     end
   end
 
+  SUCCESS_STATUSES = T.let(['executed'].freeze, T::Array[String])
+  FAILURE_STATUSES = T.let(
+    %w[
+      rejected
+      failed
+      resigned
+      reversed
+      refunded
+      invalid_uri
+    ].freeze,
+    T::Array[String],
+  )
   IN_PROGRESS_STATUSES = T.let(
     %w[
       preauthorized
@@ -115,20 +127,6 @@ class Payment < ApplicationRecord
     ].freeze,
     T::Array[String],
   )
-
-  FINAL_STATUSES = T.let(
-    %w[
-      executed
-      rejected
-      failed
-      resigned
-      reversed
-      refunded
-      invalid_uri
-    ].freeze,
-    T::Array[String],
-  )
-
   scope :in_progress, -> { where(state: IN_PROGRESS_STATUSES) }
 
   sig { returns(T::Boolean) }
@@ -144,6 +142,19 @@ class Payment < ApplicationRecord
   sig { returns(T::Boolean) }
   def retryable?
     !in_progress? && !successful?
+  end
+
+  sig { returns(Symbol) }
+  def simplified_status
+    if SUCCESS_STATUSES.include?(state)
+      :success
+    elsif FAILURE_STATUSES.include?(state)
+      :failure
+    elsif IN_PROGRESS_STATUSES.include?(state)
+      :awaiting
+    else
+      :unknown
+    end
   end
 
 
