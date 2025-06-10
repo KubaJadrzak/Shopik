@@ -12,55 +12,37 @@ class Payment < ApplicationRecord
   before_create :generate_payment_number
 
 
-  ORDER_STATUS_MAP = T.let({
-                             'executed'              => 'Preparing for Shipment',
-                             'rejected'              => 'Payment Rejected',
-                             'failed'                => 'Payment Failed',
-                             'resigned'              => 'Payment Resigned',
-                             'reversed'              => 'Payment Reversed',
-                             'preauthorized'         => 'Waiting for Payment',
-                             'tds2_challenge'        => 'Waiting for Payment',
-                             'tds_redirected'        => 'Waiting for Payment',
-                             'dcc_decision'          => 'Waiting for Payment',
-                             'blik_redirected'       => 'Waiting for Payment',
-                             'transfer_redirected'   => 'Waiting for Payment',
-                             'new'                   => 'Waiting for Payment',
-                             'refunded'              => 'Payment Refunded',
+  STATUS_MAP = T.let({
+                       'rejected'              => 'Payment Rejected',
+                       'failed'                => 'Payment Failed',
+                       'resigned'              => 'Payment Resigned',
+                       'reversed'              => 'Payment Reversed',
+                       'preauthorized'         => 'Waiting for Payment',
+                       'tds2_challenge'        => 'Waiting for Payment',
+                       'tds_redirected'        => 'Waiting for Payment',
+                       'dcc_decision'          => 'Waiting for Payment',
+                       'blik_redirected'       => 'Waiting for Payment',
+                       'transfer_redirected'   => 'Waiting for Payment',
+                       'new'                   => 'Waiting for Payment',
+                       'refunded'              => 'Payment Refunded',
+                       'timeout'               => 'Awaiting Payment',
+                       'connection_failed'     => 'Awaiting Payment',
+                       'ssl_error'             => 'Awaiting Payment',
+                       'parsing_error'         => 'Awaiting Payment',
+                       'unknown_faraday_error' => 'Awaiting Payment',
+                       'unexpected_error'      => 'Awaiting Payment',
+                       'invalid_uri'           => 'Payment Error',
+                     }, T::Hash[String, String],)
 
-                             'timeout'               => 'Awaiting Payment',
-                             'connection_failed'     => 'Awaiting Payment',
-                             'ssl_error'             => 'Awaiting Payment',
-                             'parsing_error'         => 'Awaiting Payment',
-                             'unknown_faraday_error' => 'Awaiting Payment',
-                             'unexpected_error'      => 'Awaiting Payment',
+  ORDER_STATUS_MAP = T.let(
+    STATUS_MAP.merge('executed' => 'Preparing for Shipment'),
+    T::Hash[String, String],
+  )
 
-                             'invalid_uri'           => 'Payment Error',
-                           }, T::Hash[String, String],)
-
-  SUBSCRIPTION_STATUS_MAP = T.let({
-                                    'executed'              => 'Active',
-                                    'rejected'              => 'Payment Rejected',
-                                    'failed'                => 'Payment Failed',
-                                    'resigned'              => 'Payment Resigned',
-                                    'reversed'              => 'Payment Reversed',
-                                    'preauthorized'         => 'Waiting for Payment',
-                                    'tds2_challenge'        => 'Waiting for Payment',
-                                    'tds_redirected'        => 'Waiting for Payment',
-                                    'dcc_decision'          => 'Waiting for Payment',
-                                    'blik_redirected'       => 'Waiting for Payment',
-                                    'transfer_redirected'   => 'Waiting for Payment',
-                                    'new'                   => 'Waiting for Payment',
-                                    'refunded'              => 'Payment Refunded',
-
-                                    'timeout'               => 'Awaiting Payment',
-                                    'connection_failed'     => 'Awaiting Payment',
-                                    'ssl_error'             => 'Awaiting Payment',
-                                    'parsing_error'         => 'Awaiting Payment',
-                                    'unknown_faraday_error' => 'Awaiting Payment',
-                                    'unexpected_error'      => 'Awaiting Payment',
-
-                                    'invalid_uri'           => 'Payment Error',
-                                  }, T::Hash[String, String],)
+  SUBSCRIPTION_STATUS_MAP = T.let(
+    STATUS_MAP.merge('executed' => 'Active'),
+    T::Hash[String, String],
+  )
 
   sig { params(state: String).void }
   def update_status_by_payment_status(state)
@@ -68,23 +50,17 @@ class Payment < ApplicationRecord
     save!
     if subscription.present?
       new_status = SUBSCRIPTION_STATUS_MAP[state] || 'Payment Error'
-
-      # Prevent changing status from Active back to a non-Active status
       if T.must(subscription).status == 'Active' && new_status != 'Active'
-        Rails.logger.info("Subscription #{T.must(subscription).id} is Active; ignoring downgrade to #{new_status}")
+        Rails.logger.info("Subscription #{T.must(subscription).id} is Active; ignoring status change to #{new_status}")
       else
         T.must(subscription).update!(status: new_status)
-
         if new_status == 'Active'
           T.must(subscription).extend_or_initialize_dates!
         end
       end
-
     elsif order.present?
       new_status = ORDER_STATUS_MAP[state] || 'Payment Error'
       T.must(order).update!(status: new_status)
-    else
-      Rails.logger.warn("Payment #{id} does not belong to a subscription or order.")
     end
   end
 

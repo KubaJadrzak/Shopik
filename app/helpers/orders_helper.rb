@@ -1,5 +1,5 @@
 module OrdersHelper
-  def color_for_status(status)
+  def order_color_for_status(status)
     case status
     when 'Preparing for Shipment'
       'bg-success'

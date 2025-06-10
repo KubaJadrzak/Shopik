@@ -4,7 +4,7 @@ class Order < ApplicationRecord
   extend T::Sig
   belongs_to :user, optional: true, touch: true
   has_many :order_items, dependent: :destroy
-  has_many :payments, dependent: :destroy
+  has_many :payments, -> { order(created_at: :desc) }, dependent: :destroy
 
   validates :email, presence: true
   validates :total_price, presence: true
@@ -30,7 +30,7 @@ class Order < ApplicationRecord
 
   sig { returns(T::Boolean) }
   def can_retry_payment?
-    payments.all?(&:retryable?)
+    payments.first&.retryable? || false
   end
 
   sig { returns(T.nilable(Payment)) }

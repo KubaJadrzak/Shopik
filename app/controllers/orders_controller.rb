@@ -3,7 +3,7 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_cart_has_items, only: %i[new create]
-  before_action :set_order, only: %i[show retry_order_payment]
+  before_action :set_order, only: %i[show retry_payment]
 
   def new
     @order = Order.new
@@ -11,7 +11,7 @@ class OrdersController < ApplicationController
   end
 
   def show
-    @payments = @order.payments.order(created_at: :desc)
+    @payments = @order.payments
   end
 
   def create

@@ -10,7 +10,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def show
-    @payments = @subscription.payments.order(created_at: :desc)
+    @payments = @subscription.payments
     @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY', nil)
   end
 

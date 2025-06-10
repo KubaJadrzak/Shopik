@@ -5,12 +5,16 @@ class Subscription < ApplicationRecord
 
   belongs_to :user, touch: true
   belongs_to :espago_client, optional: true
-  has_many :payments, dependent: :destroy
+  has_many :payments, -> { order(created_at: :desc) }, dependent: :destroy
 
   before_validation :set_price, on: :create
 
   before_create :generate_subscription_number
   broadcasts_refreshes
+
+  scope :should_be_expired, -> {
+    where(status: 'Active').where('end_date < ?', Date.current)
+  }
 
   sig { returns(T.nilable(Payment)) }
   def in_progress_payment
@@ -31,10 +35,11 @@ class Subscription < ApplicationRecord
   def can_retry_payment?
     payments.all?(&:retryable?)
   end
+
   sig { returns(T::Boolean) }
   def last_extension_payment_failed?
-    last_payment = payments.order(created_at: :desc).first
-    last_payment.present? && last_payment.simplified_status == :failure
+    last_payment = payments.first
+    last_payment&.simplified_status == :failure
   end
 
   sig { void }
@@ -47,7 +52,6 @@ class Subscription < ApplicationRecord
     end
     save!
   end
-
 
   private
 
