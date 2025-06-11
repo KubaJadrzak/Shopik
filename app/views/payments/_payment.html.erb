@@ -12,18 +12,19 @@
               <th>Reject Reason</th>
               <th>Behaviour</th>
               <th>Created At</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             <% payments.each do |payment| %>
-              <% css_class = color_for_payment_status(payment.state) %>
-              <tr>
-                <td class="<%= "#{css_class} text-white" %>"><%= payment.payment_number %></td>
-                <td class="<%= "#{css_class} text-white" %>"><%= number_to_currency(payment.amount) %></td>
-                <td class="<%= "#{css_class} text-white" %>"><%= payment.state.humanize %></td>
-                <td class="<%= "#{css_class} text-white" %>"><%= payment.reject_reason.presence || "N/A" %></td>
-                <td class="<%= "#{css_class} text-white" %>"><%= payment.behaviour.presence || "N/A" %></td>
-                <td class="<%= "#{css_class} text-white" %>"><%= payment.created_at.strftime("%B %d, %Y at %I:%M %p") %></td>
+              <tr class="align-middle">
+                <td><%= payment.payment_number %></td>
+                <td><%= number_to_currency(payment.amount) %></td>
+                <td><%= payment.state.humanize %></td>
+                <td><%= payment.reject_reason.presence || "N/A" %></td>
+                <td><%= payment.behaviour.presence || "N/A" %></td>
+                <td><%= payment.created_at.strftime("%B %d, %Y at %I:%M %p") %></td>
+                <td><%= payment_status_icon(payment.state) %></td>
               </tr>
             <% end %>
           </tbody>

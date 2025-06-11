@@ -1,4 +1,3 @@
-# spec/jobs/espago/expire_subscription_job_spec.rb
 require 'rails_helper'
 
 RSpec.describe Espago::ExpireSubscriptionJob, type: :job do

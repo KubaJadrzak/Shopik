@@ -1,5 +1,5 @@
 module SubscriptionsHelper
-  def color_for_status(status)
+  def subscription_color_for_status(status)
     case status
     when 'Active'
       'bg-success'
