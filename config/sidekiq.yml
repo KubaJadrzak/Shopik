@@ -1,0 +1,6 @@
+:scheduler:
+  :schedule:
+    expire_subscriptions:
+      cron: "0 * * * * *"
+      class: Espago::ExpireSubscriptionJob
+      queue: default

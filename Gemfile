@@ -89,3 +89,4 @@ gem 'faraday-retry'
 gem 'webmock', group: [:test]
 
 gem 'sidekiq'
+gem 'sidekiq-scheduler'

@@ -27,14 +27,13 @@ class Espago::OneTimePayment::OneTimePaymentPayload
   sig { returns(T::Hash[Symbol, T.untyped]) }
   def to_h
     {
-      amount:      @amount,
-      currency:    @currency,
-      card:        @card,
-      description: @description,
-    }.tap do |hash|
-      hash[:positive_url] = @positive_url if @positive_url
-      hash[:negative_url] = @negative_url if @negative_url
-      hash[:cof] = @cof if @cof
-    end
+      amount:       @amount,
+      currency:     @currency,
+      card:         @card,
+      description:  @description,
+      positive_url: @positive_url,
+      negative_url: @negative_url,
+      cof:          @cof,
+    }.compact
   end
 end

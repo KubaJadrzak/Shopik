@@ -1,4 +1,6 @@
-class ExpireSubscriptionsJob < ApplicationJob
+require 'sidekiq-scheduler'
+
+class Espago::ExpireSubscriptionJob < ApplicationJob
   extend T::Sig
   queue_as :default
 
