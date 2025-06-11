@@ -49,6 +49,9 @@ module GeneratedUrlHelpersModule
   def espago_start_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def extend_subscription_subscription_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def new_order_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -160,7 +163,10 @@ module GeneratedUrlHelpersModule
   def rails_storage_redirect_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def retry_order_payment_order_url(*args); end
+  def retry_payment_order_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def retry_payment_subscription_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def root_url(*args); end

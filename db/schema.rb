@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_10_140334) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_11_113918) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -37,6 +37,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_10_140334) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "client_number", null: false
+    t.string "first_name", null: false
+    t.string "last_name", null: false
     t.index ["client_id"], name: "index_espago_clients_on_client_id", unique: true
     t.index ["client_number"], name: "index_espago_clients_on_client_number", unique: true
     t.index ["user_id"], name: "index_espago_clients_on_user_id"
@@ -117,7 +119,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_10_140334) do
 
   create_table "subscriptions", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.integer "espago_client_id"
     t.date "start_date"
     t.date "end_date"
     t.string "status", default: "New", null: false
@@ -126,7 +127,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_10_140334) do
     t.datetime "updated_at", null: false
     t.decimal "price"
     t.string "subscription_number"
-    t.index ["espago_client_id"], name: "index_subscriptions_on_espago_client_id"
     t.index ["subscription_number"], name: "index_subscriptions_on_subscription_number", unique: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
@@ -158,6 +158,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_10_140334) do
   add_foreign_key "payments", "subscriptions"
   add_foreign_key "rubits", "rubits", column: "parent_rubit_id"
   add_foreign_key "rubits", "users"
-  add_foreign_key "subscriptions", "espago_clients"
   add_foreign_key "subscriptions", "users"
 end

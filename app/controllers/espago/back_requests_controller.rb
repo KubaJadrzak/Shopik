@@ -47,6 +47,29 @@ class Espago::BackRequestsController < ApplicationController
       issuer_response_code: issuer_response_code,
     )
 
+    client_id = payload['client']
+    last4     = payload.dig('card', 'last4')
+    company   = payload.dig('card', 'company')
+    first_name = payload.dig('card', 'first_name')
+    last_name = payload.dig('card', 'last_name')
+    user = payment.user
+    if user.present? && client_id.present?
+      existing_client = EspagoClient.find_by(client_id: client_id)
+
+      if existing_client.nil?
+        EspagoClient.find_or_create_by!(client_id: client_id) do |client|
+          client.user    = user
+          client.company = company
+          client.last4   = last4
+          client.first_name = first_name
+          client.last_name = last_name
+        end
+        Rails.logger.info("Created new EspagoClient for user #{user.id}")
+      else
+        Rails.logger.info("EspagoClient already exists for client_id #{client_id}")
+      end
+    end
+
     head :ok
   end
 

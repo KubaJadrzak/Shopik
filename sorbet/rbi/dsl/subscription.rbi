@@ -384,35 +384,14 @@ class Subscription
   end
 
   module GeneratedAssociationMethods
-    sig { params(args: T.untyped, blk: T.untyped).returns(::EspagoClient) }
-    def build_espago_client(*args, &blk); end
-
     sig { params(args: T.untyped, blk: T.untyped).returns(::User) }
     def build_user(*args, &blk); end
-
-    sig { params(args: T.untyped, blk: T.untyped).returns(::EspagoClient) }
-    def create_espago_client(*args, &blk); end
-
-    sig { params(args: T.untyped, blk: T.untyped).returns(::EspagoClient) }
-    def create_espago_client!(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(::User) }
     def create_user(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(::User) }
     def create_user!(*args, &blk); end
-
-    sig { returns(T.nilable(::EspagoClient)) }
-    def espago_client; end
-
-    sig { params(value: T.nilable(::EspagoClient)).void }
-    def espago_client=(value); end
-
-    sig { returns(T::Boolean) }
-    def espago_client_changed?; end
-
-    sig { returns(T::Boolean) }
-    def espago_client_previously_changed?; end
 
     sig { returns(T::Array[T.untyped]) }
     def payment_ids; end
@@ -428,14 +407,8 @@ class Subscription
     sig { params(value: T::Enumerable[::Payment]).void }
     def payments=(value); end
 
-    sig { returns(T.nilable(::EspagoClient)) }
-    def reload_espago_client; end
-
     sig { returns(T.nilable(::User)) }
     def reload_user; end
-
-    sig { void }
-    def reset_espago_client; end
 
     sig { void }
     def reset_user; end
@@ -573,6 +546,9 @@ class Subscription
     def select(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def should_be_expired(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def strict_loading(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
@@ -689,10 +665,10 @@ class Subscription
     sig { void }
     def created_at_will_change!; end
 
-    sig { returns(::Date) }
+    sig { returns(T.nilable(::Date)) }
     def end_date; end
 
-    sig { params(value: ::Date).returns(::Date) }
+    sig { params(value: T.nilable(::Date)).returns(T.nilable(::Date)) }
     def end_date=(value); end
 
     sig { returns(T::Boolean) }
@@ -707,22 +683,22 @@ class Subscription
     sig { returns(T::Boolean) }
     def end_date_came_from_user?; end
 
-    sig { returns(T.nilable([::Date, ::Date])) }
+    sig { returns(T.nilable([T.nilable(::Date), T.nilable(::Date)])) }
     def end_date_change; end
 
-    sig { returns(T.nilable([::Date, ::Date])) }
+    sig { returns(T.nilable([T.nilable(::Date), T.nilable(::Date)])) }
     def end_date_change_to_be_saved; end
 
-    sig { params(from: ::Date, to: ::Date).returns(T::Boolean) }
+    sig { params(from: T.nilable(::Date), to: T.nilable(::Date)).returns(T::Boolean) }
     def end_date_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::Date)) }
     def end_date_in_database; end
 
-    sig { returns(T.nilable([::Date, ::Date])) }
+    sig { returns(T.nilable([T.nilable(::Date), T.nilable(::Date)])) }
     def end_date_previous_change; end
 
-    sig { params(from: ::Date, to: ::Date).returns(T::Boolean) }
+    sig { params(from: T.nilable(::Date), to: T.nilable(::Date)).returns(T::Boolean) }
     def end_date_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::Date)) }
@@ -733,51 +709,6 @@ class Subscription
 
     sig { void }
     def end_date_will_change!; end
-
-    sig { returns(T.nilable(::Integer)) }
-    def espago_client_id; end
-
-    sig { params(value: T.nilable(::Integer)).returns(T.nilable(::Integer)) }
-    def espago_client_id=(value); end
-
-    sig { returns(T::Boolean) }
-    def espago_client_id?; end
-
-    sig { returns(T.nilable(::Integer)) }
-    def espago_client_id_before_last_save; end
-
-    sig { returns(T.untyped) }
-    def espago_client_id_before_type_cast; end
-
-    sig { returns(T::Boolean) }
-    def espago_client_id_came_from_user?; end
-
-    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def espago_client_id_change; end
-
-    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def espago_client_id_change_to_be_saved; end
-
-    sig { params(from: T.nilable(::Integer), to: T.nilable(::Integer)).returns(T::Boolean) }
-    def espago_client_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::Integer)) }
-    def espago_client_id_in_database; end
-
-    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def espago_client_id_previous_change; end
-
-    sig { params(from: T.nilable(::Integer), to: T.nilable(::Integer)).returns(T::Boolean) }
-    def espago_client_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::Integer)) }
-    def espago_client_id_previously_was; end
-
-    sig { returns(T.nilable(::Integer)) }
-    def espago_client_id_was; end
-
-    sig { void }
-    def espago_client_id_will_change!; end
 
     sig { returns(::Integer) }
     def id; end
@@ -924,9 +855,6 @@ class Subscription
     def restore_end_date!; end
 
     sig { void }
-    def restore_espago_client_id!; end
-
-    sig { void }
     def restore_id!; end
 
     sig { void }
@@ -962,17 +890,11 @@ class Subscription
     sig { returns(T::Boolean) }
     def saved_change_to_created_at?; end
 
-    sig { returns(T.nilable([::Date, ::Date])) }
+    sig { returns(T.nilable([T.nilable(::Date), T.nilable(::Date)])) }
     def saved_change_to_end_date; end
 
     sig { returns(T::Boolean) }
     def saved_change_to_end_date?; end
-
-    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def saved_change_to_espago_client_id; end
-
-    sig { returns(T::Boolean) }
-    def saved_change_to_espago_client_id?; end
 
     sig { returns(T.nilable([::Integer, ::Integer])) }
     def saved_change_to_id; end
@@ -992,7 +914,7 @@ class Subscription
     sig { returns(T::Boolean) }
     def saved_change_to_price?; end
 
-    sig { returns(T.nilable([::Date, ::Date])) }
+    sig { returns(T.nilable([T.nilable(::Date), T.nilable(::Date)])) }
     def saved_change_to_start_date; end
 
     sig { returns(T::Boolean) }
@@ -1022,10 +944,10 @@ class Subscription
     sig { returns(T::Boolean) }
     def saved_change_to_user_id?; end
 
-    sig { returns(::Date) }
+    sig { returns(T.nilable(::Date)) }
     def start_date; end
 
-    sig { params(value: ::Date).returns(::Date) }
+    sig { params(value: T.nilable(::Date)).returns(T.nilable(::Date)) }
     def start_date=(value); end
 
     sig { returns(T::Boolean) }
@@ -1040,22 +962,22 @@ class Subscription
     sig { returns(T::Boolean) }
     def start_date_came_from_user?; end
 
-    sig { returns(T.nilable([::Date, ::Date])) }
+    sig { returns(T.nilable([T.nilable(::Date), T.nilable(::Date)])) }
     def start_date_change; end
 
-    sig { returns(T.nilable([::Date, ::Date])) }
+    sig { returns(T.nilable([T.nilable(::Date), T.nilable(::Date)])) }
     def start_date_change_to_be_saved; end
 
-    sig { params(from: ::Date, to: ::Date).returns(T::Boolean) }
+    sig { params(from: T.nilable(::Date), to: T.nilable(::Date)).returns(T::Boolean) }
     def start_date_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::Date)) }
     def start_date_in_database; end
 
-    sig { returns(T.nilable([::Date, ::Date])) }
+    sig { returns(T.nilable([T.nilable(::Date), T.nilable(::Date)])) }
     def start_date_previous_change; end
 
-    sig { params(from: ::Date, to: ::Date).returns(T::Boolean) }
+    sig { params(from: T.nilable(::Date), to: T.nilable(::Date)).returns(T::Boolean) }
     def start_date_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::Date)) }
@@ -1257,9 +1179,6 @@ class Subscription
     def will_save_change_to_end_date?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_espago_client_id?; end
-
-    sig { returns(T::Boolean) }
     def will_save_change_to_id?; end
 
     sig { returns(T::Boolean) }
@@ -1402,6 +1321,9 @@ class Subscription
     sig { params(args: T.untyped).returns(PrivateRelation) }
     sig { params(blk: T.proc.params(record: ::Subscription).returns(BasicObject)).returns(T::Array[::Subscription]) }
     def select(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def should_be_expired(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def strict_loading(*args, &blk); end

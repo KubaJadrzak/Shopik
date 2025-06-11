@@ -399,20 +399,6 @@ class EspagoClient
     sig { void }
     def reset_user; end
 
-    sig { returns(T::Array[T.untyped]) }
-    def subscription_ids; end
-
-    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def subscription_ids=(ids); end
-
-    # This method is created by ActiveRecord on the `EspagoClient` class because it declared `has_many :subscriptions`.
-    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
-    sig { returns(::Subscription::PrivateCollectionProxy) }
-    def subscriptions; end
-
-    sig { params(value: T::Enumerable[::Subscription]).void }
-    def subscriptions=(value); end
-
     sig { returns(T.nilable(::User)) }
     def user; end
 
@@ -752,6 +738,51 @@ class EspagoClient
     sig { void }
     def created_at_will_change!; end
 
+    sig { returns(::String) }
+    def first_name; end
+
+    sig { params(value: ::String).returns(::String) }
+    def first_name=(value); end
+
+    sig { returns(T::Boolean) }
+    def first_name?; end
+
+    sig { returns(T.nilable(::String)) }
+    def first_name_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def first_name_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def first_name_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def first_name_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def first_name_change_to_be_saved; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def first_name_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def first_name_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def first_name_previous_change; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def first_name_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def first_name_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def first_name_was; end
+
+    sig { void }
+    def first_name_will_change!; end
+
     sig { returns(::Integer) }
     def id; end
 
@@ -887,6 +918,51 @@ class EspagoClient
     sig { void }
     def last4_will_change!; end
 
+    sig { returns(::String) }
+    def last_name; end
+
+    sig { params(value: ::String).returns(::String) }
+    def last_name=(value); end
+
+    sig { returns(T::Boolean) }
+    def last_name?; end
+
+    sig { returns(T.nilable(::String)) }
+    def last_name_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def last_name_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def last_name_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def last_name_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def last_name_change_to_be_saved; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def last_name_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def last_name_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def last_name_previous_change; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def last_name_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def last_name_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def last_name_was; end
+
+    sig { void }
+    def last_name_will_change!; end
+
     sig { void }
     def restore_client_id!; end
 
@@ -900,6 +976,9 @@ class EspagoClient
     def restore_created_at!; end
 
     sig { void }
+    def restore_first_name!; end
+
+    sig { void }
     def restore_id!; end
 
     sig { void }
@@ -907,6 +986,9 @@ class EspagoClient
 
     sig { void }
     def restore_last4!; end
+
+    sig { void }
+    def restore_last_name!; end
 
     sig { void }
     def restore_updated_at!; end
@@ -938,6 +1020,12 @@ class EspagoClient
     sig { returns(T::Boolean) }
     def saved_change_to_created_at?; end
 
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_first_name; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_first_name?; end
+
     sig { returns(T.nilable([::Integer, ::Integer])) }
     def saved_change_to_id; end
 
@@ -955,6 +1043,12 @@ class EspagoClient
 
     sig { returns(T::Boolean) }
     def saved_change_to_last4?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_last_name; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_last_name?; end
 
     sig { returns(T.nilable([::ActiveSupport::TimeWithZone, ::ActiveSupport::TimeWithZone])) }
     def saved_change_to_updated_at; end
@@ -1071,6 +1165,9 @@ class EspagoClient
     def will_save_change_to_created_at?; end
 
     sig { returns(T::Boolean) }
+    def will_save_change_to_first_name?; end
+
+    sig { returns(T::Boolean) }
     def will_save_change_to_id?; end
 
     sig { returns(T::Boolean) }
@@ -1078,6 +1175,9 @@ class EspagoClient
 
     sig { returns(T::Boolean) }
     def will_save_change_to_last4?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_last_name?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_updated_at?; end

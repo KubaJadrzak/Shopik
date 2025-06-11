@@ -1,0 +1,10 @@
+<div id="espago-clients-section" class="content-section" data-user-sidebar-target="espagoClientsSection">
+  <h4>Your Payment Methods</h4>
+  <% if @espago_clients.any? %>
+    <div class="row mt-4">
+      <%= render partial: "users/sidebar/espago_client", collection: @espago_clients %>
+    </div>
+  <% else %>
+    <p>You have no saved payment methods yet.</p>
+  <% end %>
+</div>

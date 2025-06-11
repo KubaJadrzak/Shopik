@@ -49,6 +49,9 @@ module GeneratedPathHelpersModule
   def espago_start_payment_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def extend_subscription_subscription_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def new_order_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -160,7 +163,10 @@ module GeneratedPathHelpersModule
   def rails_storage_redirect_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def retry_order_payment_order_path(*args); end
+  def retry_payment_order_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def retry_payment_subscription_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def root_path(*args); end

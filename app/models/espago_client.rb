@@ -3,7 +3,6 @@
 class EspagoClient < ApplicationRecord
   extend T::Sig
   belongs_to :user
-  has_many :subscriptions, dependent: :destroy
 
   before_create :generate_client_number
 

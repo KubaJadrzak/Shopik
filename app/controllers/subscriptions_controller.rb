@@ -7,6 +7,7 @@ class SubscriptionsController < ApplicationController
   def new
     @subscription = Subscription.new
     @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY', nil)
+    @espago_clients = current_user.espago_clients
   end
 
   def show

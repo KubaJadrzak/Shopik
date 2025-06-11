@@ -4,12 +4,17 @@ class Payment < ApplicationRecord
   extend T::Sig
   belongs_to :subscription, optional: true
   belongs_to :order, optional: true
-  delegate :espago_client, to: :subscription
 
   validate :must_have_subscription_or_order
   validate :prevent_duplicate_payment_for_order, on: :create
 
   before_create :generate_payment_number
+
+
+  sig { returns(T.nilable(User)) }
+  def user
+    subscription&.user || order&.user
+  end
 
 
   STATUS_MAP = T.let({

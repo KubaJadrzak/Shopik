@@ -27,6 +27,8 @@ class UsersController < ApplicationController
 
     @subscriptions = current_user.subscriptions.order(created_at: :desc)
 
+    @espago_clients = current_user.espago_clients.order(created_at: :desc)
+
     Espago::UpdatePaymentStatusJob.perform_later(current_user.id)
   end
 end

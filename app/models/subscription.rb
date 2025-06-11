@@ -4,7 +4,6 @@ class Subscription < ApplicationRecord
   extend T::Sig
 
   belongs_to :user, touch: true
-  belongs_to :espago_client, optional: true
   has_many :payments, -> { order(created_at: :desc) }, dependent: :destroy
 
   before_validation :set_price, on: :create
