@@ -3,10 +3,10 @@
 class Subscription < ApplicationRecord
   extend T::Sig
 
-  belongs_to :user, touch: true
-  has_many :payments, -> { order(created_at: :desc) }, dependent: :destroy
+  validates :price, presence: true
 
-  before_validation :set_price, on: :create
+  belongs_to :user, touch: true
+  has_many :payments, -> { order(created_at: :desc) }, as: :payable, dependent: :destroy
 
   before_create :generate_subscription_number
   broadcasts_refreshes
@@ -26,19 +26,19 @@ class Subscription < ApplicationRecord
   end
 
   sig { returns(T::Boolean) }
-  def can_extend_subscription?
-    status == 'Active' && !in_progress_payment?
-  end
-
-  sig { returns(T::Boolean) }
   def can_retry_payment?
     payments.all?(&:retryable?)
   end
 
   sig { returns(T::Boolean) }
-  def last_extension_payment_failed?
-    last_payment = payments.first
-    last_payment&.simplified_status == :failure
+  def can_extend_subscription?
+    status == 'Active' && !in_progress_payment?
+  end
+
+  sig { returns(T::Boolean) }
+  def extension_payment_failed?
+    payment = payments.first
+    payment&.simplified_status == :failure
   end
 
   sig { void }
@@ -52,13 +52,12 @@ class Subscription < ApplicationRecord
     save!
   end
 
-  private
-
-
-  sig { void }
-  def set_price
-    self.price ||= BigDecimal('4.99')
+  sig { returns(BigDecimal) }
+  def amount
+    price
   end
+
+  private
 
   sig { void }
   def generate_subscription_number

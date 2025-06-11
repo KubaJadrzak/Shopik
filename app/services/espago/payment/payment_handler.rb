@@ -1,6 +1,6 @@
 # typed: strict
 
-class Espago::Payment::OrderPaymentHandler
+class Espago::Payment::PaymentHandler
   extend T::Sig
 
   sig do
@@ -15,11 +15,11 @@ class Espago::Payment::OrderPaymentHandler
   end
 
   sig { returns(Espago::Response) }
-  def process
+  def handle_payment
     if @card_token
       payload = Espago::OneTimePayment::OneTimePaymentPayload.new(
         amount:       @payment.amount,
-        currency:     'pln',
+        currency:     'PLN',
         card:         @card_token,
         description:  "Payment ##{@payment.payment_number}",
         positive_url: Rails.application.routes.url_helpers.espago_payments_success_url(payment_number: @payment.payment_number),
@@ -27,8 +27,9 @@ class Espago::Payment::OrderPaymentHandler
       )
       Espago::OneTimePayment::OneTimePaymentService.new(payload: payload).create_payment
     else
+
       payload = Espago::SecureWebPage::SecureWebPagePayload.new(
-        amount:       T.must(@payment.order).total_price,
+        amount:       @payment.amount,
         currency:     'PLN',
         kind:         'sale',
         title:        "Payment ##{@payment.payment_number}",

@@ -800,10 +800,10 @@ class Subscription
     sig { void }
     def id_will_change!; end
 
-    sig { returns(T.nilable(::BigDecimal)) }
+    sig { returns(::BigDecimal) }
     def price; end
 
-    sig { params(value: T.nilable(::BigDecimal)).returns(T.nilable(::BigDecimal)) }
+    sig { params(value: ::BigDecimal).returns(::BigDecimal) }
     def price=(value); end
 
     sig { returns(T::Boolean) }
@@ -818,22 +818,22 @@ class Subscription
     sig { returns(T::Boolean) }
     def price_came_from_user?; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def price_change; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def price_change_to_be_saved; end
 
-    sig { params(from: T.nilable(::BigDecimal), to: T.nilable(::BigDecimal)).returns(T::Boolean) }
+    sig { params(from: ::BigDecimal, to: ::BigDecimal).returns(T::Boolean) }
     def price_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::BigDecimal)) }
     def price_in_database; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def price_previous_change; end
 
-    sig { params(from: T.nilable(::BigDecimal), to: T.nilable(::BigDecimal)).returns(T::Boolean) }
+    sig { params(from: ::BigDecimal, to: ::BigDecimal).returns(T::Boolean) }
     def price_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::BigDecimal)) }
@@ -908,7 +908,7 @@ class Subscription
     sig { returns(T::Boolean) }
     def saved_change_to_id_value?; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def saved_change_to_price; end
 
     sig { returns(T::Boolean) }

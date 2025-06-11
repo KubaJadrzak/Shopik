@@ -37,6 +37,9 @@ module GeneratedUrlHelpersModule
   def espago_back_request_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def espago_new_payment_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def espago_payments_awaiting_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }

@@ -329,59 +329,23 @@ class Payment
   end
 
   module GeneratedAssociationMethods
-    sig { params(args: T.untyped, blk: T.untyped).returns(::Order) }
-    def build_order(*args, &blk); end
+    sig { returns(T.untyped) }
+    def payable; end
 
-    sig { params(args: T.untyped, blk: T.untyped).returns(::Subscription) }
-    def build_subscription(*args, &blk); end
-
-    sig { params(args: T.untyped, blk: T.untyped).returns(::Order) }
-    def create_order(*args, &blk); end
-
-    sig { params(args: T.untyped, blk: T.untyped).returns(::Order) }
-    def create_order!(*args, &blk); end
-
-    sig { params(args: T.untyped, blk: T.untyped).returns(::Subscription) }
-    def create_subscription(*args, &blk); end
-
-    sig { params(args: T.untyped, blk: T.untyped).returns(::Subscription) }
-    def create_subscription!(*args, &blk); end
-
-    sig { returns(T.nilable(::Order)) }
-    def order; end
-
-    sig { params(value: T.nilable(::Order)).void }
-    def order=(value); end
+    sig { params(value: T.untyped).void }
+    def payable=(value); end
 
     sig { returns(T::Boolean) }
-    def order_changed?; end
+    def payable_changed?; end
 
     sig { returns(T::Boolean) }
-    def order_previously_changed?; end
+    def payable_previously_changed?; end
 
-    sig { returns(T.nilable(::Order)) }
-    def reload_order; end
-
-    sig { returns(T.nilable(::Subscription)) }
-    def reload_subscription; end
+    sig { returns(T.untyped) }
+    def reload_payable; end
 
     sig { void }
-    def reset_order; end
-
-    sig { void }
-    def reset_subscription; end
-
-    sig { returns(T.nilable(::Subscription)) }
-    def subscription; end
-
-    sig { params(value: T.nilable(::Subscription)).void }
-    def subscription=(value); end
-
-    sig { returns(T::Boolean) }
-    def subscription_changed?; end
-
-    sig { returns(T::Boolean) }
-    def subscription_previously_changed?; end
+    def reset_payable; end
   end
 
   module GeneratedAssociationRelationMethods
@@ -396,6 +360,9 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def arel_columns(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def awaiting(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def create_with(*args, &blk); end
@@ -419,6 +386,9 @@ class Payment
     def extract_associated(association); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def failed(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def from(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelationGroupChain) }
@@ -429,9 +399,6 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def in_order_of(*args, &blk); end
-
-    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
-    def in_progress(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def includes(*args, &blk); end
@@ -479,6 +446,9 @@ class Payment
     def order(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def pending(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def preload(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
@@ -511,6 +481,12 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def structurally_compatible?(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def successful(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def uncertain(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def uniq!(*args, &blk); end
@@ -804,49 +780,94 @@ class Payment
     def issuer_response_code_will_change!; end
 
     sig { returns(T.nilable(::Integer)) }
-    def order_id; end
+    def payable_id; end
 
     sig { params(value: T.nilable(::Integer)).returns(T.nilable(::Integer)) }
-    def order_id=(value); end
+    def payable_id=(value); end
 
     sig { returns(T::Boolean) }
-    def order_id?; end
+    def payable_id?; end
 
     sig { returns(T.nilable(::Integer)) }
-    def order_id_before_last_save; end
+    def payable_id_before_last_save; end
 
     sig { returns(T.untyped) }
-    def order_id_before_type_cast; end
+    def payable_id_before_type_cast; end
 
     sig { returns(T::Boolean) }
-    def order_id_came_from_user?; end
+    def payable_id_came_from_user?; end
 
     sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def order_id_change; end
+    def payable_id_change; end
 
     sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def order_id_change_to_be_saved; end
+    def payable_id_change_to_be_saved; end
 
     sig { params(from: T.nilable(::Integer), to: T.nilable(::Integer)).returns(T::Boolean) }
-    def order_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+    def payable_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::Integer)) }
-    def order_id_in_database; end
+    def payable_id_in_database; end
 
     sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def order_id_previous_change; end
+    def payable_id_previous_change; end
 
     sig { params(from: T.nilable(::Integer), to: T.nilable(::Integer)).returns(T::Boolean) }
-    def order_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+    def payable_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::Integer)) }
-    def order_id_previously_was; end
+    def payable_id_previously_was; end
 
     sig { returns(T.nilable(::Integer)) }
-    def order_id_was; end
+    def payable_id_was; end
 
     sig { void }
-    def order_id_will_change!; end
+    def payable_id_will_change!; end
+
+    sig { returns(T.nilable(::String)) }
+    def payable_type; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def payable_type=(value); end
+
+    sig { returns(T::Boolean) }
+    def payable_type?; end
+
+    sig { returns(T.nilable(::String)) }
+    def payable_type_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def payable_type_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def payable_type_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def payable_type_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def payable_type_change_to_be_saved; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def payable_type_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def payable_type_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def payable_type_previous_change; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def payable_type_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def payable_type_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def payable_type_was; end
+
+    sig { void }
+    def payable_type_will_change!; end
 
     sig { returns(T.nilable(::String)) }
     def payment_id; end
@@ -1002,7 +1023,10 @@ class Payment
     def restore_issuer_response_code!; end
 
     sig { void }
-    def restore_order_id!; end
+    def restore_payable_id!; end
+
+    sig { void }
+    def restore_payable_type!; end
 
     sig { void }
     def restore_payment_id!; end
@@ -1015,9 +1039,6 @@ class Payment
 
     sig { void }
     def restore_state!; end
-
-    sig { void }
-    def restore_subscription_id!; end
 
     sig { void }
     def restore_updated_at!; end
@@ -1059,10 +1080,16 @@ class Payment
     def saved_change_to_issuer_response_code?; end
 
     sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def saved_change_to_order_id; end
+    def saved_change_to_payable_id; end
 
     sig { returns(T::Boolean) }
-    def saved_change_to_order_id?; end
+    def saved_change_to_payable_id?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_payable_type; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_payable_type?; end
 
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def saved_change_to_payment_id; end
@@ -1087,12 +1114,6 @@ class Payment
 
     sig { returns(T::Boolean) }
     def saved_change_to_state?; end
-
-    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def saved_change_to_subscription_id; end
-
-    sig { returns(T::Boolean) }
-    def saved_change_to_subscription_id?; end
 
     sig { returns(T.nilable([::ActiveSupport::TimeWithZone, ::ActiveSupport::TimeWithZone])) }
     def saved_change_to_updated_at; end
@@ -1144,51 +1165,6 @@ class Payment
 
     sig { void }
     def state_will_change!; end
-
-    sig { returns(T.nilable(::Integer)) }
-    def subscription_id; end
-
-    sig { params(value: T.nilable(::Integer)).returns(T.nilable(::Integer)) }
-    def subscription_id=(value); end
-
-    sig { returns(T::Boolean) }
-    def subscription_id?; end
-
-    sig { returns(T.nilable(::Integer)) }
-    def subscription_id_before_last_save; end
-
-    sig { returns(T.untyped) }
-    def subscription_id_before_type_cast; end
-
-    sig { returns(T::Boolean) }
-    def subscription_id_came_from_user?; end
-
-    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def subscription_id_change; end
-
-    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def subscription_id_change_to_be_saved; end
-
-    sig { params(from: T.nilable(::Integer), to: T.nilable(::Integer)).returns(T::Boolean) }
-    def subscription_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::Integer)) }
-    def subscription_id_in_database; end
-
-    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def subscription_id_previous_change; end
-
-    sig { params(from: T.nilable(::Integer), to: T.nilable(::Integer)).returns(T::Boolean) }
-    def subscription_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::Integer)) }
-    def subscription_id_previously_was; end
-
-    sig { returns(T.nilable(::Integer)) }
-    def subscription_id_was; end
-
-    sig { void }
-    def subscription_id_will_change!; end
 
     sig { returns(::ActiveSupport::TimeWithZone) }
     def updated_at; end
@@ -1254,7 +1230,10 @@ class Payment
     def will_save_change_to_issuer_response_code?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_order_id?; end
+    def will_save_change_to_payable_id?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_payable_type?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_payment_id?; end
@@ -1267,9 +1246,6 @@ class Payment
 
     sig { returns(T::Boolean) }
     def will_save_change_to_state?; end
-
-    sig { returns(T::Boolean) }
-    def will_save_change_to_subscription_id?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_updated_at?; end
@@ -1287,6 +1263,9 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def arel_columns(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def awaiting(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def create_with(*args, &blk); end
@@ -1310,6 +1289,9 @@ class Payment
     def extract_associated(association); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def failed(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def from(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelationGroupChain) }
@@ -1320,9 +1302,6 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def in_order_of(*args, &blk); end
-
-    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
-    def in_progress(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def includes(*args, &blk); end
@@ -1370,6 +1349,9 @@ class Payment
     def order(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def pending(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def preload(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
@@ -1402,6 +1384,12 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def structurally_compatible?(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def successful(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def uncertain(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def uniq!(*args, &blk); end

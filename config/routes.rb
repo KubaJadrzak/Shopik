@@ -33,7 +33,8 @@ Rails.application.routes.draw do
   get 'account', to: 'users#account', as: 'account'
 
   namespace :espago do
-    get 'payments/:payment_number/start_payment', to: 'payments#start_payment', as: 'start_payment'
+    get 'payments/new', to: 'payments#new', as: 'new_payment'
+    post 'payments/start_payment', to: 'payments#start_payment', as: 'start_payment'
     get 'payments/:payment_number/success', to: 'payments#payment_success', as: 'payments_success'
     get 'payments/:payment_number/failure', to: 'payments#payment_failure', as: 'payments_failure'
     get 'payments/:payment_number/awaiting', to: 'payments#payment_awaiting', as: 'payments_awaiting'

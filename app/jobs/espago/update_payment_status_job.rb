@@ -10,20 +10,18 @@ class Espago::UpdatePaymentStatusJob < ApplicationJob
     return unless user
 
     Payment.in_progress.where(id: user.payments.select(:id)).find_each do |payment|
-      case payment.show_status_by_payment_status(payment.state)
-      when 'Awaiting Payment'
+      if payment.uncertain?
         if payment.created_at < 120.minutes.ago
           payment.update_status_by_payment_status('failed')
         end
-      when 'New', 'Waiting for Payment'
+      elsif payment.pending?
         unless payment.payment_id.present?
           payment.update_status_by_payment_status('unexpected_error')
           next
         end
 
-        new_status = Espago::PaymentStatusService
-                     .new(payment_id: T.must(payment.payment_id))
-                     .fetch_payment_status
+        new_status = Espago::PaymentStatusService.new(payment_id: T.must(payment.payment_id)).fetch_payment_status
+
         if new_status.present? && new_status != payment.state
           payment.update_status_by_payment_status(new_status)
         elsif payment.created_at < 120.minutes.ago

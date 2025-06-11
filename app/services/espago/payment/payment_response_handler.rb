@@ -7,7 +7,7 @@ class Espago::Payment::PaymentResponseHandler
   def self.handle_response(payment, response)
     return handle_success(payment, response.body) if response.success?
 
-    handle_failure(payment, response.status.to_s)
+    handle_failure(payment, response.status)
   end
 
   sig { params(payment: Payment, data: T::Hash[String, T.untyped]).returns([Symbol, String]) }

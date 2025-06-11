@@ -37,6 +37,9 @@ module GeneratedPathHelpersModule
   def espago_back_request_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def espago_new_payment_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def espago_payments_awaiting_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }

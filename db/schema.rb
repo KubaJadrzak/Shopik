@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_11_113918) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_11_191729) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -80,7 +80,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_113918) do
   end
 
   create_table "payments", force: :cascade do |t|
-    t.integer "subscription_id"
     t.string "payment_id"
     t.decimal "amount", precision: 10, scale: 2, null: false
     t.string "state", default: "new", null: false
@@ -90,12 +89,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_113918) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "payment_number", null: false
-    t.integer "order_id"
-    t.index ["order_id"], name: "index_payments_on_order_id"
+    t.string "payable_type"
+    t.integer "payable_id"
+    t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
     t.index ["payment_id"], name: "index_payments_on_payment_id", unique: true
     t.index ["payment_number"], name: "index_payments_on_payment_number", unique: true
     t.index ["state"], name: "index_payments_on_state"
-    t.index ["subscription_id"], name: "index_payments_on_subscription_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -125,7 +124,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_113918) do
     t.boolean "auto_renew", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "price"
+    t.decimal "price", default: "4.99", null: false
     t.string "subscription_number"
     t.index ["subscription_number"], name: "index_subscriptions_on_subscription_number", unique: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
@@ -154,8 +153,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_113918) do
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "users"
-  add_foreign_key "payments", "orders"
-  add_foreign_key "payments", "subscriptions"
   add_foreign_key "rubits", "rubits", column: "parent_rubit_id"
   add_foreign_key "rubits", "users"
   add_foreign_key "subscriptions", "users"

@@ -18,6 +18,9 @@ class ApplicationController < ActionController::Base
   def subscription_path(subscription); end
 
   sig { params(payment_number: String).returns(String) }
+  def espago_new_payment_path(payment_number); end
+
+  sig { params(payment_number: String).returns(String) }
   def espago_start_payment_path(payment_number); end
 
   sig { returns(String) }

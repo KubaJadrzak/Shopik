@@ -7,7 +7,6 @@ class OrdersController < ApplicationController
 
   def new
     @order = Order.new
-    @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY', nil)
   end
 
   def show
@@ -23,14 +22,10 @@ class OrdersController < ApplicationController
       ordered_at:       Time.current,
     )
 
-
     @order.build_order_items_from_cart(current_user.cart)
     if @order.save
-      @payment = @order.payments.create!(amount: @order.total_price)
       current_user.cart.cart_items.destroy_all
-      session[:card_token] = params[:card_token] if params[:card_token].present?
-      redirect_to espago_start_payment_path(@payment.payment_number)
-
+      redirect_to espago_new_payment_path(order_id: @order.id)
     else
       flash.now[:alert] = 'There was a problem placing your order.'
       render :new, status: :unprocessable_entity

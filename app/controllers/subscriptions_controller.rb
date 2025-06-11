@@ -40,10 +40,6 @@ class SubscriptionsController < ApplicationController
   end
 
   def retry_payment
-    if current_user.active_subscription?
-      redirect_to "#{account_path}#subscriptions", alert: 'You already have an active subscription.'
-      return
-    end
     unless @subscription.can_retry_payment?
       redirect_to subscription_path(@subscription),
                   alert: 'Cannot retry payment: payment already in progress or successful.'
@@ -57,7 +53,7 @@ class SubscriptionsController < ApplicationController
   def extend_subscription
     unless @subscription.can_extend_subscription?
       redirect_to subscription_path(@subscription),
-                  alert: 'Cannot extend subscription: payment already in progress.'
+                  alert: 'Cannot extend subscription: payment already in progress or not Active'
       return
     end
 
