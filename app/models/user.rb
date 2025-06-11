@@ -20,16 +20,6 @@ class User < ApplicationRecord
 
   broadcasts_refreshes
 
-  sig { returns(ActiveRecord::Relation) }
-  def orders_with_in_progress_payments
-    orders.joins(:payments).merge(Payment.in_progress).distinct
-  end
-
-  sig { returns(ActiveRecord::Relation) }
-  def subscriptions_with_in_progress_payments
-    subscriptions.joins(:payments).merge(Payment.in_progress).distinct
-  end
-
   sig { returns(T::Boolean) }
   def active_subscription?
     subscriptions.where(status: 'Active').exists?

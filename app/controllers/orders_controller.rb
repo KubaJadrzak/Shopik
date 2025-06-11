@@ -38,8 +38,7 @@ class OrdersController < ApplicationController
       return
     end
 
-    payment = @order.payments.create!(amount: @order.total_price)
-    redirect_to espago_start_payment_path(payment.payment_number)
+    redirect_to espago_new_payment_path(order_id: @order.id)
   end
 
 

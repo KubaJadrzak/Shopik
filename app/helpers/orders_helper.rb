@@ -3,11 +3,11 @@ module OrdersHelper
     case status
     when 'Preparing for Shipment'
       'bg-success'
-    when 'Payment Rejected', 'Payment Failed', 'Payment Resigned', 'Payment Reversed', 'Payment Error'
+    when 'Payment Rejected', 'Payment Failed', 'Payment Resigned', 'Payment Reversed', 'Payment Refunded', 'Payment Error'
       'bg-danger'
-    when 'Payment Refunded'
+    when 'Waiting for Payment', 'Awaiting Payment'
       'bg-warning'
-    when 'Waiting for Payment', 'New'
+    when 'New'
       'bg-primary'
     else
       'bg-secondary'

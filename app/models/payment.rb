@@ -115,7 +115,7 @@ class Payment < ApplicationRecord
 
 
   sig { returns(Symbol) }
-  def simplified_status
+  def simplified_state
     return :success if SUCCESS_STATUSES.include?(state)
     return :failure if FAILURE_STATUSES.include?(state)
     return :awaiting if AWAITING_STATUSES.include?(state)

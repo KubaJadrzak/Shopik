@@ -38,7 +38,7 @@ class Espago::PaymentsController < ApplicationController
     end
 
 
-    @card_token = T.let(session.delete(:card_token), T.nilable(String))
+    @card_token = params[:card_token]
 
 
     begin

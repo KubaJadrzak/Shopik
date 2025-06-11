@@ -24,7 +24,7 @@
                 <td><%= payment.reject_reason.presence || "N/A" %></td>
                 <td><%= payment.behaviour.presence || "N/A" %></td>
                 <td><%= payment.created_at.strftime("%B %d, %Y at %I:%M %p") %></td>
-                <td><%= payment_status_icon(payment.state) %></td>
+                <td><%= payment_status_icon(payment.simplified_state) %></td>
               </tr>
             <% end %>
           </tbody>

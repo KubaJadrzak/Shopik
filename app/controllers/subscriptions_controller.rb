@@ -6,8 +6,6 @@ class SubscriptionsController < ApplicationController
 
   def new
     @subscription = Subscription.new
-    @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY', nil)
-    @espago_clients = current_user.espago_clients
   end
 
   def show
@@ -24,15 +22,10 @@ class SubscriptionsController < ApplicationController
       return
     end
 
-    Rails.logger.info("Card token: #{params[:card_token]}")
     @subscription = current_user.subscriptions.new(status: 'New')
 
-
-
-    if @subscription.save && params[:card_token]
-      @payment = @subscription.payments.create!(amount: @subscription.price)
-      session[:card_token] = params[:card_token]
-      redirect_to espago_start_payment_path(@payment.payment_number)
+    if @subscription.save
+      redirect_to espago_new_payment_path(subscription_id: @subscription.id)
     else
       flash.now[:alert] = 'There was a problem with your subscription.'
       render :new, status: :unprocessable_entity
@@ -45,21 +38,17 @@ class SubscriptionsController < ApplicationController
                   alert: 'Cannot retry payment: payment already in progress or successful.'
       return
     end
-    @payment = @subscription.payments.create!(amount: @subscription.price)
-    session[:card_token] = params[:card_token]
-    redirect_to espago_start_payment_path(@payment.payment_number)
+    redirect_to espago_new_payment_path(subscription_id: @subscription.id)
   end
 
   def extend_subscription
     unless @subscription.can_extend_subscription?
       redirect_to subscription_path(@subscription),
-                  alert: 'Cannot extend subscription: payment already in progress or not Active'
+                  alert: 'Cannot extend subscription: payment already in progress or subscription is not Active'
       return
     end
 
-    @payment = @subscription.payments.create!(amount: @subscription.price)
-    session[:card_token] = params[:card_token]
-    redirect_to espago_start_payment_path(@payment.payment_number)
+    redirect_to espago_new_payment_path(subscription_id: @subscription.id)
   end
 
   private

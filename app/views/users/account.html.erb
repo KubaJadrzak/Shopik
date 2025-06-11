@@ -35,7 +35,7 @@
           <%= button_to "Delete Account", user_registration_path, method: :delete,
                                                                 class: "list-group-item list-group-item-action text-danger" %>
           <% if @user.active_subscription? %>
-            <% if @user.active_subscription.last_extension_payment_failed? %>
+            <% if @user.active_subscription.extension_payment_failed? %>
               <div class="mt-4 p-3 border rounded bg-light text-center">
                 <h5 class="mb-1" style="color: #9B111E;">Rubitter Red</h5>
                 <p class="mb-1 text-muted">Your payment to extend your Rubitter Red subscription has failed.</p>

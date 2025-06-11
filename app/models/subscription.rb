@@ -15,16 +15,6 @@ class Subscription < ApplicationRecord
     where(status: 'Active').where('end_date < ?', Date.current)
   }
 
-  sig { returns(T.nilable(Payment)) }
-  def in_progress_payment
-    payments.in_progress.first
-  end
-
-  sig { returns(T::Boolean) }
-  def in_progress_payment?
-    in_progress_payment.present?
-  end
-
   sig { returns(T::Boolean) }
   def can_retry_payment?
     payments.all?(&:retryable?)
@@ -32,13 +22,13 @@ class Subscription < ApplicationRecord
 
   sig { returns(T::Boolean) }
   def can_extend_subscription?
-    status == 'Active' && !in_progress_payment?
+    status == 'Active' && payments.none?(&:awaiting?)
   end
 
   sig { returns(T::Boolean) }
   def extension_payment_failed?
     payment = payments.first
-    payment&.simplified_status == :failure
+    payment&.simplified_state == :failure
   end
 
   sig { void }

@@ -1,20 +1,17 @@
 module PaymentsHelper
-  def payment_status_icon(payment_status)
-    case payment_status
-    when 'executed'
+  def payment_status_icon(simplified_state)
+    case simplified_state
+    when :success
       icon = '✓'
       color_class = 'text-success'
-    when 'refunded'
-      icon = '✗'
+    when :awaiting
+      icon = 'O'
       color_class = 'text-warning'
-    when 'preauthorized', 'tds2_challenge', 'tds_redirected', 'dcc_decision', 'blik_redirected', 'transfer_redirected', 'new'
-      icon = '–'
-      color_class = 'text-primary'
     else
       icon = '✗'
       color_class = 'text-danger'
     end
 
-    "<span class='#{color_class} fs-4'>#{icon}</span>".html_safe
+    "<span class='#{color_class} fs-2'>#{icon}</span>".html_safe
   end
 end
