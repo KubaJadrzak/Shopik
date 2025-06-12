@@ -20,6 +20,12 @@
           <label class="form-check-label" for="secure_option">Secure Web Page</label>
         </div>
       </div>
+      <div class="form-check mb-3">
+        <%= check_box_tag :cof, 'storing', false, class: "form-check-input", id: "save_card" %>
+        <label class="form-check-label" for="save_card">
+          Save card information for future payments
+        </label>
+      </div>
       <%= form.submit "Process Payment", class: "btn btn-success d-none", data: { payment_method_target: "processBtn", espago_iframe_target: "processBtn", turbo: false } %>
     <% end %>
     <div class="d-grid mt-3">

@@ -5,7 +5,7 @@ class Payment < ApplicationRecord
   belongs_to :payable, polymorphic: true
 
   validate :must_have_payable
-  validate :prevent_duplicate_payment_for_order, on: :create, if: :payable_is_order
+  validate :prevent_duplicate_payment_for_order, on: :create, if: :payable_is_order?
 
   before_create :generate_payment_number
 

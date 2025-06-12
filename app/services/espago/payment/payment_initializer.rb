@@ -3,10 +3,16 @@
 class Espago::Payment::PaymentInitializer
   extend T::Sig
 
-  sig { params(payment: Payment, card_token: T.nilable(String)).returns(Espago::Response) }
-  def self.initilize(payment:, card_token:)
+  sig do
+    params(
+      payment:    Payment,
+      card_token: T.nilable(String),
+      cof:        T.nilable(String),
+    ).returns(Espago::Response)
+  end
+  def self.initilize(payment:, card_token:, cof: nil)
     if payment.payable.present?
-      Espago::Payment::PaymentHandler.new(payment, card_token).handle_payment
+      Espago::Payment::PaymentHandler.new(payment, card_token, cof).handle_payment
     else
       Espago::Response.new(
         success: false,

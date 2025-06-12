@@ -40,7 +40,7 @@ class Espago::PaymentsController < ApplicationController
 
 
     @card_token = T.let(params[:card_token], T.nilable(String))
-
+    cof = params[:cof] # "storing" or nil
 
     begin
       @payment.update_status_by_payment_status(@payment.state)
@@ -50,7 +50,11 @@ class Espago::PaymentsController < ApplicationController
       return
     end
 
-    response = Espago::Payment::PaymentInitializer.initilize(payment: @payment, card_token: @card_token)
+    response = Espago::Payment::PaymentInitializer.initilize(
+      payment:    @payment,
+      card_token: @card_token,
+      cof:        cof,
+    )
     Rails.logger.info(response.inspect)
 
     action, param = Espago::Payment::PaymentResponseHandler.handle_response(@payment, response)

@@ -5,6 +5,10 @@ class Espago::BackRequest::BackRequestEspagoClientHandler
 
   sig { params(payload: T::Hash[String, T.untyped], user: T.nilable(User)).void }
   def self.call(payload, user)
+
+    description = payload['description']
+    return unless description&.include?('storing')
+
     return unless user
 
     client_id = payload['client']
