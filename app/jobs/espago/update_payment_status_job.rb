@@ -9,7 +9,7 @@ class Espago::UpdatePaymentStatusJob < ApplicationJob
     user = User.find_by(id: user_id)
     return unless user
 
-    Payment.in_progress.where(id: user.payments.select(:id)).find_each do |payment|
+    Payment.awaiting.where(id: user.payments.select(:id)).find_each do |payment|
       if payment.uncertain?
         if payment.created_at < 120.minutes.ago
           payment.update_status_by_payment_status('failed')

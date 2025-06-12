@@ -1,6 +1,9 @@
+# typed: strict
+
 class Espago::BackRequest::BackRequestEspagoClientHandler
   extend T::Sig
 
+  sig { params(payload: T::Hash[String, T.untyped], user: T.nilable(User)).void }
   def self.call(payload, user)
     return unless user
 
@@ -23,6 +26,5 @@ class Espago::BackRequest::BackRequestEspagoClientHandler
       first_name: first_name,
       last_name:  last_name,
     )
-
   end
 end

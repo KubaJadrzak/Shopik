@@ -1,9 +1,12 @@
+# typed: strict
+
 class Espago::BackRequestsController < ApplicationController
   extend T::Sig
 
   skip_before_action :verify_authenticity_token, only: [:handle_back_request]
   before_action :authenticate_espago!
 
+  sig { void }
   def handle_back_request
     payload = JSON.parse(request.body.read)
     Rails.logger.info("Received Espago response: #{payload.inspect}")
@@ -21,6 +24,8 @@ class Espago::BackRequestsController < ApplicationController
     head :ok
   end
 
+
+  sig { returns(T::Boolean) }
   def authenticate_espago!
     authenticate_or_request_with_http_basic do |username, password|
       username == Rails.application.credentials.dig(:espago, :login_basic_auth) &&

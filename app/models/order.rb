@@ -36,7 +36,7 @@ class Order < ApplicationRecord
 
   sig { returns(T.nilable(Payment)) }
   def in_progress_payment
-    payments.in_progress.first
+    payments.awaiting.first
   end
 
   sig { returns(T::Boolean) }

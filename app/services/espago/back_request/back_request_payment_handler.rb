@@ -1,6 +1,9 @@
+# typed: strict
+
 class Espago::BackRequest::BackRequestPaymentHandler
   extend T::Sig
 
+  sig { params(payload: T::Hash[String, T.untyped]).returns(T.nilable(Payment)) }
   def self.call(payload)
     payment_id = payload['id']
     state = payload['state']

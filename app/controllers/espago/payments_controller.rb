@@ -11,6 +11,8 @@ class Espago::PaymentsController < ApplicationController
   sig { void }
 
   def new
+    @parent = T.let(nil, T.nilable(T.any(Order, Subscription)))
+
     if params[:order_id]
       @parent = Order.find(params[:order_id])
     elsif params[:subscription_id]
@@ -18,8 +20,7 @@ class Espago::PaymentsController < ApplicationController
     else
       redirect_to root_path, alert: 'Missing order or subscription to create payment.' and return
     end
-
-    @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY', nil)
+    @espago_public_key = T.let(ENV.fetch('ESPAGO_PUBLIC_KEY', nil), T.nilable(String))
   end
   sig { void }
   def start_payment
@@ -38,7 +39,7 @@ class Espago::PaymentsController < ApplicationController
     end
 
 
-    @card_token = params[:card_token]
+    @card_token = T.let(params[:card_token], T.nilable(String))
 
 
     begin

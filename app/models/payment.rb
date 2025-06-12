@@ -5,7 +5,7 @@ class Payment < ApplicationRecord
   belongs_to :payable, polymorphic: true
 
   validate :must_have_payable
-  validate :prevent_duplicate_payment_for_order, on: :create, if: -> { payable.is_a?(Order) }
+  validate :prevent_duplicate_payment_for_order, on: :create, if: :payable_is_order
 
   before_create :generate_payment_number
 
@@ -158,6 +158,11 @@ class Payment < ApplicationRecord
 
 
   private
+
+  sig { returns(T::Boolean) }
+  def payable_is_order?
+    payable.is_a?(Order)
+  end
 
   sig { void }
   def must_have_payable

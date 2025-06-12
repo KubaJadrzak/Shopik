@@ -37,7 +37,7 @@ class Subscription < ApplicationRecord
       self.start_date = Date.today
       self.end_date = 30.days.from_now.to_date
     else
-      self.end_date = end_date + 30.days
+      self.end_date = T.must(end_date) + 30.days
     end
     save!
   end
