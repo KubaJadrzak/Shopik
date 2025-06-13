@@ -344,25 +344,25 @@ class User
     sig { params(value: T.nilable(::Cart)).void }
     def cart=(value); end
 
+    sig { returns(T::Array[T.untyped]) }
+    def client_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def client_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :clients`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::Client::PrivateCollectionProxy) }
+    def clients; end
+
+    sig { params(value: T::Enumerable[::Client]).void }
+    def clients=(value); end
+
     sig { params(args: T.untyped, blk: T.untyped).returns(::Cart) }
     def create_cart(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(::Cart) }
     def create_cart!(*args, &blk); end
-
-    sig { returns(T::Array[T.untyped]) }
-    def espago_client_ids; end
-
-    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def espago_client_ids=(ids); end
-
-    # This method is created by ActiveRecord on the `User` class because it declared `has_many :espago_clients`.
-    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
-    sig { returns(::EspagoClient::PrivateCollectionProxy) }
-    def espago_clients; end
-
-    sig { params(value: T::Enumerable[::EspagoClient]).void }
-    def espago_clients=(value); end
 
     sig { returns(T::Array[T.untyped]) }
     def like_ids; end

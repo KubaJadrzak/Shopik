@@ -26,6 +26,7 @@ class DeviseController
     include ::ApplicationHelper
     include ::CartItemsHelper
     include ::CartsHelper
+    include ::ClientsHelper
     include ::LikesHelper
     include ::OrderItemsHelper
     include ::OrdersHelper

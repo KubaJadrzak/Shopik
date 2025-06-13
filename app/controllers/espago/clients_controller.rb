@@ -6,9 +6,8 @@ class Espago::ClientsController < ApplicationController
 
   sig { void }
   def show
-    return redirect_to root_path, alert: 'Espago client not found' unless @client
-
-    @payments = @client.payments
+    client = T.must(@client)
+    @payments = T.let(client.payments, T.nilable(ActiveRecord::Relation))
   end
 
   private
