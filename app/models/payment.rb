@@ -3,6 +3,7 @@
 class Payment < ApplicationRecord
   extend T::Sig
   belongs_to :payable, polymorphic: true
+  belongs_to :client, optional: true
 
   validate :must_have_payable
   validate :prevent_duplicate_payment_for_order, on: :create, if: :payable_is_order?
@@ -39,6 +40,11 @@ class Payment < ApplicationRecord
 
   SUBSCRIPTION_STATUS_MAP = T.let(
     STATUS_MAP.merge('executed' => 'Active'),
+    T::Hash[String, String],
+  )
+
+  CLIENT_STATUS_MAP = T.let(
+    Hash.new('Unverified').merge('executed' => 'CIT'),
     T::Hash[String, String],
   )
 
@@ -138,9 +144,14 @@ class Payment < ApplicationRecord
     return unless payable.present?
 
     new_status = case payable
-                 when Subscription then SUBSCRIPTION_STATUS_MAP[state] || 'Payment Error'
-                 when Order        then ORDER_STATUS_MAP[state] || 'Payment Error'
-                 else                  'Payment Error'
+                 when Subscription
+                   SUBSCRIPTION_STATUS_MAP[state] || 'Payment Error'
+                 when Order
+                   ORDER_STATUS_MAP[state] || 'Payment Error'
+                 when Client
+                   CLIENT_STATUS_MAP[state] || 'Unverified'
+                 else
+                   'Payment Error'
                  end
 
     if payable.is_a?(Subscription)
@@ -150,11 +161,10 @@ class Payment < ApplicationRecord
         payable.update!(status: new_status)
         payable.extend_or_initialize_dates! if new_status == 'Active'
       end
-    elsif payable.is_a?(Order)
+    elsif payable.is_a?(Order) || payable.is_a?(Client)
       payable.update!(status: new_status)
     end
   end
-
 
 
   private

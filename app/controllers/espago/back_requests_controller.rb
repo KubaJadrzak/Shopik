@@ -19,7 +19,7 @@ class Espago::BackRequestsController < ApplicationController
       return
     end
 
-    Espago::BackRequest::BackRequestEspagoClientHandler.call(payload, payment.user)
+    Espago::BackRequest::BackRequestClientHandler.call(payload, payment)
 
     head :ok
   end

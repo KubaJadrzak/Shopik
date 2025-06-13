@@ -11,17 +11,20 @@ class Espago::PaymentsController < ApplicationController
   sig { void }
 
   def new
-    @parent = T.let(nil, T.nilable(T.any(Order, Subscription)))
+    @parent = T.let(nil, T.nilable(T.any(Order, Subscription, Client)))
 
     if params[:order_id]
       @parent = Order.find(params[:order_id])
     elsif params[:subscription_id]
       @parent = Subscription.find(params[:subscription_id])
+    elsif params[:client_id]
+      @parent = Client.find(params[:client_id])
     else
-      redirect_to root_path, alert: 'Missing order or subscription to create payment.' and return
+      redirect_to root_path, alert: 'Missing parent to create payment.' and return
     end
     @espago_public_key = T.let(ENV.fetch('ESPAGO_PUBLIC_KEY', nil), T.nilable(String))
   end
+
   sig { void }
   def start_payment
 
@@ -40,7 +43,7 @@ class Espago::PaymentsController < ApplicationController
 
 
     @card_token = T.let(params[:card_token], T.nilable(String))
-    cof = params[:cof] # "storing" or nil
+    cof = params[:cof]
 
     begin
       @payment.update_status_by_payment_status(@payment.state)
@@ -83,6 +86,8 @@ class Espago::PaymentsController < ApplicationController
       redirect_to subscription_path(@payment.payable), notice: 'Payment successful!'
     when Order
       redirect_to order_path(@payment.payable), notice: 'Payment successful!'
+    when Client
+      redirect_to espago_client_path(@payment.payable), notice: 'Payment successful!'
     else
       redirect_to account_path, alert: 'We are experiencing an issue with your payment'
     end
@@ -100,6 +105,8 @@ class Espago::PaymentsController < ApplicationController
       redirect_to subscription_path(@payment.payable), notice: 'Payment failed!'
     when Order
       redirect_to order_path(@payment.payable), notice: 'Payment failed!'
+    when Client
+      redirect_to espago_client_path(@payment.payable), notice: 'Payment failed!'
     else
       redirect_to account_path, alert: 'We are experiencing an issue with your payment'
     end
@@ -117,6 +124,8 @@ class Espago::PaymentsController < ApplicationController
       redirect_to subscription_path(@payment.payable), notice: 'Payment is being processed!'
     when Order
       redirect_to order_path(@payment.payable), notice: 'Payment is being processed!'
+    when Client
+      redirect_to espago_client_path(@payment.payable), notice: 'Payment is being processed!'
     else
       redirect_to account_path, alert: 'We are experiencing an issue with your payment'
     end

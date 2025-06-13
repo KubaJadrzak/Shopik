@@ -9,6 +9,7 @@ class Subscription < ApplicationRecord
   has_many :payments, -> { order(created_at: :desc) }, as: :payable, dependent: :destroy
 
   before_create :generate_subscription_number
+
   broadcasts_refreshes
 
   scope :should_be_expired, -> {

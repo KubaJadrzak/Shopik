@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_11_191729) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_13_124809) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -29,7 +29,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_191729) do
     t.index ["user_id"], name: "index_carts_on_user_id"
   end
 
-  create_table "espago_clients", force: :cascade do |t|
+  create_table "clients", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "client_id", null: false
     t.string "company"
@@ -39,9 +39,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_191729) do
     t.string "client_number", null: false
     t.string "first_name", null: false
     t.string "last_name", null: false
-    t.index ["client_id"], name: "index_espago_clients_on_client_id", unique: true
-    t.index ["client_number"], name: "index_espago_clients_on_client_number", unique: true
-    t.index ["user_id"], name: "index_espago_clients_on_user_id"
+    t.string "status", default: "unverified", null: false
+    t.integer "month", null: false
+    t.integer "year", null: false
+    t.index ["client_id"], name: "index_clients_on_client_id", unique: true
+    t.index ["client_number"], name: "index_clients_on_client_number", unique: true
+    t.index ["user_id"], name: "index_clients_on_user_id"
   end
 
   create_table "likes", force: :cascade do |t|
@@ -91,6 +94,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_191729) do
     t.string "payment_number", null: false
     t.string "payable_type"
     t.integer "payable_id"
+    t.integer "client_id"
+    t.index ["client_id"], name: "index_payments_on_client_id"
     t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
     t.index ["payment_id"], name: "index_payments_on_payment_id", unique: true
     t.index ["payment_number"], name: "index_payments_on_payment_number", unique: true
@@ -147,12 +152,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_11_191729) do
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "products"
   add_foreign_key "carts", "users"
-  add_foreign_key "espago_clients", "users"
+  add_foreign_key "clients", "users"
   add_foreign_key "likes", "rubits"
   add_foreign_key "likes", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "users"
+  add_foreign_key "payments", "clients"
   add_foreign_key "rubits", "rubits", column: "parent_rubit_id"
   add_foreign_key "rubits", "users"
   add_foreign_key "subscriptions", "users"

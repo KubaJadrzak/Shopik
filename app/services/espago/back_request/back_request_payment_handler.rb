@@ -6,6 +6,7 @@ class Espago::BackRequest::BackRequestPaymentHandler
   sig { params(payload: T::Hash[String, T.untyped]).returns(T.nilable(Payment)) }
   def self.call(payload)
     payment_id = payload['id']
+    client_id = payload['client']
     state = payload['state']
     description = payload['description']
     reject_reason = payload['reject_reason']
@@ -22,13 +23,19 @@ class Espago::BackRequest::BackRequestPaymentHandler
       end
     end
 
+
+
     return if payment.nil?
+
+    client = client_id.present? ? Client.find_by(client_id: client_id) : nil
+
 
     payment.update_status_by_payment_status(state.to_s)
     payment.update(
       reject_reason:        reject_reason,
       behaviour:            behaviour,
       issuer_response_code: issuer_response_code,
+      client:               client,
     )
     payment
   end

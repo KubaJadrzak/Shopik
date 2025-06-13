@@ -25,7 +25,7 @@
             Subscriptions
           </button>
           <button class="list-group-item list-group-item-action"
-                data-action="click->user-sidebar#toggleEspagoClientsSection">
+                data-action="click->user-sidebar#toggleClientsSection">
             Payment Methods
           </button>
           <%= button_to "Edit Account", edit_user_registration_path, method: :get,
@@ -75,7 +75,7 @@
         <%= render "users/sidebar/comments_section" %>
         <%= render "users/sidebar/orders_section" %>
         <%= render "users/sidebar/subscriptions_section" %>
-        <%= render "users/sidebar/espago_clients_section" %>
+        <%= render "users/sidebar/clients_section" %>
       </div>
     </div>
   </div>

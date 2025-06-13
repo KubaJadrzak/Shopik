@@ -1,7 +1,16 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["payBtn", "secureBtn", "processBtn", "form", "radio"]
+  static targets = [
+    "payBtn",
+    "secureBtn",
+    "processBtn",
+    "form",
+    "radio",
+    "radioGroup",
+    "saveCardCheckbox",
+    "savedCard"
+  ]
 
   connect() {
     this.updateButton()
@@ -24,17 +33,35 @@ export default class extends Controller {
     }
   }
 
-handlePayClick() {
-  if (!this.formTarget.reportValidity()) return;
+  updateSavedCard() {
+    const selected = this.savedCardTargets.find(r => r.checked)
 
-  setTimeout(() => {
-    if (typeof showEspagoFrame === "function") {
-      showEspagoFrame();
+    if (selected && selected.value !== "") {
+      // Hide options for new card
+      this.radioGroupTarget.classList.add("d-none")
+      this.saveCardCheckboxTarget.classList.add("d-none")
+
+      // Show submit for stored card
+      this.payBtnTarget.classList.add("d-none")
+      this.secureBtnTarget.classList.remove("d-none")
     } else {
-      alert("Payment system not ready. Please wait and try again.");
+      this.radioGroupTarget.classList.remove("d-none")
+      this.saveCardCheckboxTarget.classList.remove("d-none")
+      this.updateButton()
     }
-  }, 100)
-}
+  }
+
+  handlePayClick() {
+    if (!this.formTarget.reportValidity()) return
+
+    setTimeout(() => {
+      if (typeof showEspagoFrame === "function") {
+        showEspagoFrame()
+      } else {
+        alert("Payment system not ready. Please wait and try again.")
+      }
+    }, 100)
+  }
 
   handleSecureClick() {
     if (!this.formTarget.reportValidity()) return

@@ -12,7 +12,7 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :liked_rubits, through: :likes, source: :rubit
   has_many :orders, dependent: :destroy
-  has_many :espago_clients, dependent: :destroy
+  has_many :clients, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
 
   has_many :order_payments, through: :orders, source: :payments
