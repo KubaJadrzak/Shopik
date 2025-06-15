@@ -33,7 +33,7 @@ RSpec.describe 'Espago::Payments', type: :request do
             allow_any_instance_of(Espago::PaymentsController).to receive(:session).and_return(
               double('session', delete: card_token),
             )
-            allow(Espago::Payment::PaymentProcessor).to receive(:process).and_return('response')
+            allow(Espago::Payment::PaymentInitializer).to receive(:process).and_return('response')
             allow(Espago::Payment::PaymentResponseHandler).to receive(:handle_response).and_return([action, param])
 
             get "/espago/payments/#{payment.payment_number}/start_payment"
@@ -52,7 +52,7 @@ RSpec.describe 'Espago::Payments', type: :request do
             allow_any_instance_of(Espago::PaymentsController).to receive(:session).and_return(
               double('session', delete: card_token),
             )
-            allow(Espago::Payment::PaymentProcessor).to receive(:process).and_return('response')
+            allow(Espago::Payment::PaymentInitializer).to receive(:process).and_return('response')
             allow(Espago::Payment::PaymentResponseHandler).to receive(:handle_response).and_return([action, param])
 
             get "/espago/payments/#{payment.payment_number}/start_payment"
@@ -71,7 +71,7 @@ RSpec.describe 'Espago::Payments', type: :request do
             allow_any_instance_of(Espago::PaymentsController).to receive(:session).and_return(
               double('session', delete: card_token),
             )
-            allow(Espago::Payment::PaymentProcessor).to receive(:process).and_return('response')
+            allow(Espago::Payment::PaymentInitializer).to receive(:process).and_return('response')
             allow(Espago::Payment::PaymentResponseHandler).to receive(:handle_response).and_return([action, param])
 
             get "/espago/payments/#{payment.payment_number}/start_payment"
@@ -91,7 +91,7 @@ RSpec.describe 'Espago::Payments', type: :request do
             allow_any_instance_of(Espago::PaymentsController).to receive(:session).and_return(
               double('session', delete: card_token),
             )
-            allow(Espago::Payment::PaymentProcessor).to receive(:process).and_return('response')
+            allow(Espago::Payment::PaymentInitializer).to receive(:process).and_return('response')
             allow(Espago::Payment::PaymentResponseHandler).to receive(:handle_response).and_return([action, param])
 
             get "/espago/payments/#{payment.payment_number}/start_payment"

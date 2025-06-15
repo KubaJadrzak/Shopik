@@ -87,7 +87,7 @@ RSpec.describe Payment, type: :model do
         create(:payment, :for_order, state: 'executed')
 
         expect(Payment.in_progress).to include(in_progress_payment)
-        expect(Payment.in_progress.pluck(:state)).to all(satisfy { |s| Payment::IN_PROGRESS_STATUSES.include?(s) })
+        expect(Payment.in_progress.pluck(:state)).to all(satisfy { |s| Payment::AWAITING_STATUSES.include?(s) })
       end
     end
 
