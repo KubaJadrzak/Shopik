@@ -42,8 +42,12 @@ class Espago::PaymentsController < ApplicationController
     end
 
 
-    @card_token = T.let(params[:card_token], T.nilable(String))
+    card_token = T.let(params[:card_token], T.nilable(String))
     cof = params[:cof]
+
+    client_id_param = params[:payment_mode]
+    client_id = client_id_param&.start_with?('cli') ? client_id_param : nil
+    Rails.logger.info("!!!!!!!!!!!!!!This is #{client_id}!!!!!!!!!!!!!!!!!!!!!")
 
     begin
       @payment.update_status_by_payment_status(@payment.state)
@@ -55,8 +59,9 @@ class Espago::PaymentsController < ApplicationController
 
     response = Espago::Payment::PaymentInitializer.initilize(
       payment:    @payment,
-      card_token: @card_token,
+      card_token: card_token,
       cof:        cof,
+      client_id:  client_id,
     )
     Rails.logger.info(response.inspect)
 

@@ -11,7 +11,9 @@
           <%= client_status_label(client.status) %>
         </span>
         <% if client.status == 'MIT' %>
-          <span class="badge bg-info text-dark">Auto-Renew</span>
+          <span class="badge bg-success text-dark">Auto-Renew</span>
+        <% else %>
+          <span class="badge bg-danger">Auto-Renew</span>
         <% end %>
       </h5>
     </div>

@@ -7,20 +7,22 @@ class Espago::OneTimePayment::OneTimePaymentPayload
     params(
       amount:       BigDecimal,
       currency:     String,
-      card:         String,
       description:  String,
-      positive_url: T.nilable(String),
-      negative_url: T.nilable(String),
+      positive_url: String,
+      negative_url: String,
+      card:         T.nilable(String),
+      client:       T.nilable(String),
       cof:          T.nilable(String),
     ).void
   end
-  def initialize(amount:, currency:, card:, description:, positive_url: nil, negative_url: nil, cof: nil)
+  def initialize(amount:, currency:, description:, positive_url:, negative_url:, card: nil, client: nil, cof: nil)
     @amount = amount
     @currency = currency
-    @card = card
     @description = description
     @positive_url = positive_url
     @negative_url = negative_url
+    @card = card
+    @client = client
     @cof = cof
   end
 
@@ -29,10 +31,11 @@ class Espago::OneTimePayment::OneTimePaymentPayload
     {
       amount:       @amount,
       currency:     @currency,
-      card:         @card,
       description:  @description,
       positive_url: @positive_url,
       negative_url: @negative_url,
+      card:         @card,
+      client:       @client,
       cof:          @cof,
     }.compact
   end

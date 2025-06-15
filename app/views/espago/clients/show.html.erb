@@ -30,6 +30,11 @@
                   <span class="badge <%= client_status_badge_class(@client.status) %>">
                     <%= client_status_label(@client.status) %>
                   </span>
+                  <% if @client.status == 'MIT' %>
+                    <span class="badge bg-success text-dark">Auto-Renew</span>
+                  <% else %>
+                    <span class="badge bg-danger">Auto-Renew</span>
+                  <% end %>
                 </span>
               </p>
               <p class="d-flex justify-content-between">
@@ -46,7 +51,7 @@
               This Payment Method is currently inactive due to failed payment. You need to make a new payment with this card.
             </div>
           <% when 'CIT' %>
-            <div class="alert alert-success mb-0" role="alert">
+            <div class="alert alert-warning mb-0" role="alert">
               This card is active and can be used for manual payments, but due to your card settings or bank requirements, this card is not eligible for Auto-Renew payments.
             </div>
           <% when 'MIT' %>

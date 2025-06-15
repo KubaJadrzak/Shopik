@@ -7,64 +7,50 @@ export default class extends Controller {
     "processBtn",
     "form",
     "radio",
-    "radioGroup",
-    "saveCardCheckbox",
-    "savedCard"
+    "saveCardCheckbox" 
   ]
 
   connect() {
-    this.updateButton()
-    this.radioTargets.forEach(radio =>
-      radio.addEventListener("change", () => this.updateButton())
-    )
-
     this.payBtnTarget.addEventListener("click", () => this.handlePayClick())
-    this.secureBtnTarget.addEventListener("click", () => this.handleSecureClick())
+    this.radioTargets.forEach(radio => {
+      radio.addEventListener("change", () => this.toggleSaveCardCheckbox())
+    })
+    this.toggleSaveCardCheckbox()
   }
 
-  updateButton() {
-    const selected = this.radioTargets.find(r => r.checked)
-    if (selected && selected.value === "secure_web_page") {
-      this.payBtnTarget.classList.add("d-none")
-      this.secureBtnTarget.classList.remove("d-none")
-    } else {
-      this.secureBtnTarget.classList.add("d-none")
-      this.payBtnTarget.classList.remove("d-none")
-    }
-  }
+  toggleSaveCardCheckbox() {
+    const selected = this.radioTargets.find(radio => radio.checked)
+    if (!selected) return
 
-  updateSavedCard() {
-    const selected = this.savedCardTargets.find(r => r.checked)
-
-    if (selected && selected.value !== "") {
-      // Hide options for new card
-      this.radioGroupTarget.classList.add("d-none")
+    if (selected.value.startsWith("cli")) {
       this.saveCardCheckboxTarget.classList.add("d-none")
-
-      // Show submit for stored card
-      this.payBtnTarget.classList.add("d-none")
-      this.secureBtnTarget.classList.remove("d-none")
+      const checkbox = this.saveCardCheckboxTarget.querySelector("input[type='checkbox']")
+      if (checkbox) checkbox.checked = false
     } else {
-      this.radioGroupTarget.classList.remove("d-none")
       this.saveCardCheckboxTarget.classList.remove("d-none")
-      this.updateButton()
     }
   }
 
   handlePayClick() {
     if (!this.formTarget.reportValidity()) return
 
-    setTimeout(() => {
-      if (typeof showEspagoFrame === "function") {
-        showEspagoFrame()
-      } else {
-        alert("Payment system not ready. Please wait and try again.")
-      }
-    }, 100)
-  }
+    const selected = this.radioTargets.find(radio => radio.checked)
+    if (!selected) return
 
-  handleSecureClick() {
-    if (!this.formTarget.reportValidity()) return
-    this.processBtnTarget.click()
+    if (selected.value === "new_one_time") {
+      setTimeout(() => {
+        if (typeof showEspagoFrame === "function") {
+          showEspagoFrame()
+        } else {
+          alert("Payment system not ready. Please wait and try again.")
+        }
+      }, 100)
+    } else if (selected.value === "new_secure_web_page") {
+      this.processBtnTarget.click()
+    } else if (selected.value.startsWith("cli")) {
+      this.formTarget.submit()
+    } else {
+      alert("Unsupported payment method.")
+    }
   }
 }

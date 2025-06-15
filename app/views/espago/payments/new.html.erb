@@ -2,53 +2,62 @@
   <div class="card shadow-sm p-4">
     <h3 class="mb-4 text-center">Choose Payment Method</h3>
     <% if @parent %>
-      <p class="mb-4 text-center">
+      <h5 class="mb-4 text-center">
         You are about to pay <strong><%= number_to_currency(@parent.amount) %></strong>
-      </p>
+      </h5>
     <% end %>
     <%= form_with url: espago_start_payment_path, method: :post, data: { turbo: false }, html: { data: { payment_method_target: "form", espago_iframe_target: "form" }, id: "payment_form" } do |form| %>
       <%= hidden_field_tag :parent_type, @parent.class.name %>
       <%= hidden_field_tag :parent_id, @parent.id %>
-      <% if current_user.clients.any? %>
-        <div class="mb-3">
-          <label class="form-label">Use Saved Card</label>
-          <% current_user.clients.cit.each do |client| %>
-            <div class="form-check">
-              <%= radio_button_tag :client_id, client.id, false,
-                  class: "form-check-input",
-                  id: "client_#{client.id}",
-                  data: { payment_method_target: "savedCard", action: "change->payment-method#updateSavedCard" } %>
-              <label class="form-check-label" for="client_<%= client.id %>">
-                **** **** **** <%= client.last4 %> (Exp: <%= client.month %>/<%= client.year %>)
-              </label>
-            </div>
+      <fieldset class="mb-4 border rounded p-3">
+        <div class="mb-3" data-payment-method-target="radioGroup">
+          <% if current_user.clients.any? %>
+            <h6 class="mb-3">Use saved card</h6>
+            <% current_user.clients.cit.each do |client| %>
+              <div class="form-check mb-2">
+                <input class="form-check-input"
+                 type="radio"
+                 id="<%= client.client_id %>"
+                 name="payment_mode"
+                 value="<%= client.client_id %>"
+                 data-payment-method-target="radio">
+                <label class="form-check-label" for="<%= client.client_id %>">
+                  <span class="d-inline-block fw-medium">•••• <%= client.last4 %></span>
+                  <small class="text-muted ms-1">(Exp: <%= client.month %>/<%= client.year %>)</small>
+                </label>
+              </div>
+            <% end %>
           <% end %>
-          <div class="form-check">
-            <%= radio_button_tag :client_id, "", true,
-                class: "form-check-input",
-                id: "client_none",
-                data: { payment_method_target: "savedCard", action: "change->payment-method#updateSavedCard" } %>
-            <label class="form-check-label" for="client_none">Use a new card</label>
+          <h6 class="mb-3 mt-4">Use new card</h6>
+          <div class="form-check mb-2">
+            <input class="form-check-input"
+             type="radio"
+             id="new_one_time_option"
+             name="payment_mode"
+             value="new_one_time"
+             <%= "checked" if current_user.clients.empty? %>
+             data-payment-method-target="radio">
+            <label class="form-check-label" for="new_one_time_option">One-time Payment</label>
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input"
+             type="radio"
+             id="new_secure_option"
+             name="payment_mode"
+             value="new_secure_web_page"
+             data-payment-method-target="radio">
+            <label class="form-check-label" for="new_secure_option">Secure Web Page</label>
           </div>
         </div>
-      <% end %>
-      <div class="mb-3" data-payment-method-target="radioGroup">
-        <label class="form-label">Payment Method</label>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" id="one_time_option" name="payment_mode" value="one_time" checked data-payment-method-target="radio">
-          <label class="form-check-label" for="one_time_option">One-time Payment</label>
+        <div class="form-check mb-0" data-payment-method-target="saveCardCheckbox">
+          <div class="border-top mt-3 pt-3">
+            <%= check_box_tag :cof, 'storing', false, class: "form-check-input", id: "save_card" %>
+            <label class="form-check-label" for="save_card">
+              Save card information for future payments
+            </label>
+          </div>
         </div>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" id="secure_option" name="payment_mode" value="secure_web_page" data-payment-method-target="radio">
-          <label class="form-check-label" for="secure_option">Secure Web Page</label>
-        </div>
-      </div>
-      <div class="form-check mb-3" data-payment-method-target="saveCardCheckbox">
-        <%= check_box_tag :cof, 'storing', false, class: "form-check-input", id: "save_card" %>
-        <label class="form-check-label" for="save_card">
-          Save card information for future payments
-        </label>
-      </div>
+      </fieldset>
       <%= form.submit "Process Payment", class: "btn btn-success d-none", data: { payment_method_target: "processBtn", espago_iframe_target: "processBtn", turbo: false } %>
     <% end %>
     <div class="d-grid mt-3">
