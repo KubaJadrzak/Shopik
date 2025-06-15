@@ -7,14 +7,18 @@ FactoryBot.define do
     behaviour { nil }
     payment_number { SecureRandom.hex(8) }
 
+    association :payable, factory: :order
+
     trait :for_subscription do
-      association :subscription
-      order { nil }
+      association :payable, factory: :subscription
     end
 
     trait :for_order do
-      association :order
-      subscription { nil }
+      association :payable, factory: :order
+    end
+
+    trait :for_client do
+      association :payable, factory: :client
     end
   end
 end

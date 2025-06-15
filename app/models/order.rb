@@ -34,15 +34,6 @@ class Order < ApplicationRecord
     payments.all?(&:retryable?)
   end
 
-  sig { returns(T.nilable(Payment)) }
-  def in_progress_payment
-    payments.awaiting.first
-  end
-
-  sig { returns(T::Boolean) }
-  def in_progress_payment?
-    in_progress_payment.present?
-  end
 
   sig { returns(BigDecimal) }
   def amount

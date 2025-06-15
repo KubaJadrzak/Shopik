@@ -4,8 +4,8 @@ class Client < ApplicationRecord
   extend T::Sig
   belongs_to :user
   has_many :payments, as: :payable, dependent: :destroy
-  has_many :payments, dependent: :destroy
-  has_many :payable_payments, as: :payable, class_name: 'Payment', dependent: :destroy
+  has_many :payments, -> { order(created_at: :desc) }, dependent: :destroy
+  has_many :payable_payments, -> { order(created_at: :desc) }, as: :payable, class_name: 'Payment', dependent: :destroy
 
   before_create :generate_client_number
 

@@ -46,7 +46,7 @@ RSpec.describe Order, type: :model do
 
       context 'when all payments are retryable' do
         before do
-          create_list(:payment, 2, :for_order, order: order, state: 'failed')
+          create_list(:payment, 2, :for_order, payable: order, state: 'failed')
         end
 
         it 'returns true' do
@@ -56,8 +56,8 @@ RSpec.describe Order, type: :model do
 
       context 'when at least one payment is not retryable' do
         before do
-          create(:payment, :for_order, order: order, state: 'failed')
-          create(:payment, :for_order, order: order, state: 'new')
+          create(:payment, :for_order, payable: order, state: 'failed')
+          create(:payment, :for_order, payable: order, state: 'new')
         end
 
         it 'returns false' do
@@ -66,40 +66,6 @@ RSpec.describe Order, type: :model do
       end
     end
 
-    describe '#in_progress_payment and #in_progress_payment?' do
-      let(:order) { create(:order) }
 
-      context 'when there is a payment in progress' do
-        let!(:in_progress_payment) do
-          create(:payment, :for_order, order: order, state: 'in_progress')
-        end
-
-        before do
-          allow(Payment).to receive_message_chain(:in_progress, :first).and_return(in_progress_payment)
-        end
-
-        it 'returns the in-progress payment' do
-          expect(order.in_progress_payment).to eq(in_progress_payment)
-        end
-
-        it 'returns true for in_progress_payment?' do
-          expect(order.in_progress_payment?).to be true
-        end
-      end
-
-      context 'when there is no in-progress payment' do
-        before do
-          allow(Payment).to receive_message_chain(:in_progress, :first).and_return(nil)
-        end
-
-        it 'returns nil for in_progress_payment' do
-          expect(order.in_progress_payment).to be_nil
-        end
-
-        it 'returns false for in_progress_payment?' do
-          expect(order.in_progress_payment?).to be false
-        end
-      end
-    end
   end
 end

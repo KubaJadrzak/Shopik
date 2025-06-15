@@ -3,72 +3,76 @@ require 'rails_helper'
 RSpec.describe Payment, type: :model do
 
   describe 'validations' do
-    it 'is invalid without a subscription or order' do
-      payment = build(:payment, subscription: nil, order: nil)
+    it 'is invalid without payable (subscription, order or client)' do
+      payment = build(:payment, payable: nil)
       expect(payment).not_to be_valid
-      expect(payment.errors[:base]).to include('Payment must belong to either a subscription or an order')
+      expect(payment.errors[:base]).to include('Payment must belong to a payable entity')
     end
-
-    describe '#prevent_duplicate_payment' do
+    describe '#prevent_duplicate_payment_for_subscription' do
       let(:subscription) { create(:subscription) }
-      let(:order) { create(:order) }
       context 'for subscription payments' do
-        before do
-          create(:payment, subscription: subscription, state: 'new')
-        end
-
-        it 'prevents creating a new payment if one in progress exists' do
-          new_payment = build(:payment, subscription: subscription, state: 'new')
+        it 'prevents creating a new payment if one awaiting exists' do
+          create(:payment, :for_subscription, payable: subscription, state: 'new')
+          new_payment = build(:payment, payable: subscription, state: 'new')
           expect(new_payment.save).to be false
           expect(new_payment.errors[:base]).to include(
-            'Cannot create new payment: subscription already has a payment in progress or successful',
+            'Cannot create new payment: subscription already has a pending or uncertain payment',
           )
         end
 
+        it 'allows to create a new payment if one successful exists' do
+          create(:payment, :for_subscription, payable: subscription, state: 'executed')
+          new_payment = build(:payment, payable: subscription, state: 'new')
+          expect(new_payment.save).to be true
+        end
+
         it 'allows updating the existing payment' do
-          payment = subscription.payments.first
+          payment = create(:payment, :for_subscription, payable: subscription, state: 'new')
           payment.state = 'executed'
           expect(payment.save).to be true
         end
 
         it 'allows creating a payment for a different subscription' do
+          create(:payment, :for_subscription, payable: subscription, state: 'new')
           other_subscription = create(:subscription)
-          new_payment = build(:payment, subscription: other_subscription, state: 'new')
+          new_payment = build(:payment, :for_subscription, payable: other_subscription, state: 'new')
           expect(new_payment.save).to be true
         end
       end
-
+    end
+    context '#prevent_duplicate_payment_for_orders' do
+      let(:order) { create(:order) }
       context 'for order payments' do
-        before do
-          create(:payment, order: order, state: 'new')
-        end
 
-        it 'prevents creating a new payment if one in progress exists' do
-          new_payment = build(:payment, order: order, state: 'new')
+        it 'prevents creating a new payment if one awaiting exists' do
+          create(:payment, :for_order, payable: order, state: 'new')
+          new_payment = build(:payment, :for_order, payable: order, state: 'new')
           expect(new_payment.save).to be false
           expect(new_payment.errors[:base]).to include(
-            'Cannot create new payment: order already has a payment in progress or successful',
+            'Cannot create new payment: order already has a payment awaiting or successful',
+          )
+        end
+
+        it 'prevents creating a new payment if one successful exists' do
+          create(:payment, :for_order, payable: order, state: 'executed')
+          new_payment = build(:payment, :for_order, payable: order, state: 'new')
+          expect(new_payment.save).to be false
+          expect(new_payment.errors[:base]).to include(
+            'Cannot create new payment: order already has a payment awaiting or successful',
           )
         end
 
         it 'allows updating the existing payment' do
-          payment = order.payments.first
+          payment = create(:payment, :for_order, payable: order, state: 'new')
           payment.state = 'executed'
           expect(payment.save).to be true
         end
 
         it 'allows creating a payment for a different order' do
+          create(:payment, :for_order, payable: order, state: 'new')
           other_order = create(:order)
-          new_payment = build(:payment, order: other_order, state: 'new')
+          new_payment = build(:payment, :for_order, payable: other_order, state: 'new')
           expect(new_payment.save).to be true
-        end
-      end
-
-      context 'when payment has neither subscription nor order' do
-        it 'is invalid' do
-          payment = build(:payment, subscription: nil, order: nil)
-          expect(payment).not_to be_valid
-          expect(payment.errors[:base]).to include('Payment must belong to either a subscription or an order')
         end
       end
     end
@@ -80,29 +84,69 @@ RSpec.describe Payment, type: :model do
       expect(payment.payment_number).to be_present
     end
   end
+
+  describe 'scopes' do
+    describe '.successful' do
+      it 'includes payments with successful states' do
+        payment = create(:payment, state: 'executed')
+        expect(Payment.successful).to include(payment)
+      end
+
+      it 'excludes payments with non-successful states' do
+        payment = create(:payment, state: 'new')
+        expect(Payment.successful).not_to include(payment)
+      end
+    end
+
+    describe '.failed' do
+      it 'includes payments with failed states' do
+        payment = create(:payment, state: 'rejected')
+        expect(Payment.failed).to include(payment)
+      end
+
+      it 'excludes payments with non-failed states' do
+        payment = create(:payment, state: 'executed')
+        expect(Payment.failed).not_to include(payment)
+      end
+    end
+
+    describe '.pending' do
+      it 'includes payments with pending states' do
+        payment = create(:payment, state: 'preauthorized')
+        expect(Payment.pending).to include(payment)
+      end
+
+      it 'excludes payments with non-pending states' do
+        payment = create(:payment, state: 'executed')
+        expect(Payment.pending).not_to include(payment)
+      end
+    end
+
+    describe '.awaiting' do
+      it 'includes payments with awaiting states' do
+        payment = create(:payment, state: 'timeout')
+        expect(Payment.awaiting).to include(payment)
+      end
+
+      it 'excludes payments with non-awaiting states' do
+        payment = create(:payment, state: 'executed')
+        expect(Payment.awaiting).not_to include(payment)
+      end
+    end
+
+    describe '.uncertain' do
+      it 'includes payments with uncertain states' do
+        payment = create(:payment, state: 'ssl_error')
+        expect(Payment.uncertain).to include(payment)
+      end
+
+      it 'excludes payments with non-uncertain states' do
+        payment = create(:payment, state: 'executed')
+        expect(Payment.uncertain).not_to include(payment)
+      end
+    end
+  end
   describe 'methods' do
-    describe '#in_progress' do
-      it 'returns only payments with in-progress statuses' do
-        in_progress_payment = create(:payment, :for_order, state: 'new')
-        create(:payment, :for_order, state: 'executed')
-
-        expect(Payment.in_progress).to include(in_progress_payment)
-        expect(Payment.in_progress.pluck(:state)).to all(satisfy { |s| Payment::AWAITING_STATUSES.include?(s) })
-      end
-    end
-
-    describe '#in_progress?' do
-      it 'returns true if payment state is in-progress' do
-        payment = build(:payment, state: 'tds_redirected')
-        expect(payment.in_progress?).to be true
-      end
-
-      it 'returns false if payment state is not in-progress' do
-        payment = build(:payment, state: 'executed')
-        expect(payment.in_progress?).to be false
-      end
-    end
-
     describe '#successful?' do
       it 'returns true if payment state is executed' do
         payment = build(:payment, state: 'executed')
@@ -114,28 +158,83 @@ RSpec.describe Payment, type: :model do
         expect(payment.successful?).to be false
       end
     end
-
-    describe '#retryable?' do
-      it 'returns false if payment is in progress' do
-        payment = build(:payment, state: 'new')
-        expect(payment.retryable?).to be false
+    describe '#pending?' do
+      it 'returns true for a pending state' do
+        payment = build(:payment, state: 'preauthorized')
+        expect(payment.pending?).to be true
       end
 
-      it 'returns false if payment is successful' do
+      it 'returns false for a non-pending state' do
+        payment = build(:payment, state: 'executed')
+        expect(payment.pending?).to be false
+      end
+    end
+
+    describe '#uncertain?' do
+      it 'returns true for an uncertain state' do
+        payment = build(:payment, state: 'timeout')
+        expect(payment.uncertain?).to be true
+      end
+
+      it 'returns false for a non-uncertain state' do
+        payment = build(:payment, state: 'executed')
+        expect(payment.uncertain?).to be false
+      end
+    end
+
+    describe '#awaiting?' do
+      it 'returns true for an awaiting state' do
+        payment = build(:payment, state: 'ssl_error')
+        expect(payment.awaiting?).to be true
+      end
+
+      it 'returns false for a non-awaiting state' do
+        payment = build(:payment, state: 'executed')
+        expect(payment.awaiting?).to be false
+      end
+    end
+
+    describe '#retryable?' do
+      it 'returns true if not successful and not awaiting' do
+        payment = build(:payment, state: 'failed')
+        expect(payment.retryable?).to be true
+      end
+
+      it 'returns false if successful' do
         payment = build(:payment, state: 'executed')
         expect(payment.retryable?).to be false
       end
 
-      it 'returns true for failed/rejected payment' do
-        payment = build(:payment, state: 'failed')
-        expect(payment.retryable?).to be true
+      it 'returns false if awaiting' do
+        payment = build(:payment, state: 'timeout')
+        expect(payment.retryable?).to be false
       end
     end
 
-    describe '#show_status_by_payment_status' do
-      it 'returns status of associated order/subscription based on payment state' do
-        payment = build(:payment)
-        expect(payment.show_status_by_payment_status('executed')).to eq('Payment Successful')
+    describe '#simplified_state' do
+      it 'returns :success for a success state' do
+        payment = build(:payment, state: 'executed')
+        expect(payment.simplified_state).to eq(:success)
+      end
+
+      it 'returns :failure for a failure state' do
+        payment = build(:payment, state: 'rejected')
+        expect(payment.simplified_state).to eq(:failure)
+      end
+
+      it 'returns :pending for a pending state' do
+        payment = build(:payment, state: 'tds_redirected')
+        expect(payment.simplified_state).to eq(:pending)
+      end
+
+      it 'returns :uncertain for an uncertain state' do
+        payment = build(:payment, state: 'ssl_error')
+        expect(payment.simplified_state).to eq(:uncertain)
+      end
+
+      it 'returns :failure for an unknown state' do
+        payment = build(:payment, state: 'some_unknown_status')
+        expect(payment.simplified_state).to eq(:failure)
       end
     end
 
@@ -144,15 +243,15 @@ RSpec.describe Payment, type: :model do
       let(:order)        { create(:order) }
 
       it 'updates state and associated subscription status' do
-        payment = create(:payment, :for_subscription, subscription: subscription)
+        payment = create(:payment, :for_subscription, payable: subscription)
         payment.update_status_by_payment_status('executed')
 
         expect(payment.state).to eq('executed')
-        expect(subscription.reload.status).to eq('Payment Successful')
+        expect(subscription.reload.status).to eq('Active')
       end
 
       it 'updates state and associated order status' do
-        payment = create(:payment, :for_order, order: order)
+        payment = create(:payment, :for_order, payable: order)
         payment.update_status_by_payment_status('failed')
 
         expect(payment.state).to eq('failed')

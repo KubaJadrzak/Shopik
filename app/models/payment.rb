@@ -7,6 +7,7 @@ class Payment < ApplicationRecord
 
   validate :must_have_payable
   validate :prevent_duplicate_payment_for_order, on: :create, if: :payable_is_order?
+  validate :prevent_duplicate_payment_for_subscription, on: :create, if: :payable_is_subscription?
 
   before_create :generate_payment_number
 
@@ -124,7 +125,6 @@ class Payment < ApplicationRecord
   def simplified_state
     return :success if SUCCESS_STATUSES.include?(state)
     return :failure if FAILURE_STATUSES.include?(state)
-    return :awaiting if AWAITING_STATUSES.include?(state)
     return :uncertain if UNCERTAIN_STATUSES.include?(state)
     return :pending if PENDING_STATUSES.include?(state)
 
@@ -174,6 +174,11 @@ class Payment < ApplicationRecord
     payable.is_a?(Order)
   end
 
+  sig { returns(T::Boolean) }
+  def payable_is_subscription?
+    payable.is_a?(Subscription)
+  end
+
   sig { void }
   def must_have_payable
     return if payable.present?
@@ -187,8 +192,15 @@ class Payment < ApplicationRecord
 
     return unless Payment.where(payable: payable).where(state: SUCCESS_STATUSES + AWAITING_STATUSES).exists?
 
-    errors.add(:base, 'Cannot create new payment: order already has a payment in progress or successful')
+    errors.add(:base, 'Cannot create new payment: order already has a payment awaiting or successful')
 
+  end
+
+  sig { void }
+  def prevent_duplicate_payment_for_subscription
+    return unless Payment.where(payable: payable).awaiting.exists?
+
+    errors.add(:base, 'Cannot create new payment: subscription already has a pending or uncertain payment')
   end
 
   sig { void }
