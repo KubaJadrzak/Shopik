@@ -17,9 +17,10 @@ RSpec.describe 'Espago::BackRequestsController Requests Test', type: :request do
     let(:payment_number) { 'E2A46240ADC041537175' }
     let(:success_payload) do
       {
-        id:          payment_id,
-        state:       'executed',
-        description: "Payment ##{payment_number}",
+        id:                   payment_id,
+        state:                'executed',
+        description:          "Payment ##{payment_number}",
+        issuer_response_code: '00',
       }
     end
     let(:fail_payload) do
@@ -38,14 +39,14 @@ RSpec.describe 'Espago::BackRequestsController Requests Test', type: :request do
         context 'when the payment belongs to order' do
           let!(:order) { create(:order) }
           let!(:payment) do
-            create(:payment, :for_order, order: order, payment_id: payment_id, payment_number: payment_number)
+            create(:payment, :for_order, payable: order, payment_id: payment_id, payment_number: payment_number)
           end
 
           it 'updates the status of payment and order and returns :ok' do
             post '/espago/back_request', params: success_payload, headers: headers, as: :json
 
             expect(response).to have_http_status(:ok)
-            expect(order.reload.status).to eq('Payment Successful')
+            expect(order.reload.status).to eq('Preparing for Shipment')
             expect(payment.reload.state).to eq('executed')
           end
         end
@@ -53,7 +54,7 @@ RSpec.describe 'Espago::BackRequestsController Requests Test', type: :request do
         context 'when the payment belongs to subscription' do
           let!(:subscription) { create(:subscription) }
           let!(:payment) do
-            create(:payment, :for_subscription, subscription: subscription, payment_id: payment_id,
+            create(:payment, :for_subscription, payable: subscription, payment_id: payment_id,
                                                                             payment_number: payment_number,)
           end
 
@@ -61,7 +62,7 @@ RSpec.describe 'Espago::BackRequestsController Requests Test', type: :request do
             post '/espago/back_request', params: success_payload, headers: headers, as: :json
 
             expect(response).to have_http_status(:ok)
-            expect(subscription.reload.status).to eq('Payment Successful')
+            expect(subscription.reload.status).to eq('Active')
             expect(payment.reload.state).to eq('executed')
           end
         end
@@ -70,7 +71,7 @@ RSpec.describe 'Espago::BackRequestsController Requests Test', type: :request do
         context 'when the payment belongs to order' do
           let!(:order) { create(:order) }
           let!(:payment) do
-            create(:payment, :for_order, order: order, payment_id: payment_id, payment_number: payment_number)
+            create(:payment, :for_order, payable: order, payment_id: payment_id, payment_number: payment_number)
           end
 
           it 'updates the status of payment and order, updated payment fail related fields and returns :ok' do
@@ -89,7 +90,7 @@ RSpec.describe 'Espago::BackRequestsController Requests Test', type: :request do
         context 'when the payment belongs to subscription' do
           let!(:subscription) { create(:subscription) }
           let!(:payment) do
-            create(:payment, :for_subscription, subscription: subscription, payment_id: payment_id,
+            create(:payment, :for_subscription, payable: subscription, payment_id: payment_id,
 payment_number: payment_number,)
           end
 
@@ -117,7 +118,7 @@ payment_number: payment_number,)
 
     context 'when the payment does not have a payment_id but exists by payment_number in description' do
       let!(:order) { create(:order) }
-      let!(:payment) { create(:payment, :for_order, order: order, payment_id: nil) }
+      let!(:payment) { create(:payment, :for_order, payable: order, payment_id: nil) }
       let(:payload) do
         {
           id:          payment_id,
@@ -130,7 +131,7 @@ payment_number: payment_number,)
         post '/espago/back_request', params: payload, headers: headers, as: :json
 
         expect(response).to have_http_status(:ok)
-        expect(order.reload.status).to eq('Payment Successful')
+        expect(order.reload.status).to eq('Preparing for Shipment')
         payment.reload
         expect(payment.state).to eq('executed')
         expect(payment.payment_id).to eq(payment_id)

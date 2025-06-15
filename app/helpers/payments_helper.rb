@@ -4,7 +4,7 @@ module PaymentsHelper
     when :success
       icon = '✓'
       color_class = 'text-success'
-    when :awaiting
+    when :pending || :uncertain
       icon = 'O'
       color_class = 'text-warning'
     else

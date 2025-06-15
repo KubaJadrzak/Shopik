@@ -23,7 +23,9 @@ RSpec.describe 'UsersController Requests Test', type: :request do
         create(:like, user: user, rubit: liked_rubit)
 
         @order = create(:order, user: user)
-        @payment = create(:payment, :for_order, order: @order, payment_id: 'PAY123')
+        @subscription = create(:subscription, user: user)
+        @client = create(:client, user: user)
+        @payment = create(:payment, :for_order, payable: @order, payment_id: 'PAY123')
 
         sign_in user
         get account_path
@@ -47,6 +49,16 @@ RSpec.describe 'UsersController Requests Test', type: :request do
         @child_rubits.each do |rubit|
           expect(response.body).to include(rubit.content)
         end
+      end
+      it 'includes orders content in the response body' do
+        expect(response.body).to include(@order.order_number)
+      end
+      it 'includes subscription content in the response body' do
+        expect(response.body).to include(@subscription.subscription_number)
+      end
+
+      it 'includes clients (Payment Methods) content in the response body' do
+        expect(response.body).to include(@client.client_number)
       end
 
       it 'enqueues UpdatePaymentStatusJob on sign in' do
@@ -74,7 +86,7 @@ RSpec.describe 'UsersController Requests Test', type: :request do
           Espago::UpdatePaymentStatusJob.perform_later(user.id)
         end
 
-        expect(@order.reload.status).to eq('Payment Successful')
+        expect(@order.reload.status).to eq('Preparing for Shipment')
         expect(@payment.reload.state).to eq('executed')
       end
 

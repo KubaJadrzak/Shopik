@@ -25,7 +25,7 @@ class Espago::BackRequestsController < ApplicationController
   end
 
 
-  sig { returns(T::Boolean) }
+  sig { returns(T.any(T::Boolean, String)) }
   def authenticate_espago!
     authenticate_or_request_with_http_basic do |username, password|
       username == Rails.application.credentials.dig(:espago, :login_basic_auth) &&

@@ -15,7 +15,7 @@ RSpec.describe 'OrdersController Requests Test', type: :request do
       it 'returns success if cart has items' do
         get new_order_path
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include('Place Order')
+        expect(response.body).to include('Go to Payment')
       end
 
       it 'redirects to cart page if cart is empty' do
@@ -50,8 +50,7 @@ RSpec.describe 'OrdersController Requests Test', type: :request do
       it 'creates a new order and redirects to payment' do
         post orders_path, params: valid_params
         order = Order.last
-        payment = Payment.last
-        expect(response).to redirect_to(espago_start_payment_path(payment.payment_number))
+        expect(response).to redirect_to espago_new_payment_path(order_id: order.id)
         expect(order.email).to eq(user.email)
         expect(order.order_items.count).to eq(1)
         expect(user.cart.cart_items.count).to eq(0)

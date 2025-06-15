@@ -41,21 +41,13 @@ class Espago::PaymentsController < ApplicationController
       return
     end
 
-
     card_token = T.let(params[:card_token], T.nilable(String))
     cof = params[:cof]
 
     client_id_param = params[:payment_mode]
     client_id = client_id_param&.start_with?('cli') ? client_id_param : nil
-    Rails.logger.info("!!!!!!!!!!!!!!This is #{client_id}!!!!!!!!!!!!!!!!!!!!!")
 
-    begin
-      @payment.update_status_by_payment_status(@payment.state)
-    rescue ActiveRecord::RecordInvalid => e
-      Rails.logger.error("Failed to update payment state: #{e.message}")
-      redirect_to account_path, alert: 'We could not process your payment due to a technical issue'
-      return
-    end
+    @payment.update_status_by_payment_status(@payment.state)
 
     response = Espago::Payment::PaymentInitializer.initilize(
       payment:    @payment,

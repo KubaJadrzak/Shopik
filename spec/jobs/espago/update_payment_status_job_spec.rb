@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Espago::UpdatePaymentStatusJob, type: :job do
   let(:user) { create(:user) }
   let(:order) { create(:order, user: user) }
-  let!(:payment) { create(:payment, :for_order, order: order, payment_id: 'PAY123') }
+  let!(:payment) { create(:payment, :for_order, payable: order, payment_id: 'PAY123') }
 
   it 'updates payment status when payment has payment_id and payment status changes' do
     allow(Espago::PaymentStatusService).to receive(:new)

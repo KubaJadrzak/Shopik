@@ -14,6 +14,13 @@ class Client < ApplicationRecord
   scope :cit, -> { where(status: 'CIT') }
 
   scope :mit, -> { where(status: 'MIT') }
+
+  # this is needed for payment of value 0 in order to authorize card for MIT payments
+  sig { returns(BigDecimal) }
+  def amount
+    BigDecimal('0')
+  end
+
   private
 
   sig { void }
