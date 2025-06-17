@@ -104,7 +104,7 @@ GEM
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
     date (3.4.1)
-    debug (1.10.0)
+    debug (1.11.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
     devise (4.9.4)
@@ -121,6 +121,7 @@ GEM
       railties (>= 6.1)
     drb (2.2.1)
     ed25519 (1.4.0)
+    erb (5.0.1)
     erubi (1.13.1)
     et-orbi (1.2.11)
       tzinfo
@@ -205,10 +206,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.8-aarch64-linux-musl)
       racc (~> 1.4)
-    nokogiri (1.18.8-arm-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.8-arm-linux-musl)
-      racc (~> 1.4)
     nokogiri (1.18.8-x86_64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.18.8-x86_64-linux-musl)
@@ -282,7 +279,8 @@ GEM
       sorbet-runtime (>= 0.5.9204)
     rbs (3.9.4)
       logger
-    rdoc (6.13.1)
+    rdoc (6.14.0)
+      erb
       psych (>= 4.0.0)
     redis-client (0.24.0)
       connection_pool
@@ -386,8 +384,6 @@ GEM
       thor (>= 0.19.2)
     sqlite3 (2.6.0-aarch64-linux-gnu)
     sqlite3 (2.6.0-aarch64-linux-musl)
-    sqlite3 (2.6.0-arm-linux-gnu)
-    sqlite3 (2.6.0-arm-linux-musl)
     sqlite3 (2.6.0-x86_64-linux-gnu)
     sqlite3 (2.6.0-x86_64-linux-musl)
     sshkit (1.24.0)
@@ -453,8 +449,6 @@ PLATFORMS
   aarch64-linux
   aarch64-linux-gnu
   aarch64-linux-musl
-  arm-linux-gnu
-  arm-linux-musl
   x86_64-linux
   x86_64-linux-gnu
   x86_64-linux-musl
