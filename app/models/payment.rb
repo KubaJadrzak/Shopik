@@ -11,56 +11,36 @@ class Payment < ApplicationRecord
 
   before_create :generate_payment_number
 
-
   STATUS_MAP = T.let({
-                       'rejected'              => 'Payment Rejected',
-                       'failed'                => 'Payment Failed',
-                       'resigned'              => 'Payment Resigned',
-                       'reversed'              => 'Payment Reversed',
-                       'preauthorized'         => 'Waiting for Payment',
-                       'tds2_challenge'        => 'Waiting for Payment',
-                       'tds_redirected'        => 'Waiting for Payment',
-                       'dcc_decision'          => 'Waiting for Payment',
-                       'blik_redirected'       => 'Waiting for Payment',
-                       'transfer_redirected'   => 'Waiting for Payment',
-                       'new'                   => 'Waiting for Payment',
-                       'refunded'              => 'Payment Refunded',
-                       'timeout'               => 'Awaiting Payment',
-                       'connection_failed'     => 'Awaiting Payment',
-                       'ssl_error'             => 'Awaiting Payment',
-                       'parsing_error'         => 'Awaiting Payment',
+                       'rejected' => 'Payment Rejected',
+                       'failed' => 'Payment Failed',
+                       'resigned' => 'Payment Resigned',
+                       'reversed' => 'Payment Reversed',
+                       'preauthorized' => 'Waiting for Payment',
+                       'tds2_challenge' => 'Waiting for Payment',
+                       'tds_redirected' => 'Waiting for Payment',
+                       'dcc_decision' => 'Waiting for Payment',
+                       'blik_redirected' => 'Waiting for Payment',
+                       'transfer_redirected' => 'Waiting for Payment',
+                       'new' => 'Waiting for Payment',
+                       'refunded' => 'Payment Refunded',
+                       'timeout' => 'Awaiting Payment',
+                       'connection_failed' => 'Awaiting Payment',
+                       'ssl_error' => 'Awaiting Payment',
+                       'parsing_error' => 'Awaiting Payment',
                        'unknown_faraday_error' => 'Awaiting Payment',
-                       'unexpected_error'      => 'Awaiting Payment',
-                       'invalid_uri'           => 'Payment Error',
-                     }, T::Hash[String, String],)
+                       'unexpected_error' => 'Awaiting Payment',
+                       'invalid_uri' => 'Payment Error'
+                     }, T::Hash[String, String])
 
-  ORDER_STATUS_MAP = T.let(
-    STATUS_MAP.merge('executed' => 'Preparing for Shipment'),
-    T::Hash[String, String],
-  )
+  ORDER_STATUS_MAP = T.let(STATUS_MAP.merge('executed' => 'Preparing for Shipment'), T::Hash[String, String])
 
-  SUBSCRIPTION_STATUS_MAP = T.let(
-    STATUS_MAP.merge('executed' => 'Active'),
-    T::Hash[String, String],
-  )
+  SUBSCRIPTION_STATUS_MAP = T.let(STATUS_MAP.merge('executed' => 'Active'), T::Hash[String, String])
 
-  CLIENT_STATUS_MAP = T.let(
-    Hash.new('Unverified').merge('executed' => 'CIT'),
-    T::Hash[String, String],
-  )
+  CLIENT_STATUS_MAP = T.let(Hash.new('Unverified').merge('executed' => 'CIT'), T::Hash[String, String])
 
   SUCCESS_STATUSES = T.let(['executed'].freeze, T::Array[String])
-  FAILURE_STATUSES = T.let(
-    %w[
-      rejected
-      failed
-      resigned
-      reversed
-      refunded
-      invalid_uri
-    ].freeze,
-    T::Array[String],
-  )
+  FAILURE_STATUSES = T.let(%w[rejected failed resigned reversed refunded invalid_uri].freeze, T::Array[String])
   PENDING_STATUSES = T.let(
     %w[
       preauthorized
@@ -71,7 +51,7 @@ class Payment < ApplicationRecord
       transfer_redirected
       new
     ].freeze,
-    T::Array[String],
+    T::Array[String]
   )
   UNCERTAIN_STATUSES = T.let(
     %w[
@@ -82,12 +62,9 @@ class Payment < ApplicationRecord
       unknown_faraday_error
       unexpected_error
     ].freeze,
-    T::Array[String],
+    T::Array[String]
   )
-  AWAITING_STATUSES = T.let(
-    (PENDING_STATUSES + UNCERTAIN_STATUSES).freeze,
-    T::Array[String],
-  )
+  AWAITING_STATUSES = T.let((PENDING_STATUSES + UNCERTAIN_STATUSES).freeze, T::Array[String])
 
   scope :successful, -> { where(state: SUCCESS_STATUSES) }
   scope :failed, -> { where(state: FAILURE_STATUSES) }
@@ -119,7 +96,6 @@ class Payment < ApplicationRecord
   def retryable?
     !successful? && !awaiting?
   end
-
 
   sig { returns(Symbol) }
   def simplified_state
@@ -166,7 +142,6 @@ class Payment < ApplicationRecord
     end
   end
 
-
   private
 
   sig { returns(T::Boolean) }
@@ -193,7 +168,6 @@ class Payment < ApplicationRecord
     return unless Payment.where(payable: payable).where(state: SUCCESS_STATUSES + AWAITING_STATUSES).exists?
 
     errors.add(:base, 'Cannot create new payment: order already has a payment awaiting or successful')
-
   end
 
   sig { void }

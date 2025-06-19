@@ -23,19 +23,16 @@ class Espago::BackRequest::BackRequestPaymentHandler
       end
     end
 
-
-
     return if payment.nil?
 
     client = client_id.present? ? Client.find_by(client_id: client_id) : nil
 
-
     payment.update_status_by_payment_status(state.to_s)
     payment.update(
-      reject_reason:        reject_reason,
-      behaviour:            behaviour,
+      reject_reason: reject_reason,
+      behaviour: behaviour,
       issuer_response_code: issuer_response_code,
-      client:               client,
+      client: client
     )
     payment
   end

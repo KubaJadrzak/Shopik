@@ -1,34 +1,36 @@
 # typed: strict
 
-class Espago::BackRequestsController < ApplicationController
-  extend T::Sig
+module Espago
+  class BackRequestsController < ApplicationController
+    extend T::Sig
 
-  skip_before_action :verify_authenticity_token, only: [:handle_back_request]
-  before_action :authenticate_espago!
+    skip_before_action :verify_authenticity_token, only: [:handle_back_request]
+    before_action :authenticate_espago!
 
-  sig { void }
-  def handle_back_request
-    payload = JSON.parse(request.body.read)
-    Rails.logger.info("Received Espago response: #{payload.inspect}")
+    sig { void }
+    def handle_back_request
+      payload = JSON.parse(request.body.read)
+      Rails.logger.info("Received Espago response: #{payload.inspect}")
 
-    payment = Espago::BackRequest::BackRequestPaymentHandler.call(payload)
+      payment = Espago::BackRequest::BackRequestPaymentHandler.call(payload)
 
-    if payment.nil?
-      Rails.logger.warn('Payment not found for payment_id or payment_number')
-      head :not_found
-      return
+      if payment.nil?
+        Rails.logger.warn('Payment not found for payment_id or payment_number')
+        head :not_found
+        return
+      end
+
+      Espago::BackRequest::BackRequestClientHandler.call(payload, payment)
+
+      head :ok
     end
 
-    Espago::BackRequest::BackRequestClientHandler.call(payload, payment)
-
-    head :ok
-  end
-
-  sig { returns(T.any(T::Boolean, String)) }
-  def authenticate_espago!
-    authenticate_or_request_with_http_basic do |username, password|
-      username == Rails.application.credentials.dig(:espago, :login_basic_auth) &&
-        password == Rails.application.credentials.dig(:espago, :password_basic_auth)
+    sig { returns(T.any(T::Boolean, String)) }
+    def authenticate_espago!
+      authenticate_or_request_with_http_basic do |username, password|
+        username == Rails.application.credentials.dig(:espago, :login_basic_auth) &&
+          password == Rails.application.credentials.dig(:espago, :password_basic_auth)
+      end
     end
   end
 end

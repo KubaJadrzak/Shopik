@@ -1,134 +1,126 @@
 # typed: strict
 
-class Espago::PaymentsController < ApplicationController
-  extend T::Sig
+module Espago
+  class PaymentsController < ApplicationController
+    extend T::Sig
 
-  before_action :authenticate_user!
-  before_action :set_payment, only: %i[new start_payment payment_success payment_failure payment_awaiting]
+    before_action :authenticate_user!
+    before_action :set_payment, only: %i[new start_payment payment_success payment_failure payment_awaiting]
 
-  sig { void }
+    sig { void }
 
-  def new
-    @parent = T.let(nil, T.nilable(T.any(Order, Subscription, Client)))
+    def new
+      @parent = T.let(nil, T.nilable(T.any(Order, Subscription, Client)))
 
-    if params[:order_id]
-      @parent = Order.find(params[:order_id])
-    elsif params[:subscription_id]
-      @parent = Subscription.find(params[:subscription_id])
-    elsif params[:client_id]
-      @parent = Client.find(params[:client_id])
-    else
-      redirect_to root_path, alert: 'Missing parent to create payment.' and return
-    end
-    @espago_public_key = T.let(ENV.fetch('ESPAGO_PUBLIC_KEY', nil), T.nilable(String))
-  end
-
-  sig { void }
-  def start_payment
-    parent_type = params[:parent_type]
-    parent_id = params[:parent_id]
-    @parent = parent_type.constantize.find_by(id: parent_id)
-    unless @parent
-      redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
-      return
-    end
-    @payment = @parent.payments.create(amount: @parent.amount, state: 'new')
-    unless @payment.persisted?
-      redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
-      return
+      if params[:order_id]
+        @parent = Order.find(params[:order_id])
+      elsif params[:subscription_id]
+        @parent = Subscription.find(params[:subscription_id])
+      elsif params[:client_id]
+        @parent = Client.find(params[:client_id])
+      else
+        redirect_to root_path, alert: 'Missing parent to create payment.' and return
+      end
+      @espago_public_key = T.let(ENV.fetch('ESPAGO_PUBLIC_KEY', nil), T.nilable(String))
     end
 
-    card_token = T.let(params[:card_token], T.nilable(String))
-    cof = params[:cof]
+    sig { void }
+    def start_payment
+      parent_type = params[:parent_type]
+      parent_id = params[:parent_id]
+      @parent = parent_type.constantize.find_by(id: parent_id)
+      unless @parent
+        redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
+        return
+      end
+      @payment = @parent.payments.create(amount: @parent.amount, state: 'new')
+      unless @payment.persisted?
+        redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
+        return
+      end
 
-    client_id_param = params[:payment_mode]
-    client_id = client_id_param&.start_with?('cli') ? client_id_param : nil
+      card_token = T.let(params[:card_token], T.nilable(String))
+      cof = params[:cof]
 
-    @payment.update_status_by_payment_status(@payment.state)
+      client_id_param = params[:payment_mode]
+      client_id = client_id_param&.start_with?('cli') ? client_id_param : nil
 
-    response = Espago::Payment::PaymentInitializer.initilize(
-      payment: @payment,
-      card_token: card_token,
-      cof: cof,
-      client_id: client_id
-    )
-    Rails.logger.info(response.inspect)
+      action, param = Espago::Payment::EspagoPaymentProcessor.new(payment: @payment, card_token: card_token, cof: cof, client_id: client_id).process
 
-    action, param = Espago::Payment::PaymentResponseHandler.handle_response(@payment, response)
-
-    case action
-    when :redirect_url
-      redirect_to param, allow_other_host: true
-    when :success
-      redirect_to espago_payments_success_path(param)
-    when :awaiting
-      redirect_to espago_payments_awaiting_path(param)
-    when :failure
-      redirect_to espago_payments_failure_path(param)
-    end
-  end
-
-  sig { void }
-  def payment_success
-    unless @payment
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      return
+      case action
+      when :redirect_url
+        redirect_to param, allow_other_host: true
+      when :success
+        redirect_to espago_payments_success_path(param)
+      when :awaiting
+        redirect_to espago_payments_awaiting_path(param)
+      when :failure
+        redirect_to espago_payments_failure_path(param)
+      end
     end
 
-    case @payment.payable
-    when Subscription
-      redirect_to subscription_path(@payment.payable), notice: 'Payment successful!'
-    when Order
-      redirect_to order_path(@payment.payable), notice: 'Payment successful!'
-    when Client
-      redirect_to espago_client_path(@payment.payable), notice: 'Payment successful!'
-    else
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-    end
-  end
+    sig { void }
+    def payment_success
+      unless @payment
+        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+        return
+      end
 
-  sig { void }
-  def payment_failure
-    unless @payment
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      return
-    end
-
-    case @payment.payable
-    when Subscription
-      redirect_to subscription_path(@payment.payable), notice: 'Payment failed!'
-    when Order
-      redirect_to order_path(@payment.payable), notice: 'Payment failed!'
-    when Client
-      redirect_to espago_client_path(@payment.payable), notice: 'Payment failed!'
-    else
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-    end
-  end
-
-  sig { void }
-  def payment_awaiting
-    unless @payment
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      return
+      case @payment.payable
+      when Subscription
+        redirect_to subscription_path(@payment.payable), notice: 'Payment successful!'
+      when Order
+        redirect_to order_path(@payment.payable), notice: 'Payment successful!'
+      when Client
+        redirect_to espago_client_path(@payment.payable), notice: 'Payment successful!'
+      else
+        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+      end
     end
 
-    case @payment.payable
-    when Subscription
-      redirect_to subscription_path(@payment.payable), notice: 'Payment is being processed!'
-    when Order
-      redirect_to order_path(@payment.payable), notice: 'Payment is being processed!'
-    when Client
-      redirect_to espago_client_path(@payment.payable), notice: 'Payment is being processed!'
-    else
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+    sig { void }
+    def payment_failure
+      unless @payment
+        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+        return
+      end
+
+      case @payment.payable
+      when Subscription
+        redirect_to subscription_path(@payment.payable), notice: 'Payment failed!'
+      when Order
+        redirect_to order_path(@payment.payable), notice: 'Payment failed!'
+      when Client
+        redirect_to espago_client_path(@payment.payable), notice: 'Payment failed!'
+      else
+        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+      end
     end
-  end
 
-  private
+    sig { void }
+    def payment_awaiting
+      unless @payment
+        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+        return
+      end
 
-  sig { void }
-  def set_payment
-    @payment = T.let(Payment.find_by(payment_number: params[:payment_number]), T.nilable(Payment))
+      case @payment.payable
+      when Subscription
+        redirect_to subscription_path(@payment.payable), notice: 'Payment is being processed!'
+      when Order
+        redirect_to order_path(@payment.payable), notice: 'Payment is being processed!'
+      when Client
+        redirect_to espago_client_path(@payment.payable), notice: 'Payment is being processed!'
+      else
+        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+      end
+    end
+
+    private
+
+    sig { void }
+    def set_payment
+      @payment = T.let(::Payment.find_by(payment_number: params[:payment_number]), T.nilable(::Payment))
+    end
   end
 end
