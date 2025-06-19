@@ -13,11 +13,7 @@ class Espago::Response
   attr_reader :body
 
   sig do
-    params(
-      success: T::Boolean,
-      status:  T.any(String, Symbol, Integer),
-      body:    T::Hash[String, T.untyped],
-    ).void
+    params(success: T::Boolean, status: T.any(String, Symbol, Integer), body: T::Hash[String, T.untyped]).void
   end
   def initialize(success:, status:, body:)
     @success = success

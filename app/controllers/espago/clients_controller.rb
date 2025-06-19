@@ -1,7 +1,6 @@
 # typed: strict
 
 class Espago::ClientsController < ApplicationController
-
   before_action :set_client, only: %i[show]
 
   sig { void }
@@ -16,5 +15,4 @@ class Espago::ClientsController < ApplicationController
   def set_client
     @client = T.let(Client.includes(:payments).find_by(id: params[:id]), T.nilable(Client))
   end
-
 end

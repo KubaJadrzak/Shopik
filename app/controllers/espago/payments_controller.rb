@@ -4,9 +4,7 @@ class Espago::PaymentsController < ApplicationController
   extend T::Sig
 
   before_action :authenticate_user!
-  before_action :set_payment, only: %i[
-    new start_payment payment_success payment_failure payment_awaiting
-  ]
+  before_action :set_payment, only: %i[new start_payment payment_success payment_failure payment_awaiting]
 
   sig { void }
 
@@ -27,7 +25,6 @@ class Espago::PaymentsController < ApplicationController
 
   sig { void }
   def start_payment
-
     parent_type = params[:parent_type]
     parent_id = params[:parent_id]
     @parent = parent_type.constantize.find_by(id: parent_id)
@@ -50,10 +47,10 @@ class Espago::PaymentsController < ApplicationController
     @payment.update_status_by_payment_status(@payment.state)
 
     response = Espago::Payment::PaymentInitializer.initilize(
-      payment:    @payment,
+      payment: @payment,
       card_token: card_token,
-      cof:        cof,
-      client_id:  client_id,
+      cof: cof,
+      client_id: client_id
     )
     Rails.logger.info(response.inspect)
 

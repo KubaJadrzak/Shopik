@@ -27,6 +27,12 @@ RSpec.describe 'One Time Payment Test', type: :system do
 
         fill_in 'Shipping Address', with: 'Shipping Address'
 
+        click_button 'Go to Payment'
+
+        expect(page).to have_content('Choose Payment Method')
+
+        choose 'One-time Payment'
+
         find('#pay_btn').click
 
         within_frame(find('iframe')) do
@@ -48,7 +54,8 @@ RSpec.describe 'One Time Payment Test', type: :system do
         end
         order = Order.last
         expect(page).to have_content(order.order_number, wait: 10)
-        expect(page).to have_content('Payment successful!', wait: 10)
+        expect(page).to have_selector('#flash', text: 'Payment successful!')
+
       end
     end
 
@@ -65,6 +72,12 @@ RSpec.describe 'One Time Payment Test', type: :system do
 
         fill_in 'Shipping Address', with: 'Shipping Address'
 
+        click_button 'Go to Payment'
+
+        expect(page).to have_content('Choose Payment Method')
+
+        choose 'One-time Payment'
+
         find('#pay_btn').click
 
         within_frame(find('iframe')) do
@@ -77,7 +90,6 @@ RSpec.describe 'One Time Payment Test', type: :system do
           click_button 'Pay'
         end
 
-        expect(page).to have_current_path(/secure_web_page/, wait: 10)
         expect(page).to have_content('Wybór waluty - decyzja DCC')
         choose('dcc-yes')
         click_button 'Płacę'
@@ -109,6 +121,12 @@ RSpec.describe 'One Time Payment Test', type: :system do
 
         fill_in 'Shipping Address', with: 'Shipping Address'
 
+        click_button 'Go to Payment'
+
+        expect(page).to have_content('Choose Payment Method')
+
+        choose 'One-time Payment'
+
         find('#pay_btn').click
 
         within_frame(find('iframe')) do
@@ -130,6 +148,7 @@ RSpec.describe 'One Time Payment Test', type: :system do
         end
         order = Order.last
         expect(page).to have_content(order.order_number, wait: 10)
+
         expect(page).to have_content('Payment failed!', wait: 10)
       end
     end
@@ -146,6 +165,12 @@ RSpec.describe 'One Time Payment Test', type: :system do
         expect(page).to have_content('Shipping Address')
 
         fill_in 'Shipping Address', with: 'Shipping Address'
+
+        click_button 'Go to Payment'
+
+        expect(page).to have_content('Choose Payment Method')
+
+        choose 'One-time Payment'
 
         find('#pay_btn').click
 

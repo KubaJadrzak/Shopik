@@ -33,7 +33,7 @@ RSpec.describe 'Likes System Test', type: :system do
     end
   end
   context 'when user is not signed in' do
-    it 'user cannot like rubit and is redirected ot sign in page' do
+    it 'user cannot like rubit and is redirected to sign in page' do
       visit root_path
       expect(page).to have_content('This is Rubit')
       expect(page).to have_content('0 Likes')

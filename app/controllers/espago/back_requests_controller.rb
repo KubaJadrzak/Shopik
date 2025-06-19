@@ -24,7 +24,6 @@ class Espago::BackRequestsController < ApplicationController
     head :ok
   end
 
-
   sig { returns(T.any(T::Boolean, String)) }
   def authenticate_espago!
     authenticate_or_request_with_http_basic do |username, password|

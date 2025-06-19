@@ -9,7 +9,6 @@ RSpec.describe 'Order OrderItem System Test', type: :system do
 
   before do
     sign_in user
-    driven_by(:selenium_chrome_headless)
   end
 
   context 'when cart has items' do
@@ -27,7 +26,13 @@ RSpec.describe 'Order OrderItem System Test', type: :system do
 
       fill_in 'Shipping Address', with: 'Shipping Address'
 
+      click_button "Go to Payment"
+
+      expect(page).to have_content('Choose Payment Method')
       choose('Secure Web Page')
+
+      find('#pay_btn').click
+
       click_button 'Pay'
       expect(page).to have_current_path(/secure_web_page/, wait: 3)
       order = Order.last

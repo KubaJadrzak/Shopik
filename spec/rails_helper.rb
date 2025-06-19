@@ -10,6 +10,8 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'factory_bot'
+require 'capybara/cuprite'
+
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -96,6 +98,12 @@ RSpec.configure do |config|
     Rails.application.reload_routes_unless_loaded
   end
 
+  RSpec.configure do |config|
+    config.before(:each, type: :system) do
+      driven_by :cuprite
+    end
+  end
+
   WebMock.disable_net_connect!(
     allow_localhost: true,
     allow:           [
@@ -103,8 +111,14 @@ RSpec.configure do |config|
     ],
   )
 
+  Capybara.javascript_driver = :cuprite
+  Capybara.register_driver(:cuprite) do |app|
+    Capybara::Cuprite::Driver.new(app, window_size: [1200, 800])
+  end
+
   Capybara.server_host = 'localhost'
   Capybara.server_port = 3001
   Capybara.app_host = 'http://localhost:3001'
-  Capybara.default_driver = :selenium_chrome
+  Capybara.default_driver = :cuprite
+  Capybara.javascript_driver = :cuprite
 end

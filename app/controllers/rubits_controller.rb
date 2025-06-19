@@ -1,7 +1,6 @@
 # typed: true
 
 class RubitsController < ApplicationController
-
   before_action :authenticate_user!, only: %i[create destroy]
   before_action :set_rubit, only: %i[show destroy]
 
@@ -13,7 +12,7 @@ class RubitsController < ApplicationController
         .group('rubits.id')
         .order('likes_count DESC')
         .includes(:user, :likes_by_users),
-      items: 20,
+      items: 20
     )
 
     render 'scrollable_list' if params[:page]
@@ -34,8 +33,8 @@ class RubitsController < ApplicationController
           render turbo_stream: [
             turbo_stream.prepend('rubits', partial: 'rubits/rubit', locals: { rubit: @rubit }),
             turbo_stream.replace('new_rubit_form', partial: 'rubits/form',
-                                                   locals:  { parent_rubit: @rubit.parent_rubit },),
-            turbo_stream.replace('flash', partial: 'shared/flash'),
+                                                   locals: { parent_rubit: @rubit.parent_rubit }),
+            turbo_stream.replace('flash', partial: 'shared/flash')
           ]
         end
         format.html { redirect_to root_path, notice: 'Rubit created' }
@@ -48,7 +47,7 @@ class RubitsController < ApplicationController
         format.turbo_stream do
           render turbo_stream: [
             turbo_stream.replace('new_rubit_form', partial: 'rubits/form', locals: { parent_rubit: parent_rubit }),
-            turbo_stream.replace('flash', partial: 'shared/flash'),
+            turbo_stream.replace('flash', partial: 'shared/flash')
           ]
         end
         format.html { redirect_to root_path, alert: 'Failed to create Rubit' }
@@ -74,7 +73,7 @@ class RubitsController < ApplicationController
         format.turbo_stream do
           render turbo_stream: [
             turbo_stream.remove("rubit_#{@rubit.id}"),
-            turbo_stream.replace('flash', partial: 'shared/flash'),
+            turbo_stream.replace('flash', partial: 'shared/flash')
           ]
         end
         format.html { redirect_to root_path, notice: 'Rubit deleted' }

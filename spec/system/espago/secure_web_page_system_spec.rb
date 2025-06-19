@@ -26,8 +26,16 @@ RSpec.describe 'Secure Web Page Test', type: :system do
 
       fill_in 'Shipping Address', with: 'Shipping Address'
 
+      fill_in 'Shipping Address', with: 'Shipping Address'
+
+      click_button 'Go to Payment'
+
+      expect(page).to have_content('Choose Payment Method')
+
       choose('Secure Web Page')
-      click_button 'Pay'
+
+      find('#pay_btn').click
+
       expect(page).to have_current_path(/secure_web_page/, wait: 3)
       order = Order.last
       payment = Payment.last
@@ -38,7 +46,7 @@ RSpec.describe 'Secure Web Page Test', type: :system do
       # mock redirect to success to avoid going through external service
       visit "/espago/payments/#{payment.payment_number}/success"
       expect(page).to have_content('Payment successful!')
-      expect(page).to have_content(order.status)
+      expect(page).to have_content(order.order_number)
       expect(page).to have_content(payment.payment_number)
     end
   end
@@ -56,8 +64,16 @@ RSpec.describe 'Secure Web Page Test', type: :system do
 
       fill_in 'Shipping Address', with: 'Shipping Address'
 
+      fill_in 'Shipping Address', with: 'Shipping Address'
+
+      click_button 'Go to Payment'
+
+      expect(page).to have_content('Choose Payment Method')
+
       choose('Secure Web Page')
-      click_button 'Pay'
+
+      find('#pay_btn').click
+
       expect(page).to have_current_path(/secure_web_page/, wait: 3)
       order = Order.last
       payment = Payment.last

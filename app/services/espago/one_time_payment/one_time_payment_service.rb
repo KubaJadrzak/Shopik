@@ -10,10 +10,6 @@ class Espago::OneTimePayment::OneTimePaymentService
 
   sig { returns(Espago::Response) }
   def create_payment
-    Espago::ClientService.new.send(
-      'api/charges',
-      method: :post,
-      body:   @payload.to_h,
-    )
+    Espago::ClientService.new.send('api/charges', method: :post, body: @payload.to_h)
   end
 end
