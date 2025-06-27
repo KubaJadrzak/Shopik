@@ -3,20 +3,21 @@
 
 class Espago::BackRequest::BackRequestPaymentHandler
 
+  #: (Hash[String, untyped]) -> void
   def initialize(payload)
-    @payment_id = payload['id']
-    @client_id = payload['client']
-    @state = payload['state']
-    @description = payload['description']
-    @reject_reason = payload['reject_reason']
-    @behaviour = payload['behaviour']
-    @issuer_response_code = payload['issuer_response_code']
+    @payment_id = payload['id'] #: Integer
+    @client_id = payload['client'] #: String
+    @state = payload['state'] #: String
+    @description = payload['description'] #: String
+    @reject_reason = payload['reject_reason'] #: String
+    @behaviour = payload['behaviour'] #: String
+    @issuer_response_code = payload['issuer_response_code'] #: String
   end
 
-  #: -> Payment
+  #: -> Payment?
   def process_payment
     payment = set_payment
-    return if payment.nil?
+    return unless payment
 
     client = set_client(@client_id)
 
@@ -27,12 +28,13 @@ class Espago::BackRequest::BackRequestPaymentHandler
       issuer_response_code: @issuer_response_code,
       client:               client,
     )
+
     payment
   end
 
   private
 
-  #: (Integer payment_id, String? description) -> Payment?
+  #: -> ::Payment?
   def set_payment
     payment = Payment.find_by(payment_id: @payment_id)
     return payment if payment.present?
@@ -54,7 +56,7 @@ class Espago::BackRequest::BackRequestPaymentHandler
     match.presence
   end
 
-  #: (untyped client_id) -> Client?
+  #: (String) -> Client?
   def set_client(client_id)
     return if client_id.blank?
 

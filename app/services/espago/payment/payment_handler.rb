@@ -6,7 +6,8 @@ module Espago
       extend T::Sig
 
       sig do
-        params(payment: ::Payment, card_token: T.nilable(String), cof: T.nilable(String), client_id: T.nilable(String)).void
+        params(payment: ::Payment, card_token: T.nilable(String), cof: T.nilable(String),
+               client_id: T.nilable(String),).void
       end
       def initialize(payment:, card_token: nil, cof: nil, client_id: nil)
         @payment = payment
@@ -39,11 +40,11 @@ module Espago
       sig { params(description: String).returns(Response) }
       def handle_one_time_payment(description)
         attrs = {
-          amount: @payment.amount,
-          currency: 'PLN',
-          description: description,
+          amount:       @payment.amount,
+          currency:     'PLN',
+          description:  description,
           positive_url: Rails.application.routes.url_helpers.espago_payments_success_url(payment_number: @payment.payment_number),
-          negative_url: Rails.application.routes.url_helpers.espago_payments_failure_url(payment_number: @payment.payment_number)
+          negative_url: Rails.application.routes.url_helpers.espago_payments_failure_url(payment_number: @payment.payment_number),
         }
         attrs[:cof] = @cof if @cof.present?
         attrs[:card] = @card_token if @card_token.present?
@@ -56,13 +57,13 @@ module Espago
       sig { params(description: String).returns(Response) }
       def handle_secure_web_payment(description)
         attrs = {
-          amount: @payment.amount,
-          currency: 'PLN',
-          kind: 'sale',
-          title: description,
-          description: description,
+          amount:       @payment.amount,
+          currency:     'PLN',
+          kind:         'sale',
+          title:        description,
+          description:  description,
           positive_url: Rails.application.routes.url_helpers.espago_payments_success_url(payment_number: @payment.payment_number),
-          negative_url: Rails.application.routes.url_helpers.espago_payments_failure_url(payment_number: @payment.payment_number)
+          negative_url: Rails.application.routes.url_helpers.espago_payments_failure_url(payment_number: @payment.payment_number),
         }
         attrs[:cof] = @cof if @cof.present?
 

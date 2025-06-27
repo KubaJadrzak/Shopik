@@ -12,26 +12,26 @@ class Payment < ApplicationRecord
   before_create :generate_payment_number
 
   STATUS_MAP = T.let({
-                       'rejected' => 'Payment Rejected',
-                       'failed' => 'Payment Failed',
-                       'resigned' => 'Payment Resigned',
-                       'reversed' => 'Payment Reversed',
-                       'preauthorized' => 'Waiting for Payment',
-                       'tds2_challenge' => 'Waiting for Payment',
-                       'tds_redirected' => 'Waiting for Payment',
-                       'dcc_decision' => 'Waiting for Payment',
-                       'blik_redirected' => 'Waiting for Payment',
-                       'transfer_redirected' => 'Waiting for Payment',
-                       'new' => 'Waiting for Payment',
-                       'refunded' => 'Payment Refunded',
-                       'timeout' => 'Awaiting Payment',
-                       'connection_failed' => 'Awaiting Payment',
-                       'ssl_error' => 'Awaiting Payment',
-                       'parsing_error' => 'Awaiting Payment',
+                       'rejected'              => 'Payment Rejected',
+                       'failed'                => 'Payment Failed',
+                       'resigned'              => 'Payment Resigned',
+                       'reversed'              => 'Payment Reversed',
+                       'preauthorized'         => 'Waiting for Payment',
+                       'tds2_challenge'        => 'Waiting for Payment',
+                       'tds_redirected'        => 'Waiting for Payment',
+                       'dcc_decision'          => 'Waiting for Payment',
+                       'blik_redirected'       => 'Waiting for Payment',
+                       'transfer_redirected'   => 'Waiting for Payment',
+                       'new'                   => 'Waiting for Payment',
+                       'refunded'              => 'Payment Refunded',
+                       'timeout'               => 'Awaiting Payment',
+                       'connection_failed'     => 'Awaiting Payment',
+                       'ssl_error'             => 'Awaiting Payment',
+                       'parsing_error'         => 'Awaiting Payment',
                        'unknown_faraday_error' => 'Awaiting Payment',
-                       'unexpected_error' => 'Awaiting Payment',
-                       'invalid_uri' => 'Payment Error'
-                     }, T::Hash[String, String])
+                       'unexpected_error'      => 'Awaiting Payment',
+                       'invalid_uri'           => 'Payment Error',
+                     }, T::Hash[String, String],)
 
   ORDER_STATUS_MAP = T.let(STATUS_MAP.merge('executed' => 'Preparing for Shipment'), T::Hash[String, String])
 
@@ -51,7 +51,7 @@ class Payment < ApplicationRecord
       transfer_redirected
       new
     ].freeze,
-    T::Array[String]
+    T::Array[String],
   )
   UNCERTAIN_STATUSES = T.let(
     %w[
@@ -62,7 +62,7 @@ class Payment < ApplicationRecord
       unknown_faraday_error
       unexpected_error
     ].freeze,
-    T::Array[String]
+    T::Array[String],
   )
   AWAITING_STATUSES = T.let((PENDING_STATUSES + UNCERTAIN_STATUSES).freeze, T::Array[String])
 
@@ -163,15 +163,16 @@ class Payment < ApplicationRecord
 
   sig { void }
   def prevent_duplicate_payment_for_order
-    return unless payable.is_a?(Order)
+    return unless payable_is_order?
 
-    return unless Payment.where(payable: payable).where(state: SUCCESS_STATUSES + AWAITING_STATUSES).exists?
+    return unless Payment.where(payable: payable).awaiting.exists?
 
     errors.add(:base, 'Cannot create new payment: order already has a payment awaiting or successful')
   end
 
   sig { void }
   def prevent_duplicate_payment_for_subscription
+    return unless payable_is_subscription?
     return unless Payment.where(payable: payable).awaiting.exists?
 
     errors.add(:base, 'Cannot create new payment: subscription already has a pending or uncertain payment')

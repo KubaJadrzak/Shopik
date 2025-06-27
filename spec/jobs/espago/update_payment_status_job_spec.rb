@@ -6,7 +6,7 @@ RSpec.describe Espago::UpdatePaymentStatusJob, type: :job do
   let!(:payment) { create(:payment, :for_order, payable: order, payment_id: 'PAY123') }
 
   it 'updates payment status when payment has payment_id and payment status changes' do
-    allow(Espago::PaymentStatusService).to receive(:new)
+    allow(Espago::Payment::PaymentStatusService).to receive(:new)
       .with(payment_id: 'PAY123')
       .and_return(double(fetch_payment_status: 'executed'))
 
@@ -18,7 +18,7 @@ RSpec.describe Espago::UpdatePaymentStatusJob, type: :job do
   it 'sets status to resigned if payment is old and status unchanged' do
     payment.update!(created_at: 3.hours.ago)
 
-    allow(Espago::PaymentStatusService).to receive(:new)
+    allow(Espago::Payment::PaymentStatusService).to receive(:new)
       .with(payment_id: 'PAY123')
       .and_return(double(fetch_payment_status: 'new'))
 
@@ -36,7 +36,7 @@ RSpec.describe Espago::UpdatePaymentStatusJob, type: :job do
   end
 
   it 'does nothing if PaymentStatusService returns nil' do
-    allow(Espago::PaymentStatusService).to receive(:new)
+    allow(Espago::Payment::PaymentStatusService).to receive(:new)
       .with(payment_id: 'PAY123')
       .and_return(double(fetch_payment_status: nil))
 

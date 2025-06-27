@@ -1,5 +1,7 @@
 --dir
---enable-experimental-rbs-comments
 .
 --ignore=tmp/
 --ignore=vendor/
+--enable-experimental-rbs-signatures
+--enable-experimental-rbs-assertions
+--enable-experimental-requires-ancestor

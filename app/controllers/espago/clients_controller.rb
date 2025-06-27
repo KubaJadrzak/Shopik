@@ -2,28 +2,19 @@
 
 module Espago
   class ClientsController < ApplicationController
-    before_action :set_client, only: %i[show verify_mit]
+    before_action :set_client, only: %i[show]
 
-    sig { void }
+    #: -> void
     def show
-      client = T.must(@client)
-      @payments = T.let(client.payments, T.nilable(ActiveRecord::Relation))
-    end
-
-    sig { void }
-    def verify_mit
-      client = T.must(@client)
-      return unless client.status != 'CIT'
-
-      redirect_to account_path, alert: 'We are experiencing an issue with your verification'
-      nil
+      client = @client #: as !nil
+      @payments = client.payments #: ActiveRecord::Relation?
     end
 
     private
 
-    sig { void }
+    #: -> void
     def set_client
-      @client = T.let(Client.includes(:payments).find_by(id: params[:id]), T.nilable(Client))
+      @client = Client.includes(:payments).find(params[:id]) #: Client?
     end
   end
 end

@@ -22,7 +22,7 @@ module Espago
 
         faraday.options.timeout = 5
         faraday.options.open_timeout = 3
-      end, Faraday::Connection)
+      end, Faraday::Connection,)
     end
 
     sig do

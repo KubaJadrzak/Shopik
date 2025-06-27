@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Espago::PaymentStatusService do
+RSpec.describe Espago::Payment::PaymentStatusService do
   let(:payment_id) { 'payment_123' }
   let(:client_double) { instance_double('ClientService') }
   let(:service) { described_class.new(payment_id: payment_id) }
@@ -11,7 +11,7 @@ RSpec.describe Espago::PaymentStatusService do
 
   describe '#fetch_payment_status' do
     context 'when the client response is successful' do
-      response = Espago::Response.new(
+      response = Espago::Payment::Response.new(
         success: true,
         status:  200,
         body:    { 'state' => 'executed' },
@@ -30,7 +30,7 @@ RSpec.describe Espago::PaymentStatusService do
     end
 
     context 'when the client response is unsuccessful' do
-      response = Espago::Response.new(
+      response = Espago::Payment::Response.new(
         success: false,
         status:  500,
         body:    { 'error' => 'Internal Server Error' },

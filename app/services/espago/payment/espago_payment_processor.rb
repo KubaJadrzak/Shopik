@@ -7,10 +7,10 @@ module Espago
 
       sig do
         params(
-          payment: ::Payment,
+          payment:    ::Payment,
           card_token: T.nilable(String),
-          cof: T.nilable(String),
-          client_id: T.nilable(String)
+          cof:        T.nilable(String),
+          client_id:  T.nilable(String),
         ).void
       end
       def initialize(payment:, card_token: nil, cof: nil, client_id: nil)
@@ -21,21 +21,21 @@ module Espago
       end
 
       sig { returns([Symbol, T.untyped]) }
-      def process
+      def process_payment
         @payment.update_status_by_payment_status(@payment.state)
 
         response = if @payment.payable.present?
                      PaymentHandler.new(
-                       payment: @payment,
+                       payment:    @payment,
                        card_token: @card_token,
-                       cof: @cof,
-                       client_id: @client_id
+                       cof:        @cof,
+                       client_id:  @client_id,
                      ).handle_payment
                    else
                      Response.new(
                        success: false,
-                       status: :missing_reference,
-                       body: { 'error' => 'Payment must be linked to a payable (order or subscription)' }
+                       status:  :missing_reference,
+                       body:    { 'error' => 'Payment must be linked to a payable' },
                      )
                    end
 

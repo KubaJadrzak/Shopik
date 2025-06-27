@@ -2,20 +2,19 @@
 
 module Espago
   class UpdatePaymentStatusJob < ApplicationJob
-    extend T::Sig
     queue_as :default
 
-    sig { params(user_id: Integer).void }
+    #: (Integer) -> void
     def perform(user_id)
       user = User.find_by(id: user_id)
       return unless user
 
       handle_awaiting_payments(user)
-
     end
 
     private
 
+    #: (User) -> void
     def handle_awaiting_payments(user)
       ::Payment.awaiting.where(id: user.payments.select(:id)).find_each do |payment|
         if payment.uncertain?
@@ -30,8 +29,10 @@ module Espago
       end
     end
 
+    #: (::Payment) -> void
     def update_payment_status(payment)
-      new_status = Espago::Payment::PaymentStatusService.new(payment_id: payment.payment_id).fetch_payment_status
+      payment_id = payment.payment_id #: as !nil
+      new_status = Espago::Payment::PaymentStatusService.new(payment_id: payment_id).fetch_payment_status
 
       if new_status.present? && new_status != payment.state
         payment.update_status_by_payment_status(new_status)
