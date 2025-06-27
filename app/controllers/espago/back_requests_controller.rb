@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # typed: strict
 
 module Espago
@@ -10,17 +11,15 @@ module Espago
     sig { void }
     def handle_back_request
       payload = JSON.parse(request.body.read)
-      Rails.logger.info("Received Espago response: #{payload.inspect}")
 
-      payment = Espago::BackRequest::BackRequestPaymentHandler.call(payload)
+      payment = BackRequest::BackRequestPaymentHandler.new(payload).process_payment
 
       if payment.nil?
-        Rails.logger.warn('Payment not found for payment_id or payment_number')
         head :not_found
         return
       end
 
-      Espago::BackRequest::BackRequestClientHandler.call(payload, payment)
+      Espago::BackRequest::BackRequestClientHandler.new(payload, payment).process_client
 
       head :ok
     end

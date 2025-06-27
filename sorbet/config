@@ -1,4 +1,5 @@
 --dir
+--enable-experimental-rbs-comments
 .
 --ignore=tmp/
 --ignore=vendor/
