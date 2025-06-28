@@ -19,7 +19,7 @@ class Espago::BackRequest::BackRequestPaymentHandler
     payment = set_payment
     return unless payment
 
-    client = set_client(@client_id)
+    client = set_client
 
     payment.update_status_by_payment_status(@state.to_s)
     payment.update(
@@ -41,7 +41,7 @@ class Espago::BackRequest::BackRequestPaymentHandler
 
     return if @description.blank?
 
-    payment_number = extract_payment_number(@description)
+    payment_number = extract_payment_number
     return if payment_number.blank?
 
     payment = Payment.find_by(payment_number: payment_number)
@@ -50,16 +50,16 @@ class Espago::BackRequest::BackRequestPaymentHandler
     payment
   end
 
-  #: (String description) -> String?
-  def extract_payment_number(description)
-    match = description[/#([A-Z0-9]+)/, 1]
+  #:  -> String?
+  def extract_payment_number
+    match = @description[/#([A-Z0-9]+)/, 1]
     match.presence
   end
 
-  #: (String) -> Client?
-  def set_client(client_id)
-    return if client_id.blank?
+  #: -> Client?
+  def set_client
+    return if @client_id.blank?
 
-    Client.find_by(client_id: client_id)
+    Client.find_by(client_id: @client_id)
   end
 end

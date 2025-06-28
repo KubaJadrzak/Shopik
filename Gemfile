@@ -93,4 +93,6 @@ gem 'sidekiq-scheduler'
 
 gem 'cuprite', group: %i[development test]
 
-gem "rubocop-espago", "~> 1.1"
+gem 'rubocop-espago', '~> 1.1'
+
+gem 'byebug'

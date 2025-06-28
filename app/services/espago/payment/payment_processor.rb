@@ -1,14 +1,11 @@
+# frozen_string_literal: true
 # typed: strict
 
 module Espago
   module Payment
-    class PaymentHandler
-      extend T::Sig
+    class PaymentProcessor
 
-      sig do
-        params(payment: ::Payment, card_token: T.nilable(String), cof: T.nilable(String),
-               client_id: T.nilable(String),).void
-      end
+      #: (payment: ::Payment, ?card_token: String?, ?cof: String?, ?client_id: String?) -> void
       def initialize(payment:, card_token: nil, cof: nil, client_id: nil)
         @payment = payment
         @card_token = card_token
@@ -16,7 +13,24 @@ module Espago
         @client_id = client_id
       end
 
-      sig { returns(Response) }
+      #: -> [Symbol, untyped]
+      def process_payment
+        @payment.update_status_by_payment_status(@payment.state)
+
+        response = if @payment.payable.present?
+                     handle_payment
+                   else
+                     handle_no_payable
+                   end
+
+        Rails.logger.info(response.inspect)
+
+        PaymentResponseHandler.new(@payment, response).handle_response
+      end
+
+      private
+
+      #: -> PaymentResponse
       def handle_payment
         description = build_description
 
@@ -27,9 +41,16 @@ module Espago
         end
       end
 
-      private
+      #: -> PaymentResponse
+      def handle_no_payable
+        PaymentResponse.new(
+          success: false,
+          status:  :missing_reference,
+          body:    { 'error' => 'Payment must be linked to a payable' },
+        )
+      end
 
-      sig { returns(String) }
+      #: -> String
       def build_description
         desc = "Payment ##{@payment.payment_number}"
         desc += ' - storing' if @cof == 'storing'
@@ -37,7 +58,7 @@ module Espago
         desc
       end
 
-      sig { params(description: String).returns(Response) }
+      #: (String) -> PaymentResponse
       def handle_one_time_payment(description)
         attrs = {
           amount:       @payment.amount,
@@ -54,7 +75,7 @@ module Espago
         OneTimePayment::OneTimePaymentService.new(payload: payload).create_payment
       end
 
-      sig { params(description: String).returns(Response) }
+      #: (String) -> PaymentResponse
       def handle_secure_web_payment(description)
         attrs = {
           amount:       @payment.amount,

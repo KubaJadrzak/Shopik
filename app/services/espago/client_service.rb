@@ -26,7 +26,7 @@ module Espago
     end
 
     sig do
-      params(path: String, body: T.untyped, method: Symbol).returns(Espago::Payment::Response)
+      params(path: String, body: T.untyped, method: Symbol).returns(Espago::Payment::PaymentResponse)
     end
     def send(path, body: nil, method: :get)
       Rails.logger.info(body)
@@ -37,7 +37,7 @@ module Espago
         req.body = body if body
       end
 
-      Espago::Payment::Response.new(success: true, status: response.status, body: response.body)
+      Espago::Payment::PaymentResponse.new(success: true, status: response.status, body: response.body)
     rescue Faraday::TimeoutError => e
       handle_error(:timeout, e)
     rescue Faraday::ConnectionFailed => e
@@ -67,13 +67,13 @@ module Espago
       Base64.strict_encode64("#{user}:#{password}")
     end
 
-    sig { params(type: Symbol, exception: StandardError).returns(Espago::Payment::Response) }
+    sig { params(type: Symbol, exception: StandardError).returns(Espago::Payment::PaymentResponse) }
     def handle_error(type, exception)
       Rails.logger.error("Espago Client Service error status #{type}:, body: #{exception.message}")
-      Espago::Payment::Response.new(success: false, status: type, body: { 'error' => exception.message })
+      Espago::Payment::PaymentResponse.new(success: false, status: type, body: { 'error' => exception.message })
     end
 
-    sig { params(default_type: Symbol, exception: Faraday::Error).returns(Espago::Payment::Response) }
+    sig { params(default_type: Symbol, exception: Faraday::Error).returns(Espago::Payment::PaymentResponse) }
     def handle_error_from_response(default_type, exception)
       if exception.respond_to?(:response) && exception.response
         status = exception.response[:status]
@@ -81,7 +81,7 @@ module Espago
 
         Rails.logger.error("Espago Client Service error status: #{status}, body: #{body}")
 
-        Espago::Payment::Response.new(success: false, status: status, body: body)
+        Espago::Payment::PaymentResponse.new(success: false, status: status, body: body)
       else
         handle_error(default_type, exception)
       end

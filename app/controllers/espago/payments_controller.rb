@@ -33,10 +33,10 @@ module Espago
 
       set_payment_params
 
-      action, param = Espago::Payment::EspagoPaymentProcessor.new(payment: @payment, card_token: @card_token, cof: @cof,
-                                                                  client_id: @client_id,).process_payment
+      action, payment_number = Espago::Payment::PaymentProcessor.new(payment: @payment, card_token: @card_token, cof: @cof,
+                                                                     client_id: @client_id,).process_payment
 
-      handle_action(action, param)
+      handle_response(action, payment_number)
     end
 
     #: -> void
@@ -77,7 +77,24 @@ module Espago
     def set_parent
       parent_type = params[:parent_type]
       parent_id = params[:parent_id]
-      @parent = parent_type.find_by(id: parent_id) #: Order? | Subscription? | Client?
+      if parent_type.blank? || parent_id.blank?
+        set_new_parent
+        return
+      end
+      @parent = parent_type.constantize.find_by(id: parent_id) #: Order? | Subscription? | Client?
+    end
+
+    #: -> void
+    def set_new_parent
+      if params[:order_id].present?
+        @parent = Order.find_by(id: params[:order_id])
+      elsif params[:subscription_id].present?
+        @parent = Subscription.find_by(id: params[:subscription_id])
+      elsif params[:client_id].present?
+        @parent = Client.find_by(id: params[:client_id])
+      end
+
+      nil
     end
 
     #: -> void
@@ -95,16 +112,16 @@ module Espago
     end
 
     #: (Symbol, String) -> void
-    def handle_action(action, param)
+    def handle_response(action, payment_number)
       case action
       when :redirect_url
-        redirect_to param, allow_other_host: true
+        redirect_to payment_number, allow_other_host: true
       when :success
-        redirect_to espago_payments_success_path(param)
+        redirect_to espago_payments_success_path(payment_number)
       when :awaiting
-        redirect_to espago_payments_awaiting_path(param)
+        redirect_to espago_payments_awaiting_path(payment_number)
       when :failure
-        redirect_to espago_payments_failure_path(param)
+        redirect_to espago_payments_failure_path(payment_number)
       end
     end
 

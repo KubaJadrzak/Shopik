@@ -43,6 +43,7 @@ module Espago
         month      = @payload.dig('card', 'month')
 
         client = Client.find_by(client_id: @client_id)
+
         if client.nil?
           client = Client.create!(
             client_id:  @client_id,

@@ -1,7 +1,7 @@
+# frozen_string_literal: true
 # typed: strict
 
 class Subscription < ApplicationRecord
-  extend T::Sig
 
   validates :price, presence: true
 
@@ -16,41 +16,42 @@ class Subscription < ApplicationRecord
     where(status: 'Active').where('end_date < ?', Date.current)
   }
 
-  sig { returns(T::Boolean) }
+  #: -> bool
   def can_retry_payment?
     payments.all?(&:retryable?)
   end
 
-  sig { returns(T::Boolean) }
+  #: -> bool
   def can_extend_subscription?
     status == 'Active' && payments.none?(&:awaiting?)
   end
 
-  sig { returns(T::Boolean) }
+  #: -> bool
   def extension_payment_failed?
     payment = payments.first
     payment&.simplified_state == :failure
   end
 
-  sig { void }
+  #: -> void
   def extend_or_initialize_dates!
     if start_date.nil? || end_date.nil?
       self.start_date = Date.today
       self.end_date = 30.days.from_now.to_date
     else
-      self.end_date = T.must(end_date) + 30.days
+      current_end_date = end_date #: as !nil
+      self.end_date = current_end_date + 30.days
     end
     save!
   end
 
-  sig { returns(BigDecimal) }
+  #: -> BigDecimal
   def amount
     price
   end
 
   private
 
-  sig { void }
+  #: -> void
   def generate_subscription_number
     self.subscription_number = SecureRandom.hex(10).upcase
   end
