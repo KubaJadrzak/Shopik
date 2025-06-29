@@ -17,8 +17,8 @@ class ApplicationController < ActionController::Base
   sig { params(subscription: Subscription).returns(String) }
   def subscription_path(subscription); end
 
-  sig { params(subscription_id: T.nilable(Integer), order_id: T.nilable(Integer)).returns(String) }
-  def espago_new_payment_path(subscription_id: nil, order_id: nil); end
+  sig { params(subscription_id: T.nilable(Integer), order_id: T.nilable(Integer), client_id: T.nilable((Integer))).returns(String) }
+  def espago_new_payment_path(subscription_id: nil, order_id: nil, client_id: nil); end
   
   sig { params(payment_number: String).returns(String) }
   def espago_start_payment_path(payment_number); end

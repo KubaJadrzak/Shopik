@@ -11,11 +11,6 @@ module Espago
       @payments = client.payments #: ActiveRecord::Relation?
     end
 
-    #: -> void
-    def verify_mit
-
-    end
-
     private
 
     #: -> void

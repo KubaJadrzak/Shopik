@@ -4,9 +4,9 @@
     <h3><%= @client.client_number %></h3>
     <div class="d-flex align-items-center">
       <%= link_to "Back to Payment Methods", account_path(anchor: 'clients'), class: "btn btn-primary me-2" %>
-    <% if @client.status != 'MIT' %>
-      <%= button_to "Verify Auto-Renew", {:controller => "payments", :action => "start_payment", :parent_type => @client.class.name, :parent_id => @client.id, :cof => 'recurring', :payment_mode => @client.client_id}, method: :post, class: "btn btn-success", data: { turbo: false } %>
-    <% end %>
+      <% if @client.status != 'MIT' %>
+        <%= link_to "Verify", espago_verification_path(client_id: @client.id), class: "btn btn-success me-2" %>
+      <% end %>
     </div>
   </div>
   <div class="row mt-4">
@@ -60,7 +60,7 @@
             <div class="alert alert-warning mb-0" role="alert">
               This card is active and can be used for manual payments,
               but due to your card settings or bank permissions, this card is not eligible for Auto-Renew functionality.
-              In order to verify your card eligibility, please Verify Auto-Renew.
+              In order to verify your card eligibility, please press Verify.
             </div>
           <% when 'MIT' %>
             <div class="alert alert-success mb-0" role="alert">

@@ -6,17 +6,23 @@ module Espago
 
     before_action :authenticate_user!
     before_action :set_payment, only: %i[new start_payment payment_success payment_failure payment_awaiting]
-    before_action :set_parent, only: %i[new start_payment]
+    before_action :set_parent, only: %i[new verify start_payment]
 
     #: -> void
     def new
-
       unless @parent
         redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
         return
       end
 
       @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY') #: String?
+    end
+
+    #: -> void
+    def verify
+      unless @parent.present? && @parent.status != 'MIT' # rubocop:disable Style/GuardClause
+        redirect_to account_path, alert: 'We could not process your verification due to a technical issue'
+      end
     end
 
     #: -> void

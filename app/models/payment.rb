@@ -3,7 +3,7 @@
 
 class Payment < ApplicationRecord
   belongs_to :payable, polymorphic: true
-  belongs_to :client, optional: true
+  belongs_to :client, optional: true, touch: true
 
   validate :must_have_payable
   validate :prevent_duplicate_payment_for_order, on: :create, if: :payable_is_order?

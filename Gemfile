@@ -95,3 +95,4 @@ gem 'sidekiq-scheduler'
 gem 'cuprite', group: %i[development test]
 
 gem 'byebug'
+gem 'htmlbeautifier'
