@@ -80,7 +80,6 @@ module Espago
         body = exception.response[:body]
 
         Rails.logger.error("Espago Client Service error status: #{status}, body: #{body}")
-
         Espago::Payment::PaymentResponse.new(success: false, status: status, body: body)
       else
         handle_error(default_type, exception)

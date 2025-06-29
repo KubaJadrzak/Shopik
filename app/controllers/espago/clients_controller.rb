@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # typed: strict
 
 module Espago
@@ -8,6 +9,11 @@ module Espago
     def show
       client = @client #: as !nil
       @payments = client.payments #: ActiveRecord::Relation?
+    end
+
+    #: -> void
+    def verify_mit
+
     end
 
     private

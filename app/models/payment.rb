@@ -1,7 +1,7 @@
+# frozen_string_literal: true
 # typed: strict
 
 class Payment < ApplicationRecord
-  extend T::Sig
   belongs_to :payable, polymorphic: true
   belongs_to :client, optional: true
 
@@ -37,7 +37,7 @@ class Payment < ApplicationRecord
 
   SUBSCRIPTION_STATUS_MAP = STATUS_MAP.merge('executed' => 'Active') #: Hash[String, String]
 
-  CLIENT_STATUS_MAP = Hash.new('Unverified').merge('executed' => 'CIT') #: Hash[String, String]
+  CLIENT_STATUS_MAP = Hash.new('Unverified').merge('executed' => 'CIT/recurring') #: Hash[String, String]
 
   SUCCESS_STATUSES = ['executed'].freeze #: Array[String]
 
@@ -153,9 +153,10 @@ class Payment < ApplicationRecord
         payable.update!(status: new_status)
         payable.extend_or_initialize_dates! if new_status == 'Active'
       end
-    elsif payable.is_a?(Order) || payable.is_a?(Client)
+    elsif payable.is_a?(Order)
       payable.update!(status: new_status)
     end
+
   end
 
   #: -> bool

@@ -58,6 +58,10 @@ module Espago
           )
         end
 
+        if @description.match?(/recurring/i) && (client.status != 'MIT')
+          client.update(status: 'MIT')
+        end
+
         @payment.update!(client: client) if @payment.client != client
       end
 

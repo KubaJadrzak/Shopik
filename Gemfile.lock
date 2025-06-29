@@ -332,8 +332,6 @@ GEM
     rubocop-ast (1.45.1)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
-    rubocop-espago (1.1.8)
-      rubocop
     rubocop-performance (1.25.0)
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
@@ -490,7 +488,6 @@ DEPENDENCIES
   rails (~> 8.0.2)
   rspec-rails (~> 8.0.0)
   rubocop
-  rubocop-espago (~> 1.1)
   rubocop-rails-omakase
   sidekiq
   sidekiq-scheduler

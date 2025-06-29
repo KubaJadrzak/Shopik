@@ -16,7 +16,6 @@ module Espago
       #: -> [Symbol, untyped]
       def process_payment
         @payment.update_status_by_payment_status(@payment.state)
-
         response = if @payment.payable.present?
                      handle_payment
                    else
@@ -33,7 +32,6 @@ module Espago
       #: -> PaymentResponse
       def handle_payment
         description = build_description
-
         if @card_token || @client_id
           handle_one_time_payment(description)
         else
@@ -54,7 +52,8 @@ module Espago
       def build_description
         desc = "Payment ##{@payment.payment_number}"
         desc += ' - storing' if @cof == 'storing'
-        desc += ' - CIT' if @client_id
+        desc += ' - recurring' if @cof == 'recurring'
+        desc += ' - CIT' if @client_id && @cof != 'recurring'
         desc
       end
 

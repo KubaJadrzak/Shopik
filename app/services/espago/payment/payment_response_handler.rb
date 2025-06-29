@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # typed: strict
 
 module Espago
@@ -8,8 +9,8 @@ module Espago
       def initialize(payment, response)
         @payment = payment
         @response = response
-        @state = response.status #: String
         @data = response.body #: Hash[String, untyped]
+        @state = @data['state'] #: String
       end
 
       #: -> [Symbol, String]

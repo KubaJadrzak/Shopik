@@ -60,6 +60,7 @@ end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
+
   gem 'web-console'
 end
 
@@ -92,7 +93,5 @@ gem 'sidekiq'
 gem 'sidekiq-scheduler'
 
 gem 'cuprite', group: %i[development test]
-
-gem 'rubocop-espago', '~> 1.1'
 
 gem 'byebug'

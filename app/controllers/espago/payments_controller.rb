@@ -10,6 +10,7 @@ module Espago
 
     #: -> void
     def new
+
       unless @parent
         redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
         return
@@ -24,7 +25,6 @@ module Espago
         redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
         return
       end
-
       create_payment
       unless @payment
         redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
@@ -32,11 +32,12 @@ module Espago
       end
 
       set_payment_params
+      result, payment_number = Espago::Payment::PaymentProcessor.new(payment:    @payment,
+                                                                     card_token: @card_token,
+                                                                     cof:        @cof,
+                                                                     client_id:  @client_id,).process_payment
 
-      action, payment_number = Espago::Payment::PaymentProcessor.new(payment: @payment, card_token: @card_token, cof: @cof,
-                                                                     client_id: @client_id,).process_payment
-
-      handle_response(action, payment_number)
+      handle_response(result, payment_number)
     end
 
     #: -> void
@@ -100,6 +101,10 @@ module Espago
     #: -> void
     def create_payment
       parent = @parent #: as !nil
+      if parent.instance_of?(Client)
+        @payment = parent.payable_payments.create(amount: parent.amount, state: 'new')
+        return
+      end
       @payment = parent.payments.create(amount: parent.amount, state: 'new')
     end
 
@@ -107,13 +112,18 @@ module Espago
     def set_payment_params
       @card_token = params[:card_token] #: String?
       @cof = params[:cof] #: String?
-      client_id_param = params[:payment_mode] #: String?
-      @client_id = client_id_param&.start_with?('cli') ? client_id_param : nil #: String?
+      set_payment_mode
+    end
+
+    #: -> void
+    def set_payment_mode
+      payment_mode = params[:payment_mode] #: String
+      @client_id = payment_mode.start_with?('cli') ? payment_mode : nil #: String?
     end
 
     #: (Symbol, String) -> void
-    def handle_response(action, payment_number)
-      case action
+    def handle_response(result, payment_number)
+      case result
       when :redirect_url
         redirect_to payment_number, allow_other_host: true
       when :success
