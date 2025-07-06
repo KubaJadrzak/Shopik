@@ -10,14 +10,14 @@ module Espago
     def handle_back_request
       payload = JSON.parse(request.body.read)
 
-      payment = BackRequest::BackRequestPaymentHandler.new(payload).process_payment
+      payment = BackRequest::BackRequestPaymentProcessor.new(payload).process_payment
 
       if payment.nil?
         head :not_found
         return
       end
 
-      Espago::BackRequest::BackRequestClientHandler.new(payload, payment).process_client
+      Espago::BackRequest::BackRequestClientProcessor.new(payload, payment).process_client
 
       head :ok
     end

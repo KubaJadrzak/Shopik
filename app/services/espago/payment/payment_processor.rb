@@ -11,9 +11,10 @@ module Espago
         @card_token = card_token
         @cof = cof
         @client_id = client_id
+        @description = '' #: String
       end
 
-      #: -> [Symbol, untyped]
+      #: -> [Symbol, String]
       def process_payment
         @payment.update_status_by_payment_status(@payment.state)
         response = if @payment.payable.present?
@@ -24,18 +25,18 @@ module Espago
 
         Rails.logger.info(response.inspect)
 
-        PaymentResponseHandler.new(@payment, response).handle_response
+        @payment.process_response(response).process_response
       end
 
       private
 
       #: -> PaymentResponse
       def handle_payment
-        description = build_description
+        build_description
         if @card_token || @client_id
-          handle_one_time_payment(description)
+          handle_one_time_payment
         else
-          handle_secure_web_payment(description)
+          handle_secure_web_payment
         end
       end
 
@@ -52,43 +53,41 @@ module Espago
       def build_description
         desc = "Payment ##{@payment.payment_number}"
         desc += ' - storing' if @cof == 'storing'
-        desc += ' - recurring' if @cof == 'recurring'
-        desc += ' - CIT' if @client_id && @cof != 'recurring'
-        desc
+        desc += ' - cit' if @client_id && @cof != 'recurring'
+        desc += ' - mit' if @client_id && @cof == 'recurring'
+
+        @description = desc
       end
 
-      #: (String) -> PaymentResponse
-      def handle_one_time_payment(description)
-        attrs = {
-          amount:       @payment.amount,
-          currency:     'PLN',
-          description:  description,
-          positive_url: Rails.application.routes.url_helpers.espago_payments_success_url(payment_number: @payment.payment_number),
-          negative_url: Rails.application.routes.url_helpers.espago_payments_failure_url(payment_number: @payment.payment_number),
-        }
-        attrs[:cof] = @cof if @cof.present?
-        attrs[:card] = @card_token if @card_token.present?
-        attrs[:client] = @client_id if @client_id.present?
+      #: -> PaymentResponse
+      def handle_one_time_payment
+        payload = PaymentPayloadBuilder.new(payment:     @payment,
+                                            description: @description,
+                                            cof:         @cof,
+                                            card_token:  @card_token,
+                                            client_id:   @client_id,).one_time_payment
 
-        payload = OneTimePayment::OneTimePaymentPayload.new(**attrs)
-        OneTimePayment::OneTimePaymentService.new(payload: payload).create_payment
+        create_one_time_payment(payload)
       end
 
-      #: (String) -> PaymentResponse
-      def handle_secure_web_payment(description)
-        attrs = {
-          amount:       @payment.amount,
-          currency:     'PLN',
-          kind:         'sale',
-          title:        description,
-          description:  description,
-          positive_url: Rails.application.routes.url_helpers.espago_payments_success_url(payment_number: @payment.payment_number),
-          negative_url: Rails.application.routes.url_helpers.espago_payments_failure_url(payment_number: @payment.payment_number),
-        }
-        attrs[:cof] = @cof if @cof.present?
+      #: -> PaymentResponse
+      def handle_secure_web_payment
+        payload = PaymentPayloadBuilder.new(payment:     @payment,
+                                            description: @description,
+                                            cof:         @cof,
+                                            card_token:  @card_token,
+                                            client_id:   @client_id,).secure_web_payment
+        create_secure_web_payment(payload)
+      end
 
-        payload = SecureWebPage::SecureWebPagePayload.new(**attrs)
-        SecureWebPage::SecureWebPageService.new(payload: payload).create_payment
+      #: (Hash[Symbol, String]) -> PaymentResponse
+      def create_one_time_payment(payload)
+        Espago::ClientService.new.send('api/charges', method: :post, body: payload) # rubocop:disable Style/Send
+      end
+
+      #: (Hash[Symbol, String]) -> PaymentResponse
+      def create_secure_web_payment(payload)
+        Espago::ClientService.new.send('api/secure_web_page_register', method: :post, body: payload) # rubocop:disable Style/Send
       end
     end
   end

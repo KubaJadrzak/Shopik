@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_13_124809) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_29_161908) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -42,6 +42,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_13_124809) do
     t.string "status", default: "unverified", null: false
     t.integer "month", null: false
     t.integer "year", null: false
+    t.boolean "primary", default: false, null: false
     t.index ["client_id"], name: "index_clients_on_client_id", unique: true
     t.index ["client_number"], name: "index_clients_on_client_number", unique: true
     t.index ["user_id"], name: "index_clients_on_user_id"

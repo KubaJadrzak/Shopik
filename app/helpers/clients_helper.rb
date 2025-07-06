@@ -1,25 +1,21 @@
 # frozen_string_literal: true
 
 module ClientsHelper
-  def client_status_badge_class(status)
+  def client_status_badge(status)
     case status
-    when 'unverified'
-      'bg-danger'
-    when 'CIT', 'MIT'
+    when 'CIT', 'MIT', 'primary'
       'bg-success'
     else
-      'bg-secondary'
+      'bg-danger'
     end
   end
 
   def client_status_label(status)
     case status
-    when 'unverified'
-      'Unverified'
     when 'CIT', 'MIT'
-      'Active'
+      'Verified'
     else
-      status.titleize
+      'Unverified'
     end
   end
 end

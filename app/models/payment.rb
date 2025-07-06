@@ -37,11 +37,16 @@ class Payment < ApplicationRecord
 
   SUBSCRIPTION_STATUS_MAP = STATUS_MAP.merge('executed' => 'Active') #: Hash[String, String]
 
-  CLIENT_STATUS_MAP = Hash.new('Unverified').merge('executed' => 'CIT/recurring') #: Hash[String, String]
-
   SUCCESS_STATUSES = ['executed'].freeze #: Array[String]
 
-  FAILURE_STATUSES = %w[rejected failed resigned reversed refunded invalid_uri].freeze #: Array[String]
+  FAILURE_STATUSES = %w[
+    rejected
+    failed
+    resigned
+    reversed
+    refunded
+    invalid_uri
+  ].freeze #: Array[String]
 
   PENDING_STATUSES = %w[
     preauthorized
@@ -120,6 +125,21 @@ class Payment < ApplicationRecord
     update_status
   end
 
+  #: (?card_token: String?, ?cof: String?, ?client_id: String?) -> [Symbol, String] -> (Symbol, String)
+  def process_payment(card_token: nil, cof: nil, client_id: nil)
+    Espago::Payment::PaymentProcessor.new(
+      payment:    self,
+      card_token: card_token,
+      cof:        cof,
+      client_id:  client_id,
+    ).process_payment
+  end
+
+  #: (Espago::Payment::PaymentResponse) -> [Symbol, String]
+  def process_response(response)
+    Espago::Payment::PaymentResponseProcessor.new(payment: self, response: response).process_response
+  end
+
   private
 
   #: -> void
@@ -135,8 +155,6 @@ class Payment < ApplicationRecord
                     SUBSCRIPTION_STATUS_MAP[state] || 'Payment Error'
                   when Order
                     ORDER_STATUS_MAP[state] || 'Payment Error'
-                  when Client
-                    CLIENT_STATUS_MAP[state] || 'Unverified'
                   else
                     'Payment Error'
                   end  #: String?

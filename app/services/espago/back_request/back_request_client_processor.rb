@@ -3,7 +3,7 @@
 
 module Espago
   module BackRequest
-    class BackRequestClientHandler
+    class BackRequestClientProcessor
 
       #: (Hash[String, untyped], ::Payment) -> void
       def initialize(payload, payment)
@@ -28,7 +28,7 @@ module Espago
       #: -> bool?
       def valid?
         @state == 'executed' &&
-          @description.match?(/storing|cit|recurring/i) &&
+          @description.match?(/storing|cit|mit/i) &&
           @user &&
           @client_id.present?
       end
@@ -42,10 +42,10 @@ module Espago
         year       = @payload.dig('card', 'year')
         month      = @payload.dig('card', 'month')
 
-        client = Client.find_by(client_id: @client_id)
+        @client = Client.find_by(client_id: @client_id) #: Client?
 
-        if client.nil?
-          client = Client.create!(
+        if @client.nil?
+          @client = Client.create!(
             client_id:  @client_id,
             user:       @user,
             company:    company,
@@ -58,13 +58,32 @@ module Espago
           )
         end
 
-        if @description.match?(/recurring/i) && (client.status != 'MIT')
-          client.update(status: 'MIT')
-        end
+        handle_mit_status if @description.match?(/mit/i)
 
-        @payment.update!(client: client) if @payment.client != client
+        @payment.update!(client: @client) if @payment.client != @client
       end
 
+      #: -> void
+      def handle_mit_status
+        client = @client #: as !nil
+        if mit_verified?
+          client.update(status: 'MIT')
+        elsif mit_failure?
+          client.update(status: 'CIT')
+        end
+      end
+
+      #: -> bool
+      def mit_verified?
+        client = @client #: as !nil
+        client.status != 'MIT'
+      end
+
+      #: -> bool
+      def mit_failure?
+        client = @client #: as !nil
+        client.status == 'MIT' && ::Payment::FAILURE_STATUSES.include?(@state)
+      end
     end
   end
 end

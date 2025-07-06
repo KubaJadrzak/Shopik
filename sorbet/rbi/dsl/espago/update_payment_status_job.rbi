@@ -9,13 +9,13 @@ class Espago::UpdatePaymentStatusJob
   class << self
     sig do
       params(
-        user_id: ::Integer,
+        user_id: T.untyped,
         block: T.nilable(T.proc.params(job: Espago::UpdatePaymentStatusJob).void)
       ).returns(T.any(Espago::UpdatePaymentStatusJob, FalseClass))
     end
     def perform_later(user_id, &block); end
 
-    sig { params(user_id: ::Integer).void }
+    sig { params(user_id: T.untyped).returns(T.untyped) }
     def perform_now(user_id); end
   end
 end

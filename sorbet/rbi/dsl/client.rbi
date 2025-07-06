@@ -987,6 +987,51 @@ class Client
     sig { void }
     def month_will_change!; end
 
+    sig { returns(T::Boolean) }
+    def primary; end
+
+    sig { params(value: T::Boolean).returns(T::Boolean) }
+    def primary=(value); end
+
+    sig { returns(T::Boolean) }
+    def primary?; end
+
+    sig { returns(T.nilable(T::Boolean)) }
+    def primary_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def primary_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def primary_came_from_user?; end
+
+    sig { returns(T.nilable([T::Boolean, T::Boolean])) }
+    def primary_change; end
+
+    sig { returns(T.nilable([T::Boolean, T::Boolean])) }
+    def primary_change_to_be_saved; end
+
+    sig { params(from: T::Boolean, to: T::Boolean).returns(T::Boolean) }
+    def primary_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(T::Boolean)) }
+    def primary_in_database; end
+
+    sig { returns(T.nilable([T::Boolean, T::Boolean])) }
+    def primary_previous_change; end
+
+    sig { params(from: T::Boolean, to: T::Boolean).returns(T::Boolean) }
+    def primary_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(T::Boolean)) }
+    def primary_previously_was; end
+
+    sig { returns(T.nilable(T::Boolean)) }
+    def primary_was; end
+
+    sig { void }
+    def primary_will_change!; end
+
     sig { void }
     def restore_client_id!; end
 
@@ -1016,6 +1061,9 @@ class Client
 
     sig { void }
     def restore_month!; end
+
+    sig { void }
+    def restore_primary!; end
 
     sig { void }
     def restore_status!; end
@@ -1088,6 +1136,12 @@ class Client
 
     sig { returns(T::Boolean) }
     def saved_change_to_month?; end
+
+    sig { returns(T.nilable([T::Boolean, T::Boolean])) }
+    def saved_change_to_primary; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_primary?; end
 
     sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_status; end
@@ -1277,6 +1331,9 @@ class Client
 
     sig { returns(T::Boolean) }
     def will_save_change_to_month?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_primary?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_status?; end

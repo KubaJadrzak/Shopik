@@ -1,13 +1,22 @@
 <div class="col-lg-12 mb-4">
   <%= link_to espago_client_path(client), class: "card shadow-sm border-light text-decoration-none text-reset" do %>
     <div class="card-body">
-      <h5 class="card-title mb-3"><%= client.client_number %></h5>
+      <div class="d-flex align-items-center">
+        <h6 class="card-title mb-3">
+          <%= client.client_number %>
+        </h5>
+        <h6 class='ms-2 mb-3'>
+          <% if client.primary? %>
+            <span class="badge bg-success">Primary</span>
+          <% end %>
+        </h6>
+      </div>
       <p><strong>Name:</strong> <%= [client.first_name, client.last_name].compact.join(" ").presence || "N/A" %></p>
       <p><strong>Company:</strong> <%= client.company.presence || "N/A" %></p>
       <p><strong>Card Last 4:</strong> <%= client.last4.presence || "N/A" %></p>
       <p><strong>Created at:</strong> <%= client.created_at.strftime("%b %d, %Y") %></p>
-      <h5 class="card-title mb-3">
-        <span class="badge <%= client_status_badge_class(client.status) %>">
+      <h6 class="card-title mb-3">
+        <span class="badge <%= client_status_badge(client.status) %>">
           <%= client_status_label(client.status) %>
         </span>
         <% if client.status == 'MIT' %>
@@ -15,7 +24,7 @@
         <% else %>
           <span class="badge bg-danger">Auto-Renew</span>
         <% end %>
-      </h5>
+      </h6>
     </div>
   <% end %>
 </div>

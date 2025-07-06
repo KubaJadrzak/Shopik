@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # typed: strict
 
 module Espago
@@ -13,7 +14,7 @@ module Espago
 
       #: -> String?
       def fetch_payment_status
-        response = @client.send("api/charges/#{@payment_id}", method: :get)
+        response = @client.send("api/charges/#{@payment_id}", method: :get) # rubocop:disable Style/Send
 
         unless response.success
           Rails.logger.info("Failed to fetch payment status for #{@payment_id}, status: #{response.status}: body: #{response.body}")

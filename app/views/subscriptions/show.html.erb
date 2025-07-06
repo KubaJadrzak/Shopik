@@ -2,52 +2,8 @@
 <div class="container mt-4">
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
     <h3><%= @subscription.subscription_number %></h3>
-    <div class="d-flex align-items-center">
-      <%= link_to "Back to Subscriptions", account_path(anchor: 'subscriptions'), class: "btn btn-primary me-2" %>
-      <% if @subscription.can_extend_subscription? %>
-        <%= button_to "Extend Subscription", extend_subscription_subscription_path(@subscription), method: :post, class: "btn btn-success me-2" %>
-      <% end %>
-      <% if @subscription.can_retry_payment? %>
-        <%= button_to "Retry Payment", retry_payment_subscription_path(@subscription), method: :post, class: "btn btn-success me-2" %>
-      <% end %>
-    </div>
+    <%= render "show_buttons" %>
   </div>
-  <div class="row mt-4">
-    <div class="col-lg-12 mb-4">
-      <div class="card shadow-sm border-light">
-        <div class="card-body">
-          <h5 class="card-title mb-3">Subscription Details</h5>
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <%= render "subscription_statuses", subscription: @subscription %>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <p class="d-flex justify-content-between">
-                <strong>Auto Renew:</strong>
-                <span><%= @subscription.auto_renew ? "Yes" : "No" %></span>
-              </p>
-              <p class="d-flex justify-content-between">
-                <strong>Price:</strong>
-                <span><%= number_to_currency(@subscription.price) %></span>
-              </p>
-            </div>
-            <div class="col-md-6">
-              <p class="d-flex justify-content-between">
-                <strong>Start Date:</strong>
-                <span><%= @subscription.start_date&.strftime("%B %d, %Y") %></span>
-              </p>
-              <p class="d-flex justify-content-between">
-                <strong>End Date:</strong>
-                <span><%= @subscription.end_date&.strftime("%B %d, %Y") %></span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer bg-light d-flex justify-content-between align-items-center">
-          <small>Created on <%= @subscription.created_at.strftime("%B %d, %Y at %I:%M %p") %></small>
-        </div>
-      </div>
-    </div>
-  </div>
+  <%= render "show_card" %>
 </div>
 <%= render partial: 'espago/payments/payment', locals: { payments: @payments } %>

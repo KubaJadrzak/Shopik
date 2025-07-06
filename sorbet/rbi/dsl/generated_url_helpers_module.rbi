@@ -55,6 +55,9 @@ module GeneratedUrlHelpersModule
   def espago_start_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def espago_verification_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def extend_subscription_subscription_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }

@@ -55,6 +55,9 @@ module GeneratedPathHelpersModule
   def espago_start_payment_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def espago_verification_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def extend_subscription_subscription_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }

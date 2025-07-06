@@ -38,10 +38,11 @@ module Espago
       end
 
       set_payment_params
-      result, payment_number = Espago::Payment::PaymentProcessor.new(payment:    @payment,
-                                                                     card_token: @card_token,
-                                                                     cof:        @cof,
-                                                                     client_id:  @client_id,).process_payment
+      result, payment_number = @payment.process_payment(
+        card_token: @card_token,
+        cof:        @cof,
+        client_id:  @client_id,
+      )
 
       handle_response(result, payment_number)
     end
