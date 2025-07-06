@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_29_161908) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_06_130244) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -127,7 +127,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_29_161908) do
     t.date "start_date"
     t.date "end_date"
     t.string "status", default: "New", null: false
-    t.boolean "auto_renew", default: true, null: false
+    t.boolean "auto_renew", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "price", default: "4.99", null: false

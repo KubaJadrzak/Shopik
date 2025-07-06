@@ -23,7 +23,7 @@ module Espago
 
         client = set_client
 
-        payment.update_status_by_payment_status(@state.to_s)
+        payment.update_payment_and_payable_statuses(@state.to_s)
         payment.update(
           reject_reason:        @reject_reason,
           behaviour:            @behaviour,

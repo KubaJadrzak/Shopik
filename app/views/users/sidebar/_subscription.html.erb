@@ -7,7 +7,7 @@
           <%= render "subscriptions/subscription_statuses", subscription: subscription %>
         </div>
         <p class="d-flex justify-content-between"><strong>Period:</strong> <%= subscription.start_date&.strftime("%b %d, %Y") %> - <%= subscription.end_date&.strftime("%b %d, %Y") %></p>
-        <p class="d-flex justify-content-between"><strong>Auto Renew:</strong> <%= subscription.auto_renew ? "Yes" : "No" %></p>
+        <p class="d-flex justify-content-between"><strong>Auto Renew:</strong> <%= subscription.auto_renew ? subscription_status_icon('Yes') : subscription_status_icon('No') %></p>
         <p class="d-flex justify-content-between"><strong>Price:</strong> <%= number_to_currency(subscription.price) %></p>
       </div>
       <div class="card-footer bg-light">

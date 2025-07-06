@@ -2,7 +2,7 @@
 
 class SubscriptionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_subscription, only: %i[show retry_payment extend_subscription]
+  before_action :set_subscription, only: %i[show toggle_auto_renew retry_payment extend_subscription]
 
   def new
     @subscription = Subscription.new
@@ -11,6 +11,15 @@ class SubscriptionsController < ApplicationController
   def show
     @payments = @subscription.payments
     @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY', nil)
+  end
+
+  def toggle_auto_renew
+    unless @subscription.active?
+      redirect_to "#{account_path}#subscriptions", alert: 'This subscription is not active'
+      return
+    end
+
+    @subscription.update(auto_renew: !@subscription.auto_renew)
   end
 
   def create

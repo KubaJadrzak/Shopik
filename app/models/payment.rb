@@ -116,16 +116,15 @@ class Payment < ApplicationRecord
   end
 
   #: (String) -> void
-  def update_status_by_payment_status(state)
-    self.state = state
-    save!
+  def update_payment_and_payable_statuses(state)
+    update!(state: state)
 
     return unless payable.present?
 
-    update_status
+    update_payable_status
   end
 
-  #: (?card_token: String?, ?cof: String?, ?client_id: String?) -> [Symbol, String] -> (Symbol, String)
+  #: (?card_token: String?, ?cof: String?, ?client_id: String?) -> [Symbol, String]
   def process_payment(card_token: nil, cof: nil, client_id: nil)
     Espago::Payment::PaymentProcessor.new(
       payment:    self,
@@ -143,13 +142,13 @@ class Payment < ApplicationRecord
   private
 
   #: -> void
-  def update_status
-    set_new_status
-    handle_status_update
+  def update_payable_status
+    set_new_payable_status
+    handle_payable_status_update
   end
 
   #: -> void
-  def set_new_status
+  def set_new_payable_status
     @new_status = case payable
                   when Subscription
                     SUBSCRIPTION_STATUS_MAP[state] || 'Payment Error'
@@ -162,7 +161,7 @@ class Payment < ApplicationRecord
   end
 
   #: -> void
-  def handle_status_update
+  def handle_payable_status_update
     new_status = @new_status #: as !nil
     if payable.is_a?(Subscription)
       if payable.status == 'Active' && new_status != 'Active'

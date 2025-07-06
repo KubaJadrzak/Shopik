@@ -45,6 +45,16 @@ class User < ApplicationRecord
     subscriptions.where.not(status: 'Expired').exists?
   end
 
+  #: -> bool
+  def primary_payment_method?
+    clients.where(primary: true).exists?
+  end
+
+  #: -> bool
+  def mit_payment_method?
+    clients.where(status: 'MIT').exists?
+  end
+
   sig { returns(ActiveRecord::Relation) }
   def payments
     Payment.where(id: order_payments.select(:id))

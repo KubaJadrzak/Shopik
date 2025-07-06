@@ -18,10 +18,10 @@ module Espago
     def handle_awaiting_payments(user)
       ::Payment.awaiting.where(id: user.payments.select(:id)).find_each do |payment|
         if payment.uncertain?
-          payment.update_status_by_payment_status('failed') if payment.created_at < 120.minutes.ago
+          payment.update_payment_and_payable_statuses('failed') if payment.created_at < 120.minutes.ago
         elsif payment.pending?
           unless payment.payment_id.present?
-            payment.update_status_by_payment_status('unexpected_error')
+            payment.update_payment_and_payable_statuses('unexpected_error')
             next
           end
           update_payment_status(payment)
@@ -35,9 +35,9 @@ module Espago
       new_status = Espago::Payment::PaymentStatusService.new(payment_id: payment_id).fetch_payment_status
 
       if new_status.present? && new_status != payment.state
-        payment.update_status_by_payment_status(new_status)
+        payment.update_payment_and_payable_statuses(new_status)
       elsif payment.created_at < 120.minutes.ago
-        payment.update_status_by_payment_status('resigned')
+        payment.update_payment_and_payable_statuses('resigned')
       end
     end
   end

@@ -16,7 +16,7 @@ module Espago
 
       #: -> [Symbol, String]
       def process_payment
-        @payment.update_status_by_payment_status(@payment.state)
+        @payment.update_payment_and_payable_statuses(@payment.state)
         response = if @payment.payable.present?
                      handle_payment
                    else
@@ -25,7 +25,7 @@ module Espago
 
         Rails.logger.info(response.inspect)
 
-        @payment.process_response(response).process_response
+        @payment.process_response(response)
       end
 
       private
@@ -44,7 +44,7 @@ module Espago
       def handle_no_payable
         PaymentResponse.new(
           success: false,
-          status:  :missing_reference,
+          status:  :missing_payable,
           body:    { 'error' => 'Payment must be linked to a payable' },
         )
       end

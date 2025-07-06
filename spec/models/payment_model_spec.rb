@@ -238,13 +238,13 @@ RSpec.describe Payment, type: :model do
       end
     end
 
-    describe '#update_status_by_payment_status' do
+    describe '#update_payment_and_payable_statuses' do
       let(:subscription) { create(:subscription) }
       let(:order)        { create(:order) }
 
       it 'updates state and associated subscription status' do
         payment = create(:payment, :for_subscription, payable: subscription)
-        payment.update_status_by_payment_status('executed')
+        payment.update_payment_and_payable_statuses('executed')
 
         expect(payment.state).to eq('executed')
         expect(subscription.reload.status).to eq('Active')
@@ -252,7 +252,7 @@ RSpec.describe Payment, type: :model do
 
       it 'updates state and associated order status' do
         payment = create(:payment, :for_order, payable: order)
-        payment.update_status_by_payment_status('failed')
+        payment.update_payment_and_payable_statuses('failed')
 
         expect(payment.state).to eq('failed')
         expect(order.reload.status).to eq('Payment Failed')

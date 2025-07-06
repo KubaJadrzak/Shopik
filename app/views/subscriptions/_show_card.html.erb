@@ -8,24 +8,25 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <p class="d-flex justify-content-between">
-              <strong>Auto Renew:</strong>
-              <span><%= @subscription.auto_renew ? "Yes" : "No" %></span>
-            </p>
-            <p class="d-flex justify-content-between">
-              <strong>Price:</strong>
-              <span><%= number_to_currency(@subscription.price) %></span>
-            </p>
+            <%= render 'show_card_auto_renew' %>
           </div>
           <div class="col-md-6">
-            <p class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between mb-3">
+              <strong>Price:</strong>
+              <span><%= number_to_currency(@subscription.price) %></span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex justify-content-between mb-3">
               <strong>Start Date:</strong>
               <span><%= @subscription.start_date&.strftime("%B %d, %Y") %></span>
-            </p>
-            <p class="d-flex justify-content-between">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex justify-content-between mb-3">
               <strong>End Date:</strong>
               <span><%= @subscription.end_date&.strftime("%B %d, %Y") %></span>
-            </p>
+            </div>
           </div>
         </div>
       </div>

@@ -5,6 +5,8 @@ class Subscription < ApplicationRecord
 
   validates :price, presence: true
 
+  validate :auto_renew_requires_primary_payment_method, if: :will_save_change_to_auto_renew?
+
   belongs_to :user, touch: true
   has_many :payments, -> { order(created_at: :desc) }, as: :payable, dependent: :destroy
 
@@ -15,6 +17,11 @@ class Subscription < ApplicationRecord
   scope :should_be_expired, -> {
     where(status: 'Active').where('end_date < ?', Date.current)
   }
+
+  #: -> bool
+  def active?
+    status == 'Active'
+  end
 
   #: -> bool
   def can_retry_payment?
@@ -52,7 +59,17 @@ class Subscription < ApplicationRecord
   private
 
   #: -> void
+  def auto_renew_requires_primary_payment_method
+    owner = user #: as !nil
+    return if owner.primary_payment_method? || active?
+
+    errors.add(:base, "Cannot enable auto-renew for this subscription: user doesn't have primary payment method")
+  end
+
+  #: -> void
   def generate_subscription_number
     self.subscription_number = SecureRandom.hex(10).upcase
   end
+
+
 end

@@ -25,17 +25,23 @@ Rails.application.routes.draw do
       post :retry_payment
     end
   end
+
   resources :subscriptions, only: %i[new create show] do
     member do
       post :retry_payment
       post :extend_subscription
+      patch :toggle_auto_renew
     end
   end
 
   get 'account', to: 'users#account', as: 'account'
 
   namespace :espago do
-    resources :clients, only: [:show]
+    resources :clients, only: [:show] do
+      member do
+        patch :toggle_primary
+      end
+    end
 
     get 'payments/verify', to: 'payments#verify', as: 'verification'
     get 'payments/new', to: 'payments#new', as: 'new_payment'

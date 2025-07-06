@@ -1,0 +1,14 @@
+            
+<div class="d-flex justify-content-between">
+  <strong>Status:</strong>
+  <span>
+    <span class="badge <%= client_status_badge(@client.status) %>">
+      <%= client_status_label(@client.status) %>
+    </span>
+    <% if @client.status == 'MIT' %>
+      <span class="badge bg-success">Auto-Renew</span>
+    <% else %>
+      <span class="badge bg-danger">Auto-Renew</span>
+    <% end %>
+  </span>
+</div>

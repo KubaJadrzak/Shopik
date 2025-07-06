@@ -11,10 +11,11 @@
           <% end %>
         </h6>
       </div>
-      <p><strong>Name:</strong> <%= [client.first_name, client.last_name].compact.join(" ").presence || "N/A" %></p>
-      <p><strong>Company:</strong> <%= client.company.presence || "N/A" %></p>
-      <p><strong>Card Last 4:</strong> <%= client.last4.presence || "N/A" %></p>
-      <p><strong>Created at:</strong> <%= client.created_at.strftime("%b %d, %Y") %></p>
+      <p class="d-flex justify-content-between"><strong>Name:</strong> <%= [client.first_name, client.last_name].compact.join(" ").presence || "N/A" %></p>
+      <p class="d-flex justify-content-between"><strong>Company:</strong> <%= client.company.presence || "N/A" %></p>
+      <p class="d-flex justify-content-between"><strong>Card Last 4:</strong> <%= client.last4.presence || "N/A" %></p>
+      <p class="d-flex justify-content-between"><strong>Created at:</strong> <%= client.created_at.strftime("%b %d, %Y") %></p>
+      <p class="d-flex justify-content-between"><strong>Primary:</strong> <%= client.primary ? client_status_icon('Yes') : client_status_icon('No') %></p>
       <h6 class="card-title mb-3">
         <span class="badge <%= client_status_badge(client.status) %>">
           <%= client_status_label(client.status) %>

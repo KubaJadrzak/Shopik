@@ -17,6 +17,16 @@ class Client < ApplicationRecord
   scope :cit, -> { where(status: %w[CIT MIT]) }
   scope :mit, -> { where(status: 'MIT') }
 
+  #: -> bool
+  def cit?
+    status == 'CIT'
+  end
+
+  #: -> bool
+  def mit?
+    status == 'MIT'
+  end
+
   # this is needed for payment of value 0.01 in order to authorize card for MIT payments
   #: -> BigDecimal
   def amount

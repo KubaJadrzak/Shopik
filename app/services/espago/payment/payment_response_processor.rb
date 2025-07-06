@@ -35,7 +35,7 @@ module Espago
 
       #: -> [Symbol, String]
       def handle_failure
-        @payment.update_status_by_payment_status(@state)
+        @payment.update_payment_and_payable_statuses(@state)
 
         handle_failure_redirect
       end
@@ -47,7 +47,7 @@ module Espago
         if redirect_url
           [:redirect_url, redirect_url]
         elsif @body.key?('state')
-          @payment.update_status_by_payment_status(@state)
+          @payment.update_payment_and_payable_statuses(@state)
 
           pending_statuses = ::Payment::PENDING_STATUSES
 
