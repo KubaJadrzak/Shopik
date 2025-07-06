@@ -38,13 +38,13 @@ module Espago
       end
 
       set_payment_params
-      result, payment_number = @payment.process_payment(
+      action, action_param = @payment.process_payment(
         card_token: @card_token,
         cof:        @cof,
         client_id:  @client_id,
       )
 
-      handle_response(result, payment_number)
+      handle_response(action, action_param)
     end
 
     #: -> void
@@ -129,16 +129,16 @@ module Espago
     end
 
     #: (Symbol, String) -> void
-    def handle_response(result, payment_number)
-      case result
+    def handle_response(action, action_param)
+      case action
       when :redirect_url
-        redirect_to payment_number, allow_other_host: true
+        redirect_to action_param, allow_other_host: true
       when :success
-        redirect_to espago_payments_success_path(payment_number)
+        redirect_to espago_payments_success_path(action_param)
       when :awaiting
-        redirect_to espago_payments_awaiting_path(payment_number)
+        redirect_to espago_payments_awaiting_path(action_param)
       when :failure
-        redirect_to espago_payments_failure_path(payment_number)
+        redirect_to espago_payments_failure_path(action_param)
       end
     end
 
