@@ -3,7 +3,7 @@
 
 module Espago
   module Payment
-    class PaymentPayloadBuilder
+    class PayloadBuilder
       #: (payment: ::Payment, description: String, ?cof: String?, ?card_token: String?, ?client_id: String?) -> void
       def initialize(
         payment:,

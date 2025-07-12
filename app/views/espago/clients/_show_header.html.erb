@@ -11,8 +11,8 @@
   </div>
   <div class="d-flex align-items-center">
     <%= link_to "Back to Payment Methods", account_path(anchor: 'clients'), class: "btn btn-primary me-2" %>
-    <% if @client.status != 'MIT' %>
-      <%= link_to "Verify", espago_verification_path(client_id: @client.id), class: "btn btn-success me-2" %>
+    <% if !@client.mit? %>
+      <%= link_to "Verify", verify_espago_client_path(@client), class: "btn btn-success me-2" %>
     <% end %>
   </div>
 </div>

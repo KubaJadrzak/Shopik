@@ -549,6 +549,9 @@ class Subscription
     def should_be_expired(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def should_be_renewed(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def strict_loading(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
@@ -575,10 +578,10 @@ class Subscription
   end
 
   module GeneratedAttributeMethods
-    sig { returns(T::Boolean) }
+    sig { returns(T.nilable(T::Boolean)) }
     def auto_renew; end
 
-    sig { params(value: T::Boolean).returns(T::Boolean) }
+    sig { params(value: T.nilable(T::Boolean)).returns(T.nilable(T::Boolean)) }
     def auto_renew=(value); end
 
     sig { returns(T::Boolean) }
@@ -593,22 +596,22 @@ class Subscription
     sig { returns(T::Boolean) }
     def auto_renew_came_from_user?; end
 
-    sig { returns(T.nilable([T::Boolean, T::Boolean])) }
+    sig { returns(T.nilable([T.nilable(T::Boolean), T.nilable(T::Boolean)])) }
     def auto_renew_change; end
 
-    sig { returns(T.nilable([T::Boolean, T::Boolean])) }
+    sig { returns(T.nilable([T.nilable(T::Boolean), T.nilable(T::Boolean)])) }
     def auto_renew_change_to_be_saved; end
 
-    sig { params(from: T::Boolean, to: T::Boolean).returns(T::Boolean) }
+    sig { params(from: T.nilable(T::Boolean), to: T.nilable(T::Boolean)).returns(T::Boolean) }
     def auto_renew_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(T::Boolean)) }
     def auto_renew_in_database; end
 
-    sig { returns(T.nilable([T::Boolean, T::Boolean])) }
+    sig { returns(T.nilable([T.nilable(T::Boolean), T.nilable(T::Boolean)])) }
     def auto_renew_previous_change; end
 
-    sig { params(from: T::Boolean, to: T::Boolean).returns(T::Boolean) }
+    sig { params(from: T.nilable(T::Boolean), to: T.nilable(T::Boolean)).returns(T::Boolean) }
     def auto_renew_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(T::Boolean)) }
@@ -878,7 +881,7 @@ class Subscription
     sig { void }
     def restore_user_id!; end
 
-    sig { returns(T.nilable([T::Boolean, T::Boolean])) }
+    sig { returns(T.nilable([T.nilable(T::Boolean), T.nilable(T::Boolean)])) }
     def saved_change_to_auto_renew; end
 
     sig { returns(T::Boolean) }
@@ -1324,6 +1327,9 @@ class Subscription
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def should_be_expired(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def should_be_renewed(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def strict_loading(*args, &blk); end

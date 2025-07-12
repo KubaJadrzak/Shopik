@@ -3,7 +3,7 @@
 
 module Espago
   module Payment
-    class PaymentResponse
+    class Response
 
       #: bool
       attr_reader :success

@@ -5261,7 +5261,7 @@ class Concurrent::MaxRestartFrequencyError < ::Concurrent::Error; end
 #   result.reason #=> ActiveRecord::RecordNotFound
 # @example Using Maybe with the Null Object Pattern
 #   # In a Rails controller...
-#   result = ClientService.new(10).find    # returns a Maybe
+#   result = Client.new(10).find    # returns a Maybe
 #   render json: result.or(NullClient.new)
 # @see https://hackage.haskell.org/package/base-4.2.0.1/docs/Data-Maybe.html Haskell Data.Maybe
 # @see https://github.com/purescript/purescript-maybe/blob/master/docs/Data.Maybe.md PureScript Data.Maybe

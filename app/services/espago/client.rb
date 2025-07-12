@@ -2,7 +2,7 @@
 # typed: strict
 
 module Espago
-  class ClientService
+  class Client
 
     #: -> void
     def initialize
@@ -25,7 +25,7 @@ module Espago
       end #: Faraday::Connection
     end
 
-    #: (String path, ?body: untyped, ?method: Symbol) -> Espago::Payment::PaymentResponse
+    #: (String path, ?body: untyped, ?method: Symbol) -> Espago::Payment::Response
     def send(path, body: nil, method: :get)
       Rails.logger.info(body)
       response = @conn.send(method) do |req| # rubocop:disable Style/Send
@@ -35,7 +35,7 @@ module Espago
         req.body = body if body
       end
 
-      Espago::Payment::PaymentResponse.new(success: true, status: response.status, body: response.body)
+      Espago::Payment::Response.new(success: true, status: response.status, body: response.body)
     rescue Faraday::TimeoutError => e
       handle_error(:timeout, e)
     rescue Faraday::ConnectionFailed => e
@@ -65,20 +65,20 @@ module Espago
       Base64.strict_encode64("#{user}:#{password}")
     end
 
-    #: (Symbol type, StandardError exception) -> Espago::Payment::PaymentResponse
+    #: (Symbol type, StandardError exception) -> Espago::Payment::Response
     def handle_error(type, exception)
       Rails.logger.error("Espago Client Service error status #{type}:, body: #{exception.message}")
-      Espago::Payment::PaymentResponse.new(success: false, status: type, body: { 'error' => exception.message })
+      Espago::Payment::Response.new(success: false, status: type, body: { 'error' => exception.message })
     end
 
-    #: (Symbol default_type, Faraday::Error exception) -> Espago::Payment::PaymentResponse
+    #: (Symbol default_type, Faraday::Error exception) -> Espago::Payment::Response
     def handle_error_from_response(default_type, exception)
       if exception.respond_to?(:response) && exception.response
         status = exception.response[:status]
         body = exception.response[:body]
 
         Rails.logger.error("Espago Client Service error status: #{status}, body: #{body}")
-        Espago::Payment::PaymentResponse.new(success: false, status: status, body: body)
+        Espago::Payment::Response.new(success: false, status: status, body: body)
       else
         handle_error(default_type, exception)
       end

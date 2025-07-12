@@ -3,7 +3,7 @@
 
 module Espago
   module Payment
-    class PaymentProcessor
+    class Processor
 
       #: (payment: ::Payment, ?card_token: String?, ?cof: String?, ?client_id: String?) -> void
       def initialize(payment:, card_token: nil, cof: nil, client_id: nil)
@@ -30,7 +30,7 @@ module Espago
 
       private
 
-      #: -> PaymentResponse
+      #: -> Response
       def handle_payment
         build_description
         if @card_token || @client_id
@@ -40,9 +40,9 @@ module Espago
         end
       end
 
-      #: -> PaymentResponse
+      #: -> Response
       def handle_no_payable
-        PaymentResponse.new(
+        Response.new(
           success: false,
           status:  :missing_payable,
           body:    { 'error' => 'Payment must be linked to a payable' },
@@ -59,35 +59,35 @@ module Espago
         @description = desc
       end
 
-      #: -> PaymentResponse
+      #: -> Response
       def handle_one_time_payment
-        payload = PaymentPayloadBuilder.new(payment:     @payment,
-                                            description: @description,
-                                            cof:         @cof,
-                                            card_token:  @card_token,
-                                            client_id:   @client_id,).one_time_payment
+        payload = PayloadBuilder.new(payment:     @payment,
+                                     description: @description,
+                                     cof:         @cof,
+                                     card_token:  @card_token,
+                                     client_id:   @client_id,).one_time_payment
 
         create_one_time_payment(payload)
       end
 
-      #: -> PaymentResponse
+      #: -> Response
       def handle_secure_web_payment
-        payload = PaymentPayloadBuilder.new(payment:     @payment,
-                                            description: @description,
-                                            cof:         @cof,
-                                            card_token:  @card_token,
-                                            client_id:   @client_id,).secure_web_payment
+        payload = PayloadBuilder.new(payment:     @payment,
+                                     description: @description,
+                                     cof:         @cof,
+                                     card_token:  @card_token,
+                                     client_id:   @client_id,).secure_web_payment
         create_secure_web_payment(payload)
       end
 
-      #: (Hash[Symbol, String]) -> PaymentResponse
+      #: (Hash[Symbol, String]) -> Response
       def create_one_time_payment(payload)
-        Espago::ClientService.new.send('api/charges', method: :post, body: payload) # rubocop:disable Style/Send
+        Espago::Client.new.send('api/charges', method: :post, body: payload) # rubocop:disable Style/Send
       end
 
-      #: (Hash[Symbol, String]) -> PaymentResponse
+      #: (Hash[Symbol, String]) -> Response
       def create_secure_web_payment(payload)
-        Espago::ClientService.new.send('api/secure_web_page_register', method: :post, body: payload) # rubocop:disable Style/Send
+        Espago::Client.new.send('api/secure_web_page_register', method: :post, body: payload) # rubocop:disable Style/Send
       end
     end
   end

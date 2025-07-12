@@ -4,3 +4,7 @@
       cron: "0 * * * * *"
       class: Espago::ExpireSubscriptionJob
       queue: default
+    auto_renew_subscriptions:
+      cron: "0 * * * * *"
+      class: Espago::AutoRenewSubscriptionJob
+      queue: default

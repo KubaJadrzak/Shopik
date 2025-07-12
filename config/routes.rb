@@ -40,10 +40,10 @@ Rails.application.routes.draw do
     resources :clients, only: [:show] do
       member do
         patch :toggle_primary
+        get :verify
       end
     end
 
-    get 'payments/verify', to: 'payments#verify', as: 'verification'
     get 'payments/new', to: 'payments#new', as: 'new_payment'
     post 'payments/start_payment', to: 'payments#start_payment', as: 'start_payment'
     get 'payments/:payment_number/success', to: 'payments#payment_success', as: 'payments_success'

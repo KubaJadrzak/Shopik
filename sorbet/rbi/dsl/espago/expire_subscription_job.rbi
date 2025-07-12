@@ -14,7 +14,7 @@ class Espago::ExpireSubscriptionJob
     end
     def perform_later(&block); end
 
-    sig { void }
+    sig { returns(T.untyped) }
     def perform_now; end
   end
 end

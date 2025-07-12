@@ -5,12 +5,12 @@ module Espago
   class PaymentsController < ApplicationController
 
     before_action :authenticate_user!
-    before_action :set_payment, only: %i[new start_payment payment_success payment_failure payment_awaiting]
-    before_action :set_parent, only: %i[new verify start_payment]
+    before_action :set_payment, only: %i[new payment_success payment_failure payment_awaiting]
+    before_action :set_payable, only: %i[new start_payment]
 
     #: -> void
     def new
-      unless @parent
+      unless @payable
         redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
         return
       end
@@ -19,36 +19,26 @@ module Espago
     end
 
     #: -> void
-    def verify
-      unless @parent.present? && @parent.status != 'MIT' # rubocop:disable Style/GuardClause
-        redirect_to account_path, alert: 'We could not process your verification due to a technical issue'
-      end
-    end
-
-    #: -> void
     def start_payment
-      unless @parent
-        redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
-        return
-      end
-      create_payment
-      unless @payment
+      unless @payable
         redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
         return
       end
 
+      @payment = ::Payment.create_payment(payable: @payable)
       set_payment_params
+
       result_action, result_param = @payment.process_payment(
         card_token: @card_token,
         cof:        @cof,
         client_id:  @client_id,
       )
-
       handle_response(result_action, result_param)
     end
 
     #: -> void
     def payment_success
+
       unless @payment
         redirect_to account_path, alert: 'We are experiencing an issue with your payment'
         return
@@ -82,37 +72,27 @@ module Espago
     end
 
     #: -> void
-    def set_parent
-      parent_type = params[:parent_type]
-      parent_id = params[:parent_id]
-      if parent_type.blank? || parent_id.blank?
-        set_new_parent
+    def set_payable
+      payable_type = params[:payable_type]
+      payable_id = params[:payable_id]
+      if payable_type.blank? || payable_id.blank?
+        set_new_payable
         return
       end
-      @parent = parent_type.constantize.find_by(id: parent_id) #: Order? | Subscription? | Client?
+      @payable = payable_type.constantize.find_by(id: payable_id) #: Order? | Subscription? | ::Client?
     end
 
     #: -> void
-    def set_new_parent
+    def set_new_payable
       if params[:order_id].present?
-        @parent = Order.find_by(id: params[:order_id])
+        @payable = Order.find_by(id: params[:order_id])
       elsif params[:subscription_id].present?
-        @parent = Subscription.find_by(id: params[:subscription_id])
+        @payable = Subscription.find_by(id: params[:subscription_id])
       elsif params[:client_id].present?
-        @parent = Client.find_by(id: params[:client_id])
+        @payable = ::Client.find_by(id: params[:client_id])
       end
 
       nil
-    end
-
-    #: -> void
-    def create_payment
-      parent = @parent #: as !nil
-      if parent.instance_of?(Client)
-        @payment = parent.payable_payments.create(amount: parent.amount, state: 'new')
-        return
-      end
-      @payment = parent.payments.create(amount: parent.amount, state: 'new')
     end
 
     #: -> void
@@ -150,7 +130,7 @@ module Espago
         redirect_to subscription_path(payment.payable), notice: message
       when Order
         redirect_to order_path(payment.payable), notice: message
-      when Client
+      when ::Client
         redirect_to espago_client_path(payment.payable), notice: message
       else
         redirect_to account_path, alert: 'We are experiencing an issue with your payment'

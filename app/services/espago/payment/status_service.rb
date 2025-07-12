@@ -3,13 +3,12 @@
 
 module Espago
   module Payment
-    class PaymentStatusService
-      extend T::Sig
+    class StatusService
 
       #: (payment_id: String) -> void
       def initialize(payment_id:)
         @payment_id = payment_id
-        @client = Espago::ClientService.new #: Espago::ClientService
+        @client = Espago::Client.new #: Espago::Client
       end
 
       #: -> String?

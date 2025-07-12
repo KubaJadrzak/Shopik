@@ -3,9 +3,9 @@
 
 module Espago
   module Payment
-    class PaymentResponseProcessor
+    class ResponseProcessor
 
-      #: (payment: ::Payment, response: PaymentResponse) -> void
+      #: (payment: ::Payment, response: Response) -> void
       def initialize(payment:, response:)
         @payment = payment
         @response = response

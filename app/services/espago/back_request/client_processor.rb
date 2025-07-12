@@ -3,7 +3,7 @@
 
 module Espago
   module BackRequest
-    class BackRequestClientProcessor
+    class ClientProcessor
 
       #: (Hash[String, untyped], ::Payment) -> void
       def initialize(payload, payment)
@@ -42,10 +42,10 @@ module Espago
         year       = @payload.dig('card', 'year')
         month      = @payload.dig('card', 'month')
 
-        @client = Client.find_by(client_id: @client_id) #: Client?
+        @client = ::Client.find_by(client_id: @client_id) #: ::Client?
 
         if @client.nil?
-          @client = Client.create!(
+          @client = ::Client.create!(
             client_id:  @client_id,
             user:       @user,
             company:    company,

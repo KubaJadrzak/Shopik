@@ -202,6 +202,12 @@ module GeneratedPathHelpersModule
   def subscriptions_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def toggle_auto_renew_subscription_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def toggle_primary_espago_client_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def turbo_recede_historical_location_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }

@@ -50,6 +50,11 @@ class User < ApplicationRecord
     clients.where(primary: true).exists?
   end
 
+  #: -> ::Client?
+  def primary_payment_method
+    clients.find_by(primary: true)
+  end
+
   #: -> bool
   def mit_payment_method?
     clients.where(status: 'MIT').exists?

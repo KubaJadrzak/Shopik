@@ -17,10 +17,18 @@ class Subscription < ApplicationRecord
   scope :should_be_expired, -> {
     where(status: 'Active').where('end_date < ?', Date.current)
   }
+  scope :should_be_renewed, -> {
+    where(status: 'Active').where(auto_renew: true).where(end_date: Date.current + 1.day)
+  }
 
   #: -> bool
   def active?
     status == 'Active'
+  end
+
+  #: -> bool
+  def auto_renew?
+    auto_renew
   end
 
   #: -> bool
@@ -49,6 +57,21 @@ class Subscription < ApplicationRecord
       self.end_date = current_end_date + 30.days
     end
     save!
+  end
+
+  #: -> void
+  def renew
+    @payment = ::Payment.create_payment(payable: self) #: ::Payment?
+
+    return unless @payment
+    return unless user&.primary_payment_method?
+
+    @payment.process_payment(
+      cof:       'recurring',
+      client_id: user&.primary_payment_method&.client_id,
+    )
+
+    nil
   end
 
   #: -> BigDecimal

@@ -3,7 +3,7 @@
 
 module Espago
   module BackRequest
-    class BackRequestPaymentProcessor
+    class PaymentProcessor
 
       #: (Hash[String, untyped]) -> void
       def initialize(payload)
@@ -58,11 +58,11 @@ module Espago
         match.presence
       end
 
-      #: -> Client?
+      #: -> ::Client?
       def set_client
         return if @client_id.blank?
 
-        Client.find_by(client_id: @client_id)
+        ::Client.find_by(client_id: @client_id)
       end
     end
   end

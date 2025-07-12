@@ -110,6 +110,17 @@ class Payment < ApplicationRecord
     :failure
   end
 
+  class << self
+    #: (payable: Client | Subscription | Order) -> Payment
+    def create_payment(payable:)
+      if payable.instance_of?(Client)
+        payable.payable_payments.create(amount: payable.amount, state: 'new')
+      else
+        payable.payments.create(amount: payable.amount, state: 'new')
+      end
+    end
+  end
+
   #: -> User?
   def user
     payable&.user
@@ -117,7 +128,7 @@ class Payment < ApplicationRecord
 
   #: (String) -> void
   def update_payment_and_payable_statuses(state)
-    update!(state: state)
+    update!(state: state.to_s)
 
     return unless payable.present?
 
@@ -126,7 +137,7 @@ class Payment < ApplicationRecord
 
   #: (?card_token: String?, ?cof: String?, ?client_id: String?) -> [Symbol, String]
   def process_payment(card_token: nil, cof: nil, client_id: nil)
-    Espago::Payment::PaymentProcessor.new(
+    Espago::Payment::Processor.new(
       payment:    self,
       card_token: card_token,
       cof:        cof,
@@ -134,9 +145,9 @@ class Payment < ApplicationRecord
     ).process_payment
   end
 
-  #: (Espago::Payment::PaymentResponse) -> [Symbol, String]
+  #: (Espago::Payment::Response) -> [Symbol, String]
   def process_response(response)
-    Espago::Payment::PaymentResponseProcessor.new(payment: self, response: response).process_response
+    Espago::Payment::ResponseProcessor.new(payment: self, response: response).process_response
   end
 
   private

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # typed: strict
 
 module Espago
@@ -32,7 +33,7 @@ module Espago
     #: (::Payment) -> void
     def update_payment_status(payment)
       payment_id = payment.payment_id #: as !nil
-      new_status = Espago::Payment::PaymentStatusService.new(payment_id: payment_id).fetch_payment_status
+      new_status = Espago::Payment::StatusService.new(payment_id: payment_id).fetch_payment_status
 
       if new_status.present? && new_status != payment.state
         payment.update_payment_and_payable_statuses(new_status)

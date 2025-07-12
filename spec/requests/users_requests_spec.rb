@@ -78,7 +78,7 @@ RSpec.describe 'UsersController Requests Test', type: :request do
       end
 
       it 'UpdatePaymentStatusJob updates payment status' do
-        allow_any_instance_of(Espago::PaymentStatusService)
+        allow_any_instance_of(Espago::StatusService)
           .to receive(:fetch_payment_status)
           .and_return('executed')
 
@@ -90,8 +90,8 @@ RSpec.describe 'UsersController Requests Test', type: :request do
         expect(@payment.reload.state).to eq('executed')
       end
 
-      it 'triggers UpdatePaymentStatusJob and does not update the payment status when PaymentStatusService returns nil' do
-        allow_any_instance_of(Espago::PaymentStatusService)
+      it 'triggers UpdatePaymentStatusJob and does not update the payment status when StatusService returns nil' do
+        allow_any_instance_of(Espago::StatusService)
           .to receive(:fetch_payment_status)
           .and_return(nil)
 

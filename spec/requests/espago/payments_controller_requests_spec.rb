@@ -74,7 +74,7 @@ RSpec.describe 'Espago::Payments', type: :request do
       context 'when Espago returns a redirect_url' do
         before do
           allow(Espago::Payment::PaymentInitializer).to receive(:initilize).and_return('fake_response')
-          allow(Espago::Payment::PaymentResponseHandler).to receive(:handle_response)
+          allow(Espago::Payment::ResponseProcessorHandler).to receive(:handle_response)
             .with(instance_of(Payment), 'fake_response')
             .and_return([:redirect_url, 'https://payment.example.com'])
         end
@@ -94,7 +94,7 @@ RSpec.describe 'Espago::Payments', type: :request do
 
         before do
           allow(Espago::Payment::PaymentInitializer).to receive(:initilize).and_return('fake_response')
-          allow(Espago::Payment::PaymentResponseHandler).to receive(:handle_response)
+          allow(Espago::Payment::ResponseProcessorHandler).to receive(:handle_response)
             .with(instance_of(Payment), 'fake_response')
             .and_return([:success, payment_number])
         end
@@ -114,7 +114,7 @@ RSpec.describe 'Espago::Payments', type: :request do
 
         before do
           allow(Espago::Payment::PaymentInitializer).to receive(:initilize).and_return('fake_response')
-          allow(Espago::Payment::PaymentResponseHandler).to receive(:handle_response)
+          allow(Espago::Payment::ResponseProcessorHandler).to receive(:handle_response)
             .with(instance_of(Payment), 'fake_response')
             .and_return([:failure, payment_number])
         end
@@ -134,7 +134,7 @@ RSpec.describe 'Espago::Payments', type: :request do
 
         before do
           allow(Espago::Payment::PaymentInitializer).to receive(:initilize).and_return('fake_response')
-          allow(Espago::Payment::PaymentResponseHandler).to receive(:handle_response)
+          allow(Espago::Payment::ResponseProcessorHandler).to receive(:handle_response)
             .with(instance_of(Payment), 'fake_response')
             .and_return([:awaiting, payment_number])
         end

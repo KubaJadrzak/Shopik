@@ -202,6 +202,12 @@ module GeneratedUrlHelpersModule
   def subscriptions_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def toggle_auto_renew_subscription_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def toggle_primary_espago_client_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def turbo_recede_historical_location_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }

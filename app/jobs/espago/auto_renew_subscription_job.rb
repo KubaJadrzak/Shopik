@@ -3,13 +3,13 @@
 
 require 'sidekiq-scheduler'
 module Espago
-  class ExpireSubscriptionJob < ApplicationJob
+  class AutoRenewSubscriptionJob < ApplicationJob
     queue_as :default
 
     #: -> void
     def perform
-      Subscription.should_be_expired.find_each do |subscription|
-        subscription.update!(status: 'Expired')
+      Subscription.should_be_renewed.find_each do |subscription|
+        subscription.renew
       end
     end
   end
