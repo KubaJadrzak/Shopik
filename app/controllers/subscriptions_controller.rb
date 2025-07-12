@@ -19,6 +19,11 @@ class SubscriptionsController < ApplicationController
       return
     end
 
+    unless @subscription.user.primary_payment_method?
+      redirect_to "#{account_path}#subscriptions", alert: 'Cannot enable auto-renew without primary payment method'
+      return
+    end
+
     @subscription.update(auto_renew: !@subscription.auto_renew)
   end
 

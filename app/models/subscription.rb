@@ -28,7 +28,7 @@ class Subscription < ApplicationRecord
 
   #: -> bool
   def auto_renew?
-    auto_renew
+    auto_renew #: as !nil
   end
 
   #: -> bool
@@ -84,7 +84,7 @@ class Subscription < ApplicationRecord
   #: -> void
   def auto_renew_requires_primary_payment_method
     owner = user #: as !nil
-    return if owner.primary_payment_method? || active?
+    return if owner.primary_payment_method?
 
     errors.add(:base, "Cannot enable auto-renew for this subscription: user doesn't have primary payment method")
   end

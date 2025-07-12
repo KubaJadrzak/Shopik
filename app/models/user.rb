@@ -30,12 +30,22 @@ class User < ApplicationRecord
     subscriptions.find_by(status: 'Active')
   end
 
+  #: -> bool
+  def auto_renew_subscription?
+    subscriptions.where(auto_renew: true).exists?
+  end
+
+  #: -> Subscription?
+  def auto_renew_subscription
+    subscriptions.find_by(auto_renew: true)
+  end
+
   sig { returns(T::Boolean) }
   def pending_subscription?
     subscriptions.where.not(status: %w[Active Expired]).exists?
   end
 
-  sig { returns(T.nilable(Subscription)) }
+  #: -> Subscription?
   def pending_subscription
     subscriptions.where.not(status: %w[Active Expired]).first
   end

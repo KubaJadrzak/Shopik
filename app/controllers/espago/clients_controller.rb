@@ -13,11 +13,16 @@ module Espago
 
     #: -> void
     def toggle_primary
-      current_primary = ::Client.find_by(primary: true)
+      if current_user.auto_renew_subscription? && current_user.primary_payment_method?
+        current_user.auto_renew_subscription.update!(auto_renew: false)
+      end
+
+      current_primary = current_user.primary_payment_method
       current_primary&.update!(primary: false) unless current_primary == @client
 
-      owner = @client #: as !nil
-      owner.update!(primary: !owner.primary)
+      @client&.update!(primary: !@client.primary)
+
+
     end
 
     #: -> void
