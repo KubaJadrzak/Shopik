@@ -12,7 +12,7 @@ class Client < ApplicationRecord
 
   validate :prevent_duplicate_primary
   validate :ensure_primary_is_mit
-  validate :ensure_no_auto_renew_subscription_with_no_primary
+  validate :prevent_auto_renew_subscription_with_no_primary
 
   validates :client_id, presence: true, uniqueness: true
 
@@ -46,8 +46,7 @@ class Client < ApplicationRecord
 
   #: -> void
   def prevent_duplicate_primary
-    client_owner = user #: as !nil
-    return unless primary? && client_owner .clients.where(primary: true).exists?
+    return unless primary? && user&.primary_payment_method?
 
     errors.add(:base, 'This user already has a primary Client')
   end
@@ -60,8 +59,8 @@ class Client < ApplicationRecord
   end
 
   #: -> voidś
-  def ensure_no_auto_renew_subscription_with_no_primary
-    return unless !primary && user&.auto_renew_subscription?
+  def prevent_auto_renew_subscription_with_no_primary
+    return unless !primary? && user&.auto_renew_subscription?
 
     errors.add(:base, 'Cannot remove primary payment method with auto-renew subscription')
   end

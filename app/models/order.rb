@@ -18,7 +18,7 @@ class Order < ApplicationRecord
 
   broadcasts_refreshes
 
-  sig { params(cart: Cart).void }
+  #: (Cart cart) -> void
   def build_order_items_from_cart(cart)
     cart.cart_items.each do |cart_item|
       order_items.build(
@@ -26,32 +26,33 @@ class Order < ApplicationRecord
         quantity:          cart_item.quantity,
         price_at_purchase: T.must(cart_item.product).price,
       )
+      owner = user #: as !nil
+      owner.cart&.cart_items&.destroy_all
     end
   end
 
-  sig { returns(T::Boolean) }
+  #: -> bool
   def can_retry_payment?
     payments.all?(&:retryable?)
   end
 
-
-  sig { returns(BigDecimal) }
+  #: -> BigDecimal
   def amount
     total_price
   end
 
   private
 
-  sig { void }
+  #: -> void
   def generate_order_number
     self.order_number = SecureRandom.hex(10).upcase
   end
 
-  sig { void }
+  #: -> void
   def must_have_order_items
     return unless order_items.empty?
 
-    errors.add(:order_items, 'order must have at least one item.')
+    errors.add(:base, 'order must have at least one item.')
   end
 
 end

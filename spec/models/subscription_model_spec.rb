@@ -1,17 +1,32 @@
+#frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Subscription, type: :model do
   describe 'callbacks' do
-    let(:subscription) { create(:subscription) }
-
-    it 'generates a subscription number' do
+    it 'generate_subscription_number' do
+      subscription = create(:subscription)
       expect(subscription.subscription_number).to be_present
       expect(subscription.subscription_number.length).to eq(20)
     end
   end
 
+  describe 'validations' do
+    context 'auto_renew_requires_primary_payment_method' do
+      it 'prevent enabling of auto renew without primary payment method' do
+        user = create(:user)
+        subscription = create(:subscription, user: user)
+
+        expect(subscription.update(auto_renew: true)).to be false
+        expect(subscription.errors[:base]).to include(
+          "Cannot enable auto-renew for this subscription: user doesn't have primary payment method",
+        )
+      end
+    end
+  end
+
   describe 'scopes' do
-    describe '.should_be_expired' do
+    describe 'should_be_expired' do
       it 'includes active subscriptions with end_date in the past' do
         expired = create(:subscription, status: 'Active', end_date: 1.day.ago)
         not_expired = create(:subscription, status: 'Active', end_date: 1.day.from_now)
@@ -20,11 +35,24 @@ RSpec.describe Subscription, type: :model do
         expect(Subscription.should_be_expired).not_to include(not_expired)
       end
     end
+
+    describe 'should_be_renewed' do
+      it 'includes active subscriptions with enabled auto_renew and tomorrow expiration date' do
+        user = create(:user)
+        create(:client, :primary, user: user)
+        renewed = create(:subscription, user: user, status: 'Active', auto_renew: true, end_date: Date.current + 1.day)
+        not_renewed = create(:subscription, user: user,  status: 'Active', auto_renew: true,
+end_date: Date.current + 2.days,)
+
+        expect(Subscription.should_be_renewed).to include(renewed)
+        expect(Subscription.should_be_renewed).not_to include(not_renewed)
+      end
+    end
   end
 
   describe 'methods' do
-    describe '#can_retry_payment?' do
-      let(:subscription) { create(:subscription, status: 'New') }
+    describe 'can_retry_payment?' do
+      let(:subscription) { create(:subscription) }
 
       context 'when all payments are retryable' do
         it 'returns true when all payments are retryable' do
@@ -51,11 +79,10 @@ RSpec.describe Subscription, type: :model do
       end
     end
 
-    describe '#can_extend_subscription?' do
-      let(:subscription) { create(:subscription, status: status) }
+    describe 'can_extend_subscription?' do
+      let(:subscription) { create(:subscription) }
 
       context 'when subscription is active and has no awaiting payments' do
-        let(:status) { 'Active' }
 
         it 'returns true' do
           create(:payment, :for_subscription, payable: subscription, state: 'failed')
@@ -65,7 +92,6 @@ RSpec.describe Subscription, type: :model do
       end
 
       context 'when subscription is active but has an awaiting payment' do
-        let(:status) { 'Active' }
 
         it 'returns false' do
           create(:payment, :for_subscription, payable: subscription, state: 'new')
@@ -74,16 +100,17 @@ RSpec.describe Subscription, type: :model do
         end
       end
 
-      context 'when subscription is not active' do
-        let(:status) { 'New' }
-
+      context 'when subscription is expired' do
         it 'returns false' do
-          expect(subscription.can_extend_subscription?).to be(false)
+          expired_subscription = create(:subscription, status: 'expired')
+
+          expect(expired_subscription.can_extend_subscription?).to be(false)
         end
+
       end
     end
 
-    describe '#extension_payment_failed?' do
+    describe 'extension_payment_failed?' do
       let(:subscription) { create(:subscription) }
 
       context 'when the latest payment simplified_state is failure' do
@@ -109,7 +136,7 @@ RSpec.describe Subscription, type: :model do
       end
     end
 
-    describe '#extend_or_initialize_dates!' do
+    describe 'extend_or_initialize_dates!' do
       let(:subscription) { create(:subscription) }
 
       context 'when start_date and end_date are nil' do
@@ -132,7 +159,23 @@ RSpec.describe Subscription, type: :model do
       end
     end
 
-    describe '#amount' do
+    describe 'renew' do
+      context 'when user has primary payment method' do
+        it 'extends subscription end date by 30 days' do
+          user = create(:user)
+          create(:client, :real, user: user, status: 'MIT', primary: true)
+          subscription = create(:subscription, auto_renew: true,  user: user)
+          subscription.renew
+          subscription.reload
+
+          expect(subscription.end_date).to eq(60.days.from_now.to_date)
+        end
+      end
+    end
+
+
+
+    describe 'amount' do
       it 'returns the price' do
         subscription = create(:subscription, price: 99.99)
 

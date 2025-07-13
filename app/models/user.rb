@@ -1,7 +1,7 @@
+# frozen_string_literal: true
 # typed: strict
 
 class User < ApplicationRecord
-  extend T::Sig
 
   # Devise modules
   devise :database_authenticatable, :registerable,
@@ -20,12 +20,12 @@ class User < ApplicationRecord
 
   broadcasts_refreshes
 
-  sig { returns(T::Boolean) }
+  #: -> bool
   def active_subscription?
     subscriptions.where(status: 'Active').exists?
   end
 
-  sig { returns(T.nilable(Subscription)) }
+  #: -> Subscription?
   def active_subscription
     subscriptions.find_by(status: 'Active')
   end
@@ -40,7 +40,7 @@ class User < ApplicationRecord
     subscriptions.find_by(auto_renew: true)
   end
 
-  sig { returns(T::Boolean) }
+  #: -> bool
   def pending_subscription?
     subscriptions.where.not(status: %w[Active Expired]).exists?
   end
@@ -50,7 +50,7 @@ class User < ApplicationRecord
     subscriptions.where.not(status: %w[Active Expired]).first
   end
 
-  sig { returns(T::Boolean) }
+  #: -> bool
   def active_or_pending_subscription?
     subscriptions.where.not(status: 'Expired').exists?
   end
@@ -70,7 +70,7 @@ class User < ApplicationRecord
     clients.where(status: 'MIT').exists?
   end
 
-  sig { returns(ActiveRecord::Relation) }
+  #: -> ActiveRecord::Relation
   def payments
     Payment.where(id: order_payments.select(:id))
            .or(Payment.where(id: subscription_payments.select(:id)))

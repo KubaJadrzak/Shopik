@@ -1,32 +1,68 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Client, type: :model do
 
   describe 'callbacks' do
-    it 'generates client_number before create' do
-      client = build(:client, client_number: nil)
-      expect(client.client_number).to be_nil
+    context 'generate_client_number' do
+      it 'generates client_number before creation' do
+        client = build(:client, client_number: nil)
+        expect(client.client_number).to be_nil
 
-      client.save!
+        client.save!
 
-      expect(client.client_number).to be_present
-      expect(client.client_number.length).to eq(20) # hex(10) * 2 chars per byte
-      expect(client.client_number).to eq(client.client_number.upcase)
+        expect(client.client_number).to be_present
+        expect(client.client_number.length).to eq(20)
+        expect(client.client_number).to eq(client.client_number.upcase)
+      end
     end
   end
 
+  describe 'validations' do
+    it 'prevent_duplicate_primary' do
+      user = create(:user)
+      create(:client, :primary, user: user)
+      other_primary_client = build(:client, :primary, user: user)
+
+      expect(other_primary_client.save).to be false
+      expect(other_primary_client.errors[:base]).to include('This user already has a primary Client')
+    end
+
+    it 'ensure_primary_is_mit' do
+      primary_client = build(:client, status: 'CIT', primary: true)
+
+      expect(primary_client.save).to be false
+      expect(primary_client.errors[:base]).to include('Client must have status MIT to be primary')
+    end
+
+    it 'prevent_auto_renew_subscription_with_no_primary' do
+      user = create(:user)
+      primary_client = create(:client, :primary, user: user)
+      create(:subscription, auto_renew: true, user: user)
+
+      expect(primary_client.update(primary: false)).to be false
+      expect(primary_client.errors[:base]).to include(
+        'Cannot remove primary payment method with auto-renew subscription',
+      )
+    end
+
+  end
+
   describe 'scopes' do
-    describe '.cit' do
-      it 'returns clients with status CIT' do
+    context 'cit' do
+      it 'returns clients with status CIT or MIT' do
+        other_client = create(:client, status: 'unverified')
         cit_client = create(:client, status: 'CIT')
-        other_client = create(:client, status: 'MIT')
+        mit_client = create(:client, status: 'MIT')
 
         expect(Client.cit).to include(cit_client)
+        expect(Client.cit).to include(mit_client)
         expect(Client.cit).not_to include(other_client)
       end
     end
 
-    describe '.mit' do
+    context 'mit' do
       it 'returns clients with status MIT' do
         mit_client = create(:client, status: 'MIT')
         other_client = create(:client, status: 'CIT')

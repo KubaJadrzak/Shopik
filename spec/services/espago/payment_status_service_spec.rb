@@ -11,7 +11,7 @@ RSpec.describe Espago::Payment::StatusService do
 
   describe '#fetch_payment_status' do
     context 'when the client response is successful' do
-      response = Espago::Payment::ResponseProcessor.new(
+      response = Espago::Payment::Response.new(
         success: true,
         status:  200,
         body:    { 'state' => 'executed' },
@@ -30,7 +30,7 @@ RSpec.describe Espago::Payment::StatusService do
     end
 
     context 'when the client response is unsuccessful' do
-      response = Espago::Payment::ResponseProcessor.new(
+      response = Espago::Payment::Response.new(
         success: false,
         status:  500,
         body:    { 'error' => 'Internal Server Error' },
