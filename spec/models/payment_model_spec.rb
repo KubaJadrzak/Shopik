@@ -289,7 +289,7 @@ RSpec.describe Payment, type: :model do
       end
     end
 
-    describe 'process_payment' do
+    describe 'process_payment & process_response' do
       let(:user) { create(:user) }
       let(:order) { create(:order, user: user) }
       let(:payment) { ::Payment.create_payment(payable: order) }

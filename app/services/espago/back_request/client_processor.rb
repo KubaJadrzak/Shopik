@@ -19,7 +19,8 @@ module Espago
       def process_client
         return unless valid?
 
-        create_or_update_client
+        create_or_update_client if payment_success?
+        handle_mit_status if @description.match?(/mit/i)
       end
 
 
@@ -27,8 +28,7 @@ module Espago
 
       #: -> bool?
       def valid?
-        @state == 'executed' &&
-          @description.match?(/storing|cit|mit/i) &&
+        @description.match?(/storing|cit|mit/i) &&
           @user &&
           @client_id.present?
       end
@@ -42,8 +42,7 @@ module Espago
         year       = @payload.dig('card', 'year')
         month      = @payload.dig('card', 'month')
 
-        @client = ::Client.find_by(client_id: @client_id) #: ::Client?
-
+        find_client
         if @client.nil?
           @client = ::Client.create!(
             client_id:  @client_id,
@@ -57,14 +56,12 @@ module Espago
             status:     'CIT',
           )
         end
-
-        handle_mit_status if @description.match?(/mit/i)
-
         @payment.update!(client: @client) if @payment.client != @client
       end
 
       #: -> void
       def handle_mit_status
+        find_client
         client = @client #: as !nil
         if mit_verified?
           client.update(status: 'MIT')
@@ -76,13 +73,28 @@ module Espago
       #: -> bool
       def mit_verified?
         client = @client #: as !nil
-        client.status != 'MIT'
+        client.status != 'MIT' && payment_success?
       end
 
       #: -> bool
       def mit_failure?
         client = @client #: as !nil
-        client.status == 'MIT' && ::Payment::FAILURE_STATUSES.include?(@state)
+        client.status == 'MIT' && payment_failure?
+      end
+
+      #: -> void
+      def find_client
+        @client = ::Client.find_by(client_id: @client_id) #: ::Client?
+      end
+
+      #: -> bool
+      def payment_success?
+        ::Payment::SUCCESS_STATUSES.include?(@state)
+      end
+
+      #: -> bool
+      def payment_failure?
+        ::Payment::FAILURE_STATUSES.include?(@state)
       end
     end
   end
