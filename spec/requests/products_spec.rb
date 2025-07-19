@@ -1,6 +1,8 @@
+#frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe 'ProductsController Requests Test', type: :request do
+RSpec.describe ProductsController, type: :request do
   describe 'GET /products' do
     let!(:product1) { create(:product, title: 'Product A') }
     let!(:product2) { create(:product, title: 'Product B') }

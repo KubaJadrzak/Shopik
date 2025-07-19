@@ -1,6 +1,8 @@
+#frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe 'UsersController Requests Test', type: :request do
+RSpec.describe UsersController, type: :request do
 
   describe 'GET /account' do
     let(:user) { create(:user) }
@@ -78,7 +80,7 @@ RSpec.describe 'UsersController Requests Test', type: :request do
       end
 
       it 'UpdatePaymentStatusJob updates payment status' do
-        allow_any_instance_of(Espago::StatusService)
+        allow_any_instance_of(Espago::Payment::StatusService)
           .to receive(:fetch_payment_status)
           .and_return('executed')
 
@@ -90,8 +92,8 @@ RSpec.describe 'UsersController Requests Test', type: :request do
         expect(@payment.reload.state).to eq('executed')
       end
 
-      it 'triggers UpdatePaymentStatusJob and does not update the payment status when StatusService returns nil' do
-        allow_any_instance_of(Espago::StatusService)
+      it 'triggers UpdatePaymentStatusJob and does not update the payment state when StatusService returns nil' do
+        allow_any_instance_of(Espago::Payment::StatusService)
           .to receive(:fetch_payment_status)
           .and_return(nil)
 

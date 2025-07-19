@@ -14,7 +14,7 @@ RSpec.describe 'Secure Web Page Test', type: :system do
   end
 
   context 'when payment is successfull' do
-    it 'user is redirected to order show page and shown success message' do
+    it 'user is redirected to Secure Web Page, process through Secure Web Page and is redirected to order show page and shown success message' do
       visit cart_path
       expect(page).to have_content('Your Cart')
       expect(page).to have_content('This is Product in Cart')
@@ -23,8 +23,6 @@ RSpec.describe 'Secure Web Page Test', type: :system do
       click_link 'Place Order'
       expect(page).to have_content('Email')
       expect(page).to have_content('Shipping Address')
-
-      fill_in 'Shipping Address', with: 'Shipping Address'
 
       fill_in 'Shipping Address', with: 'Shipping Address'
 
@@ -43,8 +41,7 @@ RSpec.describe 'Secure Web Page Test', type: :system do
       expect(page).to have_content(payment.payment_number)
       expect(page).to have_content(payment.payment_id)
 
-      # mock redirect to success to avoid going through external service
-      visit "/espago/payments/#{payment.payment_number}/success"
+
       expect(page).to have_content('Payment successful!')
       expect(page).to have_content(order.order_number)
       expect(page).to have_content(payment.payment_number)
@@ -52,7 +49,7 @@ RSpec.describe 'Secure Web Page Test', type: :system do
   end
 
   context 'when payment failed' do
-    it 'user is redirected to order show page and shown fail message' do
+    it 'user is redirected to Secure Web Page, process through Secure Web Page and is redirected to order show page and shown fail message' do
       visit cart_path
       expect(page).to have_content('Your Cart')
       expect(page).to have_content('This is Product in Cart')
@@ -61,8 +58,6 @@ RSpec.describe 'Secure Web Page Test', type: :system do
       click_link 'Place Order'
       expect(page).to have_content('Email')
       expect(page).to have_content('Shipping Address')
-
-      fill_in 'Shipping Address', with: 'Shipping Address'
 
       fill_in 'Shipping Address', with: 'Shipping Address'
 

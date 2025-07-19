@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Espago::Payments', type: :request do
+RSpec.describe Espago::PaymentsController, type: :request do
   let(:user)       { create(:user) }
 
   describe 'when user is authenticated' do
@@ -10,12 +10,7 @@ RSpec.describe 'Espago::Payments', type: :request do
       sign_in user
     end
 
-    describe 'GET /payments/new' do
-      let(:espago_public_key) { 'test_public_key' }
-
-      before do
-        allow(ENV).to receive(:fetch).with('ESPAGO_PUBLIC_KEY', nil).and_return(espago_public_key)
-      end
+    describe 'GET espago/payments/new' do
 
       context 'when order_id is provided' do
         let(:order) { create(:order) }
@@ -44,17 +39,19 @@ RSpec.describe 'Espago::Payments', type: :request do
         end
       end
 
-      context 'when no parent ID is provided' do
-        it 'redirects to root_path with alert' do
+
+      context 'when no payable ID is provided' do
+        it 'redirects to account_path with alert' do
           get espago_new_payment_path
-          expect(response).to redirect_to(root_path)
+          expect(response).to redirect_to(account_path)
           follow_redirect!
-          expect(response.body).to include('Missing parent to create payment.')
+          expect(response.body).to include('We could not create your payment due to a technical issue')
         end
       end
     end
-    describe 'POST #start_payment' do
-      let(:parent)     { create(:order, user: user) }
+    describe 'POST espago/payments/start_payment' do
+      let(:payable)     { create(:order, user: user) }
+      let(:payment_number) { 'payment_number' }
 
       before do
         sign_in user
@@ -63,8 +60,8 @@ RSpec.describe 'Espago::Payments', type: :request do
       context 'when parent is not found' do
         it 'redirects to account_path with alert' do
           post espago_start_payment_path, params: {
-            parent_type: 'Order',
-            parent_id:   -1,
+            payable_type: 'Order',
+            payable_id:   -1,
           }
 
           expect(response).to redirect_to(account_path)
@@ -74,84 +71,79 @@ RSpec.describe 'Espago::Payments', type: :request do
       end
 
       context 'when Espago returns a redirect_url' do
-        before do
-          allow(Espago::Payment::PaymentInitializer).to receive(:initilize).and_return('fake_response')
-          allow(Espago::Payment::ResponseProcessorHandler).to receive(:handle_response)
-            .with(instance_of(Payment), 'fake_response')
+        it 'creates new payment and redirects to external payment URL' do
+          allow_any_instance_of(Payment).to receive(:process_payment)
             .and_return([:redirect_url, 'https://payment.example.com'])
-        end
 
-        it 'redirects to external payment URL' do
-          post espago_start_payment_path, params: {
-            parent_type: 'Order',
-            parent_id:   parent.id,
-          }
+          expect do
+            post espago_start_payment_path, params: {
+              payable_type: 'Order',
+              payable_id:   payable.id,
+              payment_mode: 'new_one_time',
+            }
+          end.to change(Payment, :count).by(1)
 
+          expect(Payment.last.state).to eq('new')
           expect(response).to redirect_to('https://payment.example.com')
         end
       end
 
       context 'when Espago returns :success' do
-        let(:payment_number) { 'pay_1234' }
-
-        before do
-          allow(Espago::Payment::PaymentInitializer).to receive(:initilize).and_return('fake_response')
-          allow(Espago::Payment::ResponseProcessorHandler).to receive(:handle_response)
-            .with(instance_of(Payment), 'fake_response')
+        it 'creates new payment and redirects to success path' do
+          allow_any_instance_of(Payment).to receive(:process_payment)
             .and_return([:success, payment_number])
-        end
 
-        it 'redirects to success path' do
-          post espago_start_payment_path, params: {
-            parent_type: 'Order',
-            parent_id:   parent.id,
-          }
+          expect do
+            post espago_start_payment_path, params: {
+              payable_type: 'Order',
+              payable_id:   payable.id,
+              payment_mode: 'new_one_time',
+            }
+          end.to change(Payment, :count).by(1) # rubocop:disable Style/MethodCalledOnDoEndBlock
 
+          expect(Payment.last.state).to eq('new')
           expect(response).to redirect_to(espago_payments_success_path(payment_number))
         end
       end
 
       context 'when Espago returns :failure' do
-        let(:payment_number) { 'pay_1234' }
-
-        before do
-          allow(Espago::Payment::PaymentInitializer).to receive(:initilize).and_return('fake_response')
-          allow(Espago::Payment::ResponseProcessorHandler).to receive(:handle_response)
-            .with(instance_of(Payment), 'fake_response')
+        it 'creates new payment and redirects to failure path' do
+          allow_any_instance_of(Payment).to receive(:process_payment)
             .and_return([:failure, payment_number])
-        end
 
-        it 'redirects to failure path' do
-          post espago_start_payment_path, params: {
-            parent_type: 'Order',
-            parent_id:   parent.id,
-          }
+          expect do
+            post espago_start_payment_path, params: {
+              payable_type: 'Order',
+              payable_id:   payable.id,
+              payment_mode: 'new_one_time',
+            }
+          end.to change(Payment, :count).by(1) # rubocop:disable Style/MethodCalledOnDoEndBlock
 
+          expect(Payment.last.state).to eq('new')
           expect(response).to redirect_to(espago_payments_failure_path(payment_number))
         end
       end
 
       context 'when Espago returns :awaiting' do
-        let(:payment_number) { 'pay_1234' }
-
-        before do
-          allow(Espago::Payment::PaymentInitializer).to receive(:initilize).and_return('fake_response')
-          allow(Espago::Payment::ResponseProcessorHandler).to receive(:handle_response)
-            .with(instance_of(Payment), 'fake_response')
+        it 'creates new payment and redirects to awaiting path' do
+          allow_any_instance_of(Payment).to receive(:process_payment)
             .and_return([:awaiting, payment_number])
-        end
 
-        it 'redirects to awaiting path' do
-          post espago_start_payment_path, params: {
-            parent_type: 'Order',
-            parent_id:   parent.id,
-          }
+          expect do
+            post espago_start_payment_path, params: {
+              payable_type: 'Order',
+              payable_id:   payable.id,
+              payment_mode: 'new_one_time',
+            }
+          end.to change(Payment, :count).by(1) # rubocop:disable Style/MethodCalledOnDoEndBlock
 
+          expect(Payment.last.state).to eq('new')
           expect(response).to redirect_to(espago_payments_awaiting_path(payment_number))
         end
       end
+
     end
-    describe 'GET #payment_success' do
+    describe 'GET espago/payments/payment_success' do
       context 'when payment does not exist' do
         it 'redirects to account_path with alert' do
           get espago_payments_success_path('nonexistent_payment_number')
@@ -202,7 +194,7 @@ RSpec.describe 'Espago::Payments', type: :request do
       end
     end
 
-    describe 'GET #payment_failure' do
+    describe 'GET espago/payments/payment_failure' do
       context 'when payment does not exist' do
         it 'redirects to account_path with alert' do
           get espago_payments_failure_path('nonexistent_payment_number')
@@ -253,7 +245,7 @@ RSpec.describe 'Espago::Payments', type: :request do
       end
     end
 
-    describe 'GET #payment_awaiting' do
+    describe 'GET espago/payments/payment_awaiting' do
       context 'when payment does not exist' do
         it 'redirects to account_path with alert' do
           get espago_payments_awaiting_path('nonexistent_payment_number')

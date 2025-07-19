@@ -12,7 +12,7 @@ class Client < ApplicationRecord
 
   validate :prevent_duplicate_primary
   validate :ensure_primary_is_mit
-  validate :prevent_auto_renew_subscription_with_no_primary
+  validate :prevent_auto_renew_subscription_with_no_primary, if: :will_save_change_to_primary?
 
   validates :client_id, presence: true, uniqueness: true
 
@@ -58,9 +58,10 @@ class Client < ApplicationRecord
     errors.add(:base, 'Client must have status MIT to be primary')
   end
 
-  #: -> voidś
+  #: -> void
   def prevent_auto_renew_subscription_with_no_primary
-    return unless !primary? && user&.auto_renew_subscription?
+    owner = user #: as !nil
+    return unless owner.primary_payment_method? && owner.auto_renew_subscription?
 
     errors.add(:base, 'Cannot remove primary payment method with auto-renew subscription')
   end

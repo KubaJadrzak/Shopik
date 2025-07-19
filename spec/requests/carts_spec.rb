@@ -1,6 +1,8 @@
+#frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe 'CartsController Requests Test', type: :request do
+RSpec.describe CartsController, type: :request do
   let(:user) { create(:user) }
   let(:other_user) { create(:user) }
 

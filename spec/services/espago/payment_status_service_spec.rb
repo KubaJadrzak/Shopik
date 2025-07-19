@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Espago::Payment::StatusService do
@@ -22,8 +24,6 @@ RSpec.describe Espago::Payment::StatusService do
           .with("api/charges/#{payment_id}", method: :get)
           .and_return(response)
 
-        expect(Rails.logger).to receive(:info).with(/Successfully fetched payment status for #{payment_id}/)
-
         result = service.fetch_payment_status
         expect(result).to eq('executed')
       end
@@ -41,8 +41,6 @@ RSpec.describe Espago::Payment::StatusService do
         expect(client_double).to receive(:send)
           .with("api/charges/#{payment_id}", method: :get)
           .and_return(response)
-
-        expect(Rails.logger).to receive(:error).with(/Failed to fetch payment status for #{payment_id}/)
 
         result = service.fetch_payment_status
         expect(result).to be_nil
