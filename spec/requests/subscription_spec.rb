@@ -75,7 +75,9 @@ RSpec.describe SubscriptionsController, type: :request do
       end
 
       context 'when user has a pending subscription' do
-        let!(:subscription) { create(:subscription, user: user, status: 'Awaiting Payment') }
+        let!(:subscription) do
+          create(:subscription, user: user, start_date: nil, end_date: nil, status: 'Awaiting Payment')
+        end
 
         it 'redirects with pending alert' do
           post subscriptions_path

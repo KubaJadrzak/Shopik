@@ -10,7 +10,6 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'factory_bot'
-require 'capybara/cuprite'
 
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -75,12 +74,7 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
 
-  config.before(:each) do
-    FactoryBot.reload
-  end
-
   config.include Devise::Test::IntegrationHelpers, type: :request
-  config.include Devise::Test::IntegrationHelpers, type: :system
   config.include Devise::Test::IntegrationHelpers, type: :job
 
   # this was added due to issues with Rails 8 route helpers not being loaded properly in tests: https://github.com/heartcombo/devise/issues/5705
@@ -98,11 +92,6 @@ RSpec.configure do |config|
     Rails.application.reload_routes_unless_loaded
   end
 
-  RSpec.configure do |config|
-    config.before(:each, type: :system) do
-      driven_by :cuprite
-    end
-  end
 
   WebMock.disable_net_connect!(
     allow_localhost: true,
@@ -111,14 +100,28 @@ RSpec.configure do |config|
     ],
   )
 
-  Capybara.javascript_driver = :cuprite
-  Capybara.register_driver(:cuprite) do |app|
-    Capybara::Cuprite::Driver.new(app, window_size: [1200, 800])
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  # For tests tagged with :js or external browser, use truncation
+  config.before(:each, type: :system) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
   end
 
   Capybara.server_host = 'localhost'
   Capybara.server_port = 3001
   Capybara.app_host = 'http://localhost:3001'
-  Capybara.default_driver = :cuprite
-  Capybara.javascript_driver = :cuprite
 end

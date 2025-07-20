@@ -229,7 +229,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
           end
 
           context 'when the payment belongs to subscription' do
-            let!(:subscription) { create(:subscription,  status: 'New') }
+            let!(:subscription) { create(:subscription,  start_date: nil, end_date: nil, status: 'New') }
             let!(:payment) do
               create(:payment, :for_subscription, payable: subscription, payment_id: payment_id,
               payment_number: payment_number,)

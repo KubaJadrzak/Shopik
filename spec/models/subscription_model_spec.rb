@@ -102,7 +102,7 @@ end_date: Date.current + 2.days,)
 
       context 'when subscription is expired' do
         it 'returns false' do
-          expired_subscription = create(:subscription, status: 'expired')
+          expired_subscription = create(:subscription, start_date: nil, end_date: nil, status: 'expired')
 
           expect(expired_subscription.can_extend_subscription?).to be(false)
         end

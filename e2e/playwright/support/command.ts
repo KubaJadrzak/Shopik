@@ -23,8 +23,8 @@ export async function swpSuccess(page: Page) {
   await page.click('#pay_btn')
 
   await page.waitForURL(/secure_web_page/)
-  await page.click('#test-cards-modal-btn')
-  await page.click('div.test-card-btn[data-number="4012000000020006"]')
+  await page.locator('#test-cards-modal-btn').click()
+  await page.getByText('0000 0002 0006').first().click()
   await page.click('#submit_payment')
   const secureFrame = page.frameLocator('iframe')
   await secureFrame.getByText('3D-Secure 2 Payment - simulation').waitFor()
@@ -40,8 +40,8 @@ export async function swpFail(page: Page) {
   await page.click('#pay_btn')
 
   await page.waitForURL(/secure_web_page/)
-  await page.click('#test-cards-modal-btn')
-  await page.click('div.test-card-btn[data-number="4012000000020006"]')
+  await page.locator('#test-cards-modal-btn').click()
+  await page.getByText('0000 0002 0006').first().click()
   await page.click('#submit_payment')
   const secureFrame = page.frameLocator('iframe')
   await secureFrame.getByText('3D-Secure 2 Payment - simulation').waitFor()
