@@ -65,5 +65,13 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
+
+
+  if Rails.env.test? || Rails.env.development?
+    devise_scope :user do
+      post '/sign_in_before_test', to: 'users/sessions#sign_in_before_test'
+    end
+  end
+
   match '*unmatched', to: 'application#raise_not_found', via: :all
 end

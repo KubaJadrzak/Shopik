@@ -56,6 +56,8 @@ group :development, :test do
   gem 'factory_bot_rails'
 
   gem 'rspec-rails', '~> 8.0.0'
+
+  gem 'cypress-on-rails'
 end
 
 group :development do
@@ -68,6 +70,9 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
   gem 'rails-controller-testing'
+
+  gem 'database_cleaner-active_record'
+
 end
 
 gem 'devise'
