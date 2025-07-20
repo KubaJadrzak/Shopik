@@ -1,0 +1,6 @@
+<%= turbo_stream_from @client %>
+<div class="container mt-4">
+  <%= render 'show_header' %>
+  <%= render 'show_card' %>
+  <%= render partial: 'espago/payments/payment', locals: { payments: @payments } %>
+</div>

@@ -1,0 +1,22 @@
+<h3 class="mb-4 text-center">Choose Payment Method</h3>
+<% if @payable %>
+  <h5 class="mb-4 text-center">
+    You are about to pay <strong><%= number_to_currency(@payable.amount) %></strong>
+  </h5>
+<% end %>
+<%= form_with url: espago_start_payment_path, method: :post, data: { turbo: false }, html: { data: { payment_method_target: "form", espago_iframe_target: "form" }, id: "payment_form" } do |form| %>
+  <%= hidden_field_tag :payable_type, @payable.class.name %>
+  <%= hidden_field_tag :payable_id, @payable.id %>
+  <%= render "new_payment_form_modes" %>
+  <%= form.submit "Process Payment", class: "btn btn-success d-none", data: { payment_method_target: "processBtn", espago_iframe_target: "processBtn", turbo: false } %>
+<% end %>
+<div class="d-grid mt-3">
+  <a id="pay_btn" class="btn btn-primary btn-lg" data-payment-method-target="payBtn" style="cursor: pointer;">Pay</a>
+  <button id="secure_web_page_btn" class="btn btn-primary btn-lg d-none mt-2" data-payment-method-target="secureBtn">Pay</button>
+</div>
+<% if @payable.instance_of?(Client) %>
+  <%= link_to "Cancel", espago_client_path(@payable), class: "btn btn-success btn-lg mt-1" %>
+<% end %>
+<p class="text-center text-muted mb-0" style="font-size: 0.9rem;">
+  Payments provided by Espago
+</p>

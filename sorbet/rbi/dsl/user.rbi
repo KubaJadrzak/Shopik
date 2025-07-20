@@ -344,6 +344,20 @@ class User
     sig { params(value: T.nilable(::Cart)).void }
     def cart=(value); end
 
+    sig { returns(T::Array[T.untyped]) }
+    def client_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def client_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :clients`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::Client::PrivateCollectionProxy) }
+    def clients; end
+
+    sig { params(value: T::Enumerable[::Client]).void }
+    def clients=(value); end
+
     sig { params(args: T.untyped, blk: T.untyped).returns(::Cart) }
     def create_cart(*args, &blk); end
 
@@ -384,6 +398,20 @@ class User
     sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
     def order_ids=(ids); end
 
+    sig { returns(T::Array[T.untyped]) }
+    def order_payment_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def order_payment_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :order_payments, through: :orders`.
+    # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
+    sig { returns(::Payment::PrivateCollectionProxy) }
+    def order_payments; end
+
+    sig { params(value: T::Enumerable[::Payment]).void }
+    def order_payments=(value); end
+
     # This method is created by ActiveRecord on the `User` class because it declared `has_many :orders`.
     # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
     sig { returns(::Order::PrivateCollectionProxy) }
@@ -411,6 +439,34 @@ class User
 
     sig { params(value: T::Enumerable[::Rubit]).void }
     def rubits=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def subscription_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def subscription_ids=(ids); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def subscription_payment_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def subscription_payment_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :subscription_payments, through: :subscriptions`.
+    # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
+    sig { returns(::Payment::PrivateCollectionProxy) }
+    def subscription_payments; end
+
+    sig { params(value: T::Enumerable[::Payment]).void }
+    def subscription_payments=(value); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :subscriptions`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::Subscription::PrivateCollectionProxy) }
+    def subscriptions; end
+
+    sig { params(value: T::Enumerable[::Subscription]).void }
+    def subscriptions=(value); end
   end
 
   module GeneratedAssociationRelationMethods

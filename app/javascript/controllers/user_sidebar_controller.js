@@ -5,7 +5,9 @@ export default class extends Controller {
     "rubitsSection",
     "likesSection",
     "commentsSection",
-    "ordersSection"
+    "ordersSection",
+    'subscriptionsSection',
+    'clientsSection'
   ]
 
 connect() {
@@ -28,7 +30,7 @@ disconnect() {
 
   showSectionFromHash() {
     const hash = window.location.hash.replace("#", "")
-    if (["rubits", "likes", "comments", "orders"].includes(hash)) {
+    if (["rubits", "likes", "comments", "orders", "subscriptions", "clients"].includes(hash)) {
       this.toggleContent(hash)
     } else {
       this.toggleContent("rubits")
@@ -51,6 +53,14 @@ disconnect() {
     this.setHash("orders")
   }
 
+  toggleSubscriptionsSection() {
+    this.setHash("subscriptions")
+  }
+
+  toggleClientsSection() {
+    this.setHash("clients")
+  }
+
   setHash(section) {
     history.pushState(null, "", `#${section}`)
     this.toggleContent(section)
@@ -69,5 +79,7 @@ disconnect() {
     if (this.hasLikesSectionTarget) this.likesSectionTarget.classList.add("d-none")
     if (this.hasCommentsSectionTarget) this.commentsSectionTarget.classList.add("d-none")
     if (this.hasOrdersSectionTarget) this.ordersSectionTarget.classList.add("d-none")
+    if (this.hasSubscriptionsSectionTarget) this.subscriptionsSectionTarget.classList.add("d-none")
+    if (this.hasClientsSectionTarget) this.clientsSectionTarget.classList.add("d-none")
   }
 }

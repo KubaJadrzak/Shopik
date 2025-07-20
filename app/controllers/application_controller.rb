@@ -1,13 +1,15 @@
 # typed: true
 
+
 class ApplicationController < ActionController::Base
+  extend T::Sig
   include Pagy::Backend
 
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from ActiveRecord::InvalidForeignKey, with: :handle_invalid_foreign_key
   rescue_from ActionController::RoutingError, with: :handle_routing_error
+
 
   def after_sign_in_path_for(resource)
     Espago::UpdatePaymentStatusJob.perform_later(resource.id)

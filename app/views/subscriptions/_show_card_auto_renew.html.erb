@@ -1,0 +1,16 @@
+<div class="d-flex justify-content-between mb-2">
+  <strong>Auto Renew:</strong>
+  <% if @subscription.active? && current_user.primary_payment_method? %>
+    <%= form_with url: toggle_auto_renew_subscription_path(@subscription), method: :patch, remote: true, class: "d-inline mb-0" do |f| %>
+      <div class="form-check form-switch">
+        <%= f.check_box :auto_renew, checked: @subscription.auto_renew, class: "form-check-input", onchange: "this.form.submit();" %>
+      </div>
+    <% end %>
+  <% elsif @subscription.active? %>
+    <%= link_to "Select Payment Method", account_path(anchor: 'clients'), class: "btn btn-primary btn-sm" %>
+  <% else %>
+    <div class="form-check form-switch">
+      <%= check_box_tag "disabled_auto_renew", "0", false, class: "form-check-input", disabled: true %>
+    </div>
+  <% end %>
+</div>

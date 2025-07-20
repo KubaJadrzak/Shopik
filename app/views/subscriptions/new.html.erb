@@ -1,0 +1,19 @@
+<div class="container"
+     style="max-width: 400px; margin: 40px auto; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 8px; background: #fff;">
+  <h2 class="mb-4 text-center">Subscribe to Rubitter Red</h2>
+  <p class="mb-2 text-center">
+    <strong>Price:</strong> <span class="text fw-bold">$4.99 / month</span>
+  </p>
+  <p class="mb-3">
+    <strong style="color: #9B111E;">Rubitter Red</strong> highlights your rubits and comments with a striking red border, making them stand out above others.
+    Enjoy priority visibility and join the community of premium users!
+  </p>
+  <p class="mb-4">
+    Your subscription lasts one month. You can renew your subscription manually or with saved Payment Method.
+  </p>
+  <%= form_with model: @subscription, html: { id: "subscription_form" } do |form| %>
+    <div style="text-align: center;">
+      <%= form.submit "Go to Payment", class: "btn btn-primary btn-lg" %>
+    </div>
+  <% end %>
+</div>

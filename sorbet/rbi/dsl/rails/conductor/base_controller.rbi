@@ -29,11 +29,14 @@ class Rails::Conductor::BaseController
     include ::ApplicationHelper
     include ::CartItemsHelper
     include ::CartsHelper
+    include ::ClientsHelper
     include ::LikesHelper
     include ::OrderItemsHelper
     include ::OrdersHelper
+    include ::PaymentsHelper
     include ::ProductsHelper
     include ::RubitsHelper
+    include ::SubscriptionsHelper
     include ::UsersHelper
     include ::DeviseHelper
   end

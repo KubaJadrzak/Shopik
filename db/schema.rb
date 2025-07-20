@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_22_194011) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_06_130244) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -27,6 +27,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_194011) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_carts_on_user_id"
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "client_id", null: false
+    t.string "company"
+    t.string "last4"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "client_number", null: false
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.string "status", default: "unverified", null: false
+    t.integer "month", null: false
+    t.integer "year", null: false
+    t.boolean "primary", default: false, null: false
+    t.index ["client_id"], name: "index_clients_on_client_id", unique: true
+    t.index ["client_number"], name: "index_clients_on_client_number", unique: true
+    t.index ["user_id"], name: "index_clients_on_user_id"
   end
 
   create_table "likes", force: :cascade do |t|
@@ -55,15 +74,33 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_194011) do
     t.string "order_number", null: false
     t.string "email", null: false
     t.string "status", null: false
-    t.string "payment_status", null: false
     t.decimal "total_price", precision: 10, scale: 2, null: false
     t.text "shipping_address", null: false
-    t.datetime "ordered_at"
+    t.datetime "ordered_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "payment_id"
     t.index ["order_number"], name: "index_orders_on_order_number", unique: true
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.string "payment_id"
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.string "state", default: "new", null: false
+    t.string "reject_reason"
+    t.string "issuer_response_code"
+    t.string "behaviour"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "payment_number", null: false
+    t.string "payable_type"
+    t.integer "payable_id"
+    t.integer "client_id"
+    t.index ["client_id"], name: "index_payments_on_client_id"
+    t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
+    t.index ["payment_id"], name: "index_payments_on_payment_id", unique: true
+    t.index ["payment_number"], name: "index_payments_on_payment_number", unique: true
+    t.index ["state"], name: "index_payments_on_state"
   end
 
   create_table "products", force: :cascade do |t|
@@ -85,6 +122,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_194011) do
     t.index ["user_id"], name: "index_rubits_on_user_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.date "start_date"
+    t.date "end_date"
+    t.string "status", default: "New", null: false
+    t.boolean "auto_renew", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "price", default: "4.99", null: false
+    t.string "subscription_number"
+    t.index ["subscription_number"], name: "index_subscriptions_on_subscription_number", unique: true
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -102,11 +153,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_22_194011) do
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "products"
   add_foreign_key "carts", "users"
+  add_foreign_key "clients", "users"
   add_foreign_key "likes", "rubits"
   add_foreign_key "likes", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "users"
+  add_foreign_key "payments", "clients"
   add_foreign_key "rubits", "rubits", column: "parent_rubit_id"
   add_foreign_key "rubits", "users"
+  add_foreign_key "subscriptions", "users"
 end

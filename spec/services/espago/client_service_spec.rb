@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'webmock/rspec'
 
-RSpec.describe Espago::ClientService, type: :service do
+RSpec.describe Espago::Client, type: :service do
   let(:client) { described_class.new }
 
   describe '#send' do

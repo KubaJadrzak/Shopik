@@ -49,23 +49,30 @@ group :development, :test do
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem 'brakeman', require: false
 
+  gem 'rubocop', require: false
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem 'rubocop-rails-omakase', require: false
 
   gem 'factory_bot_rails'
 
   gem 'rspec-rails', '~> 8.0.0'
+
+  gem 'cypress-on-rails'
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
+
   gem 'web-console'
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
-  gem 'selenium-webdriver'
+  gem 'rails-controller-testing'
+
+  gem 'database_cleaner-active_record'
+
 end
 
 gem 'devise'
@@ -89,3 +96,9 @@ gem 'faraday-retry'
 gem 'webmock', group: [:test]
 
 gem 'sidekiq'
+gem 'sidekiq-scheduler'
+
+gem 'cuprite', group: %i[development test]
+
+gem 'byebug'
+gem 'htmlbeautifier'
