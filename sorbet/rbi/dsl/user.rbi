@@ -365,34 +365,6 @@ class User
     def create_cart!(*args, &blk); end
 
     sig { returns(T::Array[T.untyped]) }
-    def like_ids; end
-
-    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def like_ids=(ids); end
-
-    sig { returns(T::Array[T.untyped]) }
-    def liked_rubit_ids; end
-
-    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def liked_rubit_ids=(ids); end
-
-    # This method is created by ActiveRecord on the `User` class because it declared `has_many :liked_rubits, through: :likes`.
-    # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
-    sig { returns(::Rubit::PrivateCollectionProxy) }
-    def liked_rubits; end
-
-    sig { params(value: T::Enumerable[::Rubit]).void }
-    def liked_rubits=(value); end
-
-    # This method is created by ActiveRecord on the `User` class because it declared `has_many :likes`.
-    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
-    sig { returns(::Like::PrivateCollectionProxy) }
-    def likes; end
-
-    sig { params(value: T::Enumerable[::Like]).void }
-    def likes=(value); end
-
-    sig { returns(T::Array[T.untyped]) }
     def order_ids; end
 
     sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
@@ -425,20 +397,6 @@ class User
 
     sig { void }
     def reset_cart; end
-
-    sig { returns(T::Array[T.untyped]) }
-    def rubit_ids; end
-
-    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def rubit_ids=(ids); end
-
-    # This method is created by ActiveRecord on the `User` class because it declared `has_many :rubits`.
-    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
-    sig { returns(::Rubit::PrivateCollectionProxy) }
-    def rubits; end
-
-    sig { params(value: T::Enumerable[::Rubit]).void }
-    def rubits=(value); end
 
     sig { returns(T::Array[T.untyped]) }
     def subscription_ids; end

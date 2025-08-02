@@ -55,9 +55,6 @@ module GeneratedUrlHelpersModule
   def espago_start_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_verification_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def extend_subscription_subscription_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -181,19 +178,10 @@ module GeneratedUrlHelpersModule
   def root_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def rubit_like_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def rubit_likes_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def rubit_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def rubits_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def sidekiq_web_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def sign_in_before_test_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def subscription_url(*args); end
@@ -227,4 +215,7 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def user_session_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def verify_espago_client_url(*args); end
 end

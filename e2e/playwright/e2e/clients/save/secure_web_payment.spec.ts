@@ -13,7 +13,7 @@ test.describe('Saves Payment Method during Secure Web Payment', () => {
 
   test('success', async ({ page }) => {
     await page.goto('/account')
-    await page.getByRole('button', { name: 'Subscribe to Rubitter Red' }).click()
+    await page.getByRole('button', { name: 'Subscribe to Membership' }).click()
     await page.getByRole('button', { name: 'Go to Payment' }).click()
     await page.getByRole('checkbox', { name: 'Save card information for' }).check()
 
@@ -26,7 +26,7 @@ test.describe('Saves Payment Method during Secure Web Payment', () => {
 
   test('fail', async ({ page }) => {
     await page.goto('/account')
-    await page.getByRole('button', { name: 'Subscribe to Rubitter Red' }).click()
+    await page.getByRole('button', { name: 'Subscribe to Membership' }).click()
     await page.getByRole('button', { name: 'Go to Payment' }).click()
     await page.getByRole('checkbox', { name: 'Save card information for' }).check()
 

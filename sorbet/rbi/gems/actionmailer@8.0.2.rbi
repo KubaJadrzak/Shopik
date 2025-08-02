@@ -2124,7 +2124,7 @@ end
 #
 #   InvitationsMailer.account_invitation(person_a, person_b).deliver_later
 #
-# Using parameterized mailers, this can be rewritten as:
+# Using parameterized mailers, this can be  as:
 #
 #   class InvitationsMailer < ApplicationMailer
 #     before_action { @inviter, @invitee = params[:inviter], params[:invitee] }

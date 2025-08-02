@@ -1,9 +1,0 @@
-<% if @pagy.next %>
-  <%= turbo_frame_tag(
-        "rubits-page-#{@pagy.next}",
-        loading: :lazy,
-        src: pagy_url_for(@pagy, @pagy.next),
-        target: "_top"
-      ) do %>
-  <% end %>
-<% end %>

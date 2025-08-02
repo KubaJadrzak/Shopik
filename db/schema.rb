@@ -48,16 +48,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_06_130244) do
     t.index ["user_id"], name: "index_clients_on_user_id"
   end
 
-  create_table "likes", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "rubit_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["rubit_id"], name: "index_likes_on_rubit_id"
-    t.index ["user_id", "rubit_id"], name: "index_likes_on_user_id_and_rubit_id", unique: true
-    t.index ["user_id"], name: "index_likes_on_user_id"
-  end
-
   create_table "order_items", force: :cascade do |t|
     t.integer "order_id", null: false
     t.integer "product_id", null: false
@@ -111,17 +101,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_06_130244) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "rubits", force: :cascade do |t|
-    t.text "content"
-    t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "likes_count", default: 0, null: false
-    t.integer "parent_rubit_id"
-    t.index ["parent_rubit_id"], name: "index_rubits_on_parent_rubit_id"
-    t.index ["user_id"], name: "index_rubits_on_user_id"
-  end
-
   create_table "subscriptions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.date "start_date"
@@ -154,13 +133,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_06_130244) do
   add_foreign_key "cart_items", "products"
   add_foreign_key "carts", "users"
   add_foreign_key "clients", "users"
-  add_foreign_key "likes", "rubits"
-  add_foreign_key "likes", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "users"
   add_foreign_key "payments", "clients"
-  add_foreign_key "rubits", "rubits", column: "parent_rubit_id"
-  add_foreign_key "rubits", "users"
   add_foreign_key "subscriptions", "users"
 end

@@ -9,10 +9,7 @@ Rails.application.routes.draw do
     registrations: 'users/registrations',
   }
 
-  root to: 'rubits#index', via: %i[get post]
-  resources :rubits, only: %i[show create destroy] do
-    resources :likes, only: %i[create destroy]
-  end
+  root to: 'products#index'
 
   resources :products, only: [:index]
   post 'add_to_cart/:product_id', to: 'cart_items#create', as: 'add_to_cart'

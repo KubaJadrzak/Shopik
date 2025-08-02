@@ -14,8 +14,8 @@ This is an app created to integrate with Espago. You can use it only if you have
 ### Clone the application:
 
 ```
-git clone https://github.com/KubaJadrzak/RubitterRewritten.git
-cd RubitterRewritten
+git clone https://github.com/KubaJadrzak/shopik.git
+cd shopik
 ```
 ### Install Ruby gems and JavaScript packages:
 ```
@@ -38,7 +38,7 @@ The application should start and be accessible via `localhost:3000` by default, 
 
 ### Adding environmental variables and credentials:
 
-RubitterRewritten is using the following environmental variables, stored inside `.env` and `.env.test` files (via gem `dotenv`), which have to be created in the root directory of the project:
+shopik is using the following environmental variables, stored inside `.env` and `.env.test` files (via gem `dotenv`), which have to be created in the root directory of the project:
 
 `.env`
 ```
@@ -55,7 +55,7 @@ ESPAGO_BASE_URL=https://sandbox.espago.com
 ESPAGO_PUBLIC_KEY=your_espago_public_key
 ```
 
-RubitterRewritten is using `Rails credentials`. You will have to remove existing encrypted credentials since encrypted `credentials.yml.enc` is included in the repository, simply run the following commands (replace `nano` with editor of choice): 
+shopik is using `Rails credentials`. You will have to remove existing encrypted credentials since encrypted `credentials.yml.enc` is included in the repository, simply run the following commands (replace `nano` with editor of choice): 
 
 ```
 rm config/credentials.yml.enc
@@ -74,15 +74,15 @@ espago:
 ```
 ### Sidekiq:
 
-RubitterRewritten is using `sidekiq`. To correctly run background jobs, simply start sidekiq in new terminal window with: `bundle exec sidekiq`. Make sure that `Redis` is also running on your system.
+shopik is using `sidekiq`. To correctly run background jobs, simply start sidekiq in new terminal window with: `bundle exec sidekiq`. Make sure that `Redis` is also running on your system.
 
 ### RSpec: 
 
-RubitterRewritten is using `RSpec` tests. You can run test suite with: `bundle exec rspec`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some tests make real requests to Espago and will otherwise fail.
+shopik is using `RSpec` tests. You can run test suite with: `bundle exec rspec`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some tests make real requests to Espago and will otherwise fail.
 
 ### Sorbet/Tapioca:
 
-RubitterRewritten is using `Sorbet` with `Tapioca`. Although all necessary `rbi` files are committed to this repository, if you encounter any Sorbet related issues, try:
+shopik is using `Sorbet` with `Tapioca`. Although all necessary `rbi` files are committed to this repository, if you encounter any Sorbet related issues, try:
 ```
 bundle exec tapioca dsl
 bundle exec tapioca gem
@@ -91,5 +91,5 @@ bundle exec tapioca require
 
 ### Back Requests:
 
-RubitterRewritten is using `back requests` to update the status of payments, however it also requests from Espago status of all payments which are not finished.
-This means that payment statuses will still be updated while running RubitterRewritten on `localhost`, although the statuses will be delayed as payment status requests to Espago are done via background jobs for a specific user on login to application and on account page visit. This means that after completing the payment process refresh of account page may be required to trigger background jobs and update payment statuses. In some cases, like timeouts or connection failures with Espago, back requests are required to properly manage payment status of orders.
+shopik is using `back requests` to update the status of payments, however it also requests from Espago status of all payments which are not finished.
+This means that payment statuses will still be updated while running shopik on `localhost`, although the statuses will be delayed as payment status requests to Espago are done via background jobs for a specific user on login to application and on account page visit. This means that after completing the payment process refresh of account page may be required to trigger background jobs and update payment statuses. In some cases, like timeouts or connection failures with Espago, back requests are required to properly manage payment status of orders.

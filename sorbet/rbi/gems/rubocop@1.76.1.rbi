@@ -4367,7 +4367,7 @@ module RuboCop::Cop::CheckLineBreakable
   def within_column_limit?(element, max, line); end
 end
 
-# Checks for code on multiple lines that could be rewritten on a single line
+# Checks for code on multiple lines that could be  on a single line
 # without changing semantics or exceeding the `Max` parameter of `Layout/LineLength`.
 #
 # source://rubocop//lib/rubocop/cop/mixin/check_single_line_suitability.rb#7
@@ -17933,7 +17933,7 @@ RuboCop::Cop::Lint::BigDecimalNew::RESTRICT_ON_SEND = T.let(T.unsafe(nil), Array
 # and "spaceship" operator - ``<=>``.
 #
 # Simple arithmetic operations are allowed by this cop: `+`, `*`, `**`, `<<` and `>>`.
-# Although these can be rewritten in a different way, it should not be necessary to
+# Although these can be  in a different way, it should not be necessary to
 # do so. Operations such as `-` or `/` where the result will always be the same
 # (`x - x` will always be 0; `x / x` will always be 1) are offenses, but these
 # are covered by `Lint/NumericOperationWithConstantResult` instead.
@@ -25918,7 +25918,7 @@ RuboCop::Cop::Lint::UnifiedInteger::MSG = T.let(T.unsafe(nil), String)
 #
 # If the accumulator is not included in the return value, then the entire
 # block will just return a transformation of the last element value, and
-# could be rewritten as such without a loop.
+# could be  as such without a loop.
 #
 # Also catches instances where an index of the accumulator is returned, as
 # this may change the type of object being retained.
@@ -34450,21 +34450,21 @@ class RuboCop::Cop::Style::BisectedAttrAccessor < ::RuboCop::Cop::Base
 
   # Each offending macro is captured and registered in `on_class` but correction
   # happens in `after_class` because a macro might have multiple attributes
-  # rewritten from it
+  #  from it
   #
   # source://rubocop//lib/rubocop/cop/style/bisected_attr_accessor.rb#55
   def after_class(class_node); end
 
   # Each offending macro is captured and registered in `on_class` but correction
   # happens in `after_class` because a macro might have multiple attributes
-  # rewritten from it
+  #  from it
   #
   # source://rubocop//lib/rubocop/cop/style/bisected_attr_accessor.rb#55
   def after_module(class_node); end
 
   # Each offending macro is captured and registered in `on_class` but correction
   # happens in `after_class` because a macro might have multiple attributes
-  # rewritten from it
+  #  from it
   #
   # source://rubocop//lib/rubocop/cop/style/bisected_attr_accessor.rb#55
   def after_sclass(class_node); end

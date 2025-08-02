@@ -11,7 +11,7 @@ test.describe('Subscription Purchase with Secure Web Payment', () => {
 
   test('success', async ({ page }) => {
     await page.goto('/account')
-    await page.getByRole('button', { name: 'Subscribe to Rubitter Red' }).click()
+    await page.getByRole('button', { name: 'Subscribe to Membership' }).click()
     await page.getByRole('button', { name: 'Go to Payment' }).click()
 
     await swpSuccess(page)
@@ -23,7 +23,7 @@ test.describe('Subscription Purchase with Secure Web Payment', () => {
 
   test('fail', async ({ page }) => {
     await page.goto('/account')
-    await page.getByRole('button', { name: 'Subscribe to Rubitter Red' }).click()
+    await page.getByRole('button', { name: 'Subscribe to Membership' }).click()
     await page.getByRole('button', { name: 'Go to Payment' }).click()
 
     await swpFail(page)

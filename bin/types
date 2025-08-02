@@ -1,0 +1,8 @@
+echo "Fetching sorbet documentation for gems"
+bundle exec tapioca annotations
+
+echo "Regenerating sorbet documentation for gems"
+bundle exec tapioca gems
+
+echo "Regenerating sorbet documentation for meta-programming"
+bundle exec tapioca dsl
