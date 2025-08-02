@@ -1,7 +1,15 @@
-This is an app created to integrate with Espago. You can use it only if you have access to Espago Sandbox.
+Shopik was created primarly to learn and expand my knowledge about Ruby on Rails. Currently the project contains:
+
+- Extensive integration with Espago payment processing service, including: Secure Web Page payments, One-Time Payments via iFrame, Recurring Payments, saving Payment Methods and using saved Payment Method to perform CIT and MIT transactions.
+- Jobs implemented via Sidekiq
+- Unit and Request tests via RSpec
+- End-to-End tests via Playwright
+
+
 
 ### Prerequisites:
 
+- This is an app created to integrate with Espago. You can use it only if you have access to Espago Sandbox.
 - Ruby 3.4.3 or newer
 - Rails 8 or newer
 - Node.js version 24.x or newer
