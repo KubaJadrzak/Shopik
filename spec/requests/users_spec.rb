@@ -28,14 +28,20 @@ RSpec.describe UsersController, type: :request do
       it 'redirects to account page' do
         expect(response).to have_http_status(:success)
       end
-      it 'includes orders content in the response body' do
+      it 'includes orders content in the response body when no section is provided' do
         expect(response.body).to include(@order.order_number)
       end
-      it 'includes subscription content in the response body' do
+      it 'includes orders content in the response body when orders section is provided' do
+        get account_path(section: 'orders')
+        expect(response.body).to include(@order.order_number)
+      end
+      it 'includes subscription content in the response body when subscriptions section is provided' do
+        get account_path(section: 'subscriptions')
         expect(response.body).to include(@subscription.subscription_number)
       end
 
-      it 'includes clients (Payment Methods) content in the response body' do
+      it 'includes clients (Payment Methods) content in the response body when clients section is provided' do
+        get account_path(section: 'clients')
         expect(response.body).to include(@client.client_number)
       end
 

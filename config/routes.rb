@@ -32,6 +32,9 @@ Rails.application.routes.draw do
   end
 
   get 'account', to: 'users#account', as: 'account'
+  get '/account/subscriptions', to: 'users#account', defaults: { section: 'subscriptions' }, as: 'account_subscriptions'
+  get '/account/orders', to: 'users#account', defaults: { section: 'orders' }, as: 'account_orders'
+  get '/account/clients', to: 'users#account', defaults: { section: 'clients' }, as: 'account_clients'
 
   namespace :espago do
     resources :clients, only: [:show] do
