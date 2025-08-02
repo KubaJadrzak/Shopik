@@ -4502,7 +4502,7 @@ class Parser::Source::Rewriter
   # Inserts new code after the given source range by allowing other
   # insertions at the same position.
   # Note that an insertion with latter invocation comes _after_ earlier
-  # insertion at the same position in the rewritten source.
+  # insertion at the same position in the  source.
   #
   # @api public
   # @deprecated Use {TreeRewriter#insert_after}
@@ -4534,7 +4534,7 @@ class Parser::Source::Rewriter
   # Inserts new code before the given source range by allowing other
   # insertions at the same position.
   # Note that an insertion with latter invocation comes _before_ earlier
-  # insertion at the same position in the rewritten source.
+  # insertion at the same position in the  source.
   #
   # @api public
   # @deprecated Use {TreeRewriter#insert_before}

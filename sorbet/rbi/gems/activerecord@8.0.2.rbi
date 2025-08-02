@@ -27820,7 +27820,7 @@ end
 #
 # You may also set a +:reject_if+ proc to silently ignore any new record
 # hashes if they fail to pass your criteria. For example, the previous
-# example could be rewritten as:
+# example could be  as:
 #
 #   class Member < ActiveRecord::Base
 #     has_many :posts

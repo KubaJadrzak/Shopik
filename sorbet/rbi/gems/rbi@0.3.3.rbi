@@ -3551,7 +3551,7 @@ RBI::Rewriters::FilterVersions::VERSION_PREFIX = T.let(T.unsafe(nil), String)
 # end
 # ~~~
 #
-# will be rewritten to:
+# will be  to:
 #
 # ~~~rb
 # def self.m1; end
@@ -3573,7 +3573,7 @@ RBI::Rewriters::FilterVersions::VERSION_PREFIX = T.let(T.unsafe(nil), String)
 #    def m3; end
 #  end
 # end
-# will be rewritten to:
+# will be  to:
 # def self.m1; end
 #   def self.m2; end
 #   def self.m3; end
@@ -3926,7 +3926,7 @@ end
 # attr_reader :bar
 # ~~~
 #
-# will be rewritten to:
+# will be  to:
 #
 # ~~~rb
 # class Object
@@ -3941,7 +3941,7 @@ end
 # ~~~rb
 # def foo; end
 # attr_reader :bar
-# will be rewritten to:
+# will be  to:
 # class Object
 #  def foo; end
 #  attr_reader :bar

@@ -16,14 +16,6 @@ RSpec.describe UsersController, type: :request do
 
     context 'when user is signed in' do
       before do
-        @root_rubits = create_list(:rubit, 3, user: user)
-
-        parent_rubit = create(:rubit, user: user)
-        @child_rubits = create_list(:rubit, 2, user: user, parent_rubit: parent_rubit)
-
-        liked_rubit = create(:rubit, content: 'this is liked Rubit')
-        create(:like, user: user, rubit: liked_rubit)
-
         @order = create(:order, user: user)
         @subscription = create(:subscription, user: user)
         @client = create(:client, user: user)
@@ -35,22 +27,6 @@ RSpec.describe UsersController, type: :request do
 
       it 'redirects to account page' do
         expect(response).to have_http_status(:success)
-      end
-
-      it 'includes root rubits content in the response body' do
-        @root_rubits.each do |rubit|
-          expect(response.body).to include(rubit.content)
-        end
-      end
-
-      it 'includes liked rubits content in the response body' do
-        expect(response.body).to include('this is liked Rubit')
-      end
-
-      it 'includes child rubits (comments) content in the response body' do
-        @child_rubits.each do |rubit|
-          expect(response.body).to include(rubit.content)
-        end
       end
       it 'includes orders content in the response body' do
         expect(response.body).to include(@order.order_number)

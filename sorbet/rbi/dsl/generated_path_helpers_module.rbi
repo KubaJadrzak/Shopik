@@ -55,9 +55,6 @@ module GeneratedPathHelpersModule
   def espago_start_payment_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_verification_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def extend_subscription_subscription_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -181,19 +178,10 @@ module GeneratedPathHelpersModule
   def root_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def rubit_like_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def rubit_likes_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def rubit_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def rubits_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def sidekiq_web_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def sign_in_before_test_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def subscription_path(*args); end
@@ -227,4 +215,7 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def user_session_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def verify_espago_client_path(*args); end
 end

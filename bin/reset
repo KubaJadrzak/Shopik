@@ -1,0 +1,5 @@
+echo "Reseting database and applying migrations"
+rails db:migrate:reset
+
+echo "Applying seeds"
+rails db:seed
