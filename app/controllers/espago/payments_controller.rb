@@ -43,7 +43,7 @@ module Espago
         redirect_to account_path, alert: 'We are experiencing an issue with your payment'
         return
       end
-      handle_redirect('Payment successful!')
+      handle_redirect(message: 'Payment successful!')
     end
 
     #: -> void
@@ -52,7 +52,7 @@ module Espago
         redirect_to account_path, alert: 'We are experiencing an issue with your payment'
         return
       end
-      handle_redirect('Payment failed!')
+      handle_redirect(message: 'Payment failed!', alert: true)
     end
 
     #: -> void
@@ -61,7 +61,7 @@ module Espago
         redirect_to account_path, alert: 'We are experiencing an issue with your payment'
         return
       end
-      handle_redirect('Payment is being processed!')
+      handle_redirect(message: 'Payment is being processed!', alert: true)
     end
 
     private
@@ -122,19 +122,23 @@ module Espago
       end
     end
 
-    #: (String) -> void
-    def handle_redirect(message)
+    #: (message: String, ?alert: bool) -> void
+    def handle_redirect(message:, alert: false)
       payment = @payment #: as !nil
+
+      flash_type = alert ? :alert : :notice
+
       case payment.payable
       when Subscription
-        redirect_to subscription_path(payment.payable), notice: message
+        redirect_to subscription_path(payment.payable), flash_type => message
       when Order
-        redirect_to order_path(payment.payable), notice: message
+        redirect_to order_path(payment.payable), flash_type => message
       when ::Client
-        redirect_to espago_client_path(payment.payable), notice: message
+        redirect_to espago_client_path(payment.payable), flash_type => message
       else
         redirect_to account_path, alert: 'We are experiencing an issue with your payment'
       end
     end
+
   end
 end

@@ -1,66 +1,13 @@
 <%= turbo_stream_from @user %>
-<div>
-  <div data-controller="user-sidebar">
-    <div class="row">
-      <div class="col-lg-3" style="margin-bottom: 20px;">
-        <div class="list-group">
-          <button class="list-group-item list-group-item-action"
-                data-action="click->user-sidebar#toggleOrdersSection">
-            Orders
-          </button>
-          <button class="list-group-item list-group-item-action"
-                data-action="click->user-sidebar#toggleSubscriptionsSection">
-            Subscriptions
-          </button>
-          <button class="list-group-item list-group-item-action"
-                data-action="click->user-sidebar#toggleClientsSection">
-            Payment Methods
-          </button>
-          <%= button_to "Edit Account", edit_user_registration_path, method: :get,
-                                                                   class: "list-group-item list-group-item-action" %>
-          <%= button_to "Logout", destroy_user_session_path, method: :delete,
-                                                           class: "list-group-item list-group-item-action text-danger" %>
-          <%= button_to "Delete Account", user_registration_path, method: :delete,
-                                                                class: "list-group-item list-group-item-action text-danger" %>
-          <% if @user.active_subscription? %>
-            <% if @user.active_subscription.extension_payment_failed? %>
-              <div class="mt-4 p-3 border rounded bg-light text-center">
-                <h5 class="mb-1" style="color: #9B111E;">Membership</h5>
-                <p class="mb-1 text-muted">Your payment to extend your Membership subscription has failed.</p>
-                <p class="mb-3 text-muted">Please update your payment method to continue enjoying your exclusive features without interruption.</p>
-                <%= button_to "Manage Subscription", subscription_path(@user.active_subscription), method: :get,
-                class: "btn btn-primary btn-sm px-4" %>
-              </div>
-            <% else %>
-              <div class="mt-4 p-3 border rounded bg-light text-center">
-                <h5 class="mb-1" style="color: #9B111E;">Membership</h5>
-                <p class="mb-1 text-muted">You have an active Membership subscription!</p>
-              </div>
-            <% end %>
-          <% elsif @user.pending_subscription? %>
-            <div class="mt-4 p-3 border rounded text-center">
-              <h5 class="mb-1" style="color: #9B111E;">Membership</h5>
-              <p class="mb-1 text-muted">You have a pending Membership subscription awaiting your action.</p>
-              <p class="mb-3 text-muted">Please complete the subscription process to activate your Membership.</p>
-              <%= button_to "Manage Subscription", subscription_path(@subscriptions.first), method: :get,
-                                                                      class: "btn btn-primary btn-sm px-4" %>
-            </div>
-          <% else %>
-            <div class="mt-4 p-3 border rounded bg-light text-center">
-              <h5 class="mb-1" style="color: #9B111E;">Membership</h5>
-              <p class="mb-1 text-muted"><strong>$4.99 / month</strong></p>
-              <p class="mb-3 text-muted">Gain access to exclusive products and membership only discounts!!!</p>
-              <%= button_to "Subscribe to Membership", new_subscription_path, method: :get,
-                                                                      class: "btn btn-primary btn-sm px-4" %>
-            </div>
-          <% end %>
-        </div>
-      </div>
-      <div class="col-lg-9">
-        <%= render "users/sidebar/orders_section" %>
-        <%= render "users/sidebar/subscriptions_section" %>
-        <%= render "users/sidebar/clients_section" %>
-      </div>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-3 col-12 mb-3">
+      <%= render 'sidebar' %>
+    </div>
+    <div class="col-lg-9 col-12">
+      <%= turbo_frame_tag "account_content" do %>
+        <%= render 'account_content', section: @section %>
+      <% end %>
     </div>
   </div>
 </div>

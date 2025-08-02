@@ -1,5 +1,6 @@
 <div class="d-flex align-items-center">
-  <%= link_to "Back to Subscriptions", account_path(anchor: 'subscriptions'), class: "btn btn-primary me-2" %>
+  <%= link_to "Back to Orders", account_subscriptions_path,
+            class: "btn btn-primary me-2" %>
   <% if @subscription.can_extend_subscription? %>
     <%= button_to "Extend Subscription", extend_subscription_subscription_path(@subscription), method: :post, class: "btn btn-success me-2" %>
   <% end %>
