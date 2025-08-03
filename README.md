@@ -90,14 +90,9 @@ shopik is using `RSpec` tests. You can run test suite with: `bundle exec rspec`.
 
 ### Sorbet/Tapioca:
 
-shopik is using `Sorbet` with `Tapioca`. Although all necessary `rbi` files are committed to this repository, if you encounter any Sorbet related issues, try:
+shopik is using `Sorbet` with `Tapioca`. You can use the following command to generate rbi files for the project:
 ```
-bundle exec tapioca dsl
-bundle exec tapioca gem
-bundle exec tapioca require
+bin/types
 ```
 
-### Back Requests:
 
-shopik is using `back requests` to update the status of payments, however it also requests from Espago status of all payments which are not finished.
-This means that payment statuses will still be updated while running shopik on `localhost`, although the statuses will be delayed as payment status requests to Espago are done via background jobs for a specific user on login to application and on account page visit. This means that after completing the payment process refresh of account page may be required to trigger background jobs and update payment statuses. In some cases, like timeouts or connection failures with Espago, back requests are required to properly manage payment status of orders.
