@@ -12,6 +12,10 @@ class Payment < ApplicationRecord
 
   before_create :generate_payment_number
 
+  scope :should_be_finalized, -> {
+    where(state: 'executed').where('updated_at < ?', 1.hour.ago)
+  }
+
   STATUS_MAP = {
     'rejected'              => 'Payment Rejected',
     'failed'                => 'Payment Failed',
@@ -34,11 +38,14 @@ class Payment < ApplicationRecord
     'invalid_uri'           => 'Payment Error',
   }.freeze #: Hash[String, String]
 
-  ORDER_STATUS_MAP = STATUS_MAP.merge('executed' => 'Preparing for Shipment') #: Hash[String, String]
+  ORDER_STATUS_MAP = STATUS_MAP.merge('executed'  => 'Preparing for Shipment',
+                                      'finalized' => 'Delivered',) #: Hash[String, String]
 
-  SUBSCRIPTION_STATUS_MAP = STATUS_MAP.merge('executed' => 'Active') #: Hash[String, String]
+  SUBSCRIPTION_STATUS_MAP = STATUS_MAP.merge('executed'  => 'Active',
+                                             'finalized' => 'Active',) #: Hash[String, String]
 
-  SUCCESS_STATUSES = ['executed'].freeze #: Array[String]
+  SUCCESS_STATUSES = %w[executed
+                        finalized].freeze #: Array[String]
 
   FAILURE_STATUSES = %w[
     rejected
@@ -101,6 +108,16 @@ class Payment < ApplicationRecord
     !successful? && !awaiting?
   end
 
+  #: -> bool
+  def reversable?
+    state == 'executed'
+  end
+
+  #: -> bool
+  def refundable?
+    state == 'finalized'
+  end
+
   #: -> Symbol
   def simplified_state
     return :success if SUCCESS_STATUSES.include?(state)
@@ -144,6 +161,13 @@ class Payment < ApplicationRecord
       cof:        cof,
       client_id:  client_id,
     ).process_payment
+  end
+
+  #: -> [Symbol, String]
+  def reverse_payment
+    Espago::Payment::Processor.new(
+      payment:    self,
+    ).reverse_payment
   end
 
   #: (Espago::Payment::Response) -> [Symbol, String]

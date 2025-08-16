@@ -5,7 +5,7 @@ module Espago
   class PaymentsController < ApplicationController
 
     before_action :authenticate_user!
-    before_action :set_payment, only: %i[new payment_success payment_failure payment_awaiting]
+    before_action :set_payment, only: %i[new reverse refund payment_success payment_failure payment_awaiting]
     before_action :set_payable, only: %i[new start_payment]
 
     #: -> void
@@ -16,6 +16,30 @@ module Espago
       end
 
       @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY') #: String?
+    end
+
+    #: -> void
+    def reverse
+      unless @payment
+        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+        return
+      end
+
+      unless @payment.reversable?
+        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+        return
+      end
+
+      @payment.reverse_payment
+    end
+
+    #: -> void
+    def refund
+      return if @payment
+
+      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+      nil
+
     end
 
     #: -> void

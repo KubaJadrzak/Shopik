@@ -28,6 +28,17 @@ module Espago
         @payment.process_response(response)
       end
 
+      #: -> [Symbol, String]
+      def reverse_payment
+        payment_id = @payment.payment_id #: as !nil
+        response = create_payment_reversal(payment_id)
+
+
+        Rails.logger.info(response.inspect)
+
+        @payment.process_response(response)
+      end
+
       private
 
       #: -> Response
@@ -78,6 +89,11 @@ module Espago
                                      card_token:  @card_token,
                                      client_id:   @client_id,).secure_web_payment
         create_secure_web_payment(payload)
+      end
+
+      #: (String) -> Response
+      def create_payment_reversal(payment_id)
+        Espago::Client.new.send("api/charges/#{payment_id}", method: :delete) # rubocop:disable Style/Send
       end
 
       #: (Hash[Symbol, String]) -> Response

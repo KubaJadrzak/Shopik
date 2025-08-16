@@ -36,6 +36,16 @@ class Order < ApplicationRecord
     payments.all?(&:retryable?)
   end
 
+  #: -> bool
+  def can_reverse_payment?
+    payments.first&.reversable? || false
+  end
+
+  #: -> bool
+  def can_refund_payment?
+    payments.first&.refundable? || false
+  end
+
   #: -> BigDecimal
   def amount
     total_price

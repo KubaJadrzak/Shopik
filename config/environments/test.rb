@@ -52,4 +52,6 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 
   Rails.application.routes.default_url_options[:host] = ENV.fetch('APP_HOST_URL')
+
+  config.active_job.queue_adapter = :inline
 end

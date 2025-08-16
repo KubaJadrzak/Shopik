@@ -10,7 +10,16 @@ module GeneratedPathHelpersModule
   include ::ActionDispatch::Routing::PolymorphicRoutes
 
   sig { params(args: T.untyped).returns(String) }
+  def account_clients_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def account_orders_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def account_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def account_subscriptions_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def add_to_cart_path(*args); end
@@ -50,6 +59,12 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def espago_payments_success_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def espago_refund_payment_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def espago_reverse_payment_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def espago_start_payment_path(*args); end
@@ -169,10 +184,16 @@ module GeneratedPathHelpersModule
   def rails_storage_redirect_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def refund_payment_order_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def retry_payment_order_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def retry_payment_subscription_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def reverse_payment_order_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def root_path(*args); end

@@ -10,6 +10,15 @@ module GeneratedUrlHelpersModule
   include ::ActionDispatch::Routing::PolymorphicRoutes
 
   sig { params(args: T.untyped).returns(String) }
+  def account_clients_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def account_orders_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def account_subscriptions_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def account_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -50,6 +59,12 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def espago_payments_success_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def espago_refund_payment_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def espago_reverse_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def espago_start_payment_url(*args); end
@@ -169,10 +184,16 @@ module GeneratedUrlHelpersModule
   def rails_storage_redirect_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def refund_payment_order_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def retry_payment_order_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def retry_payment_subscription_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def reverse_payment_order_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def root_url(*args); end

@@ -48,11 +48,10 @@ module Espago
           [:redirect_url, redirect_url]
         elsif @body.key?('state')
           @payment.update_payment_and_payable_statuses(@state)
-
           pending_statuses = ::Payment::PENDING_STATUSES
 
           case @state
-          when 'executed'
+          when 'executed', 'reversed', 'refunded'
             [:success, @payment.payment_number]
           when *pending_statuses
             [:awaiting, @payment.payment_number]
