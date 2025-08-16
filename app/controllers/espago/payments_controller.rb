@@ -35,11 +35,17 @@ module Espago
 
     #: -> void
     def refund
-      return if @payment
+      unless @payment
+        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+        return
+      end
 
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      nil
+      unless @payment.refundable?
+        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+        return
+      end
 
+      @payment.refund_payment
     end
 
     #: -> void

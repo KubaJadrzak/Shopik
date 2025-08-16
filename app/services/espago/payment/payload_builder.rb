@@ -4,10 +4,10 @@
 module Espago
   module Payment
     class PayloadBuilder
-      #: (payment: ::Payment, description: String, ?cof: String?, ?card_token: String?, ?client_id: String?) -> void
+      #: (payment: ::Payment, ?description: String?, ?cof: String?, ?card_token: String?, ?client_id: String?) -> void
       def initialize(
         payment:,
-        description:,
+        description: nil,
         cof: nil,
         card_token: nil,
         client_id: nil
