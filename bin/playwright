@@ -27,9 +27,9 @@ if ! kill -0 "$RAILS_PID" 2>/dev/null; then
 fi
 
 echo "🎭 Running Playwright..."
-npx playwright test --config=e2e/playwright.config.js --ui"$@"
+npx playwright test --config=e2e/playwright.config.js --ui "$@"
 
-echo "🧹 Stopping Rails server and Sidekiq..."
+echo "🧹 Stopping Rails server"
 kill "$RAILS_PID"
 wait "$RAILS_PID" 2>/dev/null
 
