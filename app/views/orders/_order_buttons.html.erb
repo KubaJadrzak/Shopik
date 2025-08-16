@@ -1,0 +1,13 @@
+<div class="d-flex align-items-center">
+  <%= link_to "Back to Orders", account_orders_path,
+            class: "btn btn-primary me-2" %>
+  <% if order.can_retry_payment? %>
+    <%= button_to "Retry Payment", retry_payment_order_path(order), method: :post, class: "btn btn-success", data: { turbo: false } %>
+  <% end %>
+  <% if order.can_reverse_payment? %>
+    <%= button_to "Cancel Order", espago_reverse_payment_path(payment_number: @order.payments.first.payment_number), method: :post, class: "btn btn-success", data: { turbo: false } %>
+  <% end %>
+  <% if order.can_refund_payment? %>
+    <%= button_to "Return Order",  espago_refund_payment_path(payment_number: @order.payments.first.payment_number), method: :post, class: "btn btn-success", data: { turbo: false } %>
+  <% end %>
+</div>

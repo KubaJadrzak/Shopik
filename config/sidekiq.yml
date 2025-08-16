@@ -8,3 +8,7 @@
       cron: "0 * * * * *"
       class: Espago::AutoRenewSubscriptionJob
       queue: default
+    finalize_payments_job:
+      cron: "0 * * * * *"
+      class: Espago::FinalizePaymentJob
+      queue: default

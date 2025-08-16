@@ -20,5 +20,14 @@ FactoryBot.define do
     trait :for_client do
       association :payable, factory: :client
     end
+
+    trait :executed do
+      state { 'executed' }
+    end
+
+    trait :to_be_finalized do
+      state { 'executed' }
+      updated_at { 2.hours.ago }
+    end
   end
 end

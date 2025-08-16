@@ -504,6 +504,9 @@ class Payment
     def select(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def should_be_finalized(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def strict_loading(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
@@ -1462,6 +1465,9 @@ class Payment
     sig { params(args: T.untyped).returns(PrivateRelation) }
     sig { params(blk: T.proc.params(record: ::Payment).returns(BasicObject)).returns(T::Array[::Payment]) }
     def select(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def should_be_finalized(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def strict_loading(*args, &blk); end

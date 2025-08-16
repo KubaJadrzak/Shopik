@@ -45,6 +45,8 @@ Rails.application.routes.draw do
     end
 
     get 'payments/new', to: 'payments#new', as: 'new_payment'
+    post 'payments/reverse', to: 'payments#reverse', as: 'reverse_payment'
+    post 'payments/refund', to: 'payments#refund', as: 'refund_payment'
     post 'payments/start_payment', to: 'payments#start_payment', as: 'start_payment'
     get 'payments/:payment_number/success', to: 'payments#payment_success', as: 'payments_success'
     get 'payments/:payment_number/failure', to: 'payments#payment_failure', as: 'payments_failure'
