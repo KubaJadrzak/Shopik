@@ -53,5 +53,4 @@ Rails.application.configure do
 
   Rails.application.routes.default_url_options[:host] = ENV.fetch('APP_HOST_URL')
 
-  config.active_job.queue_adapter = :inline
 end

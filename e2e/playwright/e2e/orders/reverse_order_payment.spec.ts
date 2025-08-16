@@ -3,11 +3,10 @@ import { app, appFactories, appEval } from '../../support/on-rails'
 import { fillCardIframe, login, oneTimeSuccess } from '../../support/command'
 
 test.describe('Reverse Order Payment', () => {
+  let user: any
   test.beforeEach(async ({ page }) => {
     await app('clean')
-    const [user] = await appFactories([
-      ['create', 'user'],
-    ])
+    ;[user] = await appFactories([['create', 'user']])
     await appFactories([
       ['create', 'product', { title: 'First Product' }],
       ['create', 'product', { title: 'Second Product' }],
@@ -28,11 +27,9 @@ test.describe('Reverse Order Payment', () => {
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(orderNumber)).toBeVisible()
 
-    await page.waitForTimeout(5000)
-    await page.goto('/')
-    await page.goto('orders/1')
+    await appEval(`Espago::UpdatePaymentStatusJob.perform_now(${user.id})`)
     await page.getByText('Cancel Order').click()
-    await page.getByText('Reversed')
+    await expect(page.getByText('Payment Reversed')).toBeVisible()
   })
 
 })

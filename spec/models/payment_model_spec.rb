@@ -165,6 +165,21 @@ RSpec.describe Payment, type: :model do
         expect(Payment.uncertain).not_to include(payment)
       end
     end
+
+    describe 'should_be_finalized' do
+      let!(:user) { create(:user) }
+      let!(:order) { create(:order, user: user) }
+      let!(:another_order) { create(:order, user: user) }
+      let!(:executed_payment) { create(:payment, :executed, :for_order, payable: order) }
+      let!(:to_be_finalized_payment) { create(:payment, :to_be_finalized, :for_order, payable: another_order) }
+      it 'includes payments which have executed status for longer than 1 hour' do
+        expect(Payment.should_be_finalized).to include(to_be_finalized_payment)
+      end
+
+      it 'excludes payments which have executed status for shorter than 1 hour' do
+        expect(Payment.should_be_finalized).not_to include(executed_payment)
+      end
+    end
   end
   describe 'methods' do
     describe 'successful?' do

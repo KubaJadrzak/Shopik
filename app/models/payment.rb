@@ -39,9 +39,13 @@ class Payment < ApplicationRecord
   }.freeze #: Hash[String, String]
 
   ORDER_STATUS_MAP = STATUS_MAP.merge('executed'  => 'Preparing for Shipment',
+                                      'resigned'  => 'Payment Resigned',
+                                      'reversed'  => 'Payment Reversed',
                                       'finalized' => 'Delivered',) #: Hash[String, String]
 
   SUBSCRIPTION_STATUS_MAP = STATUS_MAP.merge('executed'  => 'Active',
+                                             'resigned'  => 'Payment Resigned',
+                                             'reversed'  => 'Payment Reversed',
                                              'finalized' => 'Active',) #: Hash[String, String]
 
   SUCCESS_STATUSES = %w[executed
@@ -51,8 +55,6 @@ class Payment < ApplicationRecord
     rejected
     failed
     resigned
-    reversed
-    refunded
     invalid_uri
   ].freeze #: Array[String]
 

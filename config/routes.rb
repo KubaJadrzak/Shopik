@@ -20,8 +20,6 @@ Rails.application.routes.draw do
   resources :orders, only: %i[new create show] do
     member do
       post :retry_payment
-      post :reverse_payment
-      post :refund_payment
     end
   end
 
