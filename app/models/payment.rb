@@ -172,6 +172,13 @@ class Payment < ApplicationRecord
     ).reverse_payment
   end
 
+  #: -> [Symbol, String]
+  def refund_payment
+    Espago::Payment::Processor.new(
+      payment:    self,
+    ).refund_payment
+  end
+
   #: (Espago::Payment::Response) -> [Symbol, String]
   def process_response(response)
     Espago::Payment::ResponseProcessor.new(payment: self, response: response).process_response

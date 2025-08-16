@@ -25,6 +25,11 @@ FactoryBot.define do
       state { 'executed' }
     end
 
+    trait :finalized do
+      state { 'finalized' }
+    end
+
+
     trait :to_be_finalized do
       state { 'executed' }
       updated_at { 2.hours.ago }

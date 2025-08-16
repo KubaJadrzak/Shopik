@@ -39,6 +39,17 @@ module Espago
         @payment.process_response(response)
       end
 
+      #: -> [Symbol, String]
+      def refund_payment
+        payment_id = @payment.payment_id #: as !nil
+        response = create_payment_refund(payment_id)
+
+
+        Rails.logger.info(response.inspect)
+
+        @payment.process_response(response)
+      end
+
       private
 
       #: -> Response
@@ -104,6 +115,11 @@ module Espago
       #: (Hash[Symbol, String]) -> Response
       def create_secure_web_payment(payload)
         Espago::Client.new.send('api/secure_web_page_register', method: :post, body: payload) # rubocop:disable Style/Send
+      end
+
+      #: (String) -> Response
+      def create_payment_refund(payment_id)
+        Espago::Client.new.send("api/charges/#{payment_id}/refund", method: :post) # rubocop:disable Style/Send
       end
     end
   end
