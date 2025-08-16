@@ -310,11 +310,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
       end
 
       context 'when payment exists but is not reversable' do
-        let(:payment) { create(:payment, :for_order, payable: order) }
-
-        before do
-          allow(payment).to receive(:reversable?).and_return(false)
-        end
+        let(:payment) { create(:payment, :for_order, :finalized, payable: order) }
 
         it 'redirects to account_path with alert' do
           post espago_reverse_payment_path(payment_number: payment.payment_number)
@@ -325,6 +321,35 @@ RSpec.describe Espago::PaymentsController, type: :request do
         end
       end
     end
+
+
+    describe 'POST espago/payments/refund' do
+      let(:order) { create(:order, user: user) }
+
+      context 'when payment does not exist' do
+        it 'redirects to account_path with alert' do
+          post espago_refund_payment_path(payment_number: 'nonexistent_payment_number')
+
+          expect(response).to redirect_to(account_path)
+          follow_redirect!
+          expect(response.body).to include('We are experiencing an issue with your payment')
+        end
+      end
+
+      context 'when payment exists but is not refundable' do
+        let(:payment) { create(:payment, :for_order, :executed, payable: order) }
+
+        it 'redirects to account_path with alert' do
+          post espago_refund_payment_path(payment_number: payment.payment_number)
+
+          expect(response).to redirect_to(account_path)
+          follow_redirect!
+          expect(response.body).to include('We are experiencing an issue with your payment')
+        end
+      end
+    end
+
+
 
   end
 
