@@ -2,7 +2,7 @@
 <div class="container mt-4">
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
     <h3><%= @order.order_number%></h3>
-    <%= render 'order_buttons', order: @order  %>
+    <%= render 'show_buttons', order: @order  %>
   </div>
   <div class="row mt-4">
     <div class="col-lg-12 mb-4">
@@ -11,7 +11,7 @@
           <h5 class="card-title mb-3">Order Details</h5>
           <div class="row">
             <div class="col-12">
-              <%= render "order_statuses", order: @order %>
+              <%= render "show_statuses", order: @order %>
             </div>
           </div>
           <div class="row mt-3">

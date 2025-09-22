@@ -4,7 +4,7 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_cart_has_items, only: %i[new create]
-  before_action :set_order, only: %i[show retry_payment]
+  before_action :set_order, only: %i[show retry_payment cancel return]
 
   def new
     @order = Order.new
@@ -42,15 +42,19 @@ class OrdersController < ApplicationController
     redirect_to espago_new_payment_path(order_id: @order.id)
   end
 
-  def reverse_payment
-    unless @order.can_reverse_payment?
-      redirect_to order_path(@order), alert: 'Cannot reverse payment: payment already in progress or successful.'
-      return
+  #: -> void
+  def cancel
+    unless @order.can_reverse_payment? # rubocop:disable Style/GuardClause
+      redirect_to account_path, alert: 'We cannot process your order cancellation due to a technical issue'
     end
-
-    redirect_to espago_reverse_payment_path(order_id: @order.id)
   end
 
+  #: -> void
+  def return
+    unless @order.can_refund_payment? # rubocop:disable Style/GuardClause
+      redirect_to account_path, alert: 'We cannot process your order return due to a technical issue'
+    end
+  end
 
   private
 

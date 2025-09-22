@@ -4,7 +4,7 @@
     You are about to pay <strong><%= number_to_currency(@payable.amount) %></strong>
   </h5>
 <% end %>
-<%= form_with url: espago_start_payment_path, method: :post, data: { turbo: false }, html: { data: { payment_method_target: "form", espago_iframe_target: "form" }, id: "payment_form" } do |form| %>
+<%= form_with url: espago_charge_path, method: :post, data: { turbo: false }, html: { data: { payment_method_target: "form", espago_iframe_target: "form" }, id: "payment_form" } do |form| %>
   <%= hidden_field_tag :payable_type, @payable.class.name %>
   <%= hidden_field_tag :payable_id, @payable.id %>
   <%= render "new_payment_form_modes" %>

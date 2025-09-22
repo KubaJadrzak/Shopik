@@ -20,6 +20,8 @@ Rails.application.routes.draw do
   resources :orders, only: %i[new create show] do
     member do
       post :retry_payment
+      get  :cancel
+      get  :return
     end
   end
 
@@ -47,7 +49,7 @@ Rails.application.routes.draw do
     get 'payments/new', to: 'payments#new', as: 'new_payment'
     post 'payments/reverse', to: 'payments#reverse', as: 'reverse_payment'
     post 'payments/refund', to: 'payments#refund', as: 'refund_payment'
-    post 'payments/start_payment', to: 'payments#start_payment', as: 'start_payment'
+    post 'payments/charge', to: 'payments#charge', as: 'charge'
     get 'payments/:payment_number/success', to: 'payments#payment_success', as: 'payments_success'
     get 'payments/:payment_number/failure', to: 'payments#payment_failure', as: 'payments_failure'
     get 'payments/:payment_number/awaiting', to: 'payments#payment_awaiting', as: 'payments_awaiting'

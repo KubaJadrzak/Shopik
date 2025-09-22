@@ -120,6 +120,16 @@ class Payment < ApplicationRecord
     state == 'finalized'
   end
 
+  #: -> bool
+  def reversed?
+    state == 'reversed'
+  end
+
+  #: -> bool
+  def refunded?
+    state == 'refunded'
+  end
+
   #: -> Symbol
   def simplified_state
     return :success if SUCCESS_STATUSES.include?(state)

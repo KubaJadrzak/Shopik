@@ -46,6 +46,9 @@ module GeneratedUrlHelpersModule
   def espago_back_request_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def espago_charge_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def espago_client_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -65,9 +68,6 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def espago_reverse_payment_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def espago_start_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def extend_subscription_subscription_url(*args); end

@@ -49,7 +49,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
         end
       end
     end
-    describe 'POST espago/payments/start_payment' do
+    describe 'POST espago/payments/charge' do
       let(:payable)     { create(:order, user: user) }
       let(:payment_number) { 'payment_number' }
 
@@ -59,7 +59,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
 
       context 'when parent is not found' do
         it 'redirects to account_path with alert' do
-          post espago_start_payment_path, params: {
+          post espago_charge_path, params: {
             payable_type: 'Order',
             payable_id:   -1,
           }
@@ -76,7 +76,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
             .and_return([:redirect_url, 'https://payment.example.com'])
 
           expect do
-            post espago_start_payment_path, params: {
+            post espago_charge_path, params: {
               payable_type: 'Order',
               payable_id:   payable.id,
               payment_mode: 'new_one_time',
@@ -94,7 +94,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
             .and_return([:success, payment_number])
 
           expect do
-            post espago_start_payment_path, params: {
+            post espago_charge_path, params: {
               payable_type: 'Order',
               payable_id:   payable.id,
               payment_mode: 'new_one_time',
@@ -112,7 +112,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
             .and_return([:failure, payment_number])
 
           expect do
-            post espago_start_payment_path, params: {
+            post espago_charge_path, params: {
               payable_type: 'Order',
               payable_id:   payable.id,
               payment_mode: 'new_one_time',
@@ -130,7 +130,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
             .and_return([:awaiting, payment_number])
 
           expect do
-            post espago_start_payment_path, params: {
+            post espago_charge_path, params: {
               payable_type: 'Order',
               payable_id:   payable.id,
               payment_mode: 'new_one_time',

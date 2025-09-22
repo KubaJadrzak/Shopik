@@ -6,7 +6,7 @@ module Espago
 
     before_action :authenticate_user!
     before_action :set_payment, only: %i[new reverse refund payment_success payment_failure payment_awaiting]
-    before_action :set_payable, only: %i[new start_payment]
+    before_action :set_payable, only: %i[new charge]
 
     #: -> void
     def new
@@ -21,16 +21,22 @@ module Espago
     #: -> void
     def reverse
       unless @payment
-        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+        redirect_to account_path, alert: 'We were unable to cancel your order due to technical problems'
         return
       end
 
       unless @payment.reversable?
-        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+        redirect_to account_path, alert: 'We were unable to cancel your order due to technical problems'
         return
       end
 
       @payment.reverse_payment
+
+      if @payment.reversed?
+        redirect_to order_path(@payment.payable), notice: 'Your order was cancelled'
+      else
+        redirect_to order_path, alert: 'We were unable to cancel your order due to technical problems'
+      end
     end
 
     #: -> void
@@ -46,10 +52,16 @@ module Espago
       end
 
       @payment.refund_payment
+
+      if @payment.refunded?
+        redirect_to order_path(@payment.payable), notice: 'Your order was refunded'
+      else
+        redirect_to order_path(@payment.payable), alert: 'We were unable to refund your order due to technical problems'
+      end
     end
 
     #: -> void
-    def start_payment
+    def charge
       unless @payable
         redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
         return
