@@ -1,7 +1,6 @@
 # typed: strict
 
 class Order < ApplicationRecord
-  extend T::Sig
   belongs_to :user, optional: true, touch: true
   has_many :order_items, dependent: :destroy
   has_many :payments, -> { order(created_at: :desc) }, as: :payable, dependent: :destroy
@@ -33,7 +32,7 @@ class Order < ApplicationRecord
 
   #: -> bool
   def can_retry_payment?
-    payments.all?(&:retryable?)
+    payments.all?(&:retryable?) && status != 'Payment Refunded'
   end
 
   #: -> bool

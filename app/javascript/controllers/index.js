@@ -15,6 +15,3 @@ application.register("hello", HelloController)
 
 import PaymentMethodController from "./payment_method_controller"
 application.register("payment-method", PaymentMethodController)
-
-import UserSidebarController from "./user_sidebar_controller"
-application.register("user-sidebar", UserSidebarController)
