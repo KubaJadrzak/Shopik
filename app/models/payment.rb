@@ -157,7 +157,7 @@ class Payment < ApplicationRecord
 
   #: (?card_token: String?, ?cof: String?, ?client_id: String?) -> [Symbol, String]
   def process_payment(card_token: nil, cof: nil, client_id: nil)
-    Espago::Payment::Processor.new(
+    Espago::Payment::PaymentProcessor.new(
       payment:    self,
       card_token: card_token,
       cof:        cof,
@@ -167,14 +167,14 @@ class Payment < ApplicationRecord
 
   #: -> [Symbol, String]
   def reverse_payment
-    Espago::Payment::Processor.new(
+    Espago::Payment::PaymentProcessor.new(
       payment:    self,
     ).reverse_payment
   end
 
   #: -> [Symbol, String]
   def refund_payment
-    Espago::Payment::Processor.new(
+    Espago::Payment::PaymentProcessor.new(
       payment:    self,
     ).refund_payment
   end
@@ -209,9 +209,7 @@ class Payment < ApplicationRecord
   def handle_payable_status_update
     new_status = @new_status #: as !nil
     if payable.is_a?(Subscription)
-      if payable.status == 'Active' && new_status != 'Active'
-        Rails.logger.info("Subscription #{payable.id} is Active; ignoring status change")
-      else
+      unless payable.status == 'Active' && new_status != 'Active'
         payable.update!(status: new_status)
         payable.extend_or_initialize_dates! if new_status == 'Active'
       end

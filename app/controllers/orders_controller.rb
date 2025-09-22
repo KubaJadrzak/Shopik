@@ -42,6 +42,15 @@ class OrdersController < ApplicationController
     redirect_to espago_new_payment_path(order_id: @order.id)
   end
 
+  def reverse_payment
+    unless @order.can_reverse_payment?
+      redirect_to order_path(@order), alert: 'Cannot reverse payment: payment already in progress or successful.'
+      return
+    end
+
+    redirect_to espago_reverse_payment_path(order_id: @order.id)
+  end
+
 
   private
 

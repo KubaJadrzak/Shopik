@@ -3,7 +3,7 @@
 
 module Espago
   module Payment
-    class Processor
+    class PaymentProcessor
 
       #: (payment: ::Payment, ?card_token: String?, ?cof: String?, ?client_id: String?) -> void
       def initialize(payment:, card_token: nil, cof: nil, client_id: nil)
@@ -23,8 +23,6 @@ module Espago
                      handle_no_payable
                    end
 
-        Rails.logger.info(response.inspect)
-
         @payment.process_response(response)
       end
 
@@ -33,9 +31,6 @@ module Espago
         payment_id = @payment.payment_id #: as !nil
         response = create_payment_reversal(payment_id)
 
-
-        Rails.logger.info(response.inspect)
-
         @payment.process_response(response)
       end
 
@@ -43,9 +38,6 @@ module Espago
       def refund_payment
         payment_id = @payment.payment_id #: as !nil
         response = create_payment_refund(payment_id)
-
-
-        Rails.logger.info(response.inspect)
 
         @payment.process_response(response)
       end
