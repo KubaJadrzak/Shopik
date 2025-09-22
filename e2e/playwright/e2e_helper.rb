@@ -24,9 +24,7 @@ end
 
 require 'cypress_on_rails/smart_factory_wrapper'
 
-factory = CypressOnRails::SimpleRailsFactory
 factory = FactoryBot if defined?(FactoryBot)
-factory = FactoryGirl if defined?(FactoryGirl)
 
 CypressOnRails::SmartFactoryWrapper.configure(
   always_reload: false,

@@ -184,16 +184,10 @@ module GeneratedUrlHelpersModule
   def rails_storage_redirect_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def refund_payment_order_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def retry_payment_order_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def retry_payment_subscription_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def reverse_payment_order_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def root_url(*args); end
