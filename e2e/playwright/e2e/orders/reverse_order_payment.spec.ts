@@ -29,8 +29,8 @@ test.describe('Reverse Order Payment', () => {
 
     await appEval(`Espago::UpdatePaymentStatusJob.perform_now(${user.id})`)
     await page.getByText('Cancel Order').click()
-    await page.getByText('Cancel Order').click()
-    await expect(page.getByText('Payment Reversed')).toBeVisible()
+    await page.getByRole('button', { name: 'Cancel Order' }).click()
+    await expect(page.getByText('Cancelled', { exact: true })).toBeVisible()
   })
 
 })

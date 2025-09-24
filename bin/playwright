@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 set -e
 
 PORT=3001
@@ -10,7 +9,6 @@ RAILS_ENV=test bin/rails db:test:prepare
 echo "🔧 Starting Rails server on port $PORT in test environment..."
 RAILS_ENV=test bin/rails server -p $PORT &
 RAILS_PID=$!
-
 
 echo "⏳ Waiting for Rails server to respond..."
 for i in {1..20}; do
@@ -27,7 +25,8 @@ if ! kill -0 "$RAILS_PID" 2>/dev/null; then
 fi
 
 echo "🎭 Running Playwright..."
-npx playwright test --config=e2e/playwright.config.js --ui "$@"
+
+npx playwright test --config=e2e/playwright.config.js "$@"
 
 echo "🧹 Stopping Rails server"
 kill "$RAILS_PID"
