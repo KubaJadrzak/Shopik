@@ -7,7 +7,7 @@ on:
     branches: ['*']
 
 jobs:
-  setup:
+  setup_and_test:
     runs-on: ubuntu-latest
     services:
       redis:
