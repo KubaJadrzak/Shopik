@@ -35,12 +35,7 @@ bin/setup
 bin/reset
 ```
 
-### Start the application:
-```
-bin/dev
-```
-
-The application should start and be accessible via `localhost:3000` by default, however in order to ensure proper functionality, proceed with steps below.
+In order to ensure proper functionality, proceed with steps below.
 
 ### Adding environmental variables and credentials:
 
