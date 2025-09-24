@@ -78,7 +78,7 @@ This command will start all necessary services, including rails server and sidek
 
 shopik is using `RSpec` tests. You can run test suite with: `bin/rspec`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some tests make real requests to Espago and will otherwise fail.
 
-### RSpec: 
+### Playwright: 
 
 shopik is using `Playwright` tests. You can run test suite with: `bin/playwright`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some tests make real requests to Espago and will otherwise fail.
 
