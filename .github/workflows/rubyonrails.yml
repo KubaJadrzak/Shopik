@@ -50,5 +50,9 @@ jobs:
       - name: Run RSpec tests
         run: bin/rspec
 
+      - name: Install Playwright browsers
+        run: npx playwright install
+      
       - name: Run Playwright tests
         run: bin/playwright
+
