@@ -30,6 +30,6 @@ npx playwright test --config=e2e/playwright.config.js "$@"
 
 echo "🧹 Stopping Rails server"
 kill "$RAILS_PID"
-wait "$RAILS_PID" 2>/dev/null
+wait "$RAILS_PID" 2>/dev/null || true
 
 echo "✅ Done."
