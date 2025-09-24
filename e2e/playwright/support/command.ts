@@ -7,7 +7,6 @@ export async function login(page) {
     if (!response.ok()) {
       throw new Error(`Login failed with status: ${response.status()}`)
     }
-    console.log('Login successful')
   } catch (error) {
     console.error('Login failed:', error)
     throw error
