@@ -20,7 +20,7 @@ class Payment < ApplicationRecord
     'rejected'              => 'Payment Rejected',
     'failed'                => 'Payment Failed',
     'resigned'              => 'Payment Resigned',
-    'reversed'              => 'Payment Reversed',
+    'reversed'              => 'Cancelled',
     'preauthorized'         => 'Waiting for Payment',
     'tds2_challenge'        => 'Waiting for Payment',
     'tds_redirected'        => 'Waiting for Payment',
@@ -28,7 +28,7 @@ class Payment < ApplicationRecord
     'blik_redirected'       => 'Waiting for Payment',
     'transfer_redirected'   => 'Waiting for Payment',
     'new'                   => 'Waiting for Payment',
-    'refunded'              => 'Payment Refunded',
+    'refunded'              => 'Returned',
     'timeout'               => 'Awaiting Payment',
     'connection_failed'     => 'Awaiting Payment',
     'ssl_error'             => 'Awaiting Payment',
@@ -39,13 +39,9 @@ class Payment < ApplicationRecord
   }.freeze #: Hash[String, String]
 
   ORDER_STATUS_MAP = STATUS_MAP.merge('executed'  => 'Preparing for Shipment',
-                                      'resigned'  => 'Payment Resigned',
-                                      'reversed'  => 'Payment Reversed',
                                       'finalized' => 'Delivered',) #: Hash[String, String]
 
   SUBSCRIPTION_STATUS_MAP = STATUS_MAP.merge('executed'  => 'Active',
-                                             'resigned'  => 'Payment Resigned',
-                                             'reversed'  => 'Payment Reversed',
                                              'finalized' => 'Active',) #: Hash[String, String]
 
   SUCCESS_STATUSES = %w[executed

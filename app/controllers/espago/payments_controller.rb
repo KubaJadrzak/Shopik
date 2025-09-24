@@ -21,12 +21,12 @@ module Espago
     #: -> void
     def reverse
       unless @payment
-        redirect_to account_path, alert: 'We were unable to cancel your order due to technical problems'
+        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
         return
       end
 
       unless @payment.reversable?
-        redirect_to account_path, alert: 'We were unable to cancel your order due to technical problems'
+        redirect_to account_path, alert: 'We are experiencing an issue with your payment'
         return
       end
 
@@ -35,7 +35,7 @@ module Espago
       if @payment.reversed?
         redirect_to order_path(@payment.payable), notice: 'Your order was cancelled'
       else
-        redirect_to order_path, alert: 'We were unable to cancel your order due to technical problems'
+        redirect_to order_path, alert: 'We are experiencing an issue with your payment'
       end
     end
 
@@ -56,7 +56,7 @@ module Espago
       if @payment.refunded?
         redirect_to order_path(@payment.payable), notice: 'Your order was refunded'
       else
-        redirect_to order_path(@payment.payable), alert: 'We were unable to refund your order due to technical problems'
+        redirect_to order_path(@payment.payable), alert: 'We are experiencing an issue with your payment'
       end
     end
 

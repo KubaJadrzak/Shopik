@@ -14,20 +14,6 @@ class SubscriptionsController < ApplicationController
     @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY', nil)
   end
 
-  def toggle_auto_renew
-    unless @subscription.active?
-      redirect_to "#{account_path}#subscriptions", alert: 'This subscription is not active'
-      return
-    end
-
-    unless @subscription.user.primary_payment_method?
-      redirect_to "#{account_path}#subscriptions", alert: 'Cannot enable auto-renew without primary payment method'
-      return
-    end
-
-    @subscription.update(auto_renew: !@subscription.auto_renew)
-  end
-
   def create
     if current_user.active_subscription?
       redirect_to "#{account_path}#subscriptions", alert: 'You already have an active subscription.'
@@ -65,6 +51,21 @@ class SubscriptionsController < ApplicationController
 
     redirect_to espago_new_payment_path(subscription_id: @subscription.id)
   end
+
+  def toggle_auto_renew
+    unless @subscription.active?
+      redirect_to "#{account_path}#subscriptions", alert: 'This subscription is not active'
+      return
+    end
+
+    unless @subscription.user.primary_payment_method?
+      redirect_to "#{account_path}#subscriptions", alert: 'Cannot enable auto-renew without primary payment method'
+      return
+    end
+
+    @subscription.update(auto_renew: !@subscription.auto_renew)
+  end
+
 
   private
 

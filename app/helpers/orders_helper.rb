@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module OrdersHelper
-  def order_color_for_status(status)
+  def order_status_color(status)
     case status
     when 'Preparing for Shipment', 'Delivered'
       'bg-success'
-    when 'Payment Rejected', 'Payment Failed', 'Payment Resigned', 'Payment Reversed', 'Payment Refunded', 'Payment Error'
+    when 'Payment Rejected', 'Payment Failed', 'Payment Resigned', 'Payment Error'
       'bg-danger'
     when 'Waiting for Payment', 'Awaiting Payment'
       'bg-warning'
