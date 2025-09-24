@@ -78,6 +78,10 @@ This command will start all necessary services, including rails server and sidek
 
 shopik is using `RSpec` tests. You can run test suite with: `bin/rspec`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some tests make real requests to Espago and will otherwise fail.
 
+### RSpec: 
+
+shopik is using `Playwright` tests. You can run test suite with: `bin/playwright`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some tests make real requests to Espago and will otherwise fail.
+
 ### Sorbet/Tapioca:
 
 shopik is using `Sorbet` with `Tapioca`. You can use the following command to generate rbi files for the project:
