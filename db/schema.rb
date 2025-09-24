@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_06_130244) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_24_160759) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -99,6 +99,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_06_130244) do
     t.decimal "price", precision: 10, scale: 2, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "membership_price"
   end
 
   create_table "subscriptions", force: :cascade do |t|

@@ -25,6 +25,9 @@ module GeneratedPathHelpersModule
   def add_to_cart_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def cancel_order_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def cancel_user_registration_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -188,6 +191,9 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def retry_payment_subscription_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def return_order_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def root_path(*args); end

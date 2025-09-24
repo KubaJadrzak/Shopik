@@ -25,6 +25,9 @@ module GeneratedUrlHelpersModule
   def add_to_cart_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def cancel_order_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def cancel_user_registration_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -188,6 +191,9 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def retry_payment_subscription_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def return_order_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def root_url(*args); end

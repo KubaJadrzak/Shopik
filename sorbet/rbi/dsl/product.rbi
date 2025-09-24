@@ -684,6 +684,51 @@ class Product
     sig { void }
     def id_will_change!; end
 
+    sig { returns(T.nilable(::BigDecimal)) }
+    def membership_price; end
+
+    sig { params(value: T.nilable(::BigDecimal)).returns(T.nilable(::BigDecimal)) }
+    def membership_price=(value); end
+
+    sig { returns(T::Boolean) }
+    def membership_price?; end
+
+    sig { returns(T.nilable(::BigDecimal)) }
+    def membership_price_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def membership_price_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def membership_price_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    def membership_price_change; end
+
+    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    def membership_price_change_to_be_saved; end
+
+    sig { params(from: T.nilable(::BigDecimal), to: T.nilable(::BigDecimal)).returns(T::Boolean) }
+    def membership_price_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::BigDecimal)) }
+    def membership_price_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    def membership_price_previous_change; end
+
+    sig { params(from: T.nilable(::BigDecimal), to: T.nilable(::BigDecimal)).returns(T::Boolean) }
+    def membership_price_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::BigDecimal)) }
+    def membership_price_previously_was; end
+
+    sig { returns(T.nilable(::BigDecimal)) }
+    def membership_price_was; end
+
+    sig { void }
+    def membership_price_will_change!; end
+
     sig { returns(::BigDecimal) }
     def price; end
 
@@ -742,6 +787,9 @@ class Product
     def restore_id_value!; end
 
     sig { void }
+    def restore_membership_price!; end
+
+    sig { void }
     def restore_price!; end
 
     sig { void }
@@ -773,6 +821,12 @@ class Product
 
     sig { returns(T::Boolean) }
     def saved_change_to_id_value?; end
+
+    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    def saved_change_to_membership_price; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_membership_price?; end
 
     sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def saved_change_to_price; end
@@ -893,6 +947,9 @@ class Product
 
     sig { returns(T::Boolean) }
     def will_save_change_to_id_value?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_membership_price?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_price?; end
