@@ -1,10 +1,9 @@
 Shopik was created primarly to learn and expand my knowledge about Ruby on Rails. Currently the project contains:
 
-- Extensive integration with Espago payment processing service, including: Secure Web Page payments, One-Time Payments via iFrame, Recurring Payments, saving Payment Methods and using saved Payment Method to perform CIT and MIT transactions.
+- Extensive integration with Espago payment processing service, including: Secure Web Page payments, One-Time Payments via iFrame, Recurring Payments, saving Payment Methods, using saved Payment Method to perform CIT and MIT transactions as well as reversing and refunding Payments
 - Jobs implemented via Sidekiq
 - Unit and Request tests implemented via RSpec
 - End-to-End tests implemented via Playwright
-
 
 
 ### Prerequisites:
@@ -32,17 +31,11 @@ yarn install
 ```
 ### Set up the database:
 ```
-rails db:create 
-rails db:migrate 
-rails db:seed
+bin/setup
+bin/reset
 ```
 
-### Start the application:
-```
-bin/dev
-```
-
-The application should start and be accessible via `localhost:3000` by default, however in order to ensure proper functionality, proceed with steps below.
+In order to ensure proper functionality, proceed with steps below.
 
 ### Adding environmental variables and credentials:
 
@@ -63,14 +56,7 @@ ESPAGO_BASE_URL=https://sandbox.espago.com
 ESPAGO_PUBLIC_KEY=your_espago_public_key
 ```
 
-shopik is using `Rails credentials`. You will have to remove existing encrypted credentials since encrypted `credentials.yml.enc` is included in the repository, simply run the following commands (replace `nano` with editor of choice): 
-
-```
-rm config/credentials.yml.enc
-EDITOR=nano bin/rails credentials:edit
-```
-
-Your credentials will have to include below information:
+shopik is using `Rails credentials`. Your credentials will have to include below information:
 
 ```
 espago:
@@ -80,13 +66,17 @@ espago:
     password_basic_auth: your_espago_password_basic_auth
     checksum_key: your_espago_checksum_key
 ```
-### Sidekiq:
+### Start application:
 
-shopik is using `sidekiq`. To correctly run background jobs, simply start sidekiq in new terminal window with: `bundle exec sidekiq`. Make sure that `Redis` is also running on your system.
+You can start the shopik application using the command:
+```
+bin/dev
+```
+This command will start all necessary services, including rails server and sidekiq background jobs
 
 ### RSpec: 
 
-shopik is using `RSpec` tests. You can run test suite with: `bundle exec rspec`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some tests make real requests to Espago and will otherwise fail.
+shopik is using `RSpec` tests. You can run test suite with: `bin/rspec`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some tests make real requests to Espago and will otherwise fail.
 
 ### Sorbet/Tapioca:
 
