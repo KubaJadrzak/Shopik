@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: ['*']
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:6
+        ports:
+          - 6379:6379
+
+    env:
+      RAILS_ENV: test
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      APP_HOST_URL: http://localhost:3001
+      ESPAGO_BASE_URL: https://sandbox.espago.com
+      ESPAGO_PUBLIC_KEY: ${{ secrets.ESPAGO_PUBLIC_KEY }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.3
+          bundler-cache: true
+
+      - name: Set up Node.js and Yarn
+        uses: actions/setup-node@v3
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: |
+          yarn install
+          bundle install
+
+      - name: Set up database
+        run: |
+          bin/setup
+          bin/reset
+
+      - name: Run RSpec tests
+        run: bin/rspec
+
+      - name: Run Playwright tests
+        run: bin/playwright
