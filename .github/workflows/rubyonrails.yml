@@ -46,7 +46,6 @@ jobs:
       - name: Set up database
         run: |
           bin/setup
-          bin/reset
 
       - name: Run RSpec tests
         run: bin/rspec
