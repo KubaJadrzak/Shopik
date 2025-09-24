@@ -7,7 +7,9 @@
       </div>
     <% end %>
   <% elsif @subscription.active? %>
-    <%= link_to "Select Payment Method", account_path(anchor: 'clients'), class: "btn btn-primary btn-sm" %>
+    <%= link_to "Select Payment Method",
+            account_path(section: 'clients'),
+            class: "btn btn-primary btn-sm" %>
   <% else %>
     <div class="form-check form-switch">
       <%= check_box_tag "disabled_auto_renew", "0", false, class: "form-check-input", disabled: true %>
