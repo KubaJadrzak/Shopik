@@ -31,9 +31,8 @@ yarn install
 ```
 ### Set up the database:
 ```
-rails db:create 
-rails db:migrate 
-rails db:seed
+bin/setup
+bin/reset
 ```
 
 ### Start the application:
