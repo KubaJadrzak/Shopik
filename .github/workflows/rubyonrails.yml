@@ -46,10 +46,13 @@ jobs:
       - name: Set up database
         run: |
           bin/setup
-          bin/reset
 
       - name: Run RSpec tests
         run: bin/rspec
 
+      - name: Install Playwright browsers
+        run: npx playwright install
+      
       - name: Run Playwright tests
         run: bin/playwright
+
