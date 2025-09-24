@@ -40,10 +40,22 @@
   </div>
   <div class="form-check mb-0" data-payment-method-target="saveCardCheckbox">
     <div class="border-top mt-3 pt-3">
-      <%= check_box_tag :cof, 'storing', false, class: "form-check-input", id: "save_card" %>
-      <label class="form-check-label" for="save_card">
-        Save card information for future payments
-      </label>
+      <% if @payable.class.name == "Subscription" %>
+        <%= check_box_tag :cof, 'storing', true,
+            class: "form-check-input",
+            id: "save_card",
+            disabled: true %>
+        <%= hidden_field_tag :cof, 'storing' %>
+        <label class="form-check-label" for="save_card">
+          Save card information for future payments <br>
+          <small class="text-muted">(Required for subscription payments)</small>
+        </label>
+      <% else %>
+        <%= check_box_tag :cof, 'storing', false, class: "form-check-input", id: "save_card" %>
+        <label class="form-check-label" for="save_card">
+          Save card information for future payments
+        </label>
+      <% end %>
     </div>
   </div>
 </fieldset>
