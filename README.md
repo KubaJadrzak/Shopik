@@ -28,7 +28,7 @@ cd shopik
 ```
 bin/setup
 ```
-### Setup and seed the database
+### Setup and seed the database:
 ```
 bin/reset
 ```
