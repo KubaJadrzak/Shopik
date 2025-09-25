@@ -7,7 +7,7 @@ on:
     branches: ['*']
 
 jobs:
-  setup_and_test:
+  typecheck_and_test:
     runs-on: ubuntu-latest
     services:
       redis:
@@ -46,6 +46,12 @@ jobs:
       - name: Set up database
         run: |
           bin/setup
+          
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
+      - name: Run Sorbet
+        run: bundle exec srb tc
 
       - name: Run RSpec tests
         run: bin/rspec

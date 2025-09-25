@@ -4,6 +4,7 @@ Shopik was created primarly to learn and expand my knowledge about Ruby on Rails
 - Jobs implemented via Sidekiq
 - Unit and Request tests implemented via RSpec
 - End-to-End tests implemented via Playwright
+- Github Actions configured with Sorbet typecheck and RSpec/Playwright tests
 
 
 ### Prerequisites:
