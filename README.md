@@ -1,6 +1,6 @@
 Shopik was created primarly to learn and expand my knowledge about Ruby on Rails. Currently the project contains:
 
-- Extensive integration with Espago payment processing service, including: Secure Web Page payments, One-Time Payments via iFrame, Recurring Payments, saving Payment Methods, using saved Payment Method to perform CIT and MIT transactions as well as reversing and refunding Payments
+- Extensive integration with Espago Payment Gateway, including: Secure Web Page payments, One-Time Payments via iFrame, Recurring Payments, saving Payment Methods, using saved Payment Method to perform CIT and MIT transactions as well as reversing and refunding Payments
 - Jobs implemented via Sidekiq
 - Unit and Request tests implemented via RSpec
 - End-to-End tests implemented via Playwright
