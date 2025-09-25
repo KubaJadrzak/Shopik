@@ -24,9 +24,12 @@ Shopik was created primarly to learn and expand my knowledge about Ruby on Rails
 git clone https://github.com/KubaJadrzak/shopik.git
 cd shopik
 ```
-### Install Ruby gems and JavaScript packages and setup the database:
+### Install Ruby gems and JavaScript packages and prepare the database:
 ```
 bin/setup
+```
+### Setup and seed the database:
+```
 bin/reset
 ```
 
