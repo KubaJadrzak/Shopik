@@ -175,3 +175,5 @@ Bundler/GemVersion:
   Enabled: false
 Style/MethodCalledOnDoEndBlock:
   Enabled: false
+Lint/SuppressedException:
+  Enabled: false

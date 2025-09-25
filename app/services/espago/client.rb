@@ -27,7 +27,6 @@ module Espago
 
     #: (String path, ?body: untyped, ?method: Symbol) -> Espago::Payment::Response
     def send(path, body: nil, method: :get)
-      Rails.logger.info(body)
       response = @conn.send(method) do |req|
         req.url path
         req.headers['Accept'] = 'application/vnd.espago.v3+json'
@@ -67,7 +66,6 @@ module Espago
 
     #: (Symbol type, StandardError exception) -> Espago::Payment::Response
     def handle_error(type, exception)
-      Rails.logger.error("Espago Client Service error status #{type}:, body: #{exception.message}")
       Espago::Payment::Response.new(success: false, status: type, body: { 'error' => exception.message })
     end
 
@@ -77,7 +75,6 @@ module Espago
         status = exception.response[:status]
         body = exception.response[:body]
 
-        Rails.logger.error("Espago Client Service error status: #{status}, body: #{body}")
         Espago::Payment::Response.new(success: false, status: status, body: body)
       else
         handle_error(default_type, exception)

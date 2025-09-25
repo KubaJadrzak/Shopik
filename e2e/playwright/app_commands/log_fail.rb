@@ -18,7 +18,6 @@ if defined?(ActiveRecord::Base)
       begin
         records[record_class.to_s] = record_class.limit(100).map(&:attributes)
       rescue StandardError
-        console.log('Playwright error')
       end
     end
 end
