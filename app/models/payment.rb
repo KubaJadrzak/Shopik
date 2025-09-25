@@ -103,7 +103,7 @@ class Payment < ApplicationRecord
 
   #: -> bool
   def retryable?
-    !successful? && !awaiting?
+    !successful? && !awaiting? && !refunded?
   end
 
   #: -> bool
