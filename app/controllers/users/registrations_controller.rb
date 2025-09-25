@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Users::RegistrationsController < Devise::RegistrationsController
   # Before Devise's default action runs, permit the username parameter
   before_action :configure_sign_up_params, only: [:create]

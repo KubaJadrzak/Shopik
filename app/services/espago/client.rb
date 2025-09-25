@@ -28,7 +28,7 @@ module Espago
     #: (String path, ?body: untyped, ?method: Symbol) -> Espago::Payment::Response
     def send(path, body: nil, method: :get)
       Rails.logger.info(body)
-      response = @conn.send(method) do |req| # rubocop:disable Style/Send
+      response = @conn.send(method) do |req|
         req.url path
         req.headers['Accept'] = 'application/vnd.espago.v3+json'
         req.headers['Authorization'] = "Basic #{encoded_credentials}"

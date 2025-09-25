@@ -118,10 +118,10 @@ RSpec.describe Espago::BackRequestsController, type: :request do
     }.merge(card_data)
   end
 
-  describe 'POST /espago/back_request' do # rubocop:disable Metrics/BlockLength
+  describe 'POST /espago/back_request' do
 
-    context 'with valid credentials' do # rubocop:disable Metrics/BlockLength
-      context 'when payment is successful' do # rubocop:disable Metrics/BlockLength
+    context 'with valid credentials' do
+      context 'when payment is successful' do
         context 'when payment is standalone' do
           context 'when the payment belongs to order' do
             let!(:order) { create(:order) }
@@ -206,9 +206,9 @@ RSpec.describe Espago::BackRequestsController, type: :request do
 
         end
       end
-      context 'when payment failed' do # rubocop:disable Metrics/BlockLength
+      context 'when payment failed' do
 
-        context 'when payment is standalone' do # rubocop:disable Metrics/BlockLength
+        context 'when payment is standalone' do
           context 'when the payment belongs to order' do
             let!(:order) { create(:order) }
             let!(:payment) do

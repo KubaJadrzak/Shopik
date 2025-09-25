@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddFirstNameAndLastNameToEspagoClients < ActiveRecord::Migration[8.0]
   def change
     add_column :espago_clients, :first_name, :string, null: false

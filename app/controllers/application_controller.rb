@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # typed: true
 
 
@@ -17,7 +18,7 @@ class ApplicationController < ActionController::Base
   end
 
   def raise_not_found
-    raise ActionController::RoutingError.new("No route matches #{request.path.inspect}")
+    raise ActionController::RoutingError, "No route matches #{request.path.inspect}"
   end
 
   private

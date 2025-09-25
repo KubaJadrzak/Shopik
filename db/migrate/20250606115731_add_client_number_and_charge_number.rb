@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddClientNumberAndChargeNumber < ActiveRecord::Migration[8.0]
   def change
     add_column :espago_clients, :client_number, :string, null: false

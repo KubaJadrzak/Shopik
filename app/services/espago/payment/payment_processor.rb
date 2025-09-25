@@ -96,22 +96,22 @@ module Espago
 
       #: (String) -> Response
       def create_payment_reversal(payment_id)
-        Espago::Client.new.send("api/charges/#{payment_id}", method: :delete) # rubocop:disable Style/Send
+        Espago::Client.new.send("api/charges/#{payment_id}", method: :delete)
       end
 
       #: (Hash[Symbol, String]) -> Response
       def create_one_time_payment(payload)
-        Espago::Client.new.send('api/charges', method: :post, body: payload) # rubocop:disable Style/Send
+        Espago::Client.new.send('api/charges', method: :post, body: payload)
       end
 
       #: (Hash[Symbol, String]) -> Response
       def create_secure_web_payment(payload)
-        Espago::Client.new.send('api/secure_web_page_register', method: :post, body: payload) # rubocop:disable Style/Send
+        Espago::Client.new.send('api/secure_web_page_register', method: :post, body: payload)
       end
 
       #: (String) -> Response
       def create_payment_refund(payment_id)
-        Espago::Client.new.send("api/charges/#{payment_id}/refund", method: :post) # rubocop:disable Style/Send
+        Espago::Client.new.send("api/charges/#{payment_id}/refund", method: :post)
       end
     end
   end

@@ -25,9 +25,10 @@ module Espago
 
     #: -> void
     def verify
-      unless @client&.cit? # rubocop:disable Style/GuardClause
-        redirect_to account_path, alert: 'We could not process your verification due to a technical issue'
-      end
+      return if @client&.cit?
+
+      redirect_to account_path, alert: 'We could not process your verification due to a technical issue'
+
     end
 
     private

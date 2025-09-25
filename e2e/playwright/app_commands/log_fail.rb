@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is called when a cypress spec fails and allows for extra logging to be captured
 filename = command_options.fetch('runnable_full_title', 'no title').gsub(/[^[:print:]]/, '')
 
@@ -15,12 +17,13 @@ if defined?(ActiveRecord::Base)
     ActiveRecord::Base.descendants.each_with_object({}) do |record_class, records|
       begin
         records[record_class.to_s] = record_class.limit(100).map(&:attributes)
-      rescue
+      rescue StandardError
+        console.log('Playwright error')
       end
     end
 end
 
 filename = command_options.fetch('runnable_full_title', 'no title').gsub(/[^[:print:]]/, '')
-File.open("#{Rails.root}/log/#{filename}.json", "w+") do |file|
+File.open("#{Rails.root}/log/#{filename}.json", 'w+') do |file|
   file << JSON.pretty_generate(json_result)
 end

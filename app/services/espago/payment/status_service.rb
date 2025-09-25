@@ -13,7 +13,7 @@ module Espago
 
       #: -> String?
       def fetch_payment_status
-        response = @client.send("api/charges/#{@payment_id}", method: :get) # rubocop:disable Style/Send
+        response = @client.send("api/charges/#{@payment_id}", method: :get)
 
         unless response.success
           return

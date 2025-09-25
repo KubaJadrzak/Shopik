@@ -99,7 +99,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
               payable_id:   payable.id,
               payment_mode: 'new_one_time',
             }
-          end.to change(Payment, :count).by(1) # rubocop:disable Style/MethodCalledOnDoEndBlock
+          end.to change(Payment, :count).by(1)
 
           expect(Payment.last.state).to eq('new')
           expect(response).to redirect_to(espago_payments_success_path(payment_number))
@@ -117,7 +117,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
               payable_id:   payable.id,
               payment_mode: 'new_one_time',
             }
-          end.to change(Payment, :count).by(1) # rubocop:disable Style/MethodCalledOnDoEndBlock
+          end.to change(Payment, :count).by(1)
 
           expect(Payment.last.state).to eq('new')
           expect(response).to redirect_to(espago_payments_failure_path(payment_number))
@@ -135,7 +135,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
               payable_id:   payable.id,
               payment_mode: 'new_one_time',
             }
-          end.to change(Payment, :count).by(1) # rubocop:disable Style/MethodCalledOnDoEndBlock
+          end.to change(Payment, :count).by(1)
 
           expect(Payment.last.state).to eq('new')
           expect(response).to redirect_to(espago_payments_awaiting_path(payment_number))

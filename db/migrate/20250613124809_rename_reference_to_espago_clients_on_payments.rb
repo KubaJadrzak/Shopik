@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RenameReferenceToEspagoClientsOnPayments < ActiveRecord::Migration[8.0]
   def change
     rename_column :payments, :espago_client_id, :client_id

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :user do
     sequence(:email) { |n| "user#{n}@example.com" }
@@ -6,8 +8,6 @@ FactoryBot.define do
     sequence(:username) { |n| "user#{n}" }
 
 
-    after(:create) do |user|
-      user.create_cart!
-    end
+    after(:create, &:create_cart!)
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :user_with_cart_items, parent: :user do
     after(:create) do |user|

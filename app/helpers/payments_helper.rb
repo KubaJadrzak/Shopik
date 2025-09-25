@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PaymentsHelper
   def payment_status_icon(simplified_state)
     case simplified_state

@@ -8,9 +8,7 @@ module Espago
 
     #: -> void
     def perform
-      Subscription.should_be_renewed.find_each do |subscription|
-        subscription.renew
-      end
+      Subscription.should_be_renewed.find_each(&:renew)
     end
   end
 end

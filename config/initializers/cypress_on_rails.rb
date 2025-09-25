@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 if defined?(CypressOnRails)
   CypressOnRails.configure do |c|
-    c.api_prefix = ""
+    c.api_prefix = ''
     c.install_folder = File.expand_path("#{__dir__}/../../e2e/playwright")
     # WARNING!! CypressOnRails can execute arbitrary ruby code
     # please use with extra caution if enabling on hosted servers or starting your local server on 0.0.0.0

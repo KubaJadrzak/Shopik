@@ -56,7 +56,7 @@ RSpec.describe SubscriptionsController, type: :request do
         it 'toggles auto_renew and redirects' do
           expect do
             patch toggle_auto_renew_subscription_path(subscription)
-          end.to change { subscription.reload.auto_renew } # rubocop:disable Style/MethodCalledOnDoEndBlock
+          end.to change { subscription.reload.auto_renew }
             .from(false).to(true)
         end
       end
