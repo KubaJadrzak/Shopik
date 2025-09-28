@@ -73,7 +73,7 @@ bin/dev
 ```
 This command will start all necessary services, including rails server and sidekiq background jobs
 
-## Asynchronous requests
+### Asynchronous requests
 
 Shopik is dependent on asynchronous requests received from Espago for updating the status of payments. Due to this fact, in order to function properly, the app has to be hosted online on services such as `ngrok`.
 
