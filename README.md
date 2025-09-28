@@ -9,7 +9,7 @@ Shopik was created primarly to learn and expand my knowledge about Ruby on Rails
 
 ### Prerequisites:
 
-- This is an app created to integrate with Espago. You can use it only if you have access to Espago Sandbox.
+- This is an app created to integrate with Espago. You can use it only if you have access to Espago.
 - Ruby 3.4.3 or newer
 - Rails 8 or newer
 - Node.js version 24.x or newer
@@ -43,7 +43,7 @@ shopik is using the following environmental variables, stored inside `.env` and 
 `.env`
 ```
 APP_HOST_URL=your_host_url
-ESPAGO_BASE_URL=https://sandbox.espago.com
+ESPAGO_BASE_URL=espago_base_url
 ESPAGO_PUBLIC_KEY=your_espago_public_key
 ```
 
@@ -51,7 +51,7 @@ ESPAGO_PUBLIC_KEY=your_espago_public_key
 
 ```
 APP_HOST_URL=http://localhost:3001
-ESPAGO_BASE_URL=https://sandbox.espago.com
+ESPAGO_BASE_URL=espago_base_url
 ESPAGO_PUBLIC_KEY=your_espago_public_key
 ```
 
