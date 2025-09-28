@@ -73,6 +73,10 @@ bin/dev
 ```
 This command will start all necessary services, including rails server and sidekiq background jobs
 
+## Asynchronous requests
+
+Shopik is dependent on asynchronous requests received from Espago for updating the status of payments. Due to this fact, in order to function properly, the app has to be hosted online on services such as `ngrok`.
+
 ### RSpec: 
 
 shopik is using `RSpec` tests. You can run test suite with: `bin/rspec`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some tests make real requests to Espago and will otherwise fail.
