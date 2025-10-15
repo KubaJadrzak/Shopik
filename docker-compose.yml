@@ -1,0 +1,27 @@
+services:
+  web:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+
+  sidekiq:
+    build: .
+    command: bundle exec sidekiq
+    env_file:
+      - .env
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:6
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+volumes:
+  redisdata:

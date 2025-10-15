@@ -27,10 +27,10 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  config.assume_ssl = true
+  # config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  # config.force_ssl = true
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
@@ -60,7 +60,7 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: 'example.com' }
+  config.action_mailer.default_url_options = { host: 'shopik.kubajadrzak.com', protocol: 'https' }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
@@ -89,4 +89,16 @@ Rails.application.configure do
   #
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  config.public_file_server.enabled = true
+
+  config.action_controller.asset_host = 'https://shopik.kubajadrzak.com'
+
+  config.hosts << 'shopik.kubajadrzak.com'
+  config.hosts << 'localhost'
+
+  config.action_dispatch.trusted_proxies = [
+    IPAddr.new('172.16.0.0/12'),
+    IPAddr.new('127.0.0.1'), # rubocop:disable Style/IpAddresses
+  ]
 end
