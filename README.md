@@ -1,6 +1,6 @@
 Shopik was created primarly to learn and expand my knowledge about Ruby on Rails. Currently the project contains:
 
-- Extensive integration with Espago payment processing service, including: Secure Web Page payments, One-Time Payments via iFrame, Recurring Payments, saving Payment Methods, using saved Payment Method to perform CIT and MIT transactions as well as reversing and refunding Payments
+- Extensive integration with Espago Payment Gateway, including: Secure Web Page payments, One-Time Payments via iFrame, Recurring Payments, saving Payment Methods, using saved Payment Method to perform CIT and MIT transactions as well as reversing and refunding Payments
 - Jobs implemented via Sidekiq
 - Unit and Request tests implemented via RSpec
 - End-to-End tests implemented via Playwright
@@ -9,7 +9,7 @@ Shopik was created primarly to learn and expand my knowledge about Ruby on Rails
 
 ### Prerequisites:
 
-- This is an app created to integrate with Espago. You can use it only if you have access to Espago Sandbox.
+- This is an app created to integrate with Espago. You can use it only if you have access to Espago.
 - Ruby 3.4.3 or newer
 - Rails 8 or newer
 - Node.js version 24.x or newer
@@ -43,7 +43,7 @@ shopik is using the following environmental variables, stored inside `.env` and 
 `.env`
 ```
 APP_HOST_URL=your_host_url
-ESPAGO_BASE_URL=https://sandbox.espago.com
+ESPAGO_BASE_URL=espago_base_url
 ESPAGO_PUBLIC_KEY=your_espago_public_key
 ```
 
@@ -51,7 +51,7 @@ ESPAGO_PUBLIC_KEY=your_espago_public_key
 
 ```
 APP_HOST_URL=http://localhost:3001
-ESPAGO_BASE_URL=https://sandbox.espago.com
+ESPAGO_BASE_URL=espago_base_url
 ESPAGO_PUBLIC_KEY=your_espago_public_key
 ```
 
@@ -72,6 +72,10 @@ You can start the shopik application using the command:
 bin/dev
 ```
 This command will start all necessary services, including rails server and sidekiq background jobs
+
+### Asynchronous requests
+
+Shopik is dependent on asynchronous requests received from Espago for updating the status of payments. Due to this fact, in order to function properly, the app has to be hosted online on services such as `ngrok`.
 
 ### RSpec: 
 
