@@ -6,7 +6,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
+      - .:/rails
       - ./storage:/app/storage
     depends_on:
       - redis
@@ -19,7 +19,7 @@ services:
     environment:
       - RAILS_ENV=production
     volumes:
-      - .:/app
+      - .:/rails
       - ./storage:/app/storage
     depends_on:
       - redis
