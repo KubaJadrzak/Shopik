@@ -7,7 +7,7 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
-      - ./db:/app/db
+      - ./storage:/app/storage
     depends_on:
       - redis
 
@@ -18,7 +18,7 @@ services:
       - .env
     volumes:
       - .:/app
-      - ./db:/app/db
+      - ./storage:/app/storage
     depends_on:
       - redis
 
