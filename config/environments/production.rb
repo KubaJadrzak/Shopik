@@ -93,6 +93,9 @@ Rails.application.configure do
   config.hosts << 'shopik.kubajadrzak.com'
   config.hosts << 'localhost'
 
+  Rails.application.routes.default_url_options[:host] = ENV.fetch('HOST', 'shopik.kubajadrzak.com')
+  Rails.application.routes.default_url_options[:protocol] = 'https'
+
   config.action_dispatch.trusted_proxies = [
     IPAddr.new('172.16.0.0/12'),
     IPAddr.new('127.0.0.1'), # rubocop:disable Style/IpAddresses
