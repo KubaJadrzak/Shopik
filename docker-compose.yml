@@ -16,6 +16,8 @@ services:
     command: bundle exec sidekiq
     env_file:
       - .env
+    environment:
+      - RAILS_ENV=production
     volumes:
       - .:/app
       - ./storage:/app/storage
