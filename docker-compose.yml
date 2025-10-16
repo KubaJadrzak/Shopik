@@ -5,6 +5,9 @@ services:
       - .env
     ports:
       - "3000:3000"
+    volumes:
+      - .:/app
+      - ./db:/app/db
     depends_on:
       - redis
 
@@ -13,6 +16,9 @@ services:
     command: bundle exec sidekiq
     env_file:
       - .env
+    volumes:
+      - .:/app
+      - ./db:/app/db
     depends_on:
       - redis
 
