@@ -3,32 +3,47 @@
     <div class="card shadow-sm border-light">
       <div class="card-body">
         <h5 class="card-title mb-3">Payments</h5>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Payment Number</th>
-              <th>Amount</th>
-              <th>State</th>
-              <th>Reject Reason</th>
-              <th>Behaviour</th>
-              <th>Created At</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% payments.each do |payment| %>
-              <tr class="align-middle">
-                <td><%= payment.payment_number %></td>
-                <td><%= number_to_currency(payment.amount) %></td>
-                <td><%= payment.state.humanize %></td>
-                <td><%= payment.reject_reason.presence || "N/A" %></td>
-                <td><%= payment.behaviour.presence || "N/A" %></td>
-                <td><%= payment.created_at.strftime("%B %d, %Y at %I:%M %p") %></td>
-                <td><%= payment_status_icon(payment.simplified_state) %></td>
+        <div class="table-responsive d-none d-md-block">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr>
+                <th>Payment Number</th>
+                <th>Amount</th>
+                <th>State</th>
+                <th>Reject Reason</th>
+                <th>Behaviour</th>
+                <th>Created At</th>
+                <th>Status</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <% payments.each do |payment| %>
+                <tr>
+                  <td><%= payment.payment_number %></td>
+                  <td><%= number_to_currency(payment.amount) %></td>
+                  <td><%= payment.state.humanize %></td>
+                  <td><%= payment.reject_reason.presence || "N/A" %></td>
+                  <td><%= payment.behaviour.presence || "N/A" %></td>
+                  <td><%= payment.created_at.strftime("%B %d, %Y at %I:%M %p") %></td>
+                  <td><%= payment_status_icon(payment.simplified_state) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="d-block d-md-none">
+          <% payments.each do |payment| %>
+            <div class="border rounded p-3 mb-3 shadow-sm">
+              <div><strong>Payment Number:</strong> <%= payment.payment_number %></div>
+              <div><strong>Amount:</strong> <%= number_to_currency(payment.amount) %></div>
+              <div><strong>State:</strong> <%= payment.state.humanize %></div>
+              <div><strong>Reject Reason:</strong> <%= payment.reject_reason.presence || "N/A" %></div>
+              <div><strong>Behaviour:</strong> <%= payment.behaviour.presence || "N/A" %></div>
+              <div><strong>Created At:</strong> <%= payment.created_at.strftime("%B %d, %Y at %I:%M %p") %></div>
+              <div><strong>Status:</strong> <%= payment_status_icon(payment.simplified_state) %></div>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
