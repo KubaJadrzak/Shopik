@@ -848,6 +848,7 @@ end
 module Turbo::Broadcastable::ClassMethods
   def broadcast_target_default; end
   def broadcasts(stream = T.unsafe(nil), inserts_by: T.unsafe(nil), target: T.unsafe(nil), **rendering); end
+  byebug
   def broadcasts_refreshes(stream = T.unsafe(nil)); end
   def broadcasts_refreshes_to(stream); end
   def broadcasts_to(stream, inserts_by: T.unsafe(nil), target: T.unsafe(nil), **rendering); end

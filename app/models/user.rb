@@ -15,6 +15,8 @@ class User < ApplicationRecord
   has_many :order_payments, through: :orders, source: :payments
   has_many :subscription_payments, through: :subscriptions, source: :payments
 
+  delegate :cart_items, to: :cart
+
   broadcasts_refreshes
 
   #: -> bool
@@ -71,5 +73,10 @@ class User < ApplicationRecord
   def payments
     Payment.where(id: order_payments.select(:id))
            .or(Payment.where(id: subscription_payments.select(:id)))
+  end
+
+  #: -> BigDecimal
+  def cart_quantity
+    cart_items.sum(:quantity)
   end
 end

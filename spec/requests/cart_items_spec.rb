@@ -33,7 +33,7 @@ RSpec.describe CartItemsController, type: :request do
 
           expect(response.media_type).to eq('text/vnd.turbo-stream.html')
           expect(response.body).to include('flash')
-          expect(response.body).to include('cart-items-count')
+          expect(response.body).to include('cart-quantity')
         end
 
         it 'creates a new cart item and redirects with HTML' do
@@ -57,7 +57,7 @@ RSpec.describe CartItemsController, type: :request do
           expect(cart_item.reload.quantity).to eq(2)
           expect(response.media_type).to eq('text/vnd.turbo-stream.html')
           expect(response.body).to include('flash')
-          expect(response.body).to include('cart-items-count')
+          expect(response.body).to include('cart-quantity')
         end
       end
 
@@ -106,7 +106,7 @@ RSpec.describe CartItemsController, type: :request do
           expect(response.body).to include("cart_item_#{cart_item.id}")
           expect(response.body).to include('flash')
           expect(response.body).to include('cart_total_price')
-          expect(response.body).to include('cart-items-count')
+          expect(response.body).to include('cart-quantity')
         end
 
         it 'destroys cart item and redirects with HTML' do

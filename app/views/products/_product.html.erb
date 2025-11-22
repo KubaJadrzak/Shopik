@@ -1,16 +1,15 @@
-<div class="col-sl-12 col-md-6 col-lg-4" data-testid="product">
-  <div class="card mb-4" style="min-height: 360px;">
+<div class="col-lg-6 col-xl-4">
+  <div class="card mb-4" style="height: 360px">
     <img src="<%= image_url('default_product_image.svg') %>"
-               class="card-img-top"
                alt="<%= product.title %>"
-               style="height: 180px; object-fit: contain;">
+               style="height: 160px; object-fit: contain;">
     <div class="card-body">
       <h6 class="card-title"><%= product.title %></h6>
-      <p class="card-text" style="font-size: 0.9rem;"><%= truncate(product.description, length: 128) %></p>
+      <p class="card-text"><%= truncate(product.description, length: 120) %></p>
     </div>
-    <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
+    <div class="card-footer d-flex justify-content-between align-items-center">
       <% if current_user&.active_subscription? && product.membership_price.present? %>
-        <span style="color: #9B111E !important;">
+        <span>
           <strong>Membership price: <%= number_to_currency(product.membership_price) %></strong>
         </span>
       <% else %>

@@ -23,7 +23,7 @@ class CartItemsController < ApplicationController
         format.turbo_stream do
           render turbo_stream: [
             turbo_stream.replace('flash', partial: 'shared/flash'),
-            turbo_stream.replace('cart-items-count', partial: 'layouts/cart_count_icon'),
+            turbo_stream.replace('cart-quantity', partial: 'layouts/cart_quantity_icon'),
           ]
         end
         format.html { redirect_to products_path, notice: "#{@product.title} added to cart!" }
@@ -48,11 +48,10 @@ class CartItemsController < ApplicationController
             turbo_stream.remove("cart_item_#{@cart_item.id}"),
             turbo_stream.replace('cart_total_price', partial: 'carts/total_price',
                                                      locals:  { price: @cart.total_price },),
-            turbo_stream.replace('cart-items-count',
-                                 partial: 'layouts/cart_count_icon',),
+            turbo_stream.replace('cart-quantity',
+                                 partial: 'layouts/cart_quantity_icon',),
           ]
         end
-        format.html { redirect_to cart_path, notice: 'Cart Item deleted' }
       end
     else
       flash.now[:alert] = 'Failed to delete Cart Item'
@@ -64,7 +63,6 @@ class CartItemsController < ApplicationController
             partial: 'shared/flash',
           )
         end
-        format.html { redirect_to cart_path, alert: 'Failed to delete Cart Item' }
       end
     end
   end
@@ -72,7 +70,7 @@ class CartItemsController < ApplicationController
   private
 
   def set_cart_item
-    @cart_item = current_user.cart.cart_items.find(params[:id])
+    @cart_item = current_user.cart_items.find(params[:id])
   end
 
   def set_cart

@@ -5,10 +5,3 @@ export default class extends Controller {
     this.element.remove();
   }
 }
-
-document.addEventListener("turbo:visit", () => {
-  const flash = document.getElementById("flash");
-  if (flash) {
-    flash.innerHTML = "";
-  }
-});

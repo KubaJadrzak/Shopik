@@ -2,14 +2,14 @@
 # typed: strict
 
 class Cart < ApplicationRecord
-  extend T::Sig
-
   belongs_to :user, optional: true
   has_many :cart_items, dependent: :destroy
   has_many :products, through: :cart_items
 
-  sig { returns(BigDecimal) }
+  after_touch { T.must(user).touch if user }
+
+  #: -> BigDecimal
   def total_price
-    cart_items.sum(0.to_d, &:total_price)
+    cart_items.sum(BigDecimal(0), &:total_price)
   end
 end
