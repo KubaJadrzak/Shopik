@@ -6,7 +6,7 @@ class Cart < ApplicationRecord
   has_many :cart_items, dependent: :destroy
   has_many :products, through: :cart_items
 
-  after_touch { T.must(user).touch if user }
+  broadcasts_refreshes
 
   #: -> BigDecimal
   def total_price

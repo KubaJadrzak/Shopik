@@ -1,12 +1,12 @@
-<tr id="cart_item_<%= cart_item.id %>" data-turbo-frame="cart_item_<%= cart_item.id %>">
+<tr>
   <td><%= cart_item.product.title %></td>
-  <td><%= number_to_currency(cart_item.product.price) %></td>
+  <td><%= number_to_currency(cart_item.price) %></td>
   <td><%= cart_item.quantity %></td>
   <td><%= number_to_currency(cart_item.total_price) %></td>
   <td>
     <%= button_to cart_item_path(cart_item), method: :delete,
-                            class: "btn btn-sm text-dark p-0 m-0" do %>
-      <i class="bi bi-trash" style="font-size: 1.0rem; color: black;"></i>
+                            class: "btn" do %>
+      <i class="bi bi-trash" style="font-size: 1.0rem;"></i>
     <% end %>
   </td>
 </tr>

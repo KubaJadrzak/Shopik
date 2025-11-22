@@ -14,55 +14,33 @@ class CartItemsController < ApplicationController
                 @cart_item.increment(:quantity)
                 @cart_item.save
               else
-                current_user.cart.cart_items.create(product: @product, quantity: 1).persisted?
+                current_user.cart.cart_items.create(product: @product).persisted?
               end
 
+    if success
+      flash[:notice] = 'Product added to cart!'
+    else
+      flash[:alert] = 'Failed to add product to cart.'
+    end
+
     respond_to do |format|
-      if success
-        flash.now[:notice] = "#{@product.title} added to cart!"
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.replace('flash', partial: 'shared/flash'),
-            turbo_stream.replace('cart-quantity', partial: 'layouts/cart_quantity_icon'),
-          ]
-        end
-        format.html { redirect_to products_path, notice: "#{@product.title} added to cart!" }
-      else
-        flash.now[:alert] = "Failed to add #{@product.title} to cart."
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace('flash', partial: 'shared/flash')
-        end
-        format.html { redirect_to products_path, alert: "Failed to add #{@product.title} to cart." }
+      format.turbo_stream do
+        redirect_to root_path
       end
+
     end
   end
 
   def destroy
     if @cart_item.destroy
-      flash.now[:notice] = 'Cart Item deleted'
-
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.replace('flash', partial: 'shared/flash'),
-            turbo_stream.remove("cart_item_#{@cart_item.id}"),
-            turbo_stream.replace('cart_total_price', partial: 'carts/total_price',
-                                                     locals:  { price: @cart.total_price },),
-            turbo_stream.replace('cart-quantity',
-                                 partial: 'layouts/cart_quantity_icon',),
-          ]
-        end
-      end
+      flash[:notice] = 'Product removed from cart!'
     else
-      flash.now[:alert] = 'Failed to delete Cart Item'
+      flash[:alert] = 'Failed to remove product from cart.'
+    end
 
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(
-            'flash',
-            partial: 'shared/flash',
-          )
-        end
+    respond_to do |format|
+      format.turbo_stream do
+        redirect_to cart_path
       end
     end
   end
