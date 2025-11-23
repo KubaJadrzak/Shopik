@@ -1,12 +1,10 @@
-<tr>
-  <td><%= cart_item.product.title %></td>
+<tr class="align-middle">
+  <td><%= cart_item.title %></td>
   <td><%= number_to_currency(cart_item.price) %></td>
   <td><%= cart_item.quantity %></td>
-  <td><%= number_to_currency(cart_item.total_price) %></td>
   <td>
-    <%= button_to cart_item_path(cart_item), method: :delete,
-                            class: "btn" do %>
-      <i class="bi bi-trash" style="font-size: 1.0rem;"></i>
+    <%= button_to cart_item_path(cart_item), method: :delete, class: "btn" do %>
+      <i class="bi bi-trash"></i>
     <% end %>
   </td>
 </tr>
