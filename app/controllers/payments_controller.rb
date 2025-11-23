@@ -36,7 +36,6 @@ class PaymentsController < ApplicationController
     result_action, result_param = @payment.process_payment(
       card_token: @card_token,
       cof:        @cof,
-      client_id:  @client_id,
     )
 
     handle_response(result_action, result_param)
@@ -132,13 +131,6 @@ class PaymentsController < ApplicationController
   def set_payment_params
     @card_token = params[:card_token] #: String?
     @cof = params[:cof] #: String?
-    set_client_id
-  end
-
-  #: -> void
-  def set_client_id
-    payment_mode = params[:payment_mode] #: String
-    @client_id = payment_mode.start_with?('cli') ? payment_mode : nil #: String?
   end
 
   #: (Symbol, String) -> void
