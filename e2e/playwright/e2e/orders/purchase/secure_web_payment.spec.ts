@@ -29,7 +29,7 @@ test.describe('Order Purchase with Secure Web Page', () => {
 
     await swpSuccess(page)
 
-    const orderNumber = await appEval('Order.last.order_number')
+    const orderNumber = await appEval('Order.last.uuid')
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(orderNumber)).toBeVisible()
   })
@@ -49,7 +49,7 @@ test.describe('Order Purchase with Secure Web Page', () => {
 
     await swpFail(page)
 
-    const orderNumber = await appEval('Order.last.order_number')
+    const orderNumber = await appEval('Order.last.uuid')
     await expect(page.getByText('Payment failed!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(orderNumber)).toBeVisible()
   })

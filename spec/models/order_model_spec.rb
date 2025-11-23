@@ -17,10 +17,10 @@ RSpec.describe Order, type: :model do
   end
 
   describe 'callbacks' do
-    context 'generate_order_number' do
+    context 'generate_uuid' do
       it 'generates an order number before creation' do
         order = create(:order)
-        expect(order.order_number).to_not be_nil
+        expect(order.uuid).to_not be_nil
       end
     end
   end

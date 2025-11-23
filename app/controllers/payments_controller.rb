@@ -11,7 +11,7 @@ class PaymentsController < ApplicationController
   #: -> void
   def new
     unless @payable
-      redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
+      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
       return
     end
 
@@ -19,13 +19,32 @@ class PaymentsController < ApplicationController
   end
 
   #: -> void
-  def reverse
+  def create
+    unless @payable
+      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+      return
+    end
+
+    create_payment
+    set_payment_params
+
     unless @payment
       redirect_to account_path, alert: 'We are experiencing an issue with your payment'
       return
     end
 
-    unless @payment.reversable?
+    result_action, result_param = @payment.process_payment(
+      card_token: @card_token,
+      cof:        @cof,
+      client_id:  @client_id,
+    )
+
+    handle_response(result_action, result_param)
+  end
+
+  #: -> void
+  def reverse
+    unless @payment&.reversable?
       redirect_to account_path, alert: 'We are experiencing an issue with your payment'
       return
     end
@@ -41,12 +60,7 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def refund
-    unless @payment
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      return
-    end
-
-    unless @payment.refundable?
+    unless @payment&.refundable?
       redirect_to account_path, alert: 'We are experiencing an issue with your payment'
       return
     end
@@ -58,24 +72,6 @@ class PaymentsController < ApplicationController
     else
       redirect_to order_path(@payment.payable), alert: 'We are experiencing an issue with your payment'
     end
-  end
-
-  #: -> void
-  def create
-    unless @payable
-      redirect_to account_path, alert: 'We could not create your payment due to a technical issue'
-      return
-    end
-
-    @payment = ::Payment.create_payment(payable: @payable)
-    set_payment_params
-
-    result_action, result_param = @payment.process_payment(
-      card_token: @card_token,
-      cof:        @cof,
-      client_id:  @client_id,
-    )
-    handle_response(result_action, result_param)
   end
 
   #: -> void
@@ -110,31 +106,26 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def set_payment
-    @payment = ::Payment.find_by(payment_number: params[:payment_number]) #: ::Payment?
+    @payment = ::Payment.find_by(uuid: params[:uuid]) #: ::Payment?
   end
 
   #: -> void
   def set_payable
-    payable_type = params[:payable_type]
-    payable_id = params[:payable_id]
-    if payable_type.blank? || payable_id.blank?
-      set_new_payable
-      return
-    end
-    @payable = payable_type.constantize.find_by(id: payable_id) #: Order? | Subscription? | ::Client?
-  end
-
-  #: -> void
-  def set_new_payable
-    if params[:order_id].present?
-      @payable = Order.find_by(id: params[:order_id])
-    elsif params[:subscription_id].present?
-      @payable = Subscription.find_by(id: params[:subscription_id])
-    elsif params[:client_id].present?
-      @payable = ::Client.find_by(id: params[:client_id])
+    payable_number = params[:payable_number]
+    if payable_number.start_with?('ord')
+      @payable = Order.find_by(uuid: payable_number) #: ::Order? | ::Subscription? | ::Client?
+    elsif payable_number.start_with?('sub')
+      @payable = Subscription.find_by(uuid: payable_number)
+    elsif payable_number.start_with?('cli')
+      @payable = Client.find_by(uuid: payable_number)
     end
 
     nil
+  end
+
+  #: -> void
+  def create_payment
+    @payment = T.must(@payable).payments.create(amount: T.must(@payable).amount, state: 'new')
   end
 
   #: -> void

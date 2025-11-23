@@ -1,0 +1,34 @@
+<div class="form-check">
+  <input class="form-check-input"
+    type="radio"
+    name="payment_methods"
+    id="secure_web_page"
+    value="secure_web_page"
+    data-payment-target="paymentMethod"
+    data-action="change->payment#updatePaymentMethod" checked>
+  <label class="form-check-label" for="secure_web_page">
+    Secure Web Page
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input"
+    type="radio"
+    name="payment_methods"
+    id="one_time_payment"
+    value="one_time_payment"
+    data-payment-target="paymentMethod"
+    data-action="change->payment#updatePaymentMethod">
+  <label class="form-check-label" for="one_time_payment">
+    One-time Payment
+  </label>
+</div>
+<hr>
+<div class="form-check form-switch">
+  <input class="form-check-input"
+  type="checkbox"
+  role="switch"
+  id="save_payment_method"
+  data-payment-target="saveCard"
+  data-action="change->payment#updateSaveCard">
+  <label class="form-check-label" for="save_payment_method">Save card information for future payments</label>
+</div>

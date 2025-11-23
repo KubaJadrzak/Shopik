@@ -2,7 +2,7 @@
   <%= link_to subscription_path(subscription), class: "text-decoration-none text-dark", data: { turbo_frame: "_top" } do %>
     <div class="card shadow-sm border-light">
       <div class="card-body">
-        <h5 class="card-title mb-3"><%= subscription.subscription_number %></h5>
+        <h5 class="card-title mb-3"><%= subscription.uuid %></h5>
         <div class="d-flex justify-content-between align-items-center mb-3">
           <%= render "subscriptions/subscription_statuses", subscription: subscription %>
         </div>

@@ -8,7 +8,7 @@ FactoryBot.define do
     status { 'Active' }
     auto_renew { false }
     price { 4.99 }
-    sequence(:subscription_number) { SecureRandom.hex(8) }
+    sequence(:uuid) { SecureRandom.hex(8) }
 
     trait :new do
       start_date { nil }

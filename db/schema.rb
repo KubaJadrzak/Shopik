@@ -36,7 +36,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_160759) do
     t.string "last4"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "client_number", null: false
+    t.string "uuid", null: false
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.string "status", default: "unverified", null: false
@@ -44,8 +44,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_160759) do
     t.integer "year", null: false
     t.boolean "primary", default: false, null: false
     t.index ["client_id"], name: "index_clients_on_client_id", unique: true
-    t.index ["client_number"], name: "index_clients_on_client_number", unique: true
     t.index ["user_id"], name: "index_clients_on_user_id"
+    t.index ["uuid"], name: "index_clients_on_uuid", unique: true
   end
 
   create_table "order_items", force: :cascade do |t|
@@ -61,7 +61,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_160759) do
 
   create_table "orders", force: :cascade do |t|
     t.integer "user_id"
-    t.string "order_number", null: false
+    t.string "uuid", null: false
     t.string "email", null: false
     t.string "status", null: false
     t.decimal "total_price", precision: 10, scale: 2, null: false
@@ -69,8 +69,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_160759) do
     t.datetime "ordered_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["order_number"], name: "index_orders_on_order_number", unique: true
     t.index ["user_id"], name: "index_orders_on_user_id"
+    t.index ["uuid"], name: "index_orders_on_uuid", unique: true
   end
 
   create_table "payments", force: :cascade do |t|
@@ -82,15 +82,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_160759) do
     t.string "behaviour"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "payment_number", null: false
+    t.string "uuid", null: false
     t.string "payable_type"
     t.integer "payable_id"
     t.integer "client_id"
     t.index ["client_id"], name: "index_payments_on_client_id"
     t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
     t.index ["payment_id"], name: "index_payments_on_payment_id", unique: true
-    t.index ["payment_number"], name: "index_payments_on_payment_number", unique: true
     t.index ["state"], name: "index_payments_on_state"
+    t.index ["uuid"], name: "index_payments_on_uuid", unique: true
   end
 
   create_table "products", force: :cascade do |t|
@@ -111,9 +111,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_160759) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "price", default: "4.99", null: false
-    t.string "subscription_number"
-    t.index ["subscription_number"], name: "index_subscriptions_on_subscription_number", unique: true
+    t.string "uuid"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
+    t.index ["uuid"], name: "index_subscriptions_on_uuid", unique: true
   end
 
   create_table "users", force: :cascade do |t|

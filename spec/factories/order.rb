@@ -6,7 +6,7 @@ FactoryBot.define do
     email { 'user1@example.com' }
     shipping_address { 'Poland, Main Street 123, 00-000' }
     status { 'New' }
-    order_number { 'order_number' }
+    uuid { 'uuid' }
     ordered_at { Time.current }
     total_price { 30 }
 

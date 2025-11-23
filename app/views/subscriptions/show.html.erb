@@ -1,7 +1,7 @@
 <%= turbo_stream_from @subscription %>
 <div class="container mt-4">
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
-    <h3><%= @subscription.subscription_number %></h3>
+    <h3><%= @subscription.uuid %></h3>
     <%= render "show_buttons" %>
   </div>
   <%= render "show_card" %>

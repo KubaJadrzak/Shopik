@@ -7,7 +7,7 @@ FactoryBot.define do
     reject_reason { nil }
     issuer_response_code { nil }
     behaviour { nil }
-    payment_number { SecureRandom.hex(8) }
+    uuid { SecureRandom.hex(8) }
 
     association :payable, factory: :order
 

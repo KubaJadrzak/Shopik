@@ -2,7 +2,7 @@
   <%= link_to order_path(order), class: "text-decoration-none text-dark", data: { turbo_frame: "_top" } do %>
     <div class="card shadow-sm border-light">
       <div class="card-body">
-        <h5 class="card-title mb-3"><%= order.order_number %></h5>
+        <h5 class="card-title mb-3"><%= order.uuid %></h5>
         <%= render partial: "orders/show_statuses", locals: { order: order } %>
       </div>
       <div class="card-footer bg-light">

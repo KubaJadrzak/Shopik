@@ -711,51 +711,6 @@ class Order
     sig { void }
     def id_will_change!; end
 
-    sig { returns(::String) }
-    def order_number; end
-
-    sig { params(value: ::String).returns(::String) }
-    def order_number=(value); end
-
-    sig { returns(T::Boolean) }
-    def order_number?; end
-
-    sig { returns(T.nilable(::String)) }
-    def order_number_before_last_save; end
-
-    sig { returns(T.untyped) }
-    def order_number_before_type_cast; end
-
-    sig { returns(T::Boolean) }
-    def order_number_came_from_user?; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def order_number_change; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def order_number_change_to_be_saved; end
-
-    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
-    def order_number_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def order_number_in_database; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def order_number_previous_change; end
-
-    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
-    def order_number_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def order_number_previously_was; end
-
-    sig { returns(T.nilable(::String)) }
-    def order_number_was; end
-
-    sig { void }
-    def order_number_will_change!; end
-
     sig { returns(::ActiveSupport::TimeWithZone) }
     def ordered_at; end
 
@@ -814,9 +769,6 @@ class Order
     def restore_id_value!; end
 
     sig { void }
-    def restore_order_number!; end
-
-    sig { void }
     def restore_ordered_at!; end
 
     sig { void }
@@ -833,6 +785,9 @@ class Order
 
     sig { void }
     def restore_user_id!; end
+
+    sig { void }
+    def restore_uuid!; end
 
     sig { returns(T.nilable([::ActiveSupport::TimeWithZone, ::ActiveSupport::TimeWithZone])) }
     def saved_change_to_created_at; end
@@ -857,12 +812,6 @@ class Order
 
     sig { returns(T::Boolean) }
     def saved_change_to_id_value?; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def saved_change_to_order_number; end
-
-    sig { returns(T::Boolean) }
-    def saved_change_to_order_number?; end
 
     sig { returns(T.nilable([::ActiveSupport::TimeWithZone, ::ActiveSupport::TimeWithZone])) }
     def saved_change_to_ordered_at; end
@@ -899,6 +848,12 @@ class Order
 
     sig { returns(T::Boolean) }
     def saved_change_to_user_id?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_uuid; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_uuid?; end
 
     sig { returns(::String) }
     def shipping_address; end
@@ -1125,6 +1080,51 @@ class Order
     sig { void }
     def user_id_will_change!; end
 
+    sig { returns(::String) }
+    def uuid; end
+
+    sig { params(value: ::String).returns(::String) }
+    def uuid=(value); end
+
+    sig { returns(T::Boolean) }
+    def uuid?; end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def uuid_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def uuid_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def uuid_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def uuid_change_to_be_saved; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def uuid_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def uuid_previous_change; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def uuid_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_was; end
+
+    sig { void }
+    def uuid_will_change!; end
+
     sig { returns(T::Boolean) }
     def will_save_change_to_created_at?; end
 
@@ -1136,9 +1136,6 @@ class Order
 
     sig { returns(T::Boolean) }
     def will_save_change_to_id_value?; end
-
-    sig { returns(T::Boolean) }
-    def will_save_change_to_order_number?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_ordered_at?; end
@@ -1157,6 +1154,9 @@ class Order
 
     sig { returns(T::Boolean) }
     def will_save_change_to_user_id?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_uuid?; end
   end
 
   module GeneratedRelationMethods

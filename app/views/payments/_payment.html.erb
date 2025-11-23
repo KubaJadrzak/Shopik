@@ -19,7 +19,7 @@
             <tbody>
               <% payments.each do |payment| %>
                 <tr>
-                  <td><%= payment.payment_number %></td>
+                  <td><%= payment.uuid %></td>
                   <td><%= number_to_currency(payment.amount) %></td>
                   <td><%= payment.state.humanize %></td>
                   <td><%= payment.reject_reason.presence || "N/A" %></td>
@@ -34,7 +34,7 @@
         <div class="d-block d-md-none">
           <% payments.each do |payment| %>
             <div class="border rounded p-3 mb-3 shadow-sm">
-              <div><strong>Payment Number:</strong> <%= payment.payment_number %></div>
+              <div><strong>Payment Number:</strong> <%= payment.uuid %></div>
               <div><strong>Amount:</strong> <%= number_to_currency(payment.amount) %></div>
               <div><strong>State:</strong> <%= payment.state.humanize %></div>
               <div><strong>Reject Reason:</strong> <%= payment.reject_reason.presence || "N/A" %></div>

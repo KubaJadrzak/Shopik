@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Espago::PaymentsController, type: :request do
+RSpec.describe PaymentsController, type: :request do
   let(:user)       { create(:user) }
 
   describe 'when user is authenticated' do
@@ -51,7 +51,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
     end
     describe 'POST espago/payments/charge' do
       let(:payable)     { create(:order, user: user) }
-      let(:payment_number) { 'payment_number' }
+      let(:uuid) { 'uuid' }
 
       before do
         sign_in user
@@ -91,7 +91,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
       context 'when Espago returns :success' do
         it 'creates new payment and redirects to success path' do
           allow_any_instance_of(Payment).to receive(:process_payment)
-            .and_return([:success, payment_number])
+            .and_return([:success, uuid])
 
           expect do
             post espago_charge_path, params: {
@@ -102,14 +102,14 @@ RSpec.describe Espago::PaymentsController, type: :request do
           end.to change(Payment, :count).by(1)
 
           expect(Payment.last.state).to eq('new')
-          expect(response).to redirect_to(espago_payments_success_path(payment_number))
+          expect(response).to redirect_to(espago_payments_success_path(uuid))
         end
       end
 
       context 'when Espago returns :failure' do
         it 'creates new payment and redirects to failure path' do
           allow_any_instance_of(Payment).to receive(:process_payment)
-            .and_return([:failure, payment_number])
+            .and_return([:failure, uuid])
 
           expect do
             post espago_charge_path, params: {
@@ -120,14 +120,14 @@ RSpec.describe Espago::PaymentsController, type: :request do
           end.to change(Payment, :count).by(1)
 
           expect(Payment.last.state).to eq('new')
-          expect(response).to redirect_to(espago_payments_failure_path(payment_number))
+          expect(response).to redirect_to(espago_payments_failure_path(uuid))
         end
       end
 
       context 'when Espago returns :awaiting' do
         it 'creates new payment and redirects to awaiting path' do
           allow_any_instance_of(Payment).to receive(:process_payment)
-            .and_return([:awaiting, payment_number])
+            .and_return([:awaiting, uuid])
 
           expect do
             post espago_charge_path, params: {
@@ -138,7 +138,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
           end.to change(Payment, :count).by(1)
 
           expect(Payment.last.state).to eq('new')
-          expect(response).to redirect_to(espago_payments_awaiting_path(payment_number))
+          expect(response).to redirect_to(espago_payments_awaiting_path(uuid))
         end
       end
 
@@ -146,7 +146,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
     describe 'GET espago/payments/payment_success' do
       context 'when payment does not exist' do
         it 'redirects to account_path with alert' do
-          get espago_payments_success_path('nonexistent_payment_number')
+          get espago_payments_success_path('nonexistent_uuid')
 
           expect(response).to redirect_to(account_path)
           follow_redirect!
@@ -159,7 +159,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
         let(:payment) { create(:payment, payable: order) }
 
         it 'redirects to order_path with success notice' do
-          get espago_payments_success_path(payment.payment_number)
+          get espago_payments_success_path(payment.uuid)
 
           expect(response).to redirect_to(order_path(order))
           follow_redirect!
@@ -172,7 +172,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
         let(:payment) { create(:payment, payable: subscription) }
 
         it 'redirects to subscription_path with success notice' do
-          get espago_payments_success_path(payment.payment_number)
+          get espago_payments_success_path(payment.uuid)
 
           expect(response).to redirect_to(subscription_path(subscription))
           follow_redirect!
@@ -185,7 +185,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
         let(:payment) { create(:payment, payable: client) }
 
         it 'redirects to espago_client_path with success notice' do
-          get espago_payments_success_path(payment.payment_number)
+          get espago_payments_success_path(payment.uuid)
 
           expect(response).to redirect_to(espago_client_path(client))
           follow_redirect!
@@ -197,7 +197,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
     describe 'GET espago/payments/payment_failure' do
       context 'when payment does not exist' do
         it 'redirects to account_path with alert' do
-          get espago_payments_failure_path('nonexistent_payment_number')
+          get espago_payments_failure_path('nonexistent_uuid')
 
           expect(response).to redirect_to(account_path)
           follow_redirect!
@@ -210,7 +210,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
         let(:payment) { create(:payment, payable: order) }
 
         it 'redirects to order_path with failure notice' do
-          get espago_payments_failure_path(payment.payment_number)
+          get espago_payments_failure_path(payment.uuid)
 
           expect(response).to redirect_to(order_path(order))
           follow_redirect!
@@ -223,7 +223,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
         let(:payment) { create(:payment, payable: subscription) }
 
         it 'redirects to subscription_path with failure notice' do
-          get espago_payments_failure_path(payment.payment_number)
+          get espago_payments_failure_path(payment.uuid)
 
           expect(response).to redirect_to(subscription_path(subscription))
           follow_redirect!
@@ -236,7 +236,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
         let(:payment) { create(:payment, payable: client) }
 
         it 'redirects to espago_client_path with failure notice' do
-          get espago_payments_failure_path(payment.payment_number)
+          get espago_payments_failure_path(payment.uuid)
 
           expect(response).to redirect_to(espago_client_path(client))
           follow_redirect!
@@ -248,7 +248,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
     describe 'GET espago/payments/payment_awaiting' do
       context 'when payment does not exist' do
         it 'redirects to account_path with alert' do
-          get espago_payments_awaiting_path('nonexistent_payment_number')
+          get espago_payments_awaiting_path('nonexistent_uuid')
 
           expect(response).to redirect_to(account_path)
           follow_redirect!
@@ -261,7 +261,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
         let(:payment) { create(:payment, payable: order) }
 
         it 'redirects to order_path with processing notice' do
-          get espago_payments_awaiting_path(payment.payment_number)
+          get espago_payments_awaiting_path(payment.uuid)
 
           expect(response).to redirect_to(order_path(order))
           follow_redirect!
@@ -274,7 +274,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
         let(:payment) { create(:payment, payable: subscription) }
 
         it 'redirects to subscription_path with processing notice' do
-          get espago_payments_awaiting_path(payment.payment_number)
+          get espago_payments_awaiting_path(payment.uuid)
 
           expect(response).to redirect_to(subscription_path(subscription))
           follow_redirect!
@@ -287,7 +287,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
         let(:payment) { create(:payment, payable: client) }
 
         it 'redirects to espago_client_path with processing notice' do
-          get espago_payments_awaiting_path(payment.payment_number)
+          get espago_payments_awaiting_path(payment.uuid)
 
           expect(response).to redirect_to(espago_client_path(client))
           follow_redirect!
@@ -301,7 +301,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
 
       context 'when payment does not exist' do
         it 'redirects to account_path with alert' do
-          post espago_reverse_payment_path(payment_number: 'nonexistent_payment_number')
+          post espago_reverse_payment_path(uuid: 'nonexistent_uuid')
 
           expect(response).to redirect_to(account_path)
           follow_redirect!
@@ -313,7 +313,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
         let(:payment) { create(:payment, :for_order, :finalized, payable: order) }
 
         it 'redirects to account_path with alert' do
-          post espago_reverse_payment_path(payment_number: payment.payment_number)
+          post espago_reverse_payment_path(uuid: payment.uuid)
 
           expect(response).to redirect_to(account_path)
           follow_redirect!
@@ -328,7 +328,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
 
       context 'when payment does not exist' do
         it 'redirects to account_path with alert' do
-          post espago_refund_payment_path(payment_number: 'nonexistent_payment_number')
+          post espago_refund_payment_path(uuid: 'nonexistent_uuid')
 
           expect(response).to redirect_to(account_path)
           follow_redirect!
@@ -340,7 +340,7 @@ RSpec.describe Espago::PaymentsController, type: :request do
         let(:payment) { create(:payment, :for_order, :executed, payable: order) }
 
         it 'redirects to account_path with alert' do
-          post espago_refund_payment_path(payment_number: payment.payment_number)
+          post espago_refund_payment_path(uuid: payment.uuid)
 
           expect(response).to redirect_to(account_path)
           follow_redirect!

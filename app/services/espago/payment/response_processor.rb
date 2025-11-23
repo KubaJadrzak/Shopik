@@ -52,14 +52,14 @@ module Espago
 
           case @state
           when 'executed', 'reversed', 'refunded'
-            [:success, @payment.payment_number]
+            [:success, @payment.uuid]
           when *pending_statuses
-            [:awaiting, @payment.payment_number]
+            [:awaiting, @payment.uuid]
           else
-            [:failure, @payment.payment_number]
+            [:failure, @payment.uuid]
           end
         else
-          [:failure, @payment.payment_number]
+          [:failure, @payment.uuid]
         end
       end
 
@@ -68,9 +68,9 @@ module Espago
         uncertain_statuses = ::Payment::UNCERTAIN_STATUSES
 
         if uncertain_statuses.include?(@state)
-          [:awaiting, @payment.payment_number]
+          [:awaiting, @payment.uuid]
         else
-          [:failure, @payment.payment_number]
+          [:failure, @payment.uuid]
         end
       end
     end

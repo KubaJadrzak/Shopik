@@ -43,17 +43,17 @@ module Espago
 
         return if @description.blank?
 
-        payment_number = extract_payment_number
-        return if payment_number.blank?
+        uuid = extract_uuid
+        return if uuid.blank?
 
-        payment = ::Payment.find_by(payment_number: payment_number)
+        payment = ::Payment.find_by(uuid: uuid)
         payment.update!(payment_id: @payment_id) if payment.present?
 
         payment
       end
 
       #:  -> String?
-      def extract_payment_number
+      def extract_uuid
         match = @description[/#([A-Z0-9]+)/, 1]
         match.presence
       end

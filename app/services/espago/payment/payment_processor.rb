@@ -65,7 +65,7 @@ module Espago
 
       #: -> String
       def build_description
-        desc = "Payment ##{@payment.payment_number}"
+        desc = "Payment ##{@payment.uuid}"
         desc += ' - storing' if @cof == 'storing'
         desc += ' - cit' if @client_id && @cof != 'recurring'
         desc += ' - mit' if @client_id && @cof == 'recurring'

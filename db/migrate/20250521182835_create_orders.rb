@@ -4,7 +4,7 @@ class CreateOrders < ActiveRecord::Migration[8.0]
   def change
     create_table :orders do |t|
       t.references :user, foreign_key: true, null: true
-      t.string :order_number, null: false
+      t.string :uuid, null: false
       t.string :email, null: false
       t.string :status, null: false
       t.string :payment_status, null: false
@@ -15,6 +15,6 @@ class CreateOrders < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :orders, :order_number, unique: true
+    add_index :orders, :uuid, unique: true
   end
 end

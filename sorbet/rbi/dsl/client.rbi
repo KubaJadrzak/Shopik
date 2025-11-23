@@ -582,51 +582,6 @@ class Client
     sig { void }
     def client_id_will_change!; end
 
-    sig { returns(::String) }
-    def client_number; end
-
-    sig { params(value: ::String).returns(::String) }
-    def client_number=(value); end
-
-    sig { returns(T::Boolean) }
-    def client_number?; end
-
-    sig { returns(T.nilable(::String)) }
-    def client_number_before_last_save; end
-
-    sig { returns(T.untyped) }
-    def client_number_before_type_cast; end
-
-    sig { returns(T::Boolean) }
-    def client_number_came_from_user?; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def client_number_change; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def client_number_change_to_be_saved; end
-
-    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
-    def client_number_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def client_number_in_database; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def client_number_previous_change; end
-
-    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
-    def client_number_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def client_number_previously_was; end
-
-    sig { returns(T.nilable(::String)) }
-    def client_number_was; end
-
-    sig { void }
-    def client_number_will_change!; end
-
     sig { returns(T.nilable(::String)) }
     def company; end
 
@@ -1036,9 +991,6 @@ class Client
     def restore_client_id!; end
 
     sig { void }
-    def restore_client_number!; end
-
-    sig { void }
     def restore_company!; end
 
     sig { void }
@@ -1075,6 +1027,9 @@ class Client
     def restore_user_id!; end
 
     sig { void }
+    def restore_uuid!; end
+
+    sig { void }
     def restore_year!; end
 
     sig { returns(T.nilable([::String, ::String])) }
@@ -1082,12 +1037,6 @@ class Client
 
     sig { returns(T::Boolean) }
     def saved_change_to_client_id?; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def saved_change_to_client_number; end
-
-    sig { returns(T::Boolean) }
-    def saved_change_to_client_number?; end
 
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def saved_change_to_company; end
@@ -1160,6 +1109,12 @@ class Client
 
     sig { returns(T::Boolean) }
     def saved_change_to_user_id?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_uuid; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_uuid?; end
 
     sig { returns(T.nilable([::Integer, ::Integer])) }
     def saved_change_to_year; end
@@ -1302,11 +1257,53 @@ class Client
     sig { void }
     def user_id_will_change!; end
 
-    sig { returns(T::Boolean) }
-    def will_save_change_to_client_id?; end
+    sig { returns(::String) }
+    def uuid; end
+
+    sig { params(value: ::String).returns(::String) }
+    def uuid=(value); end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_client_number?; end
+    def uuid?; end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def uuid_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def uuid_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def uuid_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def uuid_change_to_be_saved; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def uuid_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def uuid_previous_change; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def uuid_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_was; end
+
+    sig { void }
+    def uuid_will_change!; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_client_id?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_company?; end
@@ -1343,6 +1340,9 @@ class Client
 
     sig { returns(T::Boolean) }
     def will_save_change_to_user_id?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_uuid?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_year?; end

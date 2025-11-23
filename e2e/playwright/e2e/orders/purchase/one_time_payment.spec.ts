@@ -30,7 +30,7 @@ test.describe('Order Purchase with One Time Payment', () => {
 
     await oneTimeSuccess(page)
 
-    const orderNumber = await appEval('Order.last.order_number')
+    const orderNumber = await appEval('Order.last.uuid')
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(orderNumber)).toBeVisible()
   })
@@ -52,7 +52,7 @@ test.describe('Order Purchase with One Time Payment', () => {
 
     await oneTimeFail(page)
 
-    const orderNumber = await appEval('Order.last.order_number')
+    const orderNumber = await appEval('Order.last.uuid')
     await expect(page.getByText('Payment failed!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(orderNumber)).toBeVisible()
   })

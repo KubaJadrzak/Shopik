@@ -16,7 +16,7 @@ test.describe('Subscription Purchase with Secure Web Payment', () => {
 
     await swpSuccess(page)
 
-    const subscriptionNumber = await appEval('Subscription.last.subscription_number')
+    const subscriptionNumber = await appEval('Subscription.last.uuid')
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(subscriptionNumber)).toBeVisible()
   })
@@ -28,7 +28,7 @@ test.describe('Subscription Purchase with Secure Web Payment', () => {
 
     await swpFail(page)
 
-    const subscriptionNumber = await appEval('Subscription.last.subscription_number')
+    const subscriptionNumber = await appEval('Subscription.last.uuid')
     await expect(page.getByText('Payment failed!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(subscriptionNumber)).toBeVisible()
   })

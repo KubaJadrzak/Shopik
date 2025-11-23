@@ -89,7 +89,7 @@ RSpec.describe OrdersController, type: :request do
         order = create(:order, user: user)
         get order_path(order)
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include(order.order_number)
+        expect(response.body).to include(order.uuid)
       end
 
       it 'redirects to root with alert if order not found' do

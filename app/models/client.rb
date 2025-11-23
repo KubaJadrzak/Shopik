@@ -8,7 +8,7 @@ class Client < ApplicationRecord
     order(created_at: :desc)
   }, as: :payable, class_name: 'Payment', dependent: :destroy
 
-  before_create :generate_client_number
+  before_create :generate_uuid
 
   validate :prevent_duplicate_primary
   validate :ensure_primary_is_mit
@@ -40,8 +40,8 @@ class Client < ApplicationRecord
   private
 
   #: -> void
-  def generate_client_number
-    self.client_number = SecureRandom.hex(10).upcase
+  def generate_uuid
+    self.uuid = "car_#{SecureRandom.uuid}"
   end
 
   #: -> void

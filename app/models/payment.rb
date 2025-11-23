@@ -10,7 +10,7 @@ class Payment < ApplicationRecord
   validate :prevent_duplicate_payment_for_subscription, on: :create, if: :payable_is_subscription?
   validate :prevent_duplicate_payable_payment_for_client, on: :create, if: :payable_is_client?
 
-  before_create :generate_payment_number
+  before_create :generate_uuid
 
   scope :should_be_finalized, -> {
     where(state: 'executed').where('updated_at < ?', 1.hour.ago)
@@ -136,17 +136,6 @@ class Payment < ApplicationRecord
     :failure
   end
 
-  class << self
-    #: (payable: Client | Subscription | Order) -> Payment
-    def create_payment(payable:)
-      if payable.instance_of?(Client)
-        payable.payable_payments.create(amount: payable.amount, state: 'new')
-      else
-        payable.payments.create(amount: payable.amount, state: 'new')
-      end
-    end
-  end
-
   #: -> User?
   def user
     payable&.user
@@ -237,7 +226,7 @@ class Payment < ApplicationRecord
 
   #: -> bool
   def payable_is_client?
-    payable.is_a?(::Client)
+    payable.is_a?(Client)
   end
 
   #: -> void
@@ -254,7 +243,7 @@ class Payment < ApplicationRecord
     return unless Payment.where(payable: payable).awaiting.exists? ||
                   Payment.where(payable: payable).successful.exists?
 
-    errors.add(:base, 'Cannot create new payment: order already has a payment awaiting or successful')
+    errors.add(:base, 'Cannot create new payment: order already has an awaiting or successful payment')
   end
 
   #: -> void
@@ -276,7 +265,7 @@ class Payment < ApplicationRecord
   end
 
   #: -> void
-  def generate_payment_number
-    self.payment_number = SecureRandom.hex(10).upcase
+  def generate_uuid
+    self.uuid = "pay_#{SecureRandom.uuid}"
   end
 end

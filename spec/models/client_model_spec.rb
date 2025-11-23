@@ -5,16 +5,16 @@ require 'rails_helper'
 RSpec.describe Client, type: :model do
 
   describe 'callbacks' do
-    context 'generate_client_number' do
-      it 'generates client_number before creation' do
-        client = build(:client, client_number: nil)
-        expect(client.client_number).to be_nil
+    context 'generate_uuid' do
+      it 'generates uuid before creation' do
+        client = build(:client, uuid: nil)
+        expect(client.uuid).to be_nil
 
         client.save!
 
-        expect(client.client_number).to be_present
-        expect(client.client_number.length).to eq(20)
-        expect(client.client_number).to eq(client.client_number.upcase)
+        expect(client.uuid).to be_present
+        expect(client.uuid.length).to eq(20)
+        expect(client.uuid).to eq(client.uuid.upcase)
       end
     end
   end

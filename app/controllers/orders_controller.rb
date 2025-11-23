@@ -27,10 +27,10 @@ class OrdersController < ApplicationController
     @order.build_order_items_from_cart(current_user.cart)
     if @order.save
       current_user.cart_items.destroy_all
-      redirect_to new_payments_path(order_id: @order.id)
+      redirect_to new_payments_path(payable_number: @order.uuid)
     else
-      flash.now[:alert] = 'There was a problem placing your order.'
-      render :new, status: :unprocessable_entity
+      flash[:alert] = 'There was a problem with your order.'
+      redirect_to cart_path
     end
   end
 

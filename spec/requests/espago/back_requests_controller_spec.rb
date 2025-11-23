@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Espago::BackRequestsController, type: :request do
+RSpec.describe BackRequestsController, type: :request do
   let(:login_basic_auth) { Rails.application.credentials.dig(:espago, :login_basic_auth) }
   let(:password_basic_auth) { Rails.application.credentials.dig(:espago, :password_basic_auth) }
   let(:headers) do
@@ -15,7 +15,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
   end
 
   let(:payment_id) { 'espago_123' }
-  let(:payment_number) { 'E2A46240ADC041537175' }
+  let(:uuid) { 'E2A46240ADC041537175' }
   let(:client_id) { 'cli_9cbbpQpSUgQo4BGp' }
   let(:card_data) do
     {
@@ -35,7 +35,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
     {
       id:                   payment_id,
       state:                'executed',
-      description:          "Payment ##{payment_number}",
+      description:          "Payment ##{uuid}",
       client:               client_id,
       issuer_response_code: '00',
     }.merge(card_data)
@@ -45,7 +45,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
     {
       id:                   payment_id,
       state:                'executed',
-      description:          "Payment ##{payment_number} - cit",
+      description:          "Payment ##{uuid} - cit",
       client:               client_id,
       issuer_response_code: '00',
     }.merge(card_data)
@@ -55,7 +55,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
     {
       id:                   payment_id,
       state:                'executed',
-      description:          "Payment ##{payment_number} - mit",
+      description:          "Payment ##{uuid} - mit",
       client:               client_id,
       issuer_response_code: '00',
     }.merge(card_data)
@@ -65,7 +65,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
     {
       id:                   payment_id,
       state:                'executed',
-      description:          "Payment ##{payment_number} - storing",
+      description:          "Payment ##{uuid} - storing",
       client:               client_id,
       issuer_response_code: '00',
     }.merge(card_data)
@@ -75,7 +75,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
     {
       id:                   payment_id,
       state:                'failed',
-      description:          "Payment ##{payment_number}",
+      description:          "Payment ##{uuid}",
       client:               client_id,
       issuer_response_code: '99',
       reject_reason:        '3ds',
@@ -86,7 +86,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
     {
       id:                   payment_id,
       state:                'failed',
-      description:          "Payment ##{payment_number} - storing",
+      description:          "Payment ##{uuid} - storing",
       client:               client_id,
       issuer_response_code: '99',
       reject_reason:        '3ds',
@@ -98,7 +98,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
     {
       id:                   payment_id,
       state:                'failed',
-      description:          "Payment ##{payment_number} - cit",
+      description:          "Payment ##{uuid} - cit",
       client:               client_id,
       issuer_response_code: '99',
       reject_reason:        '3ds',
@@ -110,7 +110,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
     {
       id:                   payment_id,
       state:                'failed',
-      description:          "Payment ##{payment_number} - mit",
+      description:          "Payment ##{uuid} - mit",
       client:               client_id,
       issuer_response_code: '99',
       reject_reason:        '3ds',
@@ -126,7 +126,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
           context 'when the payment belongs to order' do
             let!(:order) { create(:order) }
             let!(:payment) do
-              create(:payment, :for_order, payable: order, payment_id: payment_id, payment_number: payment_number)
+              create(:payment, :for_order, payable: order, payment_id: payment_id, uuid: uuid)
             end
 
             it 'updates the status of payment and order and returns :ok' do
@@ -142,7 +142,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
             let!(:subscription) { create(:subscription) }
             let!(:payment) do
               create(:payment, :for_subscription, payable: subscription, payment_id: payment_id,
-  payment_number: payment_number,)
+  uuid: uuid,)
             end
 
             it 'updates the status of payment and subscription and returns :ok' do
@@ -158,7 +158,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
           let!(:order) { create(:order) }
           let!(:payment) do
             create(:payment, :for_order, payable: order, payment_id: payment_id,
-        payment_number: payment_number,)
+        uuid: uuid,)
           end
           it 'updates the status of payment and payable and creates a new client' do
             post '/espago/back_request', params: success_storing_payload, headers: headers, as: :json
@@ -175,7 +175,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
           let!(:order) { create(:order) }
           let!(:payment) do
             create(:payment, :for_order, payable: order, payment_id: payment_id,
-        payment_number: payment_number,)
+        uuid: uuid,)
           end
           let!(:client) { create(:client, client_id: client_id) }
           it 'updates the status of payment and payable and assigns payment to client' do
@@ -193,7 +193,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
           let!(:order) { create(:order) }
           let!(:payment) do
             create(:payment, :for_client, payable: client, payment_id: payment_id,
-        payment_number: payment_number,)
+        uuid: uuid,)
           end
           let!(:client) { create(:client, client_id: client_id) }
           it 'updates the status of payment and payable, assigns payment to client and updates client status to MIT' do
@@ -212,7 +212,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
           context 'when the payment belongs to order' do
             let!(:order) { create(:order) }
             let!(:payment) do
-              create(:payment, :for_order, payable: order, payment_id: payment_id, payment_number: payment_number)
+              create(:payment, :for_order, payable: order, payment_id: payment_id, uuid: uuid)
             end
 
             it 'updates the status of payment and order, updates payment fail fields and returns :ok' do
@@ -232,7 +232,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
             let!(:subscription) { create(:subscription,  start_date: nil, end_date: nil, status: 'New') }
             let!(:payment) do
               create(:payment, :for_subscription, payable: subscription, payment_id: payment_id,
-              payment_number: payment_number,)
+              uuid: uuid,)
             end
 
             it 'updates the status of payment and subscription, updated payment fail related fields and returns :ok' do
@@ -252,7 +252,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
           let!(:order) { create(:order) }
           let!(:payment) do
             create(:payment, :for_order, payable: order, payment_id: payment_id,
-        payment_number: payment_number,)
+        uuid: uuid,)
           end
           it 'updates the status of payment and payable and does not create a new client' do
             post '/espago/back_request', params: fail_storing_payload, headers: headers, as: :json
@@ -269,7 +269,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
           let!(:order) { create(:order) }
           let!(:payment) do
             create(:payment, :for_order, payable: order, payment_id: payment_id,
-        payment_number: payment_number,)
+        uuid: uuid,)
           end
           let!(:client) { create(:client, client_id: client_id) }
           it 'updates the status of payment and payable and assigns payment to client' do
@@ -286,7 +286,7 @@ RSpec.describe Espago::BackRequestsController, type: :request do
           let!(:order) { create(:order) }
           let!(:payment) do
             create(:payment, :for_order, payable: order, payment_id: payment_id,
-        payment_number: payment_number,)
+        uuid: uuid,)
           end
           let!(:client) { create(:client, client_id: client_id, status: 'MIT') }
           it 'updates the status of payment and payable, assigns payment to client and updates client status to CIT' do
@@ -308,14 +308,14 @@ RSpec.describe Espago::BackRequestsController, type: :request do
           expect(response).to have_http_status(:not_found)
         end
       end
-      context 'when payment_id doesnt match any payment, but payment_number matches known payment' do
+      context 'when payment_id doesnt match any payment, but uuid matches known payment' do
         let!(:order) { create(:order) }
         let!(:payment) { create(:payment, :for_order, payable: order, payment_id: nil) }
         let(:payload) do
           {
             id:          payment_id,
             state:       'executed',
-            description: "Payment ##{payment.payment_number}",
+            description: "Payment ##{payment.uuid}",
           }
         end
 

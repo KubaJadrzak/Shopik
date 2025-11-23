@@ -28,7 +28,7 @@ test.describe('Subscription Purchase with Saved Card', () => {
 
     oneTimeSuccess(page)
 
-    const subscriptionNumber = await appEval('Subscription.last.subscription_number')
+    const subscriptionNumber = await appEval('Subscription.last.uuid')
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(subscriptionNumber)).toBeVisible()
   })
@@ -42,7 +42,7 @@ test.describe('Subscription Purchase with Saved Card', () => {
 
     oneTimeFail(page)
 
-    const subscriptionNumber = await appEval('Subscription.last.subscription_number')
+    const subscriptionNumber = await appEval('Subscription.last.uuid')
     await expect(page.getByText('Payment failed!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(subscriptionNumber)).toBeVisible()
   })

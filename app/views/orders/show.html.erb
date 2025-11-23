@@ -1,7 +1,7 @@
 <%= turbo_stream_from @order %>
 <div class="container mt-4">
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
-    <h3><%= @order.order_number%></h3>
+    <h3><%= @order.uuid%></h3>
     <%= render 'show_buttons', order: @order  %>
   </div>
   <div class="row mt-4">

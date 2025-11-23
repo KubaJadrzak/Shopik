@@ -989,51 +989,6 @@ class Payment
     sig { void }
     def payment_id_will_change!; end
 
-    sig { returns(::String) }
-    def payment_number; end
-
-    sig { params(value: ::String).returns(::String) }
-    def payment_number=(value); end
-
-    sig { returns(T::Boolean) }
-    def payment_number?; end
-
-    sig { returns(T.nilable(::String)) }
-    def payment_number_before_last_save; end
-
-    sig { returns(T.untyped) }
-    def payment_number_before_type_cast; end
-
-    sig { returns(T::Boolean) }
-    def payment_number_came_from_user?; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def payment_number_change; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def payment_number_change_to_be_saved; end
-
-    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
-    def payment_number_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def payment_number_in_database; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def payment_number_previous_change; end
-
-    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
-    def payment_number_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def payment_number_previously_was; end
-
-    sig { returns(T.nilable(::String)) }
-    def payment_number_was; end
-
-    sig { void }
-    def payment_number_will_change!; end
-
     sig { returns(T.nilable(::String)) }
     def reject_reason; end
 
@@ -1110,9 +1065,6 @@ class Payment
     def restore_payment_id!; end
 
     sig { void }
-    def restore_payment_number!; end
-
-    sig { void }
     def restore_reject_reason!; end
 
     sig { void }
@@ -1120,6 +1072,9 @@ class Payment
 
     sig { void }
     def restore_updated_at!; end
+
+    sig { void }
+    def restore_uuid!; end
 
     sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def saved_change_to_amount; end
@@ -1181,12 +1136,6 @@ class Payment
     sig { returns(T::Boolean) }
     def saved_change_to_payment_id?; end
 
-    sig { returns(T.nilable([::String, ::String])) }
-    def saved_change_to_payment_number; end
-
-    sig { returns(T::Boolean) }
-    def saved_change_to_payment_number?; end
-
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def saved_change_to_reject_reason; end
 
@@ -1204,6 +1153,12 @@ class Payment
 
     sig { returns(T::Boolean) }
     def saved_change_to_updated_at?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_uuid; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_uuid?; end
 
     sig { returns(::String) }
     def state; end
@@ -1295,6 +1250,51 @@ class Payment
     sig { void }
     def updated_at_will_change!; end
 
+    sig { returns(::String) }
+    def uuid; end
+
+    sig { params(value: ::String).returns(::String) }
+    def uuid=(value); end
+
+    sig { returns(T::Boolean) }
+    def uuid?; end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def uuid_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def uuid_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def uuid_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def uuid_change_to_be_saved; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def uuid_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def uuid_previous_change; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def uuid_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_was; end
+
+    sig { void }
+    def uuid_will_change!; end
+
     sig { returns(T::Boolean) }
     def will_save_change_to_amount?; end
 
@@ -1326,9 +1326,6 @@ class Payment
     def will_save_change_to_payment_id?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_payment_number?; end
-
-    sig { returns(T::Boolean) }
     def will_save_change_to_reject_reason?; end
 
     sig { returns(T::Boolean) }
@@ -1336,6 +1333,9 @@ class Payment
 
     sig { returns(T::Boolean) }
     def will_save_change_to_updated_at?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_uuid?; end
   end
 
   module GeneratedRelationMethods

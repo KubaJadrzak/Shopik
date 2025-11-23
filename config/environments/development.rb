@@ -73,7 +73,6 @@ Rails.application.configure do
   # config.generators.apply_rubocop_autocorrect_after_generate!
 
   config.hosts << 'ruling-special-liger.ngrok-free.app'
-  config.hosts << 'ruling-special-liger.ngrok-free.app'
 
   Rails.application.routes.default_url_options[:host] = ENV.fetch('APP_HOST_URL')
 end

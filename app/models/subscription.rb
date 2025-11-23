@@ -11,7 +11,7 @@ class Subscription < ApplicationRecord
   belongs_to :user, touch: true
   has_many :payments, -> { order(created_at: :desc) }, as: :payable, dependent: :destroy
 
-  before_create :generate_subscription_number
+  before_create :generate_uuid
 
   broadcasts_refreshes
 
@@ -62,7 +62,7 @@ class Subscription < ApplicationRecord
 
   #: -> void
   def renew
-    @payment = ::Payment.create_payment(payable: self) #: ::Payment?
+    @payment = ::Payment.create_with(payable: self).first #: ::Payment?
     return unless @payment
     return unless user&.primary_payment_method?
 
@@ -99,8 +99,8 @@ class Subscription < ApplicationRecord
   end
 
   #: -> void
-  def generate_subscription_number
-    self.subscription_number = SecureRandom.hex(10).upcase
+  def generate_subscription_uuid
+    self.uuid = "sub_#{SecureRandom.uuid}"
   end
 
 

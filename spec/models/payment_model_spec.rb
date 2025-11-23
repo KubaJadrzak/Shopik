@@ -101,7 +101,7 @@ RSpec.describe Payment, type: :model do
   describe 'callbacks' do
     it 'generates a payment number before creation' do
       payment = create(:payment, :for_order)
-      expect(payment.payment_number).to be_present
+      expect(payment.uuid).to be_present
     end
   end
 
@@ -329,7 +329,7 @@ RSpec.describe Payment, type: :model do
         result_action, result_param = payment.process_payment(client_id: client.client_id, cof: 'recurring')
 
         expect(result_action).to eq(:success)
-        expect(result_param).to eq(payment.payment_number)
+        expect(result_param).to eq(payment.uuid)
       end
     end
   end

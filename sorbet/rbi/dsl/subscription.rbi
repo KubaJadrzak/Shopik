@@ -873,13 +873,13 @@ class Subscription
     def restore_status!; end
 
     sig { void }
-    def restore_subscription_number!; end
-
-    sig { void }
     def restore_updated_at!; end
 
     sig { void }
     def restore_user_id!; end
+
+    sig { void }
+    def restore_uuid!; end
 
     sig { returns(T.nilable([T.nilable(T::Boolean), T.nilable(T::Boolean)])) }
     def saved_change_to_auto_renew; end
@@ -929,12 +929,6 @@ class Subscription
     sig { returns(T::Boolean) }
     def saved_change_to_status?; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
-    def saved_change_to_subscription_number; end
-
-    sig { returns(T::Boolean) }
-    def saved_change_to_subscription_number?; end
-
     sig { returns(T.nilable([::ActiveSupport::TimeWithZone, ::ActiveSupport::TimeWithZone])) }
     def saved_change_to_updated_at; end
 
@@ -946,6 +940,12 @@ class Subscription
 
     sig { returns(T::Boolean) }
     def saved_change_to_user_id?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_uuid; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_uuid?; end
 
     sig { returns(T.nilable(::Date)) }
     def start_date; end
@@ -1037,51 +1037,6 @@ class Subscription
     sig { void }
     def status_will_change!; end
 
-    sig { returns(T.nilable(::String)) }
-    def subscription_number; end
-
-    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
-    def subscription_number=(value); end
-
-    sig { returns(T::Boolean) }
-    def subscription_number?; end
-
-    sig { returns(T.nilable(::String)) }
-    def subscription_number_before_last_save; end
-
-    sig { returns(T.untyped) }
-    def subscription_number_before_type_cast; end
-
-    sig { returns(T::Boolean) }
-    def subscription_number_came_from_user?; end
-
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
-    def subscription_number_change; end
-
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
-    def subscription_number_change_to_be_saved; end
-
-    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
-    def subscription_number_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def subscription_number_in_database; end
-
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
-    def subscription_number_previous_change; end
-
-    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
-    def subscription_number_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def subscription_number_previously_was; end
-
-    sig { returns(T.nilable(::String)) }
-    def subscription_number_was; end
-
-    sig { void }
-    def subscription_number_will_change!; end
-
     sig { returns(::ActiveSupport::TimeWithZone) }
     def updated_at; end
 
@@ -1172,6 +1127,51 @@ class Subscription
     sig { void }
     def user_id_will_change!; end
 
+    sig { returns(T.nilable(::String)) }
+    def uuid; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def uuid=(value); end
+
+    sig { returns(T::Boolean) }
+    def uuid?; end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def uuid_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def uuid_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def uuid_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def uuid_change_to_be_saved; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def uuid_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def uuid_previous_change; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def uuid_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def uuid_was; end
+
+    sig { void }
+    def uuid_will_change!; end
+
     sig { returns(T::Boolean) }
     def will_save_change_to_auto_renew?; end
 
@@ -1197,13 +1197,13 @@ class Subscription
     def will_save_change_to_status?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_subscription_number?; end
-
-    sig { returns(T::Boolean) }
     def will_save_change_to_updated_at?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_user_id?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_uuid?; end
   end
 
   module GeneratedRelationMethods

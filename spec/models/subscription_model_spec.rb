@@ -4,10 +4,10 @@ require 'rails_helper'
 
 RSpec.describe Subscription, type: :model do
   describe 'callbacks' do
-    it 'generate_subscription_number' do
+    it 'generate_uuid' do
       subscription = create(:subscription)
-      expect(subscription.subscription_number).to be_present
-      expect(subscription.subscription_number.length).to eq(20)
+      expect(subscription.uuid).to be_present
+      expect(subscription.uuid.length).to eq(20)
     end
   end
 

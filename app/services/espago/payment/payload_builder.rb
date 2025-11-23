@@ -60,7 +60,7 @@ module Espago
         Rails.application
              .routes
              .url_helpers
-             .espago_payments_success_url(payment_number: @payment.payment_number)
+             .espago_payments_success_url(uuid: @payment.uuid)
       end
 
       #: -> String
@@ -68,7 +68,7 @@ module Espago
         Rails.application
              .routes
              .url_helpers
-             .espago_payments_failure_url(payment_number: @payment.payment_number)
+             .espago_payments_failure_url(uuid: @payment.uuid)
       end
 
       #: -> String

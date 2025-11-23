@@ -5,7 +5,7 @@
   </h5>
 <% end %>
 <%= form_with url: espago_reverse_payment_path, method: :post, data: { turbo: false }, id: "payment_form" do |form| %>
-  <%= hidden_field_tag :payment_number, @order.payments.first.payment_number%>
+  <%= hidden_field_tag :uuid, @order.payments.first.uuid%>
   <div class="mb-4 border rounded p-3">
     <h6 class="text-center">
       Confirm your order cancellation. After order cancellation you will be able to pay for your order at a later date.

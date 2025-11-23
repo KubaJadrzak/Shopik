@@ -14,7 +14,7 @@ class Order < ApplicationRecord
   validates :ordered_at, presence: true
   validate :must_have_order_items
 
-  before_create :generate_order_number
+  before_create :generate_uuid
 
   broadcasts_refreshes
 
@@ -54,8 +54,8 @@ class Order < ApplicationRecord
   private
 
   #: -> void
-  def generate_order_number
-    self.order_number = SecureRandom.hex(10).upcase
+  def generate_uuid
+    self.uuid = "ord_#{SecureRandom.uuid}"
   end
 
   #: -> void
