@@ -5,7 +5,7 @@ export default class extends Controller {
     publicKey: String
   }
 
-  static targets = ["formBtn", "paymentMethod", "saveCard"]
+  static targets = ["form", "formBtn", "paymentMethod", "saveCard"]
 
   connect() {
     this.loadEspagoMain()
@@ -64,8 +64,27 @@ export default class extends Controller {
   }
 
   processPayment() {
+    this.updateForm()
     if (this.selectedPaymentMethod == 'one_time_payment') {
       showEspagoFrame()
+    } else {
+      this.formBtnTarget.click()
+    }
+  }
+
+  updateForm() {
+    const paymentMethodInput = document.createElement("input")
+    paymentMethodInput.type = "hidden"
+    paymentMethodInput.name = "payment_method"
+    paymentMethodInput.value = this.selectedPaymentMethod
+    this.formTarget.appendChild(paymentMethodInput)
+
+    if (this.saveCard == true) {
+      const saveCardInput = document.createElement("input")
+      saveCardInput.type = "hidden"
+      saveCardInput.name = "cof"
+      saveCardInput.value = "storing"
+      this.formTarget.appendChild(saveCardInput)
     }
   }
 }

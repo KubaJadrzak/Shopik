@@ -4,7 +4,7 @@
     You are about to pay <strong><%= number_to_currency(@payable.amount) %></strong>
   </span>
 <% end %>
-<%= form_with url: payments_path, method: :post, html: { id: "espago_form" } do |form| %>
+<%= form_with url: payments_path, method: :post, html: { id: "espago_form", data: { payment_target: "form" } } do |form| %>
   <%= hidden_field_tag :payable_number, @payable.uuid %>
   <%= render "new_payment_methods" %>
   <%= form.submit "Process Payment", class: "d-none", data: { payment_target: "formBtn" } %>
