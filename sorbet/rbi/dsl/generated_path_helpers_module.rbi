@@ -25,6 +25,12 @@ module GeneratedPathHelpersModule
   def add_to_cart_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def awaiting_payments_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def back_request_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def cancel_order_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -37,6 +43,9 @@ module GeneratedPathHelpersModule
   def cart_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def client_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def destroy_user_session_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -46,37 +55,16 @@ module GeneratedPathHelpersModule
   def edit_user_registration_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def espago_back_request_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def espago_charge_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def espago_client_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def espago_new_payment_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def espago_payments_awaiting_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def espago_payments_failure_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def espago_payments_success_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def espago_refund_payment_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def espago_reverse_payment_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def extend_subscription_subscription_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def failure_payments_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def new_order_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def new_payments_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_rails_conductor_inbound_email_path(*args); end
@@ -101,6 +89,9 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def orders_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def payments_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def products_path(*args); end
@@ -187,6 +178,9 @@ module GeneratedPathHelpersModule
   def rails_storage_redirect_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def refund_payments_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def retry_payment_order_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -194,6 +188,9 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def return_order_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def reverse_payments_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def root_path(*args); end
@@ -211,10 +208,13 @@ module GeneratedPathHelpersModule
   def subscriptions_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def success_payments_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def toggle_auto_renew_subscription_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def toggle_primary_espago_client_path(*args); end
+  def toggle_primary_client_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def turbo_recede_historical_location_path(*args); end
@@ -238,5 +238,5 @@ module GeneratedPathHelpersModule
   def user_session_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def verify_espago_client_path(*args); end
+  def verify_client_path(*args); end
 end

@@ -1,16 +1,16 @@
-<div class="container" style="max-width: 480px; margin: 40px auto;">
-  <div class="card shadow-sm p-4">
-    <h3 class="mb-4 text-center">Enter Your Information</h3>
-    <%= form_with model: @order, local: true do |form| %>
-      <div class="mb-3">
+<div class="container" style="max-width: 480px">
+  <div class="card shadow p-4">
+    <h5 class="mb-4 text-center">Enter Your Information</h5>
+    <%= form_with model: @order do |form| %>
+      <div class="mb-4">
         <%= form.label :email, "Email", class: "form-label" %>
         <%= form.email_field :email, value: current_user.email, class: "form-control", required: true %>
       </div>
-      <div class="mb-3">
+      <div class="mb-4">
         <%= form.label :shipping_address, "Shipping Address", class: "form-label" %>
         <%= form.text_field :shipping_address, class: "form-control", required: true %>
       </div>
-      <%= form.submit "Go to Payment", class: "btn btn-primary btn-lg w-100" %>
+      <%= form.submit "Go to Payment", class: "btn btn-primary w-100" %>
     <% end %>
   </div>
 </div>

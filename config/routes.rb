@@ -12,10 +12,11 @@ Rails.application.routes.draw do
   root to: 'products#index'
 
   resources :products, only: [:index]
-  post 'add_to_cart/:product_id', to: 'cart_items#create', as: 'add_to_cart'
 
-  get 'cart', to: 'carts#show', as: 'cart'
+  resource :cart, only: [:show]
+
   resources :cart_items, only: [:destroy]
+  post 'add_to_cart/:product_id', to: 'cart_items#create', as: 'add_to_cart'
 
   resources :orders, only: %i[new create show] do
     member do
@@ -38,23 +39,24 @@ Rails.application.routes.draw do
   get '/account/orders', to: 'users#account', defaults: { section: 'orders' }, as: 'account_orders'
   get '/account/clients', to: 'users#account', defaults: { section: 'clients' }, as: 'account_clients'
 
-  namespace :espago do
-    resources :clients, only: [:show] do
-      member do
-        patch :toggle_primary
-        get :verify
-      end
+  resources :clients, only: [:show] do
+    member do
+      patch :toggle_primary
+      get :verify
     end
-
-    get 'payments/new', to: 'payments#new', as: 'new_payment'
-    post 'payments/reverse', to: 'payments#reverse', as: 'reverse_payment'
-    post 'payments/refund', to: 'payments#refund', as: 'refund_payment'
-    post 'payments/charge', to: 'payments#charge', as: 'charge'
-    get 'payments/:payment_number/success', to: 'payments#payment_success', as: 'payments_success'
-    get 'payments/:payment_number/failure', to: 'payments#payment_failure', as: 'payments_failure'
-    get 'payments/:payment_number/awaiting', to: 'payments#payment_awaiting', as: 'payments_awaiting'
-    post '/back_request',   to: 'back_requests#handle_back_request', as: 'back_request'
   end
+
+  resource :payments, only: %i[new create] do
+    member do
+      post :reverse
+      post :refund
+      get :success
+      get :failure
+      get :awaiting
+    end
+  end
+
+  post '/back_request',   to: 'back_requests#receive', as: 'back_request'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

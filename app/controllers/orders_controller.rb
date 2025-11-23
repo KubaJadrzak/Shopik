@@ -6,6 +6,7 @@ class OrdersController < ApplicationController
   before_action :ensure_cart_has_items, only: %i[new create]
   before_action :set_order, only: %i[show retry_payment cancel return]
 
+  #: -> void
   def new
     @order = Order.new
   end
@@ -25,8 +26,8 @@ class OrdersController < ApplicationController
 
     @order.build_order_items_from_cart(current_user.cart)
     if @order.save
-      current_user.cart.cart_items.destroy_all
-      redirect_to espago_new_payment_path(order_id: @order.id)
+      current_user.cart_items.destroy_all
+      redirect_to new_payments_path(order_id: @order.id)
     else
       flash.now[:alert] = 'There was a problem placing your order.'
       render :new, status: :unprocessable_entity
@@ -39,20 +40,20 @@ class OrdersController < ApplicationController
       return
     end
 
-    redirect_to espago_new_payment_path(order_id: @order.id)
+    redirect_to new_payments_path(order_id: @order.id)
   end
 
   #: -> void
   def cancel
     unless @order.can_reverse_payment? # rubocop:disable Style/GuardClause
-      redirect_to account_path, alert: 'We cannot process your order cancellation due to a technical issue'
+      redirect_to account_url, alert: 'We cannot process your order cancellation due to a technical issue'
     end
   end
 
   #: -> void
   def return
     unless @order.can_refund_payment? # rubocop:disable Style/GuardClause
-      redirect_to account_path, alert: 'We cannot process your order return due to a technical issue'
+      redirect_to account_url, alert: 'We cannot process your order return due to a technical issue'
     end
   end
 

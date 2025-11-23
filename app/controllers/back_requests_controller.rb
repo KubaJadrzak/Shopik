@@ -3,11 +3,11 @@
 
 module Espago
   class BackRequestsController < ApplicationController
-    skip_before_action :verify_authenticity_token, only: [:handle_back_request]
+    skip_before_action :verify_authenticity_token, only: [:receive]
     before_action :authenticate_espago!
 
     #: -> void
-    def handle_back_request
+    def receive
       payload = JSON.parse(request.body.read)
 
       payment = BackRequest::PaymentProcessor.new(payload).process_payment
