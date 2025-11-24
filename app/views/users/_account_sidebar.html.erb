@@ -1,11 +1,11 @@
 <div class="list-group">
-  <%= link_to "Orders", account_path(section: 'orders'), 
+  <%= link_to "Orders", account_path(section: 'orders'),
             class: "list-group-item list-group-item-action",
             data: { turbo_frame: "account_content" } %>
-  <%= link_to "Subscriptions", account_path(section: 'subscriptions'), 
+  <%= link_to "Subscriptions", account_path(section: 'subscriptions'),
             class: "list-group-item list-group-item-action",
             data: { turbo_frame: "account_content" } %>
-  <%= link_to "Payment Methods", account_path(section: 'clients'), 
+  <%= link_to "Payment Methods", account_path(section: 'clients'),
             class: "list-group-item list-group-item-action",
             data: { turbo_frame: "account_content" } %>
   <%= button_to "Edit Account", edit_user_registration_path, method: :get,

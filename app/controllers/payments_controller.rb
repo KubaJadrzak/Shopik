@@ -3,42 +3,30 @@
 
 
 class PaymentsController < ApplicationController
+  include PaymentErrors
 
   before_action :authenticate_user!
-  before_action :set_payment, only: %i[new reverse refund success failure awaiting]
+  before_action :set_payment, only: %i[reverse refund success failure awaiting]
   before_action :set_payable, only: %i[new create]
 
   #: -> void
   def new
-    unless @payable
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      return
-    end
+    raise payment_error! unless @payable
 
     @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY') #: String?
   end
 
   #: -> void
   def create
-    unless @payable
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      return
-    end
+    raise payment_error! unless @payable
 
-    create_payment
     set_payment_params
+    raise payment_error! unless create_payment && update_payable
 
-    unless @payment
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      return
-    end
+    byebug
+    response = charge_payment
 
-    result_action, result_param = @payment.process_payment(
-      card_token: @card_token,
-      cof:        @cof,
-    )
-
-    handle_response(result_action, result_param)
+    p response
   end
 
   #: -> void
@@ -75,7 +63,6 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def success
-
     unless @payment
       redirect_to account_path, alert: 'We are experiencing an issue with your payment'
       return
@@ -105,32 +92,99 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def set_payment
-    @payment = ::Payment.find_by(uuid: params[:uuid]) #: ::Payment?
+    @payment = Payment.find_by(uuid: params[:uuid]) #: ::Payment?
   end
 
   #: -> void
   def set_payable
     payable_number = params[:payable_number]
     if payable_number.start_with?('ord')
-      @payable = Order.find_by(uuid: payable_number) #: ::Order? | ::Subscription? | ::Client?
+      @payable = Order.find_by(uuid: payable_number) #: ::Order? | ::Subscription?
     elsif payable_number.start_with?('sub')
       @payable = Subscription.find_by(uuid: payable_number)
-    elsif payable_number.start_with?('cli')
-      @payable = Client.find_by(uuid: payable_number)
+    else
+      raise payment_error!
     end
-
-    nil
-  end
-
-  #: -> void
-  def create_payment
-    @payment = T.must(@payable).payments.create(amount: T.must(@payable).amount, state: 'new')
   end
 
   #: -> void
   def set_payment_params
-    @card_token = params[:card_token] #: String?
-    @cof = params[:cof] #: String?
+    raise payment_error! unless @payable
+
+    @amount = @payable.amount #: BigDecimal?
+    @cof = set_cof #: Symbol?
+    @payment_method = set_payment_method #: Symbol | void
+  end
+
+  #: -> Symbol?
+  def set_cof
+    case params[:cof] # rubocop:disable Style/HashLikeCase
+    when 'storing'
+      :storing
+    when 'recurring'
+      :recurring
+    when 'unscheduled'
+      :unscheduled
+    end
+  end
+
+  #: -> Symbol | void
+  def set_payment_method
+    case params[:payment_method]
+    when 'iframe'
+      :iframe
+    when 'secure_web_page'
+      :secure_web_page
+    when 'iframe3'
+      :iframe3
+    when 'meest_paywall'
+      :meest_paywall
+    when 'google_pay'
+      :google_pay
+    when 'apple_pay'
+      :apple_pay
+    else
+      raise payment_error!
+    end
+  end
+
+  #: -> bool
+  def create_payment
+    raise payment_error! unless @payable
+
+    @payment = @payable.payments.create(
+      amount:         @amount,
+      state:          'new',
+      cof:            @cof,
+      payment_method: @payment_method,
+      currency:       'USD',
+      kind:           :sale,
+    )
+
+    @payment.persisted?
+  end
+
+  #: -> bool
+  def update_payable
+    raise payment_error! unless @payable
+
+    @payable.state = 'Payment in Progress'
+    @payable.save
+  end
+
+  #: -> void
+  def charge_payment
+    raise payment_error! unless @payment
+
+    PaymentProcessor::Charge.new(
+      payment:      @payment,
+      charge_means: set_charge_means,
+    ).process
+  end
+
+  #: -> String?
+  def set_charge_means
+    params[:card_token]
   end
 
   #: (Symbol, String) -> void

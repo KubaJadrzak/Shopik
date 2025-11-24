@@ -21,12 +21,12 @@ class User < ApplicationRecord
 
   #: -> bool
   def active_subscription?
-    subscriptions.where(status: 'Active').exists?
+    subscriptions.where(state: 'Active').exists?
   end
 
   #: -> Subscription?
   def active_subscription
-    subscriptions.find_by(status: 'Active')
+    subscriptions.find_by(state: 'Active')
   end
 
   #: -> bool
@@ -41,17 +41,17 @@ class User < ApplicationRecord
 
   #: -> bool
   def pending_subscription?
-    subscriptions.where.not(status: %w[Active Expired]).exists?
+    subscriptions.where.not(state: %w[Active Expired]).exists?
   end
 
   #: -> Subscription?
   def pending_subscription
-    subscriptions.where.not(status: %w[Active Expired]).first
+    subscriptions.where.not(state: %w[Active Expired]).first
   end
 
   #: -> bool
   def active_or_pending_subscription?
-    subscriptions.where.not(status: 'Expired').exists?
+    subscriptions.where.not(state: 'Expired').exists?
   end
 
   #: -> bool
@@ -66,7 +66,7 @@ class User < ApplicationRecord
 
   #: -> bool
   def mit_payment_method?
-    clients.where(status: 'MIT').exists?
+    clients.where(state: 'MIT').exists?
   end
 
   #: -> ActiveRecord::Relation

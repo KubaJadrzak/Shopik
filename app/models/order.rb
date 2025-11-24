@@ -9,7 +9,7 @@ class Order < ApplicationRecord
 
   validates :email, presence: true
   validates :total_price, presence: true
-  validates :status, presence: true
+  validates :state, presence: true
   validates :shipping_address, presence: true
   validates :ordered_at, presence: true
   validate :must_have_order_items
@@ -33,7 +33,7 @@ class Order < ApplicationRecord
 
   #: -> bool
   def can_retry_payment?
-    payments.all?(&:retryable?) && status != 'Payment Refunded'
+    payments.all?(&:retryable?) && state != 'Payment Refunded'
   end
 
   #: -> bool

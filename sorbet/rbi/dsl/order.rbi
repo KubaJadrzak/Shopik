@@ -775,7 +775,7 @@ class Order
     def restore_shipping_address!; end
 
     sig { void }
-    def restore_status!; end
+    def restore_state!; end
 
     sig { void }
     def restore_total_price!; end
@@ -826,10 +826,10 @@ class Order
     def saved_change_to_shipping_address?; end
 
     sig { returns(T.nilable([::String, ::String])) }
-    def saved_change_to_status; end
+    def saved_change_to_state; end
 
     sig { returns(T::Boolean) }
-    def saved_change_to_status?; end
+    def saved_change_to_state?; end
 
     sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def saved_change_to_total_price; end
@@ -901,49 +901,49 @@ class Order
     def shipping_address_will_change!; end
 
     sig { returns(::String) }
-    def status; end
+    def state; end
 
     sig { params(value: ::String).returns(::String) }
-    def status=(value); end
+    def state=(value); end
 
     sig { returns(T::Boolean) }
-    def status?; end
+    def state?; end
 
     sig { returns(T.nilable(::String)) }
-    def status_before_last_save; end
+    def state_before_last_save; end
 
     sig { returns(T.untyped) }
-    def status_before_type_cast; end
+    def state_before_type_cast; end
 
     sig { returns(T::Boolean) }
-    def status_came_from_user?; end
+    def state_came_from_user?; end
 
     sig { returns(T.nilable([::String, ::String])) }
-    def status_change; end
+    def state_change; end
 
     sig { returns(T.nilable([::String, ::String])) }
-    def status_change_to_be_saved; end
+    def state_change_to_be_saved; end
 
     sig { params(from: ::String, to: ::String).returns(T::Boolean) }
-    def status_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+    def state_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
-    def status_in_database; end
+    def state_in_database; end
 
     sig { returns(T.nilable([::String, ::String])) }
-    def status_previous_change; end
+    def state_previous_change; end
 
     sig { params(from: ::String, to: ::String).returns(T::Boolean) }
-    def status_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+    def state_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
-    def status_previously_was; end
+    def state_previously_was; end
 
     sig { returns(T.nilable(::String)) }
-    def status_was; end
+    def state_was; end
 
     sig { void }
-    def status_will_change!; end
+    def state_will_change!; end
 
     sig { returns(::BigDecimal) }
     def total_price; end
@@ -1144,7 +1144,7 @@ class Order
     def will_save_change_to_shipping_address?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_status?; end
+    def will_save_change_to_state?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_total_price?; end

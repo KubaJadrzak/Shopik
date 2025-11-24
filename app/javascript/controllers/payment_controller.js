@@ -9,7 +9,7 @@ export default class extends Controller {
 
   connect() {
     this.loadEspagoMain()
-      .then(() => this.loadEspagoFrame())
+      .then(() => this.loadIframe())
       .then(() => this.initializePayment())
       .catch(error => console.error("Error:", error))
   }
@@ -18,7 +18,7 @@ export default class extends Controller {
     return this.loadScript("https://js.espago.com/espago-1.3.js")
   }
 
-  loadEspagoFrame() {
+  loadIframe() {
     return this.loadScript("https://js.espago.com/iframe.js", {
       async: true,
       "data-id": "EspagoFrameScript",

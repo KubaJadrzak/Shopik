@@ -1,11 +1,28 @@
 #!/usr/bin/env sh
 
-if gem list --no-installed --exact --silent foreman; then
-  echo "Installing foreman..."
-  gem install foreman
+NO_RAILS=false
+
+# Parse arguments for --no-rails
+for arg in "$@"; do
+  case "$arg" in
+    --no-rails)
+      NO_RAILS=true
+      # Remove --no-rails from the arguments so foreman doesn't see it
+      set -- "${@/$arg/}"
+      ;;
+  esac
+done
+
+# Only install foreman if we're running Rails
+if [ "$NO_RAILS" = false ]; then
+  if ! gem list --installed --exact foreman > /dev/null 2>&1; then
+    echo "Installing foreman..."
+    gem install foreman
+  fi
 fi
 
 # Default to port 3000 if not specified
 export PORT="${PORT:-3000}"
 
+# Execute foreman with remaining arguments
 exec foreman start -f Procfile.dev --env /dev/null "$@"

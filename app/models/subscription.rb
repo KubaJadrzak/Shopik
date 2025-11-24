@@ -66,10 +66,10 @@ class Subscription < ApplicationRecord
     return unless @payment
     return unless user&.primary_payment_method?
 
-    @payment.process_payment(
-      cof:       'recurring',
-      client_id: user&.primary_payment_method&.client_id,
-    )
+    # @payment.process_payment(
+    #   cof:       'recurring',
+    #   client_id: user&.primary_payment_method&.client_id,
+    # )
 
     nil
   end

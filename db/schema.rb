@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_24_160759) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_24_201350) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -39,7 +39,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_160759) do
     t.string "uuid", null: false
     t.string "first_name", null: false
     t.string "last_name", null: false
-    t.string "status", default: "unverified", null: false
+    t.string "state", default: "unverified", null: false
     t.integer "month", null: false
     t.integer "year", null: false
     t.boolean "primary", default: false, null: false
@@ -63,7 +63,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_160759) do
     t.integer "user_id"
     t.string "uuid", null: false
     t.string "email", null: false
-    t.string "status", null: false
+    t.string "state", null: false
     t.decimal "total_price", precision: 10, scale: 2, null: false
     t.text "shipping_address", null: false
     t.datetime "ordered_at", null: false
@@ -86,6 +86,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_160759) do
     t.string "payable_type"
     t.integer "payable_id"
     t.integer "client_id"
+    t.integer "payment_method", null: false
+    t.integer "cof"
+    t.string "currency", default: "USD", null: false
+    t.integer "kind", null: false
     t.index ["client_id"], name: "index_payments_on_client_id"
     t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
     t.index ["payment_id"], name: "index_payments_on_payment_id", unique: true
@@ -106,7 +110,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_24_160759) do
     t.integer "user_id", null: false
     t.date "start_date"
     t.date "end_date"
-    t.string "status", default: "New", null: false
+    t.string "state", default: "New", null: false
     t.boolean "auto_renew", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

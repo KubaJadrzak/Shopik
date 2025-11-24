@@ -8,6 +8,7 @@
 class Payment
   include GeneratedAssociationMethods
   include GeneratedAttributeMethods
+  include EnumMethodsModule
   extend CommonRelationMethods
   extend GeneratedRelationMethods
 
@@ -17,8 +18,17 @@ class Payment
   def to_ary; end
 
   class << self
+    sig { returns(T::Hash[T.any(String, Symbol), Integer]) }
+    def cofs; end
+
+    sig { returns(T::Hash[T.any(String, Symbol), Integer]) }
+    def kinds; end
+
     sig { params(attributes: T.untyped, block: T.nilable(T.proc.params(object: ::Payment).void)).returns(::Payment) }
     def new(attributes = nil, &block); end
+
+    sig { returns(T::Hash[T.any(String, Symbol), Integer]) }
+    def payment_methods; end
   end
 
   module CommonRelationMethods
@@ -328,6 +338,74 @@ class Payment
     def third_to_last!; end
   end
 
+  module EnumMethodsModule
+    sig { void }
+    def apple_pay!; end
+
+    sig { returns(T::Boolean) }
+    def apple_pay?; end
+
+    sig { void }
+    def google_pay!; end
+
+    sig { returns(T::Boolean) }
+    def google_pay?; end
+
+    sig { void }
+    def iframe!; end
+
+    sig { void }
+    def iframe3!; end
+
+    sig { returns(T::Boolean) }
+    def iframe3?; end
+
+    sig { returns(T::Boolean) }
+    def iframe?; end
+
+    sig { void }
+    def meest_paywall!; end
+
+    sig { returns(T::Boolean) }
+    def meest_paywall?; end
+
+    sig { void }
+    def preauth!; end
+
+    sig { returns(T::Boolean) }
+    def preauth?; end
+
+    sig { void }
+    def recurring!; end
+
+    sig { returns(T::Boolean) }
+    def recurring?; end
+
+    sig { void }
+    def sale!; end
+
+    sig { returns(T::Boolean) }
+    def sale?; end
+
+    sig { void }
+    def secure_web_page!; end
+
+    sig { returns(T::Boolean) }
+    def secure_web_page?; end
+
+    sig { void }
+    def storing!; end
+
+    sig { returns(T::Boolean) }
+    def storing?; end
+
+    sig { void }
+    def unscheduled!; end
+
+    sig { returns(T::Boolean) }
+    def unscheduled?; end
+  end
+
   module GeneratedAssociationMethods
     sig { params(args: T.untyped, blk: T.untyped).returns(::Client) }
     def build_client(*args, &blk); end
@@ -386,6 +464,9 @@ class Payment
     def annotate(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def apple_pay(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def arel_columns(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
@@ -418,11 +499,20 @@ class Payment
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def from(*args, &blk); end
 
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def google_pay(*args, &blk); end
+
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelationGroupChain) }
     def group(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def having(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def iframe(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def iframe3(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def in_order_of(*args, &blk); end
@@ -449,10 +539,46 @@ class Payment
     def lock(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def meest_paywall(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def merge(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def none(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_apple_pay(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_google_pay(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_iframe(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_iframe3(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_meest_paywall(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_preauth(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_recurring(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_sale(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_secure_web_page(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_storing(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_unscheduled(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def null_relation?(*args, &blk); end
@@ -476,10 +602,16 @@ class Payment
     def pending(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def preauth(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def preload(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def readonly(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def recurring(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def references(*args, &blk); end
@@ -499,12 +631,21 @@ class Payment
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def rewhere(*args, &blk); end
 
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def sale(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def secure_web_page(*args, &blk); end
+
     sig { params(args: T.untyped).returns(PrivateAssociationRelation) }
     sig { params(blk: T.proc.params(record: ::Payment).returns(BasicObject)).returns(T::Array[::Payment]) }
     def select(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def should_be_finalized(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def storing(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def strict_loading(*args, &blk); end
@@ -520,6 +661,9 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def uniq!(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def unscheduled(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def unscope(*args, &blk); end
@@ -674,6 +818,65 @@ class Payment
     sig { void }
     def client_id_will_change!; end
 
+    sig { returns(T.nilable(::String)) }
+    def cof; end
+
+    sig do
+      params(
+        value: T.nilable(T.any(::String, ::Symbol, ::Integer))
+      ).returns(T.nilable(T.any(::String, ::Symbol, ::Integer)))
+    end
+    def cof=(value); end
+
+    sig { returns(T::Boolean) }
+    def cof?; end
+
+    sig { returns(T.nilable(::String)) }
+    def cof_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def cof_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def cof_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def cof_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def cof_change_to_be_saved; end
+
+    sig do
+      params(
+        from: T.nilable(T.any(::String, ::Symbol, ::Integer)),
+        to: T.nilable(T.any(::String, ::Symbol, ::Integer))
+      ).returns(T::Boolean)
+    end
+    def cof_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def cof_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def cof_previous_change; end
+
+    sig do
+      params(
+        from: T.nilable(T.any(::String, ::Symbol, ::Integer)),
+        to: T.nilable(T.any(::String, ::Symbol, ::Integer))
+      ).returns(T::Boolean)
+    end
+    def cof_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def cof_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def cof_was; end
+
+    sig { void }
+    def cof_will_change!; end
+
     sig { returns(::ActiveSupport::TimeWithZone) }
     def created_at; end
 
@@ -718,6 +921,51 @@ class Payment
 
     sig { void }
     def created_at_will_change!; end
+
+    sig { returns(::String) }
+    def currency; end
+
+    sig { params(value: ::String).returns(::String) }
+    def currency=(value); end
+
+    sig { returns(T::Boolean) }
+    def currency?; end
+
+    sig { returns(T.nilable(::String)) }
+    def currency_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def currency_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def currency_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def currency_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def currency_change_to_be_saved; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def currency_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def currency_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def currency_previous_change; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def currency_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def currency_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def currency_was; end
+
+    sig { void }
+    def currency_will_change!; end
 
     sig { returns(::Integer) }
     def id; end
@@ -854,6 +1102,61 @@ class Payment
     sig { void }
     def issuer_response_code_will_change!; end
 
+    sig { returns(::String) }
+    def kind; end
+
+    sig { params(value: T.any(::String, ::Symbol, ::Integer)).returns(T.any(::String, ::Symbol, ::Integer)) }
+    def kind=(value); end
+
+    sig { returns(T::Boolean) }
+    def kind?; end
+
+    sig { returns(T.nilable(::String)) }
+    def kind_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def kind_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def kind_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def kind_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def kind_change_to_be_saved; end
+
+    sig do
+      params(
+        from: T.any(::String, ::Symbol, ::Integer),
+        to: T.any(::String, ::Symbol, ::Integer)
+      ).returns(T::Boolean)
+    end
+    def kind_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def kind_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def kind_previous_change; end
+
+    sig do
+      params(
+        from: T.any(::String, ::Symbol, ::Integer),
+        to: T.any(::String, ::Symbol, ::Integer)
+      ).returns(T::Boolean)
+    end
+    def kind_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def kind_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def kind_was; end
+
+    sig { void }
+    def kind_will_change!; end
+
     sig { returns(T.nilable(::Integer)) }
     def payable_id; end
 
@@ -989,6 +1292,61 @@ class Payment
     sig { void }
     def payment_id_will_change!; end
 
+    sig { returns(::String) }
+    def payment_method; end
+
+    sig { params(value: T.any(::String, ::Symbol, ::Integer)).returns(T.any(::String, ::Symbol, ::Integer)) }
+    def payment_method=(value); end
+
+    sig { returns(T::Boolean) }
+    def payment_method?; end
+
+    sig { returns(T.nilable(::String)) }
+    def payment_method_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def payment_method_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def payment_method_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def payment_method_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def payment_method_change_to_be_saved; end
+
+    sig do
+      params(
+        from: T.any(::String, ::Symbol, ::Integer),
+        to: T.any(::String, ::Symbol, ::Integer)
+      ).returns(T::Boolean)
+    end
+    def payment_method_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def payment_method_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def payment_method_previous_change; end
+
+    sig do
+      params(
+        from: T.any(::String, ::Symbol, ::Integer),
+        to: T.any(::String, ::Symbol, ::Integer)
+      ).returns(T::Boolean)
+    end
+    def payment_method_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def payment_method_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def payment_method_was; end
+
+    sig { void }
+    def payment_method_will_change!; end
+
     sig { returns(T.nilable(::String)) }
     def reject_reason; end
 
@@ -1044,7 +1402,13 @@ class Payment
     def restore_client_id!; end
 
     sig { void }
+    def restore_cof!; end
+
+    sig { void }
     def restore_created_at!; end
+
+    sig { void }
+    def restore_currency!; end
 
     sig { void }
     def restore_id!; end
@@ -1056,6 +1420,9 @@ class Payment
     def restore_issuer_response_code!; end
 
     sig { void }
+    def restore_kind!; end
+
+    sig { void }
     def restore_payable_id!; end
 
     sig { void }
@@ -1063,6 +1430,9 @@ class Payment
 
     sig { void }
     def restore_payment_id!; end
+
+    sig { void }
+    def restore_payment_method!; end
 
     sig { void }
     def restore_reject_reason!; end
@@ -1094,11 +1464,23 @@ class Payment
     sig { returns(T::Boolean) }
     def saved_change_to_client_id?; end
 
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_cof; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_cof?; end
+
     sig { returns(T.nilable([::ActiveSupport::TimeWithZone, ::ActiveSupport::TimeWithZone])) }
     def saved_change_to_created_at; end
 
     sig { returns(T::Boolean) }
     def saved_change_to_created_at?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_currency; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_currency?; end
 
     sig { returns(T.nilable([::Integer, ::Integer])) }
     def saved_change_to_id; end
@@ -1118,6 +1500,12 @@ class Payment
     sig { returns(T::Boolean) }
     def saved_change_to_issuer_response_code?; end
 
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_kind; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_kind?; end
+
     sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
     def saved_change_to_payable_id; end
 
@@ -1135,6 +1523,12 @@ class Payment
 
     sig { returns(T::Boolean) }
     def saved_change_to_payment_id?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_payment_method; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_payment_method?; end
 
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def saved_change_to_reject_reason; end
@@ -1305,7 +1699,13 @@ class Payment
     def will_save_change_to_client_id?; end
 
     sig { returns(T::Boolean) }
+    def will_save_change_to_cof?; end
+
+    sig { returns(T::Boolean) }
     def will_save_change_to_created_at?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_currency?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_id?; end
@@ -1317,6 +1717,9 @@ class Payment
     def will_save_change_to_issuer_response_code?; end
 
     sig { returns(T::Boolean) }
+    def will_save_change_to_kind?; end
+
+    sig { returns(T::Boolean) }
     def will_save_change_to_payable_id?; end
 
     sig { returns(T::Boolean) }
@@ -1324,6 +1727,9 @@ class Payment
 
     sig { returns(T::Boolean) }
     def will_save_change_to_payment_id?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_payment_method?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_reject_reason?; end
@@ -1347,6 +1753,9 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def annotate(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def apple_pay(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def arel_columns(*args, &blk); end
@@ -1381,11 +1790,20 @@ class Payment
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def from(*args, &blk); end
 
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def google_pay(*args, &blk); end
+
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelationGroupChain) }
     def group(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def having(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def iframe(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def iframe3(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def in_order_of(*args, &blk); end
@@ -1412,10 +1830,46 @@ class Payment
     def lock(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def meest_paywall(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def merge(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def none(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_apple_pay(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_google_pay(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_iframe(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_iframe3(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_meest_paywall(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_preauth(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_recurring(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_sale(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_secure_web_page(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_storing(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_unscheduled(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def null_relation?(*args, &blk); end
@@ -1439,10 +1893,16 @@ class Payment
     def pending(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def preauth(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def preload(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def readonly(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def recurring(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def references(*args, &blk); end
@@ -1462,12 +1922,21 @@ class Payment
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def rewhere(*args, &blk); end
 
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def sale(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def secure_web_page(*args, &blk); end
+
     sig { params(args: T.untyped).returns(PrivateRelation) }
     sig { params(blk: T.proc.params(record: ::Payment).returns(BasicObject)).returns(T::Array[::Payment]) }
     def select(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def should_be_finalized(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def storing(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def strict_loading(*args, &blk); end
@@ -1483,6 +1952,9 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def uniq!(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def unscheduled(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def unscope(*args, &blk); end

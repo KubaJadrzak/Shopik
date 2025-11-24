@@ -1,13 +1,11 @@
 <%= turbo_stream_from @user %>
 <div class="container">
   <div class="row">
-    <div class="col-lg-3 col-12 mb-3">
-      <%= render 'sidebar' %>
+    <div class="col-lg-3 mb-4">
+      <%= render 'account_sidebar' %>
     </div>
-    <div class="col-lg-9 col-12">
-      <%= turbo_frame_tag "account_content" do %>
-        <%= render 'account_content', section: @section %>
-      <% end %>
+    <div class="col-lg-9">
+      <%= render 'account_content', section: @section %>
     </div>
   </div>
 </div>

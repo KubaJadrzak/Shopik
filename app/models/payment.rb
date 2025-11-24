@@ -16,25 +16,29 @@ class Payment < ApplicationRecord
     where(state: 'executed').where('updated_at < ?', 1.hour.ago)
   }
 
+  enum :payment_method, %i[iframe secure_web_page iframe3 meest_paywall google_pay apple_pay]
+  enum :cof, %i[storing recurring unscheduled]
+  enum :kind, %i[sale preauth]
+
   STATUS_MAP = {
     'rejected'              => 'Payment Rejected',
     'failed'                => 'Payment Failed',
     'resigned'              => 'Payment Resigned',
     'reversed'              => 'Cancelled',
-    'preauthorized'         => 'Waiting for Payment',
-    'tds2_challenge'        => 'Waiting for Payment',
-    'tds_redirected'        => 'Waiting for Payment',
-    'dcc_decision'          => 'Waiting for Payment',
-    'blik_redirected'       => 'Waiting for Payment',
-    'transfer_redirected'   => 'Waiting for Payment',
-    'new'                   => 'Waiting for Payment',
+    'preauthorized'         => 'Payment in Progress',
+    'tds2_challenge'        => 'Payment in Progress',
+    'tds_redirected'        => 'Payment in Progress',
+    'dcc_decision'          => 'Payment in Progress',
+    'blik_redirected'       => 'Payment in Progress',
+    'transfer_redirected'   => 'Payment in Progress',
+    'new'                   => 'Payment in Progress',
     'refunded'              => 'Returned',
-    'timeout'               => 'Awaiting Payment',
-    'connection_failed'     => 'Awaiting Payment',
-    'ssl_error'             => 'Awaiting Payment',
-    'parsing_error'         => 'Awaiting Payment',
-    'unknown_faraday_error' => 'Awaiting Payment',
-    'unexpected_error'      => 'Awaiting Payment',
+    'timeout'               => 'Waiting for Payment',
+    'connection_failed'     => 'Waiting for Payment',
+    'ssl_error'             => 'Waiting for Payment',
+    'parsing_error'         => 'Waiting for Payment',
+    'unknown_faraday_error' => 'Waiting for Payment',
+    'unexpected_error'      => 'Waiting for Payment',
     'invalid_uri'           => 'Payment Error',
   }.freeze #: Hash[String, String]
 
@@ -147,42 +151,32 @@ class Payment < ApplicationRecord
 
     return unless payable.present?
 
-    update_payable_status
-  end
-
-  #: (?card_token: String?, ?cof: String?, ?client_id: String?) -> [Symbol, String]
-  def process_payment(card_token: nil, cof: nil, client_id: nil)
-    Espago::Payment::PaymentProcessor.new(
-      payment:    self,
-      card_token: card_token,
-      cof:        cof,
-      client_id:  client_id,
-    ).process_payment
+    set_new_payable_status
   end
 
   #: -> [Symbol, String]
   def reverse_payment
-    Espago::Payment::PaymentProcessor.new(
+    Payment::PaymentProcessor.new(
       payment:    self,
     ).reverse_payment
   end
 
   #: -> [Symbol, String]
   def refund_payment
-    Espago::Payment::PaymentProcessor.new(
+    Payment::PaymentProcessor.new(
       payment:    self,
     ).refund_payment
   end
 
-  #: (Espago::Payment::Response) -> [Symbol, String]
+  #: (Payment) -> [Symbol, String]
   def process_response(response)
-    Espago::Payment::ResponseProcessor.new(payment: self, response: response).process_response
+    Payment::ResponseProcessor.new(payment: self, response: response).process_response
   end
 
   private
 
   #: -> void
-  def update_payable_status
+  def update_status
     set_new_payable_status
     handle_payable_status_update
   end
