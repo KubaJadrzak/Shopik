@@ -25,7 +25,7 @@ module PaymentProcessor
           currency:     @payment.currency,
           positive_url: positive_url,
           negative_url: negative_url,
-          card:         @charge_means,
+          card:         @payment_means,
           client:       @payment.client,
           cof:          @payment.cof,
         }.compact

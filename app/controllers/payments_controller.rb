@@ -157,7 +157,7 @@ class PaymentsController < ApplicationController
       state:          'new',
       cof:            @cof,
       payment_method: @payment_method,
-      currency:       'USD',
+      currency:       'PLN',
       kind:           :sale,
     )
 
@@ -177,8 +177,8 @@ class PaymentsController < ApplicationController
     raise payment_error! unless @payment
 
     PaymentProcessor::Charge.new(
-      payment:      @payment,
-      charge_means: set_charge_means,
+      payment:       @payment,
+      payment_means: set_charge_means,
     ).process
   end
 

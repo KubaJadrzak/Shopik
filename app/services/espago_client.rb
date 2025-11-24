@@ -2,6 +2,7 @@
 # typed: strict
 
 class EspagoClient
+
   #: -> void
   def initialize
     base_url = ENV.fetch('ESPAGO_BASE_URL')
@@ -35,9 +36,27 @@ class EspagoClient
       req.body = body if body
     end
 
-    PaymentProcessor::Response.new(connected: true, status: response.status, body: response.body)
-  rescue Faraday::Error, StandardError => e
-    handle_error(e)
+    PaymentProcessor::Response.new(
+      connected: true,
+      status:    response.status,
+      body:      response.body,
+    )
+  rescue Faraday::ClientError => e
+    handle_http_error(e)
+  rescue Faraday::ServerError
+    PaymentProcessor::Response.new(connected: false, status: :server_error, body: { error: 'server_error' })
+  rescue Faraday::TimeoutError
+    PaymentProcessor::Response.new(connected: false, status: :timeout, body: { error: 'timeout' })
+  rescue Faraday::ConnectionFailed
+    PaymentProcessor::Response.new(connected: false, status: :connection_failed, body: { error: 'connection_failed' })
+  rescue Faraday::SSLError
+    PaymentProcessor::Response.new(connected: false, status: :ssl_error, body: { error: 'ssl_error' })
+  rescue Faraday::ParsingError
+    PaymentProcessor::Response.new(connected: false, status: :parsing_error, body: { error: 'parsing_error' })
+  rescue URI::InvalidURIError, URI::BadURIError
+    PaymentProcessor::Response.new(connected: false, status: :invalid_uri, body: { error: 'invalid_uri' })
+  rescue StandardError
+    PaymentProcessor::Response.new(connected: false, status: :unexpected_error, body: { error: 'unexpected_error' })
   end
 
   private
@@ -47,24 +66,15 @@ class EspagoClient
     Base64.strict_encode64("#{@user}:#{@password}")
   end
 
-  #: (StandardError exception) -> PaymentProcessor::Response
-  def handle_error(exception)
-    status = case exception
-             when Faraday::TimeoutError then :timeout
-             when Faraday::ConnectionFailed then :connection_failed
-             when Faraday::SSLError then :ssl_error
-             when Faraday::ParsingError then :parsing_error
-             when URI::InvalidURIError, URI::BadURIError then :invalid_uri
-             when Faraday::ClientError then :client_error
-             when Faraday::ServerError then :server_error
-             else
-               :unexpected_error
-             end
+  #: (Faraday::ClientError | Faraday::ServerError exception) -> PaymentProcessor::Response
+  def handle_http_error(exception)
+    status = exception.response[:status]
+    body   = exception.response[:body]
 
     PaymentProcessor::Response.new(
-      connected: false,
+      connected: true,
       status:    status,
-      body:      { error: status.to_s },
+      body:      body,
     )
   end
 end

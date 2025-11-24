@@ -4,13 +4,14 @@
 module PaymentProcessor
   module Request
     class SecureWebPage < Base
-      #: (payment: ::Payment, ?charge_means: String?) -> void
-      def initialize(payment:, charge_means: nil)
+      #: (payment: ::Payment, ?payment_means: String?) -> void
+      def initialize(payment:, payment_means: nil)
         super
         @session_id = SecureRandom.hex(16) #: String
         @amount = @payment.amount #: BigDecimal
         @currency = @payment.currency #: String
         @kind = @payment.kind.to_s #: String
+        @uuid = @payment.uuid #: String
       end
 
       # @override
@@ -32,7 +33,8 @@ module PaymentProcessor
           amount:       @amount,
           currency:     @currency,
           kind:         @kind,
-          title:        @payment.uuid,
+          title:        @uuid,
+          description:  @uuid,
           positive_url: positive_url,
           negative_url: negative_url,
           session_id:   @session_id,

@@ -4,10 +4,10 @@
 module PaymentProcessor
   class Charge
 
-    #: (payment: Payment, ?charge_means: String?) -> void
-    def initialize(payment:, charge_means: nil)
+    #: (payment: Payment, ?payment_means: String?) -> void
+    def initialize(payment:, payment_means: nil)
       @payment = payment
-      @charge_means = charge_means
+      @payment_means = payment_means
       @payment_method = payment.payment_method #: String
     end
 
@@ -22,7 +22,7 @@ module PaymentProcessor
     def build_request
       case @payment_method
       when 'iframe'
-        Request::Iframe.new(payment: @payment, charge_means: @charge_means)
+        Request::Iframe.new(payment: @payment, payment_means: @payment_means)
       else
         Request::SecureWebPage.new(payment: @payment)
       end

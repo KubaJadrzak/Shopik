@@ -7,15 +7,14 @@ module PaymentProcessor
     class Base
       extend T::Sig
 
-      #: (payment: ::Payment, ?charge_means: String?) -> void
-      def initialize(payment:, charge_means: nil)
+      #: (payment: ::Payment, ?payment_means: String?) -> void
+      def initialize(payment:, payment_means: nil)
         @payment = payment
-        @charge_means = charge_means
+        @payment_means = payment_means
       end
 
       #: -> ::PaymentProcessor::Response
       def perform
-        byebug
         ::EspagoClient.new.send(url, method: method, body: request)
       end
 
