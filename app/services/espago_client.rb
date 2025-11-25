@@ -42,21 +42,21 @@ class EspagoClient
       body:      response.body,
     )
   rescue Faraday::ClientError => e
-    handle_http_error(e)
+    handle_client_error(e)
   rescue Faraday::ServerError
-    PaymentProcessor::Response.new(connected: false, status: :server_error, body: { error: 'server_error' })
+    PaymentProcessor::Response.new(connected: false, body: { error: 'server_error' })
   rescue Faraday::TimeoutError
-    PaymentProcessor::Response.new(connected: false, status: :timeout, body: { error: 'timeout' })
+    PaymentProcessor::Response.new(connected: false, body: { error: 'timeout' })
   rescue Faraday::ConnectionFailed
-    PaymentProcessor::Response.new(connected: false, status: :connection_failed, body: { error: 'connection_failed' })
+    PaymentProcessor::Response.new(connected: false, body: { error: 'connection_failed' })
   rescue Faraday::SSLError
-    PaymentProcessor::Response.new(connected: false, status: :ssl_error, body: { error: 'ssl_error' })
+    PaymentProcessor::Response.new(connected: false, body: { error: 'ssl_error' })
   rescue Faraday::ParsingError
-    PaymentProcessor::Response.new(connected: false, status: :parsing_error, body: { error: 'parsing_error' })
+    PaymentProcessor::Response.new(connected: false, body: { error: 'parsing_error' })
   rescue URI::InvalidURIError, URI::BadURIError
-    PaymentProcessor::Response.new(connected: false, status: :invalid_uri, body: { error: 'invalid_uri' })
+    PaymentProcessor::Response.new(connected: false, body: { error: 'invalid_uri' })
   rescue StandardError
-    PaymentProcessor::Response.new(connected: false, status: :unexpected_error, body: { error: 'unexpected_error' })
+    PaymentProcessor::Response.new(connected: false, body: { error: 'unexpected_error' })
   end
 
   private
@@ -67,7 +67,7 @@ class EspagoClient
   end
 
   #: (Faraday::ClientError | Faraday::ServerError exception) -> PaymentProcessor::Response
-  def handle_http_error(exception)
+  def handle_client_error(exception)
     status = exception.response[:status]
     body   = exception.response[:body]
 

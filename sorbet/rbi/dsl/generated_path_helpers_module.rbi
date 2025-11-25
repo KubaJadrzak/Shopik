@@ -25,9 +25,6 @@ module GeneratedPathHelpersModule
   def add_to_cart_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def awaiting_payments_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def back_request_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -56,9 +53,6 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def extend_subscription_subscription_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def failure_payments_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_order_path(*args); end
@@ -92,6 +86,9 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def payments_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def pending_payments_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def products_path(*args); end
@@ -179,6 +176,9 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def refund_payments_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def rejected_payments_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def retry_payment_order_path(*args); end

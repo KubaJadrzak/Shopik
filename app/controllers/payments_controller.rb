@@ -6,7 +6,7 @@ class PaymentsController < ApplicationController
   include PaymentErrors
 
   before_action :authenticate_user!
-  before_action :set_payment, only: %i[reverse refund success failure awaiting]
+  before_action :set_payment, only: %i[reverse refund success rejected pending]
   before_action :set_payable, only: %i[new create]
 
   #: -> void
@@ -21,12 +21,11 @@ class PaymentsController < ApplicationController
     raise payment_error! unless @payable
 
     set_payment_params
-    raise payment_error! unless create_payment && update_payable
+    raise payment_error! unless create_payment
 
-    byebug
-    response = charge_payment
+    @response = charge_payment #: PaymentProcessor::Response?
 
-    p response
+    handle_response
   end
 
   #: -> void
@@ -36,7 +35,7 @@ class PaymentsController < ApplicationController
       return
     end
 
-    @payment.reverse_payment
+    @payment.reversable?
 
     if @payment.reversed?
       redirect_to order_path(@payment.payable), notice: 'Your order was cancelled'
@@ -52,7 +51,7 @@ class PaymentsController < ApplicationController
       return
     end
 
-    @payment.refund_payment
+    @payment.refundable?
 
     if @payment.refunded?
       redirect_to order_path(@payment.payable), notice: 'Your order was refunded'
@@ -63,28 +62,16 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def success
-    unless @payment
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      return
-    end
     handle_redirect(message: 'Payment successful!')
   end
 
   #: -> void
-  def failure
-    unless @payment
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      return
-    end
-    handle_redirect(message: 'Payment failed!', alert: true)
+  def rejected
+    handle_redirect(message: 'Payment rejected!', alert: true)
   end
 
   #: -> void
-  def awaiting
-    unless @payment
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      return
-    end
+  def pending
     handle_redirect(message: 'Payment is being processed!', alert: true)
   end
 
@@ -164,58 +151,79 @@ class PaymentsController < ApplicationController
     @payment.persisted?
   end
 
-  #: -> bool
-  def update_payable
-    raise payment_error! unless @payable
-
-    @payable.state = 'Payment in Progress'
-    @payable.save
-  end
-
-  #: -> void
+  #: -> PaymentProcessor::Response
   def charge_payment
     raise payment_error! unless @payment
 
     PaymentProcessor::Charge.new(
       payment:       @payment,
-      payment_means: set_charge_means,
+      payment_means: set_payment_means,
     ).process
   end
 
   #: -> String?
-  def set_charge_means
+  def set_payment_means
     params[:card_token]
   end
 
-  #: (Symbol, String) -> void
-  def handle_response(result_action, result_param)
-    case result_action
-    when :redirect_url
-      redirect_to result_param, allow_other_host: true
-    when :success
-      redirect_to success_payments_path(result_param)
-    when :awaiting
-      redirect_to awaiting_payments_path(result_param)
-    when :failure
-      redirect_to failure_payments_path(result_param)
+  #: -> void
+  def handle_response
+    raise payment_error! unless @payment && @response && update_payment && update_payable
+
+    byebug
+  end
+
+  #: -> bool
+  def update_payment
+    raise payment_error! unless @payment && @response
+
+    @payment.update(
+      state:                @response.state,
+      espago_id:            @response.espago_id,
+      client:               set_client,
+      reject_reason:        @response.reject_reason,
+      issuer_response_code: @response.issuer_response_code,
+      behaviour:            @response.behaviour,
+      response:             @response.body.to_s,
+    )
+  end
+
+  #: -> bool
+  def update_payable
+    raise payment_error! unless @payment && @response
+
+    payable = @payment.payable
+
+    case payable
+    when Order
+      payable.state = ORDER_STATUS_MAP[@response.state] || 'Payment Error'
+    when Subscription
+      payable.state = SUBSCRIPTION_STATUS_MAP[@response.state] || 'Payment Error'
     end
+
+    payable.save
+  end
+
+  #: -> NilClass
+  def set_client
+    nil
   end
 
   #: (message: String, ?alert: bool) -> void
   def handle_redirect(message:, alert: false)
-    payment = @payment #: as !nil
+    raise payment_error! unless @payment
 
     flash_type = alert ? :alert : :notice
 
-    case payment.payable
+    case @payment.payable
     when Subscription
-      redirect_to subscription_path(payment.payable), flash_type => message
+      redirect_to subscription_path(@payment.payable), flash_type => message
     when Order
-      redirect_to order_path(payment.payable), flash_type => message
-    when ::Client
-      redirect_to verify_client_path(payment.payable), flash_type => message
+      redirect_to order_path(@payment.payable), flash_type => message
+    when Client
+      redirect_to verify_client_path(@payment.payable), flash_type => message
     else
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
+      raise payment_error!
     end
   end
 end

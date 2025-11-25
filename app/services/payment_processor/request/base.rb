@@ -31,7 +31,7 @@ module PaymentProcessor
         Rails.application
              .routes
              .url_helpers
-             .failure_payments_url(uuid: @payment.uuid)
+             .rejected_payments_url(uuid: @payment.uuid)
       end
 
       sig { abstract.returns(String) }

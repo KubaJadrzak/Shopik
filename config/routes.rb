@@ -51,8 +51,8 @@ Rails.application.routes.draw do
       post :reverse
       post :refund
       get :success
-      get :failure
-      get :awaiting
+      get :rejected
+      get :pending
     end
   end
 

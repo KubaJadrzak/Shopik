@@ -25,9 +25,6 @@ module GeneratedUrlHelpersModule
   def add_to_cart_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def awaiting_payments_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def back_request_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -56,9 +53,6 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def extend_subscription_subscription_url(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def failure_payments_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_order_url(*args); end
@@ -92,6 +86,9 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def payments_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def pending_payments_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def products_url(*args); end
@@ -179,6 +176,9 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def refund_payments_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def rejected_payments_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def retry_payment_order_url(*args); end
