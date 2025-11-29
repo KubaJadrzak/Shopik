@@ -62,17 +62,17 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def success
-    handle_redirect(message: 'Payment successful!')
-  end
-
-  #: -> void
-  def rejected
-    handle_redirect(message: 'Payment rejected!', alert: true)
+    handle_final_redirect(message: 'Payment successful!')
   end
 
   #: -> void
   def pending
-    handle_redirect(message: 'Payment is being processed!', alert: true)
+    handle_final_redirect(message: 'Payment is being processed!', alert: true)
+  end
+
+  #: -> void
+  def rejected
+    handle_final_redirect(message: 'Payment rejected!', alert: true)
   end
 
   private
@@ -168,49 +168,25 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def handle_response
-    raise payment_error! unless @payment && @response && update_payment && update_payable
-
-    byebug
-  end
-
-  #: -> bool
-  def update_payment
     raise payment_error! unless @payment && @response
 
-    @payment.update(
-      state:                @response.state,
-      espago_id:            @response.espago_id,
-      client:               set_client,
-      reject_reason:        @response.reject_reason,
-      issuer_response_code: @response.issuer_response_code,
-      behaviour:            @response.behaviour,
-      response:             @response.body.to_s,
-    )
-  end
+    return redirect_to @response.redirect_url, allow_other_host: true if @response.redirect?
 
-  #: -> bool
-  def update_payable
-    raise payment_error! unless @payment && @response
-
-    payable = @payment.payable
-
-    case payable
-    when Order
-      payable.state = ORDER_STATUS_MAP[@response.state] || 'Payment Error'
-    when Subscription
-      payable.state = SUBSCRIPTION_STATUS_MAP[@response.state] || 'Payment Error'
+    if @response.success?
+      handle_final_redirect(message: 'Payment successful!')
+    elsif @response.pending?
+      handle_final_redirect(message: 'Payment is being processed!', alert: true)
+    elsif @response.rejected? || @response.failure?
+      handle_final_redirect(message: 'Payment rejected!', alert: true)
+    elsif @response.uncertain?
+      handle_final_redirect(message: 'We are experiencing an issue with your payment', alert: true)
+    else
+      raise !payment_error!
     end
-
-    payable.save
-  end
-
-  #: -> NilClass
-  def set_client
-    nil
   end
 
   #: (message: String, ?alert: bool) -> void
-  def handle_redirect(message:, alert: false)
+  def handle_final_redirect(message:, alert: false)
     raise payment_error! unless @payment
 
     flash_type = alert ? :alert : :notice

@@ -125,5 +125,15 @@ module PaymentProcessor
     def behaviour
       @body['behaviour']
     end
+
+    #: -> ::Payment?
+    def payment
+      ::Payment.find_by(uuid: payment_uuid)
+    end
+
+    #: -> (::Order | ::Subscription | ::Client)
+    def payable
+      payment&.payable
+    end
   end
 end

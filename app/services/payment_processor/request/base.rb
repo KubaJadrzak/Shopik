@@ -14,7 +14,7 @@ module PaymentProcessor
       end
 
       #: -> ::PaymentProcessor::Response
-      def perform
+      def process
         ::EspagoClient.new.send(url, method: method, body: request)
       end
 

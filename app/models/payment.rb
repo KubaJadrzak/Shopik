@@ -83,45 +83,7 @@ class Payment < ApplicationRecord
     :failure
   end
 
-  #:  -> void
-  def uncertain!
-
-  end
-
   private
-
-  #: -> void
-  def update_status
-    set_new_payable_status
-    handle_payable_status_update
-  end
-
-  #: -> void
-  def set_new_payable_status
-    @new_status = case payable
-                  when Subscription
-                    SUBSCRIPTION_STATUS_MAP[state] || 'Payment Error'
-                  when Order
-                    ORDER_STATUS_MAP[state] || 'Payment Error'
-                  else
-                    'Payment Error'
-                  end  #: String?
-
-  end
-
-  #: -> void
-  def handle_payable_status_update
-    new_status = @new_status #: as !nil
-    if payable.is_a?(Subscription)
-      unless payable.status == 'Active' && new_status != 'Active'
-        payable.update!(status: new_status)
-        payable.extend_or_initialize_dates! if new_status == 'Active'
-      end
-    elsif payable.is_a?(Order)
-      payable.update!(status: new_status)
-    end
-
-  end
 
   #: -> bool
   def payable_is_order?
@@ -161,7 +123,7 @@ class Payment < ApplicationRecord
 
     return unless Payment.where(payable: payable).awaiting.exists?
 
-    errors.add(:base, 'Cannot create new payment: subscription already has a pending or uncertain payment')
+    errors.add(:base, 'Cannot create new payment: subscription already has an awaiting payment')
   end
 
   #: -> void
@@ -170,7 +132,7 @@ class Payment < ApplicationRecord
 
     return unless Payment.where(payable: payable).awaiting.exists?
 
-    errors.add(:base, 'Cannot create new payment: client already has an awaiting payable payment')
+    errors.add(:base, 'Cannot create new payment: client already has an awaiting payment')
   end
 
   #: -> void

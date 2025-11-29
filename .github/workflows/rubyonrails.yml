@@ -46,7 +46,7 @@ jobs:
       - name: Set up database
         run: |
           bin/setup
-          
+
       - name: Run RuboCop
         run: bundle exec rubocop
 
@@ -58,7 +58,7 @@ jobs:
 
       - name: Install Playwright browsers
         run: npx playwright install
-      
+
       - name: Run Playwright tests
         run: bin/playwright
 
