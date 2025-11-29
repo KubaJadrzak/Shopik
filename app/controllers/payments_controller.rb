@@ -6,7 +6,7 @@ class PaymentsController < ApplicationController
   include PaymentErrors
 
   before_action :authenticate_user!
-  before_action :set_payment, only: %i[reverse refund success rejected pending]
+  before_action :set_payment, only: %i[show reverse refund success rejected pending]
   before_action :set_payable, only: %i[new create]
 
   #: -> void
@@ -14,6 +14,11 @@ class PaymentsController < ApplicationController
     raise payment_error! unless @payable
 
     @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY') #: String?
+  end
+
+  #: -> void
+  def show
+    @payment
   end
 
   #: -> void
@@ -169,7 +174,7 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def handle_response
-    raise payment_error! unless @payment && @response
+    raise payment_error! unless @response
 
     return redirect_to @response.redirect_url, allow_other_host: true if @response.redirect?
 

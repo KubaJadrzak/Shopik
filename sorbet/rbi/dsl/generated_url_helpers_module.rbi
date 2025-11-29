@@ -58,7 +58,7 @@ module GeneratedUrlHelpersModule
   def new_order_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def new_payments_url(*args); end
+  def new_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_rails_conductor_inbound_email_source_url(*args); end
@@ -85,10 +85,13 @@ module GeneratedUrlHelpersModule
   def orders_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def payment_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def payments_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def pending_payments_url(*args); end
+  def pending_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def products_url(*args); end
@@ -175,10 +178,10 @@ module GeneratedUrlHelpersModule
   def rails_storage_redirect_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def refund_payments_url(*args); end
+  def refund_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def rejected_payments_url(*args); end
+  def rejected_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def retry_payment_order_url(*args); end
@@ -190,7 +193,7 @@ module GeneratedUrlHelpersModule
   def return_order_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def reverse_payments_url(*args); end
+  def reverse_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def root_url(*args); end
@@ -208,7 +211,7 @@ module GeneratedUrlHelpersModule
   def subscriptions_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def success_payments_url(*args); end
+  def success_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def toggle_auto_renew_subscription_url(*args); end

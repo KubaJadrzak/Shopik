@@ -25,7 +25,6 @@
                   <td><%= payment.reject_reason.presence || "N/A" %></td>
                   <td><%= payment.behaviour.presence || "N/A" %></td>
                   <td><%= payment.created_at.strftime("%B %d, %Y at %I:%M %p") %></td>
-                  <td><%= payment_status_icon(payment.simplified_state) %></td>
                 </tr>
               <% end %>
             </tbody>
@@ -40,7 +39,6 @@
               <div><strong>Reject Reason:</strong> <%= payment.reject_reason.presence || "N/A" %></div>
               <div><strong>Behaviour:</strong> <%= payment.behaviour.presence || "N/A" %></div>
               <div><strong>Created At:</strong> <%= payment.created_at.strftime("%B %d, %Y at %I:%M %p") %></div>
-              <div><strong>Status:</strong> <%= payment_status_icon(payment.simplified_state) %></div>
             </div>
           <% end %>
         </div>

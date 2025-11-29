@@ -58,7 +58,7 @@ module GeneratedPathHelpersModule
   def new_order_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def new_payments_path(*args); end
+  def new_payment_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_rails_conductor_inbound_email_path(*args); end
@@ -85,10 +85,13 @@ module GeneratedPathHelpersModule
   def orders_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def payment_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def payments_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def pending_payments_path(*args); end
+  def pending_payment_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def products_path(*args); end
@@ -175,10 +178,10 @@ module GeneratedPathHelpersModule
   def rails_storage_redirect_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def refund_payments_path(*args); end
+  def refund_payment_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def rejected_payments_path(*args); end
+  def rejected_payment_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def retry_payment_order_path(*args); end
@@ -190,7 +193,7 @@ module GeneratedPathHelpersModule
   def return_order_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def reverse_payments_path(*args); end
+  def reverse_payment_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def root_path(*args); end
@@ -208,7 +211,7 @@ module GeneratedPathHelpersModule
   def subscriptions_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def success_payments_path(*args); end
+  def success_payment_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def toggle_auto_renew_subscription_path(*args); end

@@ -46,7 +46,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :payments, only: %i[new create] do
+  resources :payments, only: %i[new create show] do
     member do
       post :reverse
       post :refund

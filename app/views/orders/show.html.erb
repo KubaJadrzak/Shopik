@@ -1,33 +1,34 @@
 <%= turbo_stream_from @order %>
-<%= render 'show_buttons', order: @order  %>
+<%= render 'orders/show/buttons', order: @order  %>
 <div class="card shadow">
   <div class="card-body">
     <h5 class="card-title mb-4">Order Details</h5>
     <div class="row">
-      <%= render "show_details", title: 'Order Number' do %>
+      <%= render "orders/show/details", title: 'Order Number' do %>
         <%= @order.uuid %>
       <% end %>
       <div class="w-100 mb-2"></div>
-      <%= render "show_details", title: 'Status' do %>
-        <span class="badge <%= order_status_color(@order.last_payment_state) %> w-50">
+      <%= render "orders/show/details", title: 'Status' do %>
+        <span class="badge <%= status_color(@order.last_payment_state) %> w-50">
           <%= @order.state %>
         </span>
       <% end %>
       <div class="w-100 mb-2 d-md-none"></div>
-      <%= render "show_details", title: 'Payment Status' do %>
-        <span class="badge <%= order_status_color(@order.last_payment_state) %> w-50">
-          <%= @order.last_payment_state || 'N/A' %>
+      <%= render "orders/show/details", title: 'Payment Status' do %>
+        <span class="badge <%= status_color(@order.last_payment_state) %> w-50">
+          <%= @order.last_payment_state.humanize || 'N/A' %>
         </span>
       <% end %>
       <div class="w-100 mb-2"></div>
-      <%= render "show_details", title: 'Shipping Address' do %>
+      <%= render "orders/show/details", title: 'Shipping Address' do %>
         <%= @order.shipping_address %>
       <% end %>
       <div class="w-100 mb-2 d-md-none"></div>
-      <%= render "show_details", title: 'Ordered at' do %>
+      <%= render "orders/show/details", title: 'Ordered at' do %>
         <%= @order.ordered_at.strftime("%b %e, %Y %l:%M %p") %>
       <% end %>
     </div>
   </div>
-  <%= render 'show_items', order: @order %>
+  <%= render 'orders/show/items', order: @order %>
 </div>
+<%= render partial: 'orders/show/payments', locals: { payments: @payments } %>
