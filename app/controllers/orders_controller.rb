@@ -36,7 +36,7 @@ class OrdersController < ApplicationController
 
   def retry_payment
     unless @order.can_retry_payment?
-      redirect_to order_path(@order), alert: 'Cannot retry payment: payment already in progress or successful.'
+      redirect_to order_path(@order), alert: 'Cannot retry payment'
       return
     end
 
@@ -68,6 +68,6 @@ class OrdersController < ApplicationController
   end
 
   def ensure_cart_has_items
-    redirect_to cart_path if current_user.cart.cart_items.empty?
+    redirect_to cart_path if current_user.cart.empty?
   end
 end

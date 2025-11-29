@@ -71,8 +71,7 @@ class User < ApplicationRecord
 
   #: -> ActiveRecord::Relation
   def payments
-    Payment.where(id: order_payments.select(:id))
-           .or(Payment.where(id: subscription_payments.select(:id)))
+    Payment.where(id: order_payments.select(:id)).or(Payment.where(id: subscription_payments.select(:id)))
   end
 
   #: -> BigDecimal

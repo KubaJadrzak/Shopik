@@ -2,7 +2,7 @@
 # typed: strict
 
 class Order < ApplicationRecord
-  belongs_to :user, optional: true, touch: true
+  belongs_to :user, touch: true
   has_many :order_items, dependent: :destroy
   has_many :payments, -> { order(created_at: :desc) }, as: :payable, dependent: :destroy
 
@@ -18,22 +18,31 @@ class Order < ApplicationRecord
 
   broadcasts_refreshes
 
+  #: -> ::User
+  def owner
+    T.must(user)
+  end
+
+  #: -> String?
+  def last_payment_state
+    payments.last&.state
+  end
+
   #: (Cart cart) -> void
   def build_order_items_from_cart(cart)
     cart.cart_items.each do |cart_item|
       order_items.build(
         product:           cart_item.product,
         quantity:          cart_item.quantity,
-        price_at_purchase: T.must(cart_item.product).price,
+        price_at_purchase: cart_item.product&.price,
       )
-      owner = user #: as !nil
-      owner.cart&.cart_items&.destroy_all
+      user&.cart_items&.destroy_all
     end
   end
 
   #: -> bool
   def can_retry_payment?
-    payments.all?(&:retryable?) && state != 'Payment Refunded'
+    payments.all?(&:retryable?) && state != 'Refunded'
   end
 
   #: -> bool

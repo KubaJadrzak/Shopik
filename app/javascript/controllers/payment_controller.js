@@ -63,7 +63,7 @@ export default class extends Controller {
 
   processPayment() {
     this.updateForm()
-    if (this.selectedPaymentMethod == 'one_time_payment') {
+    if (this.selectedPaymentMethod == 'iframe') {
       showEspagoFrame()
     } else {
       this.formBtnTarget.click()
@@ -71,12 +71,6 @@ export default class extends Controller {
   }
 
   updateForm() {
-    const paymentMethodInput = document.createElement("input")
-    paymentMethodInput.type = "hidden"
-    paymentMethodInput.name = "payment_method"
-    paymentMethodInput.value = this.selectedPaymentMethod
-    this.formTarget.appendChild(paymentMethodInput)
-
     if (this.saveCard == true) {
       const saveCardInput = document.createElement("input")
       saveCardInput.type = "hidden"

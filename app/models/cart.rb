@@ -8,6 +8,8 @@ class Cart < ApplicationRecord
 
   broadcasts_refreshes
 
+  delegate :empty?, to: :cart_items
+
   #: -> BigDecimal
   def total_price
     cart_items.sum(BigDecimal(0), &:total_price)

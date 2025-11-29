@@ -1,61 +1,33 @@
 <%= turbo_stream_from @order %>
-<div class="container mt-4">
-  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
-    <h3><%= @order.uuid%></h3>
-    <%= render 'show_buttons', order: @order  %>
-  </div>
-  <div class="row mt-4">
-    <div class="col-lg-12 mb-4">
-      <div class="card shadow-sm border-light">
-        <div class="card-body">
-          <h5 class="card-title mb-3">Order Details</h5>
-          <div class="row">
-            <div class="col-12">
-              <%= render "show_statuses", order: @order %>
-            </div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-md-6 d-flex justify-content-between align-items-center">
-              <strong>Shipping Address:</strong>
-              <%= @order.shipping_address %>
-            </div>
-            <div class="col-md-6 d-flex justify-content-between align-items-center">
-              <strong>Ordered At:</strong>
-              <%= @order.ordered_at.strftime("%b %e, %Y %l:%M %p") %>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer bg-light">
-          <h6><strong>Order Items:</strong></h6>
-          <table class="table table-striped table-sm">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @order.order_items.each do |order_item| %>
-                <tr>
-                  <td><%= order_item.product.title %></td>
-                  <td><%= number_to_currency(order_item.price_at_purchase) %></td>
-                  <td><%= order_item.quantity %></td>
-                  <td><%= number_to_currency(order_item.total_price) %></td>
-                </tr>
-              <% end %>
-              <tr>
-                <td><b>Total</b></td>
-                <td></td>
-                <td></td>
-                <td><b><%= number_to_currency(@order.total_price) %></b></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+<%= render 'show_buttons', order: @order  %>
+<div class="card shadow">
+  <div class="card-body">
+    <h5 class="card-title mb-4">Order Details</h5>
+    <div class="row">
+      <%= render "show_details", title: 'Order Number' do %>
+        <%= @order.uuid %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "show_details", title: 'Status' do %>
+        <span class="badge <%= order_status_color(@order.last_payment_state) %> w-50">
+          <%= @order.state %>
+        </span>
+      <% end %>
+      <div class="w-100 mb-2 d-md-none"></div>
+      <%= render "show_details", title: 'Payment Status' do %>
+        <span class="badge <%= order_status_color(@order.last_payment_state) %> w-50">
+          <%= @order.last_payment_state || 'N/A' %>
+        </span>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "show_details", title: 'Shipping Address' do %>
+        <%= @order.shipping_address %>
+      <% end %>
+      <div class="w-100 mb-2 d-md-none"></div>
+      <%= render "show_details", title: 'Ordered at' do %>
+        <%= @order.ordered_at.strftime("%b %e, %Y %l:%M %p") %>
+      <% end %>
     </div>
   </div>
+  <%= render 'show_items', order: @order %>
 </div>
-<%= render partial: 'espago/payments/payment', locals: { payments: @payments } %>

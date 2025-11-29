@@ -1,11 +1,11 @@
-<div class="d-flex align-items-center">
+<div class="d-flex flex justify-content-end mb-4">
   <%= link_to "Back to Orders", account_orders_path,
             class: "btn btn-primary me-2" %>
   <% if order.can_retry_payment? %>
     <%= button_to "Retry Payment", retry_payment_order_path(order), method: :post, class: "btn btn-success", data: { turbo: false } %>
   <% end %>
   <% if order.can_reverse_payment? %>
-    <%= link_to "Cancel Order", cancel_order_path(@order), class: "btn btn-success me-2" %>
+    <%= link_to "Cancel Order", cancel_order_path(@order), class: "btn btn-success" %>
   <% end %>
   <% if order.can_refund_payment? %>
     <%= link_to "Return Order", return_order_path(@order), method: :post, class: "btn btn-success", data: { turbo: false } %>

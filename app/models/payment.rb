@@ -20,8 +20,6 @@ class Payment < ApplicationRecord
   enum :cof, %i[storing recurring unscheduled]
   enum :kind, %i[sale preauth]
 
-
-
   scope :successful, -> { where(state: SUCCESS_STATUSES) }
   scope :failed, -> { where(state: REJECTED_STATUSES) }
   scope :pending, -> { where(state: PENDING_STATUSES) }
@@ -76,11 +74,20 @@ class Payment < ApplicationRecord
   #: -> Symbol
   def simplified_state
     return :success if SUCCESS_STATUSES.include?(state)
-    return :failure if AWAITING_STATUSES.include?(state)
+    return :rejected if REJECTED_STATUSES.include?(state)
     return :uncertain if UNCERTAIN_STATUSES.include?(state)
     return :pending if PENDING_STATUSES.include?(state)
+    return :awaiting if AWAITING_STATUSES.include?(state)
 
-    :failure
+    :failed
+  end
+
+  #: -> String?
+  def json_response
+    raw_response = response
+    return unless raw_response
+
+    ::JSON.parse(raw_response)
   end
 
   private

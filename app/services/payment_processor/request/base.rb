@@ -15,7 +15,11 @@ module PaymentProcessor
 
       #: -> ::PaymentProcessor::Response
       def process
-        ::EspagoClient.new.send(url, method: method, body: request)
+        response = ::EspagoClient.new.send(url, method: method, body: request)
+
+        response.attach_payment(payment: @payment)
+
+        response
       end
 
       #:  -> String

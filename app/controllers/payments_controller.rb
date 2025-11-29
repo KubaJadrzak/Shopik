@@ -20,6 +20,7 @@ class PaymentsController < ApplicationController
   def create
     raise payment_error! unless @payable
 
+    byebug
     set_payment_params
     raise payment_error! unless create_payment
 
