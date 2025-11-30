@@ -12,7 +12,7 @@ module PaymentProcessor
     def process
       response = Request::Reverse.new(payment: @payment).process
 
-      StateManager::Reverse.new(response).process
+      StateManager::Refund.new(response).process
 
       response
     end

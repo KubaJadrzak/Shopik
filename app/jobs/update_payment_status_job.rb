@@ -20,7 +20,11 @@ class UpdatePaymentStatusJob < ApplicationJob
   def handle_awaiting_payments
     return unless @user
 
-    @user.payments.awaiting.find_each do |payment|
+    # Fix for weird sorbet behaviour,
+    # missing method awaiting on ActiveRecord::Relation
+    payments = @user.payments #: as untyped
+
+    payments.awaiting.find_each do |payment|
       ::PaymentProcessor::Check.new(payment).process
     end
   end
