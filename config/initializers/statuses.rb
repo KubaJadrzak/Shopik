@@ -32,8 +32,8 @@ SUBSCRIPTION_STATUS_MAP = STATUS_MAP.merge('executed'  => 'Active',
 
 SUCCESS_STATUSES = %w[executed
                       finalized
-                      refund
-                      reverse].freeze #: Array[String]
+                      refunded
+                      reversed].freeze #: Array[String]
 
 REJECTED_STATUSES = %w[
   rejected

@@ -54,7 +54,7 @@ export default class extends Controller {
 
   updatePaymentMethod() {
     const checked = this.paymentMethodTargets.find(r => r.checked)
-    this.selectedPaymentMethod = checked ? checked.value : 'secure web page'
+    this.selectedPaymentMethod = checked ? checked.value : 'secure_web_page'
   }
 
   updateSaveCard() {

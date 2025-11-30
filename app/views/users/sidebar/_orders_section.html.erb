@@ -1,9 +1,13 @@
-<div id="order-history-section" class="content-section">
+<div id="order-history-section">
   <h4>Your Orders</h4>
   <% if @orders.any? %>
-    <div class="row mt-4">
-      <%= render partial: "users/sidebar/order", collection: @orders %>
-    </div>
+    <% @orders.each do |order| %>
+      <div class="mb-4">
+        <%= link_to order_path(order), class: "text-decoration-none text-reset" do %>
+          <%= render "orders/show/card", order: order %>
+        <% end %>
+      </div>
+    <% end %>
   <% else %>
     <p>You have no orders yet.</p>
   <% end %>

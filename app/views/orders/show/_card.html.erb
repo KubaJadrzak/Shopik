@@ -1,0 +1,31 @@
+<div class="card shadow">
+  <div class="card-body">
+    <h5 class="card-title mb-4">Order Details</h5>
+    <div class="row">
+      <%= render "orders/show/card_details", title: 'Order Number' do %>
+        <%= order.uuid %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "orders/show/card_details", title: 'Status' do %>
+        <span class="badge <%= status_color(order.last_payment_state) %> w-50">
+          <%= order.state %>
+        </span>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "orders/show/card_details", title: 'Payment Status' do %>
+        <span class="badge <%= status_color(order.last_payment_state) %> w-50">
+          <%= order.last_payment_state&.humanize || 'N/A' %>
+        </span>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "orders/show/card_details", title: 'Shipping Address' do %>
+        <%= order.shipping_address %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "orders/show/card_details", title: 'Ordered at' do %>
+        <%= order.ordered_at.strftime("%b %e, %Y %l:%M %p") %>
+      <% end %>
+    </div>
+  </div>
+  <%= render 'orders/show/card_items', order: order %>
+</div>

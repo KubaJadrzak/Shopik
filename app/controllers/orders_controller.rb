@@ -60,7 +60,7 @@ class OrdersController < ApplicationController
   private
 
   def set_order
-    @order = Order.includes(order_items: :product).find_by!(id: params[:id])
+    @order = Order.includes(order_items: :product).find_by!(uuid: params[:uuid])
   end
 
   def order_params

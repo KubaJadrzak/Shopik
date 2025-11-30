@@ -10,9 +10,9 @@
           </tr>
         </thead>
         <tbody>
-          <% payments.each do |payment| %>
+          <% @payments.each do |payment| %>
             <tr>
-              <td><%= link_to payment.uuid, payment_path(payment.uuid) %></td>
+              <td><%= link_to payment.uuid, payment_path(payment) %></td>
               <td><%= payment.state.humanize %></td>
             <% end %>
           </tbody>

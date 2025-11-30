@@ -11,9 +11,6 @@ module PaymentProcessor
     #: Hash[String, untyped]
     attr_reader :body
 
-    #: ::Payment?
-    attr_reader :payment
-
     #: (connected: bool, body: Hash[String, untyped], ?status: Integer?) -> void
     def initialize(connected:, body:, status: nil)
       @connected = connected
@@ -134,9 +131,14 @@ module PaymentProcessor
       @payment = payment #: ::Payment?
     end
 
+    #: -> ::Payment?
+    def payment
+      @payment || ::Payment.find_by(uuid: payment_uuid)
+    end
+
     #: -> (::Order | ::Subscription | ::Client)
     def payable
-      @payment&.payable
+      payment&.payable
     end
   end
 end

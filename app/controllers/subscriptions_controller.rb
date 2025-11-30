@@ -70,7 +70,7 @@ class SubscriptionsController < ApplicationController
   private
 
   def set_subscription
-    @subscription = Subscription.find_by!(id: params[:id])
+    @subscription = Subscription.find_by!(uuid: params[:uuid])
   end
 
 end

@@ -1,6 +1,6 @@
-<div class="card-footer bg-light">
+<div class="card-footer">
   <h6><strong>Order Items:</strong></h6>
-  <table class="table table-striped table-sm">
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>Product</th>
@@ -10,9 +10,9 @@
       </tr>
     </thead>
     <tbody>
-      <% @order.order_items.each do |order_item| %>
+      <% order.order_items.each do |order_item| %>
         <tr>
-          <td><%= order_item.product.title %></td>
+          <td><%= order_item.title %></td>
           <td><%= number_to_currency(order_item.price_at_purchase) %></td>
           <td><%= order_item.quantity %></td>
           <td><%= number_to_currency(order_item.total_price) %></td>
@@ -22,7 +22,7 @@
         <td><b>Total</b></td>
         <td></td>
         <td></td>
-        <td><b><%= number_to_currency(@order.total_price) %></b></td>
+        <td><b><%= number_to_currency(order.total_price) %></b></td>
       </tr>
     </tbody>
   </table>

@@ -18,6 +18,11 @@ class Order < ApplicationRecord
 
   broadcasts_refreshes
 
+  #: -> String
+  def to_param
+    uuid
+  end
+
   #: -> ::User
   def owner
     T.must(user)
@@ -25,7 +30,12 @@ class Order < ApplicationRecord
 
   #: -> String?
   def last_payment_state
-    payments.last&.state
+    payments.first&.state
+  end
+
+  #: -> ::Payment?
+  def last_payment
+    payments.first
   end
 
   #: (Cart cart) -> void

@@ -27,7 +27,7 @@ module PaymentProcessor
         Rails.application
              .routes
              .url_helpers
-             .success_payments_url(uuid: @payment.uuid)
+             .success_payment_url(uuid: @payment.uuid)
       end
 
       #: -> String
@@ -35,7 +35,7 @@ module PaymentProcessor
         Rails.application
              .routes
              .url_helpers
-             .rejected_payments_url(uuid: @payment.uuid)
+             .rejected_payment_url(uuid: @payment.uuid)
       end
 
       sig { abstract.returns(String) }
@@ -44,7 +44,7 @@ module PaymentProcessor
       sig { abstract.returns(Symbol) }
       def method; end
 
-      sig { abstract.returns(T::Hash[Symbol, T.untyped]) }
+      sig { abstract.returns(T.nilable(T::Hash[Symbol, T.untyped])) }
       def request; end
     end
   end

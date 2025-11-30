@@ -4,12 +4,11 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def status_color(state)
-    case state
-    when SUCCESS_STATUSES.include?(state)
+    if SUCCESS_STATUSES.include?(state)
       'bg-success'
-    when REJECTED_STATUSES.include?(state)
+    elsif REJECTED_STATUSES.include?(state)
       'bg-danger'
-    when AWAITING_STATUSES.include?(state)
+    elsif AWAITING_STATUSES.include?(state)
       'bg-warning'
     else
       'bg-secondary'

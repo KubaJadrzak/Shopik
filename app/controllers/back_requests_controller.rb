@@ -7,21 +7,12 @@ class BackRequestsController < ApplicationController
 
   #: -> void
   def receive
-    payload = JSON.parse(request.body.read)
+    back_request = ::JSON.parse(request.body.read)
 
-    payment = Espago::BackRequest::PaymentProcessor.new(payload).process_payment
-
-    if payment.nil?
-      head :not_found
-      return
-    end
-
-    Espago::BackRequest::ClientProcessor.new(payload, payment).process_client
-
-    head :ok
+    ::BackRequestsProcessor.new(back_request).process
   end
 
-  #: -> bool || String
+  #: -> bool
   def authenticate_espago!
     authenticate_or_request_with_http_basic do |username, password|
       username == Rails.application.credentials.dig(:espago, :login_basic_auth) &&

@@ -1,0 +1,26 @@
+# typed: strict
+# frozen_string_literal: true
+
+module PaymentProcessor
+  module Request
+    class Refund < Base
+      # @override
+      #: -> Symbol
+      def method
+        :post
+      end
+
+      # @override
+      #: -> String
+      def url
+        "api/charges/#{@payment.espago_payment_id}/refund"
+      end
+
+      # @override
+      #: -> Hash[Symbol, untyped]?
+      def request
+        nil
+      end
+    end
+  end
+end

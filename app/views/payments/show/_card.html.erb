@@ -1,0 +1,68 @@
+<div class="card shadow">
+  <div class="card-body">
+    <h5 class="card-title mb-4">Payment Details</h5>
+    <div class="row">
+      <%= render "payments/show/card_details", title: 'Payment Number' do %>
+        <%= payment.uuid %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "payments/show/card_details", title: 'Status' do %>
+        <span class="badge <%= status_color(payment.state) %> w-50">
+          <%= payment.state.humanize %>
+        </span>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "payments/show/card_details", title: 'Payment Method' do %>
+        <%= payment.payment_method.humanize %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "payments/show/card_details", title: 'Amount' do %>
+        <%= payment.amount %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "payments/show/card_details", title: 'Currency' do %>
+        <%= payment.currency %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "payments/show/card_details", title: 'Reject Reason' do %>
+        <%= payment.reject_reason || 'N/A' %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "payments/show/card_details", title: 'Issuer Response Code' do %>
+        <%= payment.issuer_response_code || 'N/A' %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "payments/show/card_details", title: 'Behaviour' do %>
+        <%= payment.behaviour || 'N/A' %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "payments/show/card_details", title: 'Card on File' do %>
+        <%= payment.cof|| 'N/A' %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "payments/show/card_details", title: 'Espago Payment ID' do %>
+        <%= payment.espago_payment_id || 'N/A' %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "payments/show/card_details", title: 'Espago Client ID' do %>
+        <%= payment.espago_client_id || 'N/A' %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "payments/show/card_details", title: 'Client' do %>
+        <%= payment.client || 'N/A' %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "payments/show/card_details", title: 'Created at' do %>
+        <%= payment.created_at.strftime("%b %e, %Y %l:%M %p") %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "payments/show/card_details", title: 'Payable Type' do %>
+        <%= payment.payable_type.humanize %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "payments/show/card_details", title: 'Payable' do %>
+        <%= link_to payment.payable.uuid, polymorphic_url(payment.payable) %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :cart_items, only: [:destroy]
   post 'add_to_cart/:product_id', to: 'cart_items#create', as: 'add_to_cart'
 
-  resources :orders, only: %i[new create show] do
+  resources :orders, param: :uuid, only: %i[new create show] do
     member do
       post :retry_payment
       get  :cancel
@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :subscriptions, only: %i[new create show] do
+  resources :subscriptions, param: :uuid, only: %i[new create show] do
     member do
       post :retry_payment
       post :extend_subscription
@@ -46,7 +46,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :payments, only: %i[new create show] do
+  resources :payments, param: :uuid,  only: %i[new create show] do
     member do
       post :reverse
       post :refund

@@ -9,6 +9,8 @@ class OrderItem < ApplicationRecord
   validates :quantity, presence: true
   validates :price_at_purchase, presence: true
 
+  delegate :title, to: :product
+
   sig { returns(BigDecimal) }
   def total_price
     price_at_purchase * quantity

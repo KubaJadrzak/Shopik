@@ -26,6 +26,11 @@ class Payment < ApplicationRecord
   scope :awaiting, -> { where(state: AWAITING_STATUSES) }
   scope :uncertain, -> { where(state: UNCERTAIN_STATUSES) }
 
+  #: -> String
+  def to_param
+    uuid
+  end
+
   #: -> bool
   def pending?
     PENDING_STATUSES.include?(state)

@@ -25,7 +25,6 @@ class PaymentsController < ApplicationController
   def create
     raise payment_error! unless @payable
 
-    byebug
     set_payment_params
     raise payment_error! unless create_payment
 
@@ -36,26 +35,18 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def reverse
-    unless @payment&.reversable?
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      return
-    end
+    raise payment_error! unless @payment&.reversable?
 
-    @payment.reversable?
+    @response = ::PaymentProcessor::Reverse.new(@payment).process
 
-    if @payment.reversed?
-      redirect_to order_path(@payment.payable), notice: 'Your order was cancelled'
-    else
-      redirect_to order_path, alert: 'We are experiencing an issue with your payment'
-    end
+    byebug
+
+    handle_response
   end
 
   #: -> void
   def refund
-    unless @payment&.refundable?
-      redirect_to account_path, alert: 'We are experiencing an issue with your payment'
-      return
-    end
+    raise payment_error! unless @payment&.refundable?
 
     @payment.refundable?
 
@@ -197,15 +188,6 @@ class PaymentsController < ApplicationController
 
     flash_type = alert ? :alert : :notice
 
-    case @payment.payable
-    when Subscription
-      redirect_to subscription_path(@payment.payable), flash_type => message
-    when Order
-      redirect_to order_path(@payment.payable), flash_type => message
-    when Client
-      redirect_to verify_client_path(@payment.payable), flash_type => message
-    else
-      raise payment_error!
-    end
+    redirect_to polymorphic_path(@payment.payable), flash_type => message
   end
 end
