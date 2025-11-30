@@ -39,8 +39,6 @@ class PaymentsController < ApplicationController
 
     @response = ::PaymentProcessor::Reverse.new(@payment).process
 
-    byebug
-
     handle_response
   end
 
@@ -48,13 +46,9 @@ class PaymentsController < ApplicationController
   def refund
     raise payment_error! unless @payment&.refundable?
 
-    @payment.refundable?
+    @response = ::PaymentProcessor::Refund.new(@payment).process
 
-    if @payment.refunded?
-      redirect_to order_path(@payment.payable), notice: 'Your order was refunded'
-    else
-      redirect_to order_path(@payment.payable), alert: 'We are experiencing an issue with your payment'
-    end
+    handle_response
   end
 
   #: -> void
