@@ -17,7 +17,8 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    Espago::UpdatePaymentStatusJob.perform_later(resource.id)
+    UpdatePaymentStatusJob.perform_later(resource.id)
+    FinalizePaymentJob.perform_later(resource.id)
     super
   end
 

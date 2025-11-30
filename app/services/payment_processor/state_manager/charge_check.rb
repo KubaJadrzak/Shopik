@@ -3,7 +3,7 @@
 
 module PaymentProcessor
   module StateManager
-    class Charge < Base
+    class ChargeCheck < Base
 
       # @override
       #: -> void

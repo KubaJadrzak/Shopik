@@ -21,5 +21,6 @@ class UsersController < ApplicationController
     end
 
     UpdatePaymentStatusJob.perform_later(current_user.id)
+    FinalizePaymentJob.perform_later(current_user.id)
   end
 end

@@ -16,7 +16,7 @@ class BackRequestsProcessor
     case subject
     when ::Payment
       response = ::PaymentProcessor::Response.new(connected: true, status: 200, body: @back_request)
-      ::PaymentProcessor::StateManager::Charge.new(response).process
+      ::PaymentProcessor::StateManager::ChargeCheck.new(response).process
     when ::Client
     end
   end

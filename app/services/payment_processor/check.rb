@@ -12,7 +12,7 @@ module PaymentProcessor
     def process
       response = Request::Check.new(payment: @payment).process
 
-      StateManager::Charge.new(response).process
+      StateManager::ChargeCheck.new(response).process
     end
   end
 end
