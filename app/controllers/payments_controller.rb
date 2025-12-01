@@ -23,7 +23,6 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def create
-    byebug
     raise payment_error! unless @payable
 
     set_payment_params
@@ -147,7 +146,7 @@ class PaymentsController < ApplicationController
   def charge_payment
     raise payment_error! unless @payment
 
-    T.must(PaymentProcessor::Charge.new(
+   PaymentProcessor::Charge.new(
       payment:       @payment,
       payment_means: set_payment_means,
     ).process)
