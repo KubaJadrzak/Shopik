@@ -10,9 +10,11 @@ module PaymentProcessor
 
     #: -> void
     def process
-      response = Request::Check.new(payment: @payment).process
+      request = Request::Check.new(payment: @payment)
 
-      StateManager::ChargeCheck.new(response).process
+      response = request.process
+
+      StateManager.new(response).process
     end
   end
 end

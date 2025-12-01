@@ -7,19 +7,26 @@ module PaymentProcessor
     class Base
       extend T::Sig
 
+      #: ::Payment
+      attr_reader :payment
+
+      #: ::PaymentProcessor::Response?
+      attr_accessor :response
+
       #: (payment: ::Payment, ?payment_means: String?) -> void
       def initialize(payment:, payment_means: nil)
         @payment = payment
         @payment_means = payment_means
+        @response = nil
       end
 
       #: -> ::PaymentProcessor::Response
       def process
         response = ::EspagoClient.new.send(url, method: method, body: request)
 
-        response.attach_payment(payment: @payment)
-
-        response
+        response.payment = @payment
+        response.type = type
+        @response = response
       end
 
       #:  -> String
@@ -43,6 +50,9 @@ module PaymentProcessor
 
       sig { abstract.returns(Symbol) }
       def method; end
+
+      sig { abstract.returns(Symbol) }
+      def type; end
 
       sig { abstract.returns(T.nilable(T::Hash[Symbol, T.untyped])) }
       def request; end

@@ -11,11 +11,19 @@ module PaymentProcessor
     #: Hash[String, untyped]
     attr_reader :body
 
+    #: ::Payment?
+    attr_writer :payment
+
+    #: Symbol?
+    attr_accessor :type
+
     #: (connected: bool, body: Hash[String, untyped], ?status: Integer?) -> void
     def initialize(connected:, body:, status: nil)
       @connected = connected
       @status = status
       @body = body
+      @payment = nil #: ::Payment?
+      @type = nil #: Symbol?
     end
 
     #: -> bool
@@ -124,11 +132,6 @@ module PaymentProcessor
     #: -> String?
     def behaviour
       @body['behaviour']
-    end
-
-    #: (payment: ::Payment) -> void
-    def attach_payment(payment:)
-      @payment = payment #: ::Payment?
     end
 
     #: -> ::Payment?

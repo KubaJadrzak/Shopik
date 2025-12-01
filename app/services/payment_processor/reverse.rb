@@ -8,11 +8,13 @@ module PaymentProcessor
       @payment = payment
     end
 
-    #: -> PaymentProcessor::Response
+    #: -> PaymentProcessor::Response?
     def process
-      response = Request::Reverse.new(payment: @payment).process
+      request = Request::Reverse.new(payment: @payment)
 
-      StateManager::RefundReverse.new(response).process
+      response = request.process
+
+      PaymentProcessor::StateManager.new(response).process
 
       response
     end

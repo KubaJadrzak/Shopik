@@ -11,13 +11,13 @@ module PaymentProcessor
       @payment_method = payment.payment_method #: String
     end
 
-    #: -> PaymentProcessor::Response
+    #: -> PaymentProcessor::Response?
     def process
       request = build_request
 
       response = request.process
 
-      PaymentProcessor::StateManager::Charge.new(response).process
+      PaymentProcessor::StateManager.new(response).process
 
       response
     end

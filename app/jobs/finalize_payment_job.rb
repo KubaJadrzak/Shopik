@@ -18,7 +18,7 @@ class FinalizePaymentJob < ApplicationJob
   def handle_finalized_payments
     return unless @user
 
-    # Fix for weird sorbet behaviour,
+    # Fix for sorbet behaviour,
     # missing method awaiting on ActiveRecord::Relation
     payments = @user.payments #: as untyped
 

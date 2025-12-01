@@ -11,6 +11,12 @@ module PaymentProcessor
       end
 
       # @override
+      #: -> Symbol
+      def type
+        :refund
+      end
+
+      # @override
       #: -> String
       def url
         "api/charges/#{@payment.espago_payment_id}/refund"

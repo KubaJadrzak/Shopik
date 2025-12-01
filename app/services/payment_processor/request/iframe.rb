@@ -12,6 +12,12 @@ module PaymentProcessor
       end
 
       # @override
+      #: -> Symbol
+      def type
+        :charge
+      end
+
+      # @override
       #: -> String
       def url
         'api/charges'
@@ -23,6 +29,7 @@ module PaymentProcessor
         {
           amount:       @payment.amount,
           currency:     @payment.currency,
+          description:  @payment.uuid,
           positive_url: positive_url,
           negative_url: negative_url,
           card:         @payment_means,

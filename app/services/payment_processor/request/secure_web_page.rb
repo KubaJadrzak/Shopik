@@ -21,6 +21,12 @@ module PaymentProcessor
       end
 
       # @override
+      #: -> Symbol
+      def type
+        :charge
+      end
+
+      # @override
       #: -> String
       def url
         'api/secure_web_page_register'
