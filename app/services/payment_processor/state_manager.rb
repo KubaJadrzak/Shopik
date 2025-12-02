@@ -14,12 +14,12 @@ module PaymentProcessor
 
     #: -> void
     def process
-      return unless  @type && @payment && @payable
+      return unless @type && @payment && @payable
 
       update_payable
 
       @payment.state = @response.state
-      @payment.response = @response.body.to_s
+      @payment.response = @response.body.to_json
 
       case @type
       when :charge, :check

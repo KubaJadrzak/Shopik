@@ -25,7 +25,7 @@ class UpdatePaymentStatusJob < ApplicationJob
     payments = @user.payments #: as untyped
 
     payments.awaiting.find_each do |payment|
-      ::PaymentProcessor::Check.new(payment).process
+      ::PaymentProcessor::Check.new(payment).process if payment.espago_client_id.present?
     end
   end
 end

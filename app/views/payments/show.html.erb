@@ -3,3 +3,4 @@
             class: "btn btn-primary me-2" %>
 </div>
 <%= render 'payments/show/card', payment: @payment %>
+<%= render 'payments/show/response', response: @payment.json_response %>

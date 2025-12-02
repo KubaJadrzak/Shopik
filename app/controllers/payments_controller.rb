@@ -17,9 +17,7 @@ class PaymentsController < ApplicationController
   end
 
   #: -> void
-  def show
-    @payment
-  end
+  def show; end
 
   #: -> void
   def create
@@ -142,14 +140,14 @@ class PaymentsController < ApplicationController
     @payment.persisted?
   end
 
-  #: -> PaymentProcessor::Response
+  #: -> PaymentProcessor::Response?
   def charge_payment
     raise payment_error! unless @payment
 
-   PaymentProcessor::Charge.new(
+    PaymentProcessor::Charge.new(
       payment:       @payment,
       payment_means: set_payment_means,
-    ).process)
+    ).process
   end
 
   #: -> String?
