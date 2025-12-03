@@ -28,7 +28,7 @@ class PaymentsController < ApplicationController
 
     @response = charge_payment #: PaymentProcessor::Response?
 
-    handle_response
+    handle_response('payment')
   end
 
   #: -> void
@@ -37,7 +37,7 @@ class PaymentsController < ApplicationController
 
     @response = ::PaymentProcessor::Reverse.new(@payment).process
 
-    handle_response
+    handle_response('Cancellation')
   end
 
   #: -> void
@@ -46,7 +46,7 @@ class PaymentsController < ApplicationController
 
     @response = ::PaymentProcessor::Refund.new(@payment).process
 
-    handle_response
+    handle_response('Return')
   end
 
   #: -> void
@@ -155,20 +155,20 @@ class PaymentsController < ApplicationController
     params[:card_token]
   end
 
-  #: -> void
-  def handle_response
+  #: (String) -> void
+  def handle_response(subject)
     raise payment_error! unless @response
 
     return redirect_to @response.redirect_url, allow_other_host: true if @response.redirect?
 
     if @response.success?
-      handle_final_redirect(message: 'Payment successful!')
+      handle_final_redirect(message: "#{subject.capitalize} successful!")
     elsif @response.pending?
-      handle_final_redirect(message: 'Payment is being processed!', alert: true)
+      handle_final_redirect(message: "#{subject.capitalize} is being processed!", alert: true)
     elsif @response.rejected? || @response.failure?
-      handle_final_redirect(message: 'Payment rejected!', alert: true)
+      handle_final_redirect(message: "#{subject.capitalize} rejected!", alert: true)
     elsif @response.uncertain?
-      handle_final_redirect(message: 'We are experiencing an issue with your payment', alert: true)
+      handle_final_redirect(message: "We are experiencing an issue with your #{subject}!", alert: true)
     else
       raise !payment_error!
     end

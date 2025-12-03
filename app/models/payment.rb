@@ -16,6 +16,10 @@ class Payment < ApplicationRecord
     where(state: 'executed').where('updated_at < ?', 1.hour.ago)
   }
 
+  scope :should_be_checked, -> {
+    awaiting.where.not(espago_payment_id: nil)
+  }
+
   enum :payment_method, %i[iframe secure_web_page iframe3 meest_paywall google_pay apple_pay]
   enum :cof, %i[storing recurring unscheduled]
   enum :kind, %i[sale preauth]

@@ -24,8 +24,8 @@ class UpdatePaymentStatusJob < ApplicationJob
     # missing method awaiting on ActiveRecord::Relation
     payments = @user.payments #: as untyped
 
-    payments.awaiting.find_each do |payment|
-      ::PaymentProcessor::Check.new(payment).process if payment.espago_client_id.present?
+    payments.should_be_checked.find_each do |payment|
+      ::PaymentProcessor::Check.new(payment).process
     end
   end
 end

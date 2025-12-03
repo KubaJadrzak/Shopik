@@ -1,0 +1,15 @@
+<div class='text-center'>
+  <h5 class="mb-4">Return Order</h5>
+  Your order amount was <strong><%= number_to_currency(@order.amount) %></strong>
+  <hr>
+  <%= form_with url: refund_payment_path(@order.last_payment), method: :post do |form| %>
+    <div class="mb-4">
+      Your funds will be returned to the payment method used to purchase the order
+    </div>
+    <%= form.submit "Return Order", class: "btn btn-primary w-100 mb-2" %>
+    <%= link_to "Abort", order_path(@order), class: "btn btn-success w-100" %>
+    <p class="text-muted mb-0">
+      <small>Payments provided by Espago</small>
+    </p>
+  <% end %>
+</div>
