@@ -12,6 +12,8 @@ class Payment < ApplicationRecord
 
   before_create :generate_uuid
 
+  delegate :user, to: :payable
+
   scope :should_be_finalized, -> {
     where(state: 'executed').where('updated_at < ?', 1.hour.ago)
   }

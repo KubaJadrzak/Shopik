@@ -48,6 +48,14 @@
         <%= payment.espago_client_id || 'N/A' %>
       <% end %>
       <div class="w-100 mb-2"></div>
+      <%= render "payments/show/card_details", title: 'Card Identifier' do %>
+        <%= payment.card_identifier || 'N/A' %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "payments/show/card_details", title: 'Transaction ID' do %>
+        <%= payment.transaction_id %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
       <%= render "payments/show/card_details", title: 'Client' do %>
         <%= payment.client || 'N/A' %>
       <% end %>

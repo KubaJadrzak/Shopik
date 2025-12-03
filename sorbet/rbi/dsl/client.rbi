@@ -339,20 +339,6 @@ class Client
     def create_user!(*args, &blk); end
 
     sig { returns(T::Array[T.untyped]) }
-    def payable_payment_ids; end
-
-    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def payable_payment_ids=(ids); end
-
-    # This method is created by ActiveRecord on the `Client` class because it declared `has_many :payable_payments`.
-    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
-    sig { returns(::Payment::PrivateCollectionProxy) }
-    def payable_payments; end
-
-    sig { params(value: T::Enumerable[::Payment]).void }
-    def payable_payments=(value); end
-
-    sig { returns(T::Array[T.untyped]) }
     def payment_ids; end
 
     sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
@@ -537,50 +523,50 @@ class Client
   end
 
   module GeneratedAttributeMethods
-    sig { returns(::String) }
-    def client_id; end
+    sig { returns(T.nilable(::String)) }
+    def card_identifier; end
 
-    sig { params(value: ::String).returns(::String) }
-    def client_id=(value); end
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def card_identifier=(value); end
 
     sig { returns(T::Boolean) }
-    def client_id?; end
+    def card_identifier?; end
 
     sig { returns(T.nilable(::String)) }
-    def client_id_before_last_save; end
+    def card_identifier_before_last_save; end
 
     sig { returns(T.untyped) }
-    def client_id_before_type_cast; end
+    def card_identifier_before_type_cast; end
 
     sig { returns(T::Boolean) }
-    def client_id_came_from_user?; end
+    def card_identifier_came_from_user?; end
 
-    sig { returns(T.nilable([::String, ::String])) }
-    def client_id_change; end
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def card_identifier_change; end
 
-    sig { returns(T.nilable([::String, ::String])) }
-    def client_id_change_to_be_saved; end
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def card_identifier_change_to_be_saved; end
 
-    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
-    def client_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def client_id_in_database; end
-
-    sig { returns(T.nilable([::String, ::String])) }
-    def client_id_previous_change; end
-
-    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
-    def client_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def card_identifier_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
-    def client_id_previously_was; end
+    def card_identifier_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def card_identifier_previous_change; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def card_identifier_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable(::String)) }
-    def client_id_was; end
+    def card_identifier_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def card_identifier_was; end
 
     sig { void }
-    def client_id_will_change!; end
+    def card_identifier_will_change!; end
 
     sig { returns(T.nilable(::String)) }
     def company; end
@@ -671,6 +657,51 @@ class Client
 
     sig { void }
     def created_at_will_change!; end
+
+    sig { returns(::String) }
+    def espago_client_id; end
+
+    sig { params(value: ::String).returns(::String) }
+    def espago_client_id=(value); end
+
+    sig { returns(T::Boolean) }
+    def espago_client_id?; end
+
+    sig { returns(T.nilable(::String)) }
+    def espago_client_id_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def espago_client_id_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def espago_client_id_came_from_user?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def espago_client_id_change; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def espago_client_id_change_to_be_saved; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def espago_client_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def espago_client_id_in_database; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def espago_client_id_previous_change; end
+
+    sig { params(from: ::String, to: ::String).returns(T::Boolean) }
+    def espago_client_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def espago_client_id_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def espago_client_id_was; end
+
+    sig { void }
+    def espago_client_id_will_change!; end
 
     sig { returns(::String) }
     def first_name; end
@@ -988,13 +1019,16 @@ class Client
     def primary_will_change!; end
 
     sig { void }
-    def restore_client_id!; end
+    def restore_card_identifier!; end
 
     sig { void }
     def restore_company!; end
 
     sig { void }
     def restore_created_at!; end
+
+    sig { void }
+    def restore_espago_client_id!; end
 
     sig { void }
     def restore_first_name!; end
@@ -1032,11 +1066,11 @@ class Client
     sig { void }
     def restore_year!; end
 
-    sig { returns(T.nilable([::String, ::String])) }
-    def saved_change_to_client_id; end
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_card_identifier; end
 
     sig { returns(T::Boolean) }
-    def saved_change_to_client_id?; end
+    def saved_change_to_card_identifier?; end
 
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def saved_change_to_company; end
@@ -1049,6 +1083,12 @@ class Client
 
     sig { returns(T::Boolean) }
     def saved_change_to_created_at?; end
+
+    sig { returns(T.nilable([::String, ::String])) }
+    def saved_change_to_espago_client_id; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_espago_client_id?; end
 
     sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_first_name; end
@@ -1303,13 +1343,16 @@ class Client
     def uuid_will_change!; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_client_id?; end
+    def will_save_change_to_card_identifier?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_company?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_created_at?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_espago_client_id?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_first_name?; end

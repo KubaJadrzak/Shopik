@@ -776,6 +776,51 @@ class Payment
     sig { void }
     def behaviour_will_change!; end
 
+    sig { returns(T.nilable(::String)) }
+    def card_identifier; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def card_identifier=(value); end
+
+    sig { returns(T::Boolean) }
+    def card_identifier?; end
+
+    sig { returns(T.nilable(::String)) }
+    def card_identifier_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def card_identifier_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def card_identifier_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def card_identifier_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def card_identifier_change_to_be_saved; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def card_identifier_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def card_identifier_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def card_identifier_previous_change; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def card_identifier_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def card_identifier_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def card_identifier_was; end
+
+    sig { void }
+    def card_identifier_will_change!; end
+
     sig { returns(T.nilable(::Integer)) }
     def client_id; end
 
@@ -1340,51 +1385,6 @@ class Payment
     sig { void }
     def payable_type_will_change!; end
 
-    sig { returns(T.nilable(::String)) }
-    def payment_id; end
-
-    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
-    def payment_id=(value); end
-
-    sig { returns(T::Boolean) }
-    def payment_id?; end
-
-    sig { returns(T.nilable(::String)) }
-    def payment_id_before_last_save; end
-
-    sig { returns(T.untyped) }
-    def payment_id_before_type_cast; end
-
-    sig { returns(T::Boolean) }
-    def payment_id_came_from_user?; end
-
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
-    def payment_id_change; end
-
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
-    def payment_id_change_to_be_saved; end
-
-    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
-    def payment_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def payment_id_in_database; end
-
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
-    def payment_id_previous_change; end
-
-    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
-    def payment_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::String)) }
-    def payment_id_previously_was; end
-
-    sig { returns(T.nilable(::String)) }
-    def payment_id_was; end
-
-    sig { void }
-    def payment_id_will_change!; end
-
     sig { returns(::String) }
     def payment_method; end
 
@@ -1537,6 +1537,9 @@ class Payment
     def restore_behaviour!; end
 
     sig { void }
+    def restore_card_identifier!; end
+
+    sig { void }
     def restore_client_id!; end
 
     sig { void }
@@ -1573,9 +1576,6 @@ class Payment
     def restore_payable_type!; end
 
     sig { void }
-    def restore_payment_id!; end
-
-    sig { void }
     def restore_payment_method!; end
 
     sig { void }
@@ -1586,6 +1586,9 @@ class Payment
 
     sig { void }
     def restore_state!; end
+
+    sig { void }
+    def restore_transaction_id!; end
 
     sig { void }
     def restore_updated_at!; end
@@ -1604,6 +1607,12 @@ class Payment
 
     sig { returns(T::Boolean) }
     def saved_change_to_behaviour?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_card_identifier; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_card_identifier?; end
 
     sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
     def saved_change_to_client_id; end
@@ -1677,12 +1686,6 @@ class Payment
     sig { returns(T::Boolean) }
     def saved_change_to_payable_type?; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
-    def saved_change_to_payment_id; end
-
-    sig { returns(T::Boolean) }
-    def saved_change_to_payment_id?; end
-
     sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_payment_method; end
 
@@ -1706,6 +1709,12 @@ class Payment
 
     sig { returns(T::Boolean) }
     def saved_change_to_state?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_transaction_id; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_transaction_id?; end
 
     sig { returns(T.nilable([::ActiveSupport::TimeWithZone, ::ActiveSupport::TimeWithZone])) }
     def saved_change_to_updated_at; end
@@ -1763,6 +1772,51 @@ class Payment
 
     sig { void }
     def state_will_change!; end
+
+    sig { returns(T.nilable(::String)) }
+    def transaction_id; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def transaction_id=(value); end
+
+    sig { returns(T::Boolean) }
+    def transaction_id?; end
+
+    sig { returns(T.nilable(::String)) }
+    def transaction_id_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def transaction_id_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def transaction_id_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def transaction_id_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def transaction_id_change_to_be_saved; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def transaction_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def transaction_id_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def transaction_id_previous_change; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def transaction_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def transaction_id_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def transaction_id_was; end
+
+    sig { void }
+    def transaction_id_will_change!; end
 
     sig { returns(::ActiveSupport::TimeWithZone) }
     def updated_at; end
@@ -1861,6 +1915,9 @@ class Payment
     def will_save_change_to_behaviour?; end
 
     sig { returns(T::Boolean) }
+    def will_save_change_to_card_identifier?; end
+
+    sig { returns(T::Boolean) }
     def will_save_change_to_client_id?; end
 
     sig { returns(T::Boolean) }
@@ -1897,9 +1954,6 @@ class Payment
     def will_save_change_to_payable_type?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_payment_id?; end
-
-    sig { returns(T::Boolean) }
     def will_save_change_to_payment_method?; end
 
     sig { returns(T::Boolean) }
@@ -1910,6 +1964,9 @@ class Payment
 
     sig { returns(T::Boolean) }
     def will_save_change_to_state?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_transaction_id?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_updated_at?; end

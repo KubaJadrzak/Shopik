@@ -4,9 +4,6 @@
 class Client < ApplicationRecord
   belongs_to :user,  touch: true
   has_many :payments, -> { order(created_at: :desc) }, dependent: :destroy
-  has_many :payable_payments, -> {
-    order(created_at: :desc)
-  }, as: :payable, class_name: 'Payment', dependent: :destroy
 
   before_create :generate_uuid
 
@@ -14,21 +11,20 @@ class Client < ApplicationRecord
   validate :ensure_primary_is_mit
   validate :prevent_auto_renew_subscription_with_no_primary, if: :will_save_change_to_primary?
 
-  validates :client_id, presence: true, uniqueness: true
 
   broadcasts_refreshes
 
-  scope :cit, -> { where(status: %w[CIT MIT]) }
-  scope :mit, -> { where(status: 'MIT') }
+  scope :cit, -> { where(state: %w[CIT MIT]) }
+  scope :mit, -> { where(state: 'MIT') }
 
   #: -> bool
   def cit?
-    status == 'CIT'
+    state == 'CIT'
   end
 
   #: -> bool
   def mit?
-    status == 'MIT'
+    state == 'MIT'
   end
 
   # this is needed for payment of value 0.01 in order to authorize card for MIT payments
@@ -53,9 +49,9 @@ class Client < ApplicationRecord
 
   #: -> void
   def ensure_primary_is_mit
-    return unless primary? && status != 'MIT'
+    return unless primary? && state != 'MIT'
 
-    errors.add(:base, 'Client must have status MIT to be primary')
+    errors.add(:base, 'Client must have state MIT to be primary')
   end
 
   #: -> void

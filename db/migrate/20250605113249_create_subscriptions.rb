@@ -9,7 +9,7 @@ class CreateSubscriptions < ActiveRecord::Migration[8.0]
       t.date :start_date, null: false
       t.date :end_date, null: false
 
-      t.string :status, null: false, default: 'New'
+      t.string :status, null: false, default: 'new'
 
       t.boolean :auto_renew, null: false, default: true
 

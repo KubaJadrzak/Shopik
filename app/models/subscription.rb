@@ -16,15 +16,15 @@ class Subscription < ApplicationRecord
   broadcasts_refreshes
 
   scope :should_be_expired, -> {
-    where(status: 'Active').where('end_date < ?', Date.current)
+    where(state: 'Active').where('end_date < ?', Date.current)
   }
   scope :should_be_renewed, -> {
-    where(status: 'Active').where(auto_renew: true).where(end_date: Date.current + 1.day)
+    where(state: 'Active').where(auto_renew: true).where(end_date: Date.current + 1.day)
   }
 
   #: -> bool
   def active?
-    status == 'Active'
+    state == 'Active'
   end
 
   #: -> bool
@@ -39,7 +39,7 @@ class Subscription < ApplicationRecord
 
   #: -> bool
   def can_extend_subscription?
-    status == 'Active' && payments.exists? && payments.none?(&:awaiting?)
+    state == 'Active' && payments.exists? && payments.none?(&:awaiting?)
   end
 
   #: -> bool
@@ -90,7 +90,7 @@ class Subscription < ApplicationRecord
 
   #: -> void
   def cannot_have_dates_when_not_active_or_not_expired
-    return if %w[Active Expired].include?(status)
+    return if %w[Active Expired].include?(state)
 
     return unless start_date.present? || end_date.present?
 

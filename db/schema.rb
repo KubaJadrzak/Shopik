@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_29_171848) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_03_220715) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -31,7 +31,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_29_171848) do
 
   create_table "clients", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.string "client_id", null: false
     t.string "company"
     t.string "last4"
     t.datetime "created_at", null: false
@@ -43,7 +42,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_29_171848) do
     t.integer "month", null: false
     t.integer "year", null: false
     t.boolean "primary", default: false, null: false
-    t.index ["client_id"], name: "index_clients_on_client_id", unique: true
+    t.string "card_identifier"
+    t.string "espago_client_id", null: false
+    t.index ["card_identifier"], name: "index_clients_on_card_identifier"
     t.index ["user_id"], name: "index_clients_on_user_id"
     t.index ["uuid"], name: "index_clients_on_uuid", unique: true
   end
@@ -74,7 +75,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_29_171848) do
   end
 
   create_table "payments", force: :cascade do |t|
-    t.string "payment_id"
     t.decimal "amount", precision: 10, scale: 2, null: false
     t.string "state", default: "new", null: false
     t.string "reject_reason"
@@ -93,9 +93,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_29_171848) do
     t.string "espago_payment_id"
     t.string "response"
     t.string "espago_client_id"
+    t.string "card_identifier"
+    t.string "transaction_id"
+    t.index ["card_identifier"], name: "index_payments_on_card_identifier"
     t.index ["client_id"], name: "index_payments_on_client_id"
     t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
-    t.index ["payment_id"], name: "index_payments_on_payment_id", unique: true
     t.index ["state"], name: "index_payments_on_state"
     t.index ["uuid"], name: "index_payments_on_uuid", unique: true
   end
@@ -113,7 +115,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_29_171848) do
     t.integer "user_id", null: false
     t.date "start_date"
     t.date "end_date"
-    t.string "state", default: "New", null: false
+    t.string "state", default: "new", null: false
     t.boolean "auto_renew", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

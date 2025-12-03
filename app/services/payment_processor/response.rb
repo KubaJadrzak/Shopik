@@ -134,9 +134,54 @@ module PaymentProcessor
       @body['behaviour']
     end
 
+    #: -> String?
+    def card_company
+      @body.dig('card', 'company')
+    end
+
+    #: -> String?
+    def card_last4
+      @body.dig('card', 'last4')
+    end
+
+    #: -> Integer?
+    def card_year
+      @body.dig('card', 'year')
+    end
+
+    #: -> Integer?
+    def card_month
+      @body.dig('card', 'month')
+    end
+
+    #: -> String?
+    def card_first_name
+      @body.dig('card', 'first_name')
+    end
+
+    #: -> String?
+    def card_last_name
+      @body.dig('card', 'last_name')
+    end
+
+    #: -> String?
+    def card_identifier
+      @body.dig('card', 'card_identifier')
+    end
+
+    #: -> String?
+    def transaction_id
+      @body['transaction_id']
+    end
+
     #: -> ::Payment?
     def payment
       @payment || ::Payment.find_by(uuid: payment_uuid)
+    end
+
+    #: -> ::Client?
+    def client
+      ::Client.find_by(espago_client_id: espago_client_id)
     end
 
     #: -> (::Order | ::Subscription | ::Client)
