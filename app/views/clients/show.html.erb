@@ -1,6 +1,6 @@
-<%= turbo_stream_from @client %>
-<div class="container mt-4">
-  <%= render 'show_header' %>
-  <%= render 'show_card' %>
-  <%= render partial: 'espago/payments/payment', locals: { payments: @payments } %>
+<div class="d-flex flex justify-content-end mb-4">
+  <%= link_to "Back", :back,
+            class: "btn btn-primary me-2" %>
 </div>
+<%= render 'clients/show/card', client: @client %>
+<%= render 'clients/show/payments' %>

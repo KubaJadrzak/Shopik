@@ -57,7 +57,7 @@
       <% end %>
       <div class="w-100 mb-2"></div>
       <%= render "payments/show/card_details", title: 'Client' do %>
-        <%= payment.client || 'N/A' %>
+        <%= payment.client ? link_to(payment.client.uuid, client_path(payment.client)) : 'N/A' %>
       <% end %>
       <div class="w-100 mb-2 d-lg-none"></div>
       <%= render "payments/show/card_details", title: 'Created at' do %>

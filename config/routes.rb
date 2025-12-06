@@ -39,12 +39,7 @@ Rails.application.routes.draw do
   get '/account/orders', to: 'users#account', defaults: { section: 'orders' }, as: 'account_orders'
   get '/account/clients', to: 'users#account', defaults: { section: 'clients' }, as: 'account_clients'
 
-  resources :clients, only: [:show] do
-    member do
-      patch :toggle_primary
-      get :verify
-    end
-  end
+  resources :clients, param: :uuid, only: [:show]
 
   resources :payments, param: :uuid,  only: %i[new create show] do
     member do

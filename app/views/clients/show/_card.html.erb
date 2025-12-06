@@ -1,0 +1,52 @@
+<div class="card shadow">
+  <div class="card-body">
+    <h5 class="card-title mb-4">Client Details</h5>
+    <div class="row">
+      <%= render "clients/show/card_details", title: 'Client Number' do %>
+        <%= client.uuid %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "clients/show/card_details", title: 'Status' do %>
+        <span class="badge <%= status_color(client.state) %> w-50">
+          <%= client.state.humanize %>
+        </span>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "clients/show/card_details", title: 'Last4' do %>
+        <%= client.last4 %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "clients/show/card_details", title: 'First Name' do %>
+        <%= client.first_name %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "clients/show/card_details", title: 'Last Name' do %>
+        <%= client.last_name %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "clients/show/card_details", title: 'Espago Client ID' do %>
+        <%= client.espago_client_id %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "clients/show/card_details", title: 'Card Identifier' do %>
+        <%= client.card_identifier %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "clients/show/card_details", title: 'Year' do %>
+        <%= client.year %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "clients/show/card_details", title: 'Month' do %>
+        <%= client.month %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "clients/show/card_details", title: 'Primary' do %>
+        <%= client.primary? ? 'Yes' : 'No' %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "clients/show/card_details", title: 'Company' do %>
+        <%= client.company %>
+      <% end %>
+    </div>
+  </div>
+</div>

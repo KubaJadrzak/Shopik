@@ -29,8 +29,7 @@ class OrdersController < ApplicationController
       current_user.cart_items.destroy_all
       redirect_to new_payment_path(payable_number: @order.uuid)
     else
-      flash[:alert] = 'There was a problem with your order.'
-      redirect_to cart_path
+      redirect_to cart_path, alert: 'There was a problem with your order.'
     end
   end
 
@@ -40,7 +39,7 @@ class OrdersController < ApplicationController
       return
     end
 
-    redirect_to new_payment_path(order_id: @order.id)
+    redirect_to new_payment_path(payable_number: @order.uuid)
   end
 
   #: -> void

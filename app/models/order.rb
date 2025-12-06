@@ -23,11 +23,6 @@ class Order < ApplicationRecord
     uuid
   end
 
-  #: -> ::User
-  def owner
-    T.must(user)
-  end
-
   #: -> String?
   def last_payment_state
     payments.first&.state
@@ -81,7 +76,7 @@ class Order < ApplicationRecord
   def must_have_order_items
     return unless order_items.empty?
 
-    errors.add(:base, 'order must have at least one item.')
+    errors.add(:base, 'order must have at least one order item.')
   end
 
 end
