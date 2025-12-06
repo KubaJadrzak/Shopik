@@ -17,7 +17,7 @@ module PaymentProcessor
 
       response = request.process
 
-      PaymentProcessor::StateManager.new(response).process
+      StateManager.new(response).process
 
       response
     end

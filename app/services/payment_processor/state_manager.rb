@@ -33,7 +33,7 @@ module PaymentProcessor
 
     #: -> void
     def handle_charge_and_check
-      return unless  @payment
+      return unless @payment
 
       espago_payment_id = @response.espago_payment_id
       espago_client_id = @response.espago_client_id
