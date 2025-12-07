@@ -29,6 +29,8 @@ module PaymentProcessor
       case @payment_method
       when 'iframe'
         Request::Iframe.new(payment: @payment, payment_means: @payment_means)
+      when 'client'
+        Request::Client.new(payment: @payment, payment_means: @payment_means)
       else
         Request::SecureWebPage.new(payment: @payment)
       end

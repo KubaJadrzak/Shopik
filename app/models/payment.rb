@@ -22,7 +22,7 @@ class Payment < ApplicationRecord
     awaiting.where.not(espago_payment_id: nil)
   }
 
-  enum :payment_method, %i[iframe secure_web_page iframe3 meest_paywall google_pay apple_pay]
+  enum :payment_method, %i[iframe secure_web_page iframe3 meest_paywall google_pay apple_pay client]
   enum :cof, %i[storing recurring unscheduled]
   enum :kind, %i[sale preauth]
 

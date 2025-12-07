@@ -1,10 +1,14 @@
-<div id="clients-section" class="content-section">
-  <h4>Your Payment Methods</h4>
+<div id="order-history-section">
+  <h4>Your Clients</h4>
   <% if @clients.any? %>
-    <div class="row mt-4">
-      <%= render partial: "users/sidebar/client", collection: @clients %>
-    </div>
+    <% @clients.each do |client| %>
+      <div class="mb-4">
+        <%= link_to client_path(client), class: "text-decoration-none text-reset" do %>
+          <%= render "clients/show/card", client: client %>
+        <% end %>
+      </div>
+    <% end %>
   <% else %>
-    <p>You have no saved payment methods yet.</p>
+    <p>You have clients yet.</p>
   <% end %>
 </div>

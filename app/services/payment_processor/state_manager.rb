@@ -56,7 +56,7 @@ module PaymentProcessor
     #: -> void
     def attach_client
       c = @response.client
-      return unless @payment&.storing? && @payment.client.nil? && @response.success? && c
+      return unless @payment && @payment.client.nil? && @response.success? && c
 
       @payment.client = c
     end
