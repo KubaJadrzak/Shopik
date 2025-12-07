@@ -27,7 +27,6 @@ class Client < ApplicationRecord
     state == 'MIT'
   end
 
-
   private
 
   #: -> void

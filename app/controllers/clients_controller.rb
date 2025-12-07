@@ -2,18 +2,25 @@
 # typed: strict
 
 class ClientsController < ApplicationController
-  before_action :set_client, :set_payments, only: %i[show]
+  include ClientErrors
+
+  before_action :set_client, only: %i[show destroy]
+  before_action :set_payments, only: %i[show]
   before_action :authenticate_user!
 
   #: -> void
   def show; end
 
   #: -> void
-  def verify
-    return if @client&.cit?
+  def destroy
+    raise client_error! unless @client&.destroy
 
-    redirect_to account_path, alert: 'We could not process your verification due to a technical issue'
-
+    flash[:notice] = 'We have successfully deleted your Client!'
+    respond_to do |format|
+      format.turbo_stream do
+        redirect_to account_path
+      end
+    end
   end
 
   private

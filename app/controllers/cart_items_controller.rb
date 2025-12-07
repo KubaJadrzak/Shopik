@@ -8,13 +8,13 @@ class CartItemsController < ApplicationController
 
   def create
     @product = Product.find(params[:product_id])
-    @cart_item = current_user.cart.cart_items.find_by(product_id: @product.id)
+    @cart_item = current_user.cart_items.find_by(product_id: @product.id)
 
     success = if @cart_item
                 @cart_item.increment(:quantity)
                 @cart_item.save
               else
-                current_user.cart.cart_items.create(product: @product).persisted?
+                current_user.cart_items.create(product: @product).persisted?
               end
 
     if success
