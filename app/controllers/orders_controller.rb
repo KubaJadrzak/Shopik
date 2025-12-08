@@ -1,4 +1,4 @@
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
 class OrdersController < ApplicationController
@@ -8,13 +8,15 @@ class OrdersController < ApplicationController
 
   #: -> void
   def new
-    @order = Order.new
+    @order = Order.new #: ::Order?
   end
 
+  #: -> void
   def show
-    @payments = @order.payments
+    @payments = @order&.payments #: ActiveRecord::Relation?
   end
 
+  #: -> void
   def create
     @order = current_user.orders.new(
       email:            order_params[:email],
@@ -33,8 +35,9 @@ class OrdersController < ApplicationController
     end
   end
 
+  #: -> void
   def retry_payment
-    unless @order.can_retry_payment?
+    unless @order&.can_retry_payment?
       redirect_to order_path(@order), alert: 'Cannot retry payment'
       return
     end
@@ -44,28 +47,32 @@ class OrdersController < ApplicationController
 
   #: -> void
   def cancel
-    unless @order.can_reverse_payment? # rubocop:disable Style/GuardClause
-      redirect_to account_url, alert: 'We cannot process your order cancellation due to a technical issue'
-    end
+    return if @order&.can_reverse_payment?
+
+    redirect_to account_url, alert: 'We cannot process your order cancellation due to a technical issue'
   end
 
   #: -> void
   def return
-    unless @order.can_refund_payment? # rubocop:disable Style/GuardClause
-      redirect_to account_url, alert: 'We cannot process your order return due to a technical issue'
-    end
+    return if @order&.can_refund_payment?
+
+    redirect_to account_url, alert: 'We cannot process your order return due to a technical issue'
+
   end
 
   private
 
+  #: -> void
   def set_order
-    @order = Order.includes(order_items: :product).find_by!(uuid: params[:uuid])
+    @order = Order.includes(order_items: :product).find_by(uuid: params[:uuid])
   end
 
+  #: -> Hash[Symbol, untyped]
   def order_params
     params.require(:order).permit(:email, :shipping_address)
   end
 
+  #: -> void
   def ensure_cart_has_items
     redirect_to cart_path if current_user.cart.empty?
   end

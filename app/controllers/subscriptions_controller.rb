@@ -1,19 +1,23 @@
+# typed: strict
 # frozen_string_literal: true
-# typed: false
+
 
 class SubscriptionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_subscription, only: %i[show toggle_auto_renew retry_payment extend_subscription]
+  before_action :set_subscription, only: %i[show retry_payment]
+  before_action :set_payments, only: [:show]
 
+  #: -> void
   def new
-    @subscription = Subscription.new
+    @subscription = Subscription.new #: ::Subscription?
   end
 
+  #: -> void
   def show
-    @payments = @subscription.payments
-    @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY', nil)
+    @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY', nil) #: String?
   end
 
+  #: -> void
   def create
     if current_user.active_subscription?
       redirect_to "#{account_path}#subscriptions", alert: 'You already have an active subscription.'
@@ -26,51 +30,33 @@ class SubscriptionsController < ApplicationController
     @subscription = current_user.subscriptions.new(status: 'New')
 
     if @subscription.save
-      redirect_to espago_new_payment_path(subscription_id: @subscription.id)
+      redirect_to new_payment_path(subscription_id: @subscription.id)
     else
       flash.now[:alert] = 'There was a problem with your subscription.'
       render :new, status: :unprocessable_entity
     end
   end
 
+  #: -> void
   def retry_payment
-    unless @subscription.can_retry_payment?
+    unless T.must(@subscription).can_retry_payment?
       redirect_to subscription_path(@subscription),
                   alert: 'Cannot retry payment: payment already in progress or successful.'
       return
     end
-    redirect_to espago_new_payment_path(subscription_id: @subscription.id)
+    redirect_to new_payment_path(subscription_id: T.must(@subscription).id)
   end
-
-  def extend_subscription
-    unless @subscription.can_extend_subscription?
-      redirect_to subscription_path(@subscription),
-                  alert: 'Cannot extend subscription: payment already in progress or subscription is not Active'
-      return
-    end
-
-    redirect_to espago_new_payment_path(subscription_id: @subscription.id)
-  end
-
-  def toggle_auto_renew
-    unless @subscription.active?
-      redirect_to "#{account_path}#subscriptions", alert: 'This subscription is not active'
-      return
-    end
-
-    unless @subscription.user.primary_payment_method?
-      redirect_to "#{account_path}#subscriptions", alert: 'Cannot enable auto-renew without primary payment method'
-      return
-    end
-
-    @subscription.update(auto_renew: !@subscription.auto_renew)
-  end
-
 
   private
 
+  #: -> ::Subscription?
   def set_subscription
-    @subscription = Subscription.find_by!(uuid: params[:uuid])
+    @subscription = Subscription.find_by(uuid: params[:uuid])
+  end
+
+  #: -> ActiveRecord::Relation?
+  def set_payments
+    @payments = @subscription&.payments #: ActiveRecord::Relation?
   end
 
 end

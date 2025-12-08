@@ -2,11 +2,7 @@
 # typed: strict
 
 class Subscription < ApplicationRecord
-
   validates :price, presence: true
-
-  validate :auto_renew_requires_primary_payment_method, if: :will_save_change_to_auto_renew?
-  validate :cannot_have_dates_when_not_active_or_not_expired
 
   belongs_to :user, touch: true
   has_many :payments, -> { order(created_at: :desc) }, as: :payable, dependent: :destroy
@@ -60,43 +56,12 @@ class Subscription < ApplicationRecord
     save!
   end
 
-  #: -> void
-  def renew
-    @payment = ::Payment.create_with(payable: self).first #: ::Payment?
-    return unless @payment
-    return unless user&.primary_payment_method?
-
-    # @payment.process_payment(
-    #   cof:       'recurring',
-    #   client_id: user&.primary_payment_method&.client_id,
-    # )
-
-    nil
-  end
-
   #: -> BigDecimal
   def amount
     price
   end
 
   private
-
-  #: -> void
-  def auto_renew_requires_primary_payment_method
-    return if user&.primary_payment_method? || user&.auto_renew_subscription?
-
-    errors.add(:base, "Cannot enable auto-renew for this subscription: user doesn't have primary payment method")
-  end
-
-  #: -> void
-  def cannot_have_dates_when_not_active_or_not_expired
-    return if %w[Active Expired].include?(state)
-
-    return unless start_date.present? || end_date.present?
-
-    errors.add(:base, 'Start and end dates are only allowed for active or expired subscriptions')
-
-  end
 
   #: -> void
   def generate_subscription_uuid
