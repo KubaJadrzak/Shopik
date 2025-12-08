@@ -1,9 +1,7 @@
 # typed: strict
 # frozen_string_literal: true
 
-
-
-class UpdatePaymentStatusJob < ApplicationJob
+class ResignOrderJob < ApplicationJob
   queue_as :default
 
   #: (Integer) -> void
@@ -11,21 +9,24 @@ class UpdatePaymentStatusJob < ApplicationJob
     @user = User.find(user_id) #: ::User?
     return unless @user
 
-    handle_awaiting_payments
+    handle_resigned_orders
   end
 
   private
 
   #: -> void
-  def handle_awaiting_payments
+  def handle_resigned_orders
     return unless @user
 
     # Fix for weird sorbet behaviour,
     # missing method awaiting on ActiveRecord::Relation
-    payments = @user.payments #: as untyped
+    orders = @user.orders #: as untyped
 
-    payments.should_be_checked.find_each do |payment|
-      ::PaymentProcessor::Check.new(payment).process
+
+    orders.should_be_resigned.find_each do |order|
+      order.state = 'Payment Resigned'
+
+      order.save(validate: false)
     end
   end
 end

@@ -1,18 +1,8 @@
 <% if @user.active_subscription? %>
-  <% if @user.active_subscription.extension_payment_failed? %>
-    <div class="mt-4 p-3 border rounded bg-light text-center">
-      <h5 class="mb-1" style="color: #9B111E;">Membership</h5>
-      <p class="mb-1 text-muted">Your payment to extend your Membership subscription has failed.</p>
-      <p class="mb-3 text-muted">Please update your payment method to continue enjoying your exclusive features without interruption.</p>
-      <%= button_to "Manage Subscription", subscription_path(@user.active_subscription), method: :get,
-                class: "btn btn-primary btn-sm px-4" %>
-    </div>
-  <% else %>
-    <div class="mt-4 p-3 border rounded bg-light text-center">
-      <h5 class="mb-1" style="color: #9B111E;">Membership</h5>
-      <p class="mb-1 text-muted">You have an active Membership subscription!</p>
-    </div>
-  <% end %>
+  <div class="mt-4 p-3 border rounded bg-light text-center">
+    <h5 class="mb-1" style="color: #9B111E;">Membership</h5>
+    <p class="mb-1 text-muted">You have an active Membership subscription!</p>
+  </div>
 <% elsif @user.pending_subscription? %>
   <div class="mt-4 p-3 border rounded text-center">
     <h5 class="mb-1" style="color: #9B111E;">Membership</h5>

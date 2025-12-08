@@ -22,5 +22,7 @@ class UsersController < ApplicationController
 
     UpdatePaymentStatusJob.perform_now(current_user.id)
     FinalizePaymentJob.perform_now(current_user.id)
+    ResignPaymentJob.perform_now(current_user.id)
+    ResignOrderJob.perform_now(current_user.id)
   end
 end

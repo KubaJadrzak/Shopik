@@ -28,7 +28,7 @@ module PaymentProcessor
         create_client
       end
 
-      @payment.save
+      @payment.save(validate: false)
     end
 
     #: -> void
@@ -72,7 +72,7 @@ module PaymentProcessor
         @payable.state = SUBSCRIPTION_STATUS_MAP[@response.state] || 'Payment Error'
       end
 
-      @payable.save
+      @payable.save(validate: false)
     end
 
     #: -> void

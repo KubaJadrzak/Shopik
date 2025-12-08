@@ -6,7 +6,7 @@ class FinalizePaymentJob < ApplicationJob
 
   #: (Integer) -> void
   def perform(user_id)
-    @user = User.find_by(id: user_id) #: ::User?
+    @user = User.find(user_id) #: ::User?
     return unless @user
 
     handle_finalized_payments
@@ -39,6 +39,6 @@ class FinalizePaymentJob < ApplicationJob
       payable.state = SUBSCRIPTION_STATUS_MAP['finalized'] || 'Payment Error'
     end
 
-    payable.save && payment.save
+    payable.save(validate: false) && payment.save(validate: false)
   end
 end

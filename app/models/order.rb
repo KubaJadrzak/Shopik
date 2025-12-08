@@ -16,6 +16,12 @@ class Order < ApplicationRecord
 
   before_create :generate_uuid
 
+  scope :should_be_resigned, -> {
+    left_outer_joins(:payments)
+      .where(payments: { id: nil })
+      .where('orders.updated_at < ?', 1.hour.ago)
+  }
+
   broadcasts_refreshes
 
   #: -> String
@@ -47,7 +53,7 @@ class Order < ApplicationRecord
 
   #: -> bool
   def can_retry_payment?
-    payments.all?(&:retryable?) && state != 'Refunded'
+    payments.all?(&:retryable?)
   end
 
   #: -> bool

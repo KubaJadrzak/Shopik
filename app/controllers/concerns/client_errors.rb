@@ -7,6 +7,6 @@ module ClientErrors
 
 
   def client_error!(message = 'We are experiencing an issue with your client!')
-    raise ClientErrors, message
+    raise ClientError, message
   end
 end

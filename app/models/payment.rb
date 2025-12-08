@@ -1,14 +1,12 @@
-# frozen_string_literal: true
 # typed: strict
+# frozen_string_literal: true
 
 class Payment < ApplicationRecord
   belongs_to :payable, polymorphic: true
   belongs_to :client, optional: true, touch: true
 
   validate :must_have_payable
-  validate :prevent_duplicate_payment_for_order, on: :create, if: :payable_is_order?
-  validate :prevent_duplicate_payment_for_subscription, on: :create, if: :payable_is_subscription?
-  validate :prevent_duplicate_payable_payment_for_client, on: :create, if: :payable_is_client?
+  validate :prevent_duplicate_payment
 
   before_create :generate_uuid
 
@@ -20,6 +18,10 @@ class Payment < ApplicationRecord
 
   scope :should_be_checked, -> {
     awaiting.where.not(espago_payment_id: nil)
+  }
+
+  scope :should_be_resigned, -> {
+    awaiting.where('updated_at < ?', 1.hour.ago)
   }
 
   enum :payment_method, %i[iframe secure_web_page iframe3 meest_paywall google_pay apple_pay client]
@@ -103,21 +105,6 @@ class Payment < ApplicationRecord
 
   private
 
-  #: -> bool
-  def payable_is_order?
-    payable.is_a?(Order)
-  end
-
-  #: -> bool
-  def payable_is_subscription?
-    payable.is_a?(Subscription)
-  end
-
-  #: -> bool
-  def payable_is_client?
-    payable.is_a?(Client)
-  end
-
   #: -> void
   def must_have_payable
     return if payable.present?
@@ -126,31 +113,13 @@ class Payment < ApplicationRecord
   end
 
   #: -> void
-  def prevent_duplicate_payment_for_order
-    return unless payable_is_order?
+  def prevent_duplicate_payment
+    return unless payable_id?
 
     return unless Payment.where(payable: payable).awaiting.exists? ||
                   Payment.where(payable: payable).successful.exists?
 
     errors.add(:base, 'Cannot create new payment: order already has an awaiting or successful payment')
-  end
-
-  #: -> void
-  def prevent_duplicate_payment_for_subscription
-    return unless payable_is_subscription?
-
-    return unless Payment.where(payable: payable).awaiting.exists?
-
-    errors.add(:base, 'Cannot create new payment: subscription already has an awaiting payment')
-  end
-
-  #: -> void
-  def prevent_duplicate_payable_payment_for_client
-    return unless payable_is_client?
-
-    return unless Payment.where(payable: payable).awaiting.exists?
-
-    errors.add(:base, 'Cannot create new payment: client already has an awaiting payment')
   end
 
   #: -> void
