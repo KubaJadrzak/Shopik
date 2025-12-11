@@ -14,9 +14,21 @@ class Subscription < ApplicationRecord
   scope :should_be_expired, -> {
     where(state: 'Active').where('end_date < ?', Date.current)
   }
-  scope :should_be_renewed, -> {
-    where(state: 'Active').where(auto_renew: true).where(end_date: Date.current + 1.day)
-  }
+
+  #: -> String
+  def to_param
+    uuid
+  end
+
+  #: -> String?
+  def last_payment_state
+    payments.first&.state
+  end
+
+  #: -> ::Payment?
+  def last_payment
+    payments.first
+  end
 
   #: -> bool
   def active?
@@ -24,36 +36,8 @@ class Subscription < ApplicationRecord
   end
 
   #: -> bool
-  def auto_renew?
-    auto_renew #: as !nil
-  end
-
-  #: -> bool
   def can_retry_payment?
     payments.all?(&:retryable?)
-  end
-
-  #: -> bool
-  def can_extend_subscription?
-    state == 'Active' && payments.exists? && payments.none?(&:awaiting?)
-  end
-
-  #: -> bool
-  def extension_payment_failed?
-    payment = payments.first
-    payment&.simplified_state == :failure
-  end
-
-  #: -> void
-  def extend_or_initialize_dates!
-    if start_date.nil? || end_date.nil?
-      self.start_date = Date.today
-      self.end_date = 30.days.from_now.to_date
-    else
-      current_end_date = end_date #: as !nil
-      self.end_date = current_end_date + 30.days
-    end
-    save!
   end
 
   #: -> BigDecimal
@@ -64,9 +48,7 @@ class Subscription < ApplicationRecord
   private
 
   #: -> void
-  def generate_subscription_uuid
+  def generate_uuid
     self.uuid = "sub_#{SecureRandom.uuid}"
   end
-
-
 end

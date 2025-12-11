@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_08_180942) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_11_185245) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -119,7 +119,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_08_180942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "price", default: "4.99", null: false
-    t.string "uuid"
+    t.string "uuid", null: false
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
     t.index ["uuid"], name: "index_subscriptions_on_uuid", unique: true
   end

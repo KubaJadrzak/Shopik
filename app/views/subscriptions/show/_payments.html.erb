@@ -1,0 +1,22 @@
+<div class="card shadow mt-4">
+  <div class="card-body">
+    <h5 class="card-title mb-2">Payments</h5>
+    <div class="table">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Payment Number</th>
+            <th>State</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @payments.each do |payment| %>
+            <tr>
+              <td><%= link_to payment.uuid, payment_path(payment) %></td>
+              <td><%= payment.state.humanize %></td>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

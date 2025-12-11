@@ -346,6 +346,12 @@ class Payment
     def apple_pay?; end
 
     sig { void }
+    def client!; end
+
+    sig { returns(T::Boolean) }
+    def client?; end
+
+    sig { void }
     def google_pay!; end
 
     sig { returns(T::Boolean) }
@@ -473,6 +479,9 @@ class Payment
     def awaiting(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def client(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def create_with(*args, &blk); end
 
     sig { params(value: T::Boolean).returns(PrivateAssociationRelation) }
@@ -549,6 +558,9 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def not_apple_pay(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_client(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def not_google_pay(*args, &blk); end
@@ -646,6 +658,9 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def should_be_finalized(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def should_be_resigned(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def storing(*args, &blk); end
@@ -1995,6 +2010,9 @@ class Payment
     def awaiting(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def client(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def create_with(*args, &blk); end
 
     sig { params(value: T::Boolean).returns(PrivateRelation) }
@@ -2071,6 +2089,9 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def not_apple_pay(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_client(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def not_google_pay(*args, &blk); end
@@ -2168,6 +2189,9 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def should_be_finalized(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def should_be_resigned(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def storing(*args, &blk); end

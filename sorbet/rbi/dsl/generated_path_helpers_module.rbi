@@ -217,9 +217,6 @@ module GeneratedPathHelpersModule
   def toggle_auto_renew_subscription_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def toggle_primary_client_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def turbo_recede_historical_location_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -239,7 +236,4 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def user_session_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def verify_client_path(*args); end
 end

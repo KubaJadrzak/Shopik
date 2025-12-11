@@ -27,10 +27,10 @@ class SubscriptionsController < ApplicationController
       return
     end
 
-    @subscription = current_user.subscriptions.new(status: 'New')
+    @subscription = current_user.subscriptions.new(state: 'new')
 
     if @subscription.save
-      redirect_to new_payment_path(subscription_id: @subscription.id)
+      redirect_to new_payment_path(payable_number: @subscription.uuid)
     else
       flash.now[:alert] = 'There was a problem with your subscription.'
       render :new, status: :unprocessable_entity
@@ -44,7 +44,7 @@ class SubscriptionsController < ApplicationController
                   alert: 'Cannot retry payment: payment already in progress or successful.'
       return
     end
-    redirect_to new_payment_path(subscription_id: T.must(@subscription).id)
+    redirect_to new_payment_path(payable_number: T.must(@subscription).uuid)
   end
 
   private

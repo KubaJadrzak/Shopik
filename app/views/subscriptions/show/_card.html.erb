@@ -1,0 +1,16 @@
+<div class="card shadow">
+  <div class="card-body">
+    <h5 class="card-title mb-4">Subscription Details</h5>
+    <div class="row">
+      <%= render "subscriptions/show/card_details", title: 'Subscription Number' do %>
+        <%= subscription.uuid %>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "subscriptions/show/card_details", title: 'Status' do %>
+        <span class="badge <%= status_color(subscription.last_payment_state) %> w-50">
+          <%= subscription.state %>
+        </span>
+      <% end %>
+    </div>
+  </div>
+</div>

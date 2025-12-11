@@ -1,9 +1,4 @@
 <%= turbo_stream_from @subscription %>
-<div class="container mt-4">
-  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3">
-    <h3><%= @subscription.uuid %></h3>
-    <%= render "show_buttons" %>
-  </div>
-  <%= render "show_card" %>
-</div>
-<%= render partial: 'espago/payments/payment', locals: { payments: @payments } %>
+<%= render 'subscriptions/show/card_buttons' %>
+<%= render 'subscriptions/show/card', subscription: @subscription %>
+<%= render 'subscriptions/show/payments' %>

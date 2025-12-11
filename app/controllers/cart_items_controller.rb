@@ -27,7 +27,6 @@ class CartItemsController < ApplicationController
       format.turbo_stream do
         redirect_to root_path
       end
-
     end
   end
 

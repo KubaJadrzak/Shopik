@@ -1,9 +1,13 @@
-<div id="subscriptions-section" class="content-section">
+<div id="order-history-section">
   <h4>Your Subscriptions</h4>
   <% if @subscriptions.any? %>
-    <div class="row mt-4">
-      <%= render partial: "users/sidebar/subscription", collection: @subscriptions %>
-    </div>
+    <% @subscriptions.each do |subscription| %>
+      <div class="mb-4">
+        <%= link_to subscription_path(subscription), class: "text-decoration-none text-reset" do %>
+          <%= render "subscriptions/show/card", subscription: subscription %>
+        <% end %>
+      </div>
+    <% end %>
   <% else %>
     <p>You have no subscriptions yet.</p>
   <% end %>

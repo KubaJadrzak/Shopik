@@ -1,0 +1,7 @@
+<div class="d-flex flex justify-content-end mb-4">
+  <%= link_to "Back to Subscriptions", account_subscriptions_path,
+            class: "btn btn-primary me-2" %>
+  <% if @subscription.can_retry_payment? %>
+    <%= button_to "Retry Payment", retry_payment_subscription_path(@subscription), method: :post, class: "btn btn-success", data: { turbo: false } %>
+  <% end %>
+</div>

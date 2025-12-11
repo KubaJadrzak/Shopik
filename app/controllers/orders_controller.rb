@@ -57,7 +57,6 @@ class OrdersController < ApplicationController
     return if @order&.can_refund_payment?
 
     redirect_to account_url, alert: 'We cannot process your order return due to a technical issue'
-
   end
 
   private
