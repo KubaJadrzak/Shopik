@@ -19,12 +19,12 @@ class Client < ApplicationRecord
 
   #: -> bool
   def cit?
-    state == 'CIT'
+    state == 'cit_verified'
   end
 
   #: -> bool
   def mit?
-    state == 'MIT'
+    state == 'mit_verified'
   end
 
   private

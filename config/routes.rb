@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     member do
       get :authorize
       post :authorize
+      patch :toggle_primary
     end
   end
 

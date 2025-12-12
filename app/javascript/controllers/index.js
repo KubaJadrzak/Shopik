@@ -12,3 +12,6 @@ application.register("hello", HelloController)
 
 import PaymentController from "./payment_controller"
 application.register("payment", PaymentController)
+
+import PrimaryClientToggleController from "./primary_client_toggle_controller"
+application.register("primary-client-toggle", PrimaryClientToggleController)
