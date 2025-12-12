@@ -23,6 +23,15 @@ class ClientsController < ApplicationController
     end
   end
 
+  #:-> void
+  def authorize
+    if request.get?
+      # show page
+    elsif request.post?
+      # perform authorization
+    end
+  end
+
   private
 
   #: -> void

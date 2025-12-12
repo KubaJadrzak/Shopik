@@ -74,7 +74,6 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def set_payable
-    byebug
     payable_number = params[:payable_number]
     if payable_number.start_with?('ord')
       @payable = Order.find_by(uuid: payable_number) #: ::Order? | ::Subscription?

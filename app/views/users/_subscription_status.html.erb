@@ -1,13 +1,13 @@
 <% if @user.active_subscription? %>
-  <div class="mt-4 p-3 border rounded bg-light text-center">
-    <h5 class="mb-1" style="color: #9B111E;">Membership</h5>
-    <p class="mb-1 text-muted">You have an active Membership subscription!</p>
+  <div class="mt-4 p-4 border rounded bg-light text-center">
+    <h5 class="mb-2" style="color: #9B111E;">Membership</h5>
+    <p class="mb-2 text-muted">You have an active Membership subscription!</p>
   </div>
 <% else %>
-  <div class="mt-4 p-3 border rounded bg-light text-center">
-    <h5 class="mb-1" style="color: #9B111E;">Membership</h5>
-    <p class="mb-1 text-muted"><strong>$4.99 / month</strong></p>
-    <p class="mb-3 text-muted">Gain access to exclusive products and membership only discounts!!!</p>
+  <div class="mt-4 p-4 border rounded bg-light text-center">
+    <h5 class="mb-2" style="color: #9B111E;">Membership</h5>
+    <p class="mb-2 text-muted"><strong>$4.99 / month</strong></p>
+    <p class="mb-4 text-muted">Gain access to exclusive products and membership only discounts!!!</p>
     <%= button_to "Subscribe to Membership", new_subscription_path, method: :get,
                                                                       class: "btn btn-primary btn-sm px-4" %>
   </div>

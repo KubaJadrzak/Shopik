@@ -8,7 +8,7 @@
       <div class="w-100 mb-2"></div>
       <%= render "clients/show/card_details", title: 'Status' do %>
         <span class="badge <%= status_color(client.state) %> w-50">
-          <%= client.state.humanize %>
+          <%= client.state %>
         </span>
       <% end %>
       <div class="w-100 mb-2 d-lg-none"></div>

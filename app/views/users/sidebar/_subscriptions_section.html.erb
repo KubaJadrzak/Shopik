@@ -1,5 +1,11 @@
 <div id="order-history-section">
-  <h4>Your Subscriptions</h4>
+  <div class="d-flex justify-content-between">
+    <h4>Your Subscriptions</h4>
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" <%= "disabled" unless current_user.primary_payment_method? %>>
+      <label class="form-check-label" for="flexSwitchCheckDefault">Auto-Renew <%= "(primary payment method required)" unless current_user.primary_payment_method?%></label>
+    </div>
+  </div>
   <% if @subscriptions.any? %>
     <% @subscriptions.each do |subscription| %>
       <div class="mb-4">

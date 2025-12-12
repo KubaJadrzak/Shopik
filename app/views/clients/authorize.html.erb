@@ -1,0 +1,12 @@
+<div class="container" style="max-width: 480px">
+  <div class="card shadow p-4">
+    <h5 class="mb-2 text-center">Client Authorization</h5>
+    <p class="mb-4">
+      In order to authorize your Client for Auto-Renew functionality we will perform a Merchant Initiated Transaction (MIT) for 1PLN and immedietly reverse it afterwards.
+      This is required in order to verify your card eligibility for Auto-Renew functionality
+    </p>
+    <%= form_with url: authorize_client_path(@client) do |form| %>
+      <%= form.submit "Authorize", class: "btn btn-primary w-100" %>
+    <% end %>
+  </div>
+</div>

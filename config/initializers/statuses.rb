@@ -34,8 +34,8 @@ SUCCESS_STATUSES = %w[executed
                       finalized
                       refunded
                       reversed
-                      cit
-                      mit].freeze #: Array[String]
+                      CIT
+                      MIT].freeze #: Array[String]
 
 REJECTED_STATUSES = %w[
   rejected

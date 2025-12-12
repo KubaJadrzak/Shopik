@@ -1,6 +1,8 @@
 <div class="d-flex flex justify-content-end mb-4">
   <%= link_to "Back", :back,
             class: "btn btn-primary me-2" %>
+  <%= link_to "Authorize", authorize_client_path(@client),
+            class: "btn btn-success me-2" %>
 </div>
 <%= render 'clients/show/card', client: @client %>
 <%= render 'clients/show/payments' %>

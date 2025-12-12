@@ -11,6 +11,20 @@
           <%= subscription.state %>
         </span>
       <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "subscriptions/show/card_details", title: 'Payment Status' do %>
+        <span class="badge <%= status_color(subscription.last_payment_state) %> w-50">
+          <%= subscription.last_payment_state&.humanize || 'N/A' %>
+        </span>
+      <% end %>
+      <div class="w-100 mb-2"></div>
+      <%= render "subscriptions/show/card_details", title: 'Start Date' do %>
+        <%= subscription.start_date&.strftime("%b %e, %Y %l:%M %p") %>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "subscriptions/show/card_details", title: 'End Date' do %>
+        <%= subscription.end_date&.strftime("%b %e, %Y %l:%M %p") %>
+      <% end %>
     </div>
   </div>
 </div>

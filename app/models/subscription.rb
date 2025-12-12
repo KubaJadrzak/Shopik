@@ -8,6 +8,7 @@ class Subscription < ApplicationRecord
   has_many :payments, -> { order(created_at: :desc) }, as: :payable, dependent: :destroy
 
   before_create :generate_uuid
+  before_save :set_active_dates
 
   broadcasts_refreshes
 
@@ -46,6 +47,14 @@ class Subscription < ApplicationRecord
   end
 
   private
+
+  #: -> void
+  def set_active_dates
+    return unless will_save_change_to_state? && state == 'Active'
+
+    self.start_date ||= Date.current
+    self.end_date   ||= Date.current + 1.month
+  end
 
   #: -> void
   def generate_uuid

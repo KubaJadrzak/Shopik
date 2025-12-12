@@ -26,20 +26,21 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :subscriptions, param: :uuid, only: %i[new create show] do
+  resources :subscriptions, param: :uuid, only: %i[new create show]
+
+  resources :clients, param: :uuid, only: %i[show destroy] do
     member do
-      post :retry_payment
-      post :extend_subscription
-      patch :toggle_auto_renew
+      get :authorize
+      post :authorize
     end
   end
+
 
   get 'account', to: 'users#account', as: 'account'
   get '/account/subscriptions', to: 'users#account', defaults: { section: 'subscriptions' }, as: 'account_subscriptions'
   get '/account/orders', to: 'users#account', defaults: { section: 'orders' }, as: 'account_orders'
   get '/account/clients', to: 'users#account', defaults: { section: 'clients' }, as: 'account_clients'
 
-  resources :clients, param: :uuid, only: %i[show destroy]
 
   resources :payments, param: :uuid,  only: %i[new create show] do
     member do

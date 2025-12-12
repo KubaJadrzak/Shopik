@@ -3,6 +3,8 @@
 
 
 class SubscriptionsController < ApplicationController
+  include SubscriptionErrors
+
   before_action :authenticate_user!
   before_action :set_subscription, only: %i[show retry_payment]
   before_action :set_payments, only: [:show]
@@ -19,32 +21,20 @@ class SubscriptionsController < ApplicationController
 
   #: -> void
   def create
-    if current_user.active_subscription?
-      redirect_to "#{account_path}#subscriptions", alert: 'You already have an active subscription.'
-      return
-    elsif current_user.pending_subscription?
-      redirect_to "#{account_path}#subscriptions", alert: 'You already have a pending subscription.'
-      return
-    end
+    raise subscription_error! if current_user.active_subscription? || current_user.pending_subscription?
 
     @subscription = current_user.subscriptions.new(state: 'new')
 
-    if @subscription.save
-      redirect_to new_payment_path(payable_number: @subscription.uuid)
-    else
-      flash.now[:alert] = 'There was a problem with your subscription.'
-      render :new, status: :unprocessable_entity
-    end
+    raise subscription_error! unless @subscription.save
+
+    redirect_to new_payment_path(payable_number: @subscription.uuid)
   end
 
   #: -> void
   def retry_payment
-    unless T.must(@subscription).can_retry_payment?
-      redirect_to subscription_path(@subscription),
-                  alert: 'Cannot retry payment: payment already in progress or successful.'
-      return
-    end
-    redirect_to new_payment_path(payable_number: T.must(@subscription).uuid)
+    raise subscription_error! unless @subscription&.can_retry_payment?
+
+    redirect_to new_payment_path(payable_number: @subscription.uuid)
   end
 
   private
