@@ -4,7 +4,7 @@
 class ClientsController < ApplicationController
   include ClientErrors
 
-  before_action :set_client, only: %i[show destroy]
+  before_action :set_client, only: %i[show destroy authorize]
   before_action :set_payments, only: %i[show]
   before_action :authenticate_user!
 
@@ -25,11 +25,15 @@ class ClientsController < ApplicationController
 
   #:-> void
   def authorize
-    if request.get?
-      # show page
-    elsif request.post?
-      # perform authorization
-    end
+    return unless request.post?
+
+    raise client_error! unless @client
+
+    response = ::ClientProcessor::Authorize.new(@client).process
+
+    raise client_error! unless response.communication_success?
+
+    redirect_to client_path(@client)
   end
 
   private

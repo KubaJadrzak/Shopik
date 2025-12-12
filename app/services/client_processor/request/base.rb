@@ -7,22 +7,22 @@ module ClientProcessor
     class Base
       extend T::Sig
 
-      #: ::Payment
-      attr_reader :payment
+      #: ::Client?
+      attr_reader :client
 
-      #: ::PaymentProcessor::Response?
+      #: ::ClientProcessor::Response?
       attr_accessor :response
 
-      #: (payment: ::Payment, ?payment_means: String?) -> void
-      def initialize(payment:, payment_means: nil)
-        @client = payment
+      #: (::Client) -> void
+      def initialize(client)
+        @client = client
       end
 
-      #: -> ::PaymentProcessor::Response
+      #: -> ::ClientProcessor::Response
       def process
-        response = ::EspagoClient.new.send(url, method: method, body: request)
-
-        response.payment = @payment
+        base = ::EspagoClient.new.send(url, method: method, body: request)
+        response = ::ClientProcessor::Response.build(base)
+        response.client = @client
         response.type = type
         @response = response
       end

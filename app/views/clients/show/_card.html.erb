@@ -41,7 +41,10 @@
       <% end %>
       <div class="w-100 mb-2"></div>
       <%= render "clients/show/card_details", title: 'Primary' do %>
-        <%= client.primary? ? 'Yes' : 'No' %>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" <%= "disabled" unless client.mit? %>>
+          <label class="form-check-label" for="flexSwitchCheckDefault"><%= "(authorization required)" unless client.mit? %></label>
+        </div>
       <% end %>
       <div class="w-100 mb-2 d-lg-none"></div>
       <%= render "clients/show/card_details", title: 'Company' do %>

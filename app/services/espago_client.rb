@@ -28,7 +28,7 @@ class EspagoClient
     end #: Faraday::Connection
   end
 
-  #: (String path, ?body: Hash[Symbol, untyped]?, ?method: Symbol) -> PaymentProcessor::Response
+  #: (String path, ?body: Hash[Symbol, untyped]?, ?method: Symbol) -> ::Response::Base
   def send(path, body: nil, method: :get)
     response = @conn.send(method) do |req|
       req.url path
@@ -37,7 +37,7 @@ class EspagoClient
       req.body = body if body
     end
 
-    PaymentProcessor::Response.new(
+    ::Response::Base.new(
       connected: true,
       status:    response.status,
       body:      response.body,

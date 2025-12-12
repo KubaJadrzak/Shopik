@@ -22,7 +22,8 @@ module PaymentProcessor
 
       #: -> ::PaymentProcessor::Response
       def process
-        response = ::EspagoClient.new.send(url, method: method, body: request)
+        base = ::EspagoClient.new.send(url, method: method, body: request)
+        response = PaymentProcessor::Response.build(base)
 
         response.payment = @payment
         response.type = type
