@@ -28,6 +28,7 @@ class UsersController < ApplicationController
     ResignPaymentJob.perform_now
     ResignOrderJob.perform_now
     ExpireSubscriptionJob.perform_now
+    RenewSubscriptionJob.perform_now
   end
 
   #: -> void

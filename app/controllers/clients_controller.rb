@@ -33,7 +33,7 @@ class ClientsController < ApplicationController
 
     raise client_error! unless response.communication_success?
 
-    redirect_to client_path(@client)
+    redirect_to client_path(@client), notice: 'Authorization success!'
   end
 
   #: -> void
@@ -44,10 +44,14 @@ class ClientsController < ApplicationController
       @client.update(primary: false)
       current_user.update(auto_renew: false)
     else
+      current_auto_renew = current_user.auto_renew
+      current_user.update(auto_renew: false)
+
       current_primary = current_user.primary_payment_method
       current_primary&.update(primary: false)
 
       @client.update(primary: true)
+      current_user.update(auto_renew: current_auto_renew)
     end
   end
 

@@ -24,7 +24,7 @@ class Payment < ApplicationRecord
     awaiting.where('updated_at < ?', 1.hour.ago)
   }
 
-  enum :payment_method, %i[iframe secure_web_page iframe3 meest_paywall google_pay apple_pay client]
+  enum :payment_method, %i[iframe secure_web_page iframe3 meest_paywall google_pay apple_pay cit mit]
   enum :cof, %i[storing recurring unscheduled]
   enum :kind, %i[sale preauth]
 

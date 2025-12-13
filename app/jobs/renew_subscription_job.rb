@@ -1,6 +1,5 @@
 # typed: strict
-
-# frozen_string_litera: true
+# frozen_string_literal: true
 
 class RenewSubscriptionJob < ApplicationJob
   queue_as :default
@@ -14,32 +13,25 @@ class RenewSubscriptionJob < ApplicationJob
 
   #: -> void
   def handle_subscription_renewal
-    Subscription.should_be_renewed.find_each do |old_subscription|
-      ActiveRecord::Base.transaction do
-        old_subscription.state = 'Expired'
-        old_subscription.save(validate: false)
+    User.should_renew_subscription.find_each do |user|
+      client = user.primary_payment_method
+      next unless client.present?
 
-        user = old_subscription.user #: as !nil
+      payment_means = client.espago_client_id
+      next unless payment_means.present?
 
-        new_subscription = user.subscriptions.create!(
-          state: 'New',
-        )
+      subscription = user.subscriptions.create!(state: 'New')
 
-        payment = new_subscription.payments.create!(
-          amount:         4.99,
-          state:          'new',
-          cof:            :recurring,
-          payment_method: 'mit',
-          currency:       'PLN',
-          kind:           :sale,
-        )
+      payment = subscription.payments.create!(
+        amount:         4.99,
+        state:          'new',
+        cof:            :recurring,
+        payment_method: 'mit',
+        currency:       'PLN',
+        kind:           :sale,
+      )
 
-        client = user.primary_payment_method #: as !nil
-
-        payment_means = client.espago_client_id
-
-        PaymentProcessor::Charge.new(payment: payment, payment_means: payment_means)
-      end
+      ::PaymentProcessor::Charge.new(payment: payment, payment_means: payment_means).process
     end
   end
 end

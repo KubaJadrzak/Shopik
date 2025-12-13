@@ -19,6 +19,19 @@ class User < ApplicationRecord
 
   broadcasts_refreshes
 
+  scope :should_renew_subscription, -> {
+    where(auto_renew: true)
+      .where(
+        subscriptions: {
+          id: Subscription
+                .select('MAX(subscriptions.id)')
+                .where('subscriptions.user_id = users.id'),
+        },
+      )
+      .joins(:subscriptions)
+      .where(subscriptions: { state: 'Expired' })
+  }
+
   #: -> bool
   def active_subscription?
     subscriptions.where(state: 'Active').exists?
@@ -66,7 +79,7 @@ class User < ApplicationRecord
 
   #: -> bool
   def can_toggle_auto_renew?
-    active_subscription? && primary_payment_method?
+    primary_payment_method? && subscriptions.exists?
   end
 
   #: -> bool

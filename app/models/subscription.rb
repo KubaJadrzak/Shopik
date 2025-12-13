@@ -19,8 +19,7 @@ class Subscription < ApplicationRecord
   scope :should_be_renewed, -> {
     joins(:user)
       .where(users: { auto_renew: true })
-      .where(state: 'Active')
-      .where(end_date: Time.current..1.hour.from_now)
+      .where(state: 'Expired')
   }
 
   #: -> String

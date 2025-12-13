@@ -34,6 +34,7 @@ SUCCESS_STATUSES = ['executed',
                     'finalized',
                     'refunded',
                     'reversed',
+                    'Active',
                     'CIT Verified',
                     'MIT Verified',].freeze #: Array[String]
 
