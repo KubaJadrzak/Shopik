@@ -42,6 +42,7 @@ class ClientsController < ApplicationController
 
     if @client.primary?
       @client.update(primary: false)
+      current_user.update(auto_renew: false)
     else
       current_primary = current_user.primary_payment_method
       current_primary&.update(primary: false)

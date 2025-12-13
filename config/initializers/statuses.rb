@@ -30,18 +30,19 @@ ORDER_STATUS_MAP = STATUS_MAP.merge('executed'  => 'Preparing for Shipment',
 SUBSCRIPTION_STATUS_MAP = STATUS_MAP.merge('executed'  => 'Active',
                                            'finalized' => 'Active',) #: Hash[String, String]
 
-SUCCESS_STATUSES = %w[executed
-                      finalized
-                      refunded
-                      reversed
-                      cit_verified
-                      mit_verified].freeze #: Array[String]
+SUCCESS_STATUSES = ['executed',
+                    'finalized',
+                    'refunded',
+                    'reversed',
+                    'CIT Verified',
+                    'MIT Verified',].freeze #: Array[String]
 
 REJECTED_STATUSES = %w[
   rejected
   failed
   resigned
-  unverified
+  Unverified
+  Expired
 ].freeze #: Array[String]
 
 PENDING_STATUSES = %w[
@@ -52,6 +53,7 @@ PENDING_STATUSES = %w[
   blik_redirected
   transfer_redirected
   new
+  New
 ].freeze #: Array[String]
 
 UNCERTAIN_STATUSES = %w[

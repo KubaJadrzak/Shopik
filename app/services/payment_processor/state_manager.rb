@@ -79,7 +79,7 @@ module PaymentProcessor
       return unless @payment&.storing? && @response.success? && @response.client.nil? && @response.espago_client_id
 
       @payment.user.clients.create(
-        state:            'cit_verified',
+        state:            'CIT Verified',
         espago_client_id: @response.espago_client_id,
         card_identifier:  @response.card_identifier,
         company:          @response.card_company,

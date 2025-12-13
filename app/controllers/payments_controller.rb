@@ -126,7 +126,7 @@ class PaymentsController < ApplicationController
     when 'apple_pay'
       :apple_pay
     when ->(v) { v.start_with?('cli') }
-      :client
+      :cit
     else
       raise payment_error!
     end

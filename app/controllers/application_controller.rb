@@ -10,10 +10,14 @@ class ApplicationController < ActionController::Base
   rescue_from PaymentError, with: :handle_payment_error
   rescue_from ClientError, with: :handle_client_error
   rescue_from SubscriptionError, with: :handle_subscription_error
+  rescue_from GenericError, with: :handle_generic_error
 
   def after_sign_in_path_for(resource)
-    UpdatePaymentStatusJob.perform_later(resource.id)
-    FinalizePaymentJob.perform_later(resource.id)
+    UpdatePaymentStatusJob.perform_now
+    FinalizePaymentJob.perform_now
+    ResignPaymentJob.perform_now
+    ResignOrderJob.perform_now
+    ExpireSubscriptionJob.perform_now
     super
   end
 
@@ -29,5 +33,9 @@ class ApplicationController < ActionController::Base
 
   def handle_subscription_error(error)
     redirect_to account_path, alert: error.message
+  end
+
+  def handle_generic_error(error)
+    redirect_to root_path, alert: error.message
   end
 end

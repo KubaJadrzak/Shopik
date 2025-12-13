@@ -23,7 +23,7 @@ class SubscriptionsController < ApplicationController
   def create
     raise subscription_error! if current_user.active_subscription? || current_user.pending_subscription?
 
-    @subscription = current_user.subscriptions.new(state: 'new')
+    @subscription = current_user.subscriptions.new(state: 'New')
 
     raise subscription_error! unless @subscription.save
 

@@ -25,6 +25,9 @@ module GeneratedUrlHelpersModule
   def add_to_cart_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def authorize_client_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def back_request_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -52,7 +55,7 @@ module GeneratedUrlHelpersModule
   def edit_user_registration_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def extend_subscription_subscription_url(*args); end
+  def edit_user_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_order_url(*args); end
@@ -77,6 +80,9 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def new_user_session_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def new_user_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def order_url(*args); end
@@ -214,7 +220,10 @@ module GeneratedUrlHelpersModule
   def success_payment_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def toggle_auto_renew_subscription_url(*args); end
+  def toggle_auto_renew_user_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def toggle_primary_client_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def turbo_recede_historical_location_url(*args); end
@@ -236,4 +245,10 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def user_session_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def user_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def users_url(*args); end
 end

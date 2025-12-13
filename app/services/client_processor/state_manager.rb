@@ -19,7 +19,7 @@ module ClientProcessor
     def authorize_client
       return unless @client && @response.communication_success?
 
-      @client.state = 'mit_verified'
+      @client.state = 'MIT Verified'
       @client.save(validate: false)
     end
   end

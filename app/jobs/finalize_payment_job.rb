@@ -4,11 +4,8 @@
 class FinalizePaymentJob < ApplicationJob
   queue_as :default
 
-  #: (Integer) -> void
-  def perform(user_id)
-    @user = User.find(user_id) #: ::User?
-    return unless @user
-
+  #: -> void
+  def perform
     handle_finalized_payments
   end
 
@@ -16,13 +13,7 @@ class FinalizePaymentJob < ApplicationJob
 
   #: -> void
   def handle_finalized_payments
-    return unless @user
-
-    # Fix for sorbet behaviour,
-    # missing method awaiting on ActiveRecord::Relation
-    payments = @user.payments #: as untyped
-
-    payments.should_be_finalized.find_each do |payment|
+    ::Payment.should_be_finalized.find_each do |payment|
       finalize_payment(payment)
     end
   end

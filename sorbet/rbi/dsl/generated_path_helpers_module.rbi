@@ -25,6 +25,9 @@ module GeneratedPathHelpersModule
   def add_to_cart_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def authorize_client_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def back_request_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -49,10 +52,10 @@ module GeneratedPathHelpersModule
   def edit_user_password_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def edit_user_registration_path(*args); end
+  def edit_user_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def extend_subscription_subscription_path(*args); end
+  def edit_user_registration_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_order_path(*args); end
@@ -71,6 +74,9 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def new_user_password_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def new_user_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_user_registration_path(*args); end
@@ -214,7 +220,10 @@ module GeneratedPathHelpersModule
   def success_payment_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def toggle_auto_renew_subscription_path(*args); end
+  def toggle_auto_renew_user_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def toggle_primary_client_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def turbo_recede_historical_location_path(*args); end
@@ -232,8 +241,14 @@ module GeneratedPathHelpersModule
   def user_password_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def user_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def user_registration_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def user_session_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def users_path(*args); end
 end

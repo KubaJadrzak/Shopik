@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import AutoRenewToggleController from "./auto_renew_toggle_controller"
+application.register("auto-renew-toggle", AutoRenewToggleController)
+
 import FlashController from "./flash_controller"
 application.register("flash", FlashController)
 

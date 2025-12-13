@@ -9,9 +9,6 @@ class Client < ApplicationRecord
 
   broadcasts_refreshes
 
-  scope :cit, -> { where(state: %w[CIT MIT]) }
-  scope :mit, -> { where(state: 'MIT') }
-
   #: -> String
   def to_param
     uuid
@@ -19,12 +16,12 @@ class Client < ApplicationRecord
 
   #: -> bool
   def cit?
-    state == 'cit_verified'
+    state == 'CIT Verified'
   end
 
   #: -> bool
   def mit?
-    state == 'mit_verified'
+    state == 'MIT Verified'
   end
 
   private

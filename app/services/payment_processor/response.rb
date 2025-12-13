@@ -70,7 +70,7 @@ module PaymentProcessor
 
     #: -> String?
     def redirect_url
-      @body['redirect_url']
+      @body['redirect_url'] || @body.dig('dcc_decision_information', 'redirect_url')
     end
 
     #: -> String

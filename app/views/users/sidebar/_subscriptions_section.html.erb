@@ -1,9 +1,21 @@
 <div id="order-history-section">
   <div class="d-flex justify-content-between">
     <h4>Your Subscriptions</h4>
-    <div class="form-check form-switch">
-      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" <%= "disabled" unless current_user.primary_payment_method? %>>
-      <label class="form-check-label" for="flexSwitchCheckDefault">Auto-Renew <%= "(primary payment method required)" unless current_user.primary_payment_method?%></label>
+    <div data-controller="auto-renew-toggle" data-auto-renew-toggle-url-value="<%= toggle_auto_renew_user_path(current_user) %>">
+      <div class="form-check form-switch">
+        <input data-action="change->auto-renew-toggle#toggle" class="form-check-input" type="checkbox" role="switch" id="auto-renew"  <%= "disabled" unless current_user.can_toggle_auto_renew? %> <%= "checked" if current_user.auto_renew? %> >
+        <label class="auto-renew" for="auto-renew">
+          Auto-Renew
+          <% unless current_user.can_toggle_auto_renew? %>
+            <i
+            class="bi bi-info-circle text-muted"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+            title="Primary Payment Method and Active Subscription is required to enable Auto-Renew functionality"
+            ></i>
+          <% end %>
+        </label>
+      </div>
     </div>
   </div>
   <% if @subscriptions.any? %>

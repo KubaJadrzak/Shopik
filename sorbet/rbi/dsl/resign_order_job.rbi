@@ -9,13 +9,12 @@ class ResignOrderJob
   class << self
     sig do
       params(
-        user_id: T.untyped,
         block: T.nilable(T.proc.params(job: ResignOrderJob).void)
       ).returns(T.any(ResignOrderJob, FalseClass))
     end
-    def perform_later(user_id, &block); end
+    def perform_later(&block); end
 
-    sig { params(user_id: T.untyped).returns(T.untyped) }
-    def perform_now(user_id); end
+    sig { returns(T.untyped) }
+    def perform_now; end
   end
 end

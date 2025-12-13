@@ -65,6 +65,11 @@ class User < ApplicationRecord
   end
 
   #: -> bool
+  def can_toggle_auto_renew?
+    active_subscription? && primary_payment_method?
+  end
+
+  #: -> bool
   def mit_payment_method?
     clients.where(state: 'MIT').exists?
   end

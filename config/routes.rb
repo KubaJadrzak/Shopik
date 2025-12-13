@@ -11,6 +11,12 @@ Rails.application.routes.draw do
 
   root to: 'products#index'
 
+  resources :users do
+    member do
+      patch :toggle_auto_renew
+    end
+  end
+
   resources :products, only: [:index]
 
   resource :cart, only: [:show]
@@ -26,7 +32,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :subscriptions, param: :uuid, only: %i[new create show]
+  resources :subscriptions, param: :uuid, only: %i[new create show] do
+    member do
+      post :retry_payment
+    end
+  end
 
   resources :clients, param: :uuid, only: %i[show destroy] do
     member do

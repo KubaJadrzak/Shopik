@@ -22,7 +22,7 @@ class OrdersController < ApplicationController
       email:            order_params[:email],
       shipping_address: order_params[:shipping_address],
       total_price:      current_user.cart.total_price,
-      state:            'new',
+      state:            'New',
       ordered_at:       Time.current,
     )
 

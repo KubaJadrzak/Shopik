@@ -16,6 +16,13 @@ class Subscription < ApplicationRecord
     where(state: 'Active').where('end_date < ?', Date.current)
   }
 
+  scope :should_be_renewed, -> {
+    joins(:user)
+      .where(users: { auto_renew: true })
+      .where(state: 'Active')
+      .where(end_date: Time.current..1.hour.from_now)
+  }
+
   #: -> String
   def to_param
     uuid

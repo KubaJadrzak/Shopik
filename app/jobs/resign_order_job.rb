@@ -4,11 +4,8 @@
 class ResignOrderJob < ApplicationJob
   queue_as :default
 
-  #: (Integer) -> void
-  def perform(user_id)
-    @user = User.find(user_id) #: ::User?
-    return unless @user
-
+  #:  -> void
+  def perform
     handle_resigned_orders
   end
 
@@ -16,14 +13,7 @@ class ResignOrderJob < ApplicationJob
 
   #: -> void
   def handle_resigned_orders
-    return unless @user
-
-    # Fix for weird sorbet behaviour,
-    # missing method awaiting on ActiveRecord::Relation
-    orders = @user.orders #: as untyped
-
-
-    orders.should_be_resigned.find_each do |order|
+    ::Order.should_be_resigned.find_each do |order|
       order.state = 'Payment Resigned'
 
       order.save(validate: false)

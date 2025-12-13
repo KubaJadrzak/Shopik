@@ -8,7 +8,7 @@
       <div class="w-100 mb-2"></div>
       <%= render "clients/show/card_details", title: 'Status' do %>
         <span class="badge <%= status_color(client.state) %> w-50">
-          <%= client.state.humanize %>
+          <%= client.state %>
         </span>
       <% end %>
       <div class="w-100 mb-2 d-lg-none"></div>
@@ -43,25 +43,24 @@
       <%= render "clients/show/card_details", title: 'Primary' do %>
         <div data-controller="primary-client-toggle" data-primary-client-toggle-url-value="<%= toggle_primary_client_path(client) %>">
           <div class="form-check form-switch">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              role="switch"
-              id="primary-client-toggle"
-              <%= "checked" if client.primary? %>
-              <%= "disabled" unless client.mit? %>
-              data-action="change->primary-client-toggle#toggle"
-              >
-              <label class="form-check-label" for="primary-client-toggle">
-                <%= "(authorization required)" unless client.mit? %>
-              </label>
-            </div>
+            <input class="form-check-input" type="checkbox" role="switch" id="primary-client-toggle" <%= "checked" if client.primary? %> <%= "disabled" unless client.mit? %> data-action="change->primary-client-toggle#toggle" >
+            <label class="form-check-label" for="primary-client-toggle">
+              <% unless client.mit? %>
+                <i
+                    class="bi bi-info-circle text-muted"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="right"
+                    title="You need to Authorize your Payment Method in order to make it Primary"
+                  ></i>
+              <% end %>
+            </label>
           </div>
-        <% end %>
-        <div class="w-100 mb-2 d-lg-none"></div>
-        <%= render "clients/show/card_details", title: 'Company' do %>
-          <%= client.company %>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
+      <div class="w-100 mb-2 d-lg-none"></div>
+      <%= render "clients/show/card_details", title: 'Company' do %>
+        <%= client.company %>
+      <% end %>
     </div>
   </div>
+</div>
