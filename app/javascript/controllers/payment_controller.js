@@ -56,7 +56,7 @@ export default class extends Controller {
     const checked = this.paymentMethodTargets.find(r => r.checked)
     this.selectedPaymentMethod = checked ? checked.value : 'secure_web_page'
 
-    if (checked && checked.value.startsWith("cli")) {
+    if (checked && checked.value.startsWith("sav")) {
       this.saveCardTargets.forEach(c => {
         c.checked = false
         c.disabled = true

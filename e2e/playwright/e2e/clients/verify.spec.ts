@@ -12,7 +12,7 @@ test.describe('Order Retry with Saved Card', () => {
     ])
 
     await appFactories([
-      ['create', 'client', 'real',  { 'user_id': user.id }],
+      ['create', 'saved_payment_methods', 'real',  { 'user_id': user.id }],
     ])
 
     await login(page)

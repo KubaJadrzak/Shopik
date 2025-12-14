@@ -16,8 +16,8 @@ class UsersController < ApplicationController
       @orders = current_user.orders.includes(order_items: :product).order(created_at: :desc) #: ::ActiveRecord::Relation?
     when 'subscriptions'
       @subscriptions = current_user.subscriptions.order(created_at: :desc) #: ::ActiveRecord::Relation?
-    when 'clients'
-      @clients = current_user.clients.order(created_at: :desc) #: ::ActiveRecord::Relation?
+    when 'saved_payment_methods'
+      @saved_payment_methods = current_user.saved_payment_methods.order(created_at: :desc) #: ::ActiveRecord::Relation?
     else
       @section = 'orders'
       @orders = current_user.orders.includes(order_items: :product).order(created_at: :desc)

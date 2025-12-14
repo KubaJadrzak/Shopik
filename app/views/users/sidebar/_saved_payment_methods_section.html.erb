@@ -1,0 +1,14 @@
+<div id="order-history-section">
+  <h4>Your Saved Payment Methods</h4>
+  <% if @saved_payment_methods.any? %>
+    <% @saved_payment_methods.each do |saved_payment_methods| %>
+      <div class="mb-4">
+        <%= link_to client_path(saved_payment_methods), class: "text-decoration-none text-reset" do %>
+          <%= render "saved_payment_methods/show/card", saved_payment_methods: saved_payment_methods %>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>You have no Saved Payment Methods yet.</p>
+  <% end %>
+</div>

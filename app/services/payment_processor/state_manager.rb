@@ -9,7 +9,7 @@ module PaymentProcessor
       @response = response
       @type = response.type #: Symbol?
       @payment = response.payment #: ::Payment?
-      @payable = @payment&.payable #: ::Order? | ::Subscription? | ::Client?
+      @payable = @payment&.payable #: ::Order? | ::Subscription? | ::SavedPaymentMethod?
     end
 
     #: -> void
@@ -55,10 +55,10 @@ module PaymentProcessor
 
     #: -> void
     def attach_client
-      c = @response.client
-      return unless @payment && @payment.client.nil? && @response.success? && c
+      c = @response.saved_payment_methods
+      return unless @payment && @payment.saved_payment_methods.nil? && @response.success? && c
 
-      @payment.client = c
+      @payment.saved_payment_methods = c
     end
 
     #: -> void
@@ -76,9 +76,9 @@ module PaymentProcessor
 
     #: -> void
     def create_client
-      return unless @payment&.storing? && @response.success? && @response.client.nil? && @response.espago_client_id
+      return unless @payment&.storing? && @response.success? && @response.saved_payment_methods.nil? && @response.espago_client_id
 
-      @payment.user.clients.create(
+      @payment.user.saved_payment_methods.create(
         state:            'CIT Verified',
         espago_client_id: @response.espago_client_id,
         card_identifier:  @response.card_identifier,

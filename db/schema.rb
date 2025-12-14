@@ -29,26 +29,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_11_185245) do
     t.index ["user_id"], name: "index_carts_on_user_id"
   end
 
-  create_table "clients", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.string "company"
-    t.string "last4"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "uuid", null: false
-    t.string "first_name", null: false
-    t.string "last_name", null: false
-    t.string "state", default: "unverified", null: false
-    t.integer "month", null: false
-    t.integer "year", null: false
-    t.boolean "primary", default: false, null: false
-    t.string "card_identifier"
-    t.string "espago_client_id", null: false
-    t.index ["card_identifier"], name: "index_clients_on_card_identifier"
-    t.index ["user_id"], name: "index_clients_on_user_id"
-    t.index ["uuid"], name: "index_clients_on_uuid", unique: true
-  end
-
   create_table "order_items", force: :cascade do |t|
     t.integer "order_id", null: false
     t.integer "product_id", null: false
@@ -85,7 +65,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_11_185245) do
     t.string "uuid", null: false
     t.string "payable_type"
     t.integer "payable_id"
-    t.integer "client_id"
+    t.integer "saved_payment_method_id"
     t.integer "payment_method", null: false
     t.integer "cof"
     t.string "currency", default: "USD", null: false
@@ -96,8 +76,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_11_185245) do
     t.string "card_identifier"
     t.string "transaction_id"
     t.index ["card_identifier"], name: "index_payments_on_card_identifier"
-    t.index ["client_id"], name: "index_payments_on_client_id"
     t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
+    t.index ["saved_payment_method_id"], name: "index_payments_on_saved_payment_method_id"
     t.index ["state"], name: "index_payments_on_state"
     t.index ["uuid"], name: "index_payments_on_uuid", unique: true
   end
@@ -111,8 +91,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_11_185245) do
     t.decimal "membership_price"
   end
 
+  create_table "saved_payment_methods", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "company"
+    t.string "last4"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "uuid", null: false
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.string "state", default: "unverified", null: false
+    t.integer "month", null: false
+    t.integer "year", null: false
+    t.boolean "primary", default: false, null: false
+    t.string "card_identifier"
+    t.string "espago_client_id", null: false
+    t.index ["card_identifier"], name: "index_saved_payment_methods_on_card_identifier"
+    t.index ["user_id"], name: "index_saved_payment_methods_on_user_id"
+    t.index ["uuid"], name: "index_saved_payment_methods_on_uuid", unique: true
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.integer "user_id", null: false
+    t.integer "espago_saved_payment_method_id"
     t.date "start_date"
     t.date "end_date"
     t.string "state", default: "new", null: false
@@ -120,6 +121,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_11_185245) do
     t.datetime "updated_at", null: false
     t.decimal "price", default: "4.99", null: false
     t.string "uuid", null: false
+    t.index ["espago_saved_payment_method_id"], name: "index_subscriptions_on_espago_saved_payment_method_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
     t.index ["uuid"], name: "index_subscriptions_on_uuid", unique: true
   end
@@ -142,10 +144,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_11_185245) do
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "products"
   add_foreign_key "carts", "users"
-  add_foreign_key "clients", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "users"
-  add_foreign_key "payments", "clients"
+  add_foreign_key "payments", "saved_payment_methods"
+  add_foreign_key "saved_payment_methods", "users"
+  add_foreign_key "subscriptions", "saved_payment_methods", column: "espago_saved_payment_method_id"
   add_foreign_key "subscriptions", "users"
 end

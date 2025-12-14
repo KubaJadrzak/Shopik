@@ -44,7 +44,7 @@
         <%= payment.espago_payment_id || 'N/A' %>
       <% end %>
       <div class="w-100 mb-2 d-lg-none"></div>
-      <%= render "payments/show/card_details", title: 'Espago Client ID' do %>
+      <%= render "payments/show/card_details", title: 'Espago Saved_Payment_Method ID' do %>
         <%= payment.espago_client_id || 'N/A' %>
       <% end %>
       <div class="w-100 mb-2"></div>
@@ -56,8 +56,8 @@
         <%= payment.transaction_id %>
       <% end %>
       <div class="w-100 mb-2"></div>
-      <%= render "payments/show/card_details", title: 'Client' do %>
-        <%= payment.client ? link_to(payment.client.uuid, client_path(payment.client)) : 'N/A' %>
+      <%= render "payments/show/card_details", title: 'Saved_Payment_Method' do %>
+        <%= payment.saved_payment_methods ? link_to(payment.saved_payment_methods.uuid, client_path(payment.saved_payment_methods)) : 'N/A' %>
       <% end %>
       <div class="w-100 mb-2 d-lg-none"></div>
       <%= render "payments/show/card_details", title: 'Created at' do %>

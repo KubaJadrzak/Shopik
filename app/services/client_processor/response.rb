@@ -15,13 +15,13 @@ module ClientProcessor
       end
     end
 
-    #: ::Client?
-    attr_accessor :client
+    #: ::SavedPaymentMethod?
+    attr_accessor :saved_payment_methods
 
     #: (connected: bool, body: Hash[String, untyped], ?status: Integer?) -> void
     def initialize(connected:, body:, status: nil)
       super
-      @client = nil #: ::Client?
+      @saved_payment_methSaved_Payment_Methodnil #: ::SavedPaymentMethod?
     end
   end
 end

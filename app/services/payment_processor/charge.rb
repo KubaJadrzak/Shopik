@@ -30,7 +30,7 @@ module PaymentProcessor
       when 'iframe'
         Request::Iframe.new(payment: @payment, payment_means: @payment_means)
       when 'cit', 'mit'
-        Request::Client.new(payment: @payment, payment_means: @payment_means)
+        Request::SavedPaymentMethod.new(payment: @payment, payment_means: @payment_means)
       else
         Request::SecureWebPage.new(payment: @payment)
       end

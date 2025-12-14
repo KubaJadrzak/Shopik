@@ -38,7 +38,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :clients, param: :uuid, only: %i[show destroy] do
+  resources :saved_payment_methods, param: :uuid, only: %i[show destroy] do
     member do
       get :authorize
       post :authorize
@@ -50,7 +50,7 @@ Rails.application.routes.draw do
   get 'account', to: 'users#account', as: 'account'
   get '/account/subscriptions', to: 'users#account', defaults: { section: 'subscriptions' }, as: 'account_subscriptions'
   get '/account/orders', to: 'users#account', defaults: { section: 'orders' }, as: 'account_orders'
-  get '/account/clients', to: 'users#account', defaults: { section: 'clients' }, as: 'account_clients'
+  get '/account/saved_payment_methods', to: 'users#account', defaults: { section: 'saved_payment_methods' }, as: 'account_saved_payment_methods'
 
 
   resources :payments, param: :uuid,  only: %i[new create show] do

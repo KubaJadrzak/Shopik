@@ -9,7 +9,7 @@ test.describe('Toggle Auto Renew', () => {
       ['create', 'user'],
     ])
     await appFactories([
-      ['create', 'client', { 'user_id': user.id }],
+      ['create', 'saved_payment_methods', { 'user_id': user.id }],
     ])
     await login(page)
   })
@@ -22,7 +22,7 @@ test.describe('Toggle Auto Renew', () => {
 
   test.describe('when payment method is verified for auto renew', () => {
     test('toggle button is enabled', async({ page }) => {
-      await appEval('Client.last.update_columns(status: \'MIT\')')
+      await appEval('Saved_Payment_Method.last.update_columns(status: \'MIT\')')
       await page.goto('espago/clients/1')
       await expect(page.locator('body')).toMatchAriaSnapshot('- checkbox')
       await page.locator('#primary').check()

@@ -19,11 +19,11 @@ class BackRequestsProcessor
       response.payment = subject
       response.type = :charge
       ::PaymentProcessor::StateManager.new(response).process
-    when ::Client
+    when ::SavedPaymentMethod
     end
   end
 
-  #: -> (::Payment | ::Client)?
+  #: -> (::Payment | ::SavedPaymentMethod)?
   def find_subject
     uuid = @back_request['description']
 
@@ -31,8 +31,8 @@ class BackRequestsProcessor
 
     if uuid.starts_with?('pay')
       ::Payment.find_by(uuid: uuid)
-    elsif uuid.starts_with?('cli')
-      ::Client.find_by(uuid: uuid)
+    elsif uuid.starts_with?('sav')
+      ::SavedPaymentMethod.find_by(uuid: uuid)
     end
   end
 end

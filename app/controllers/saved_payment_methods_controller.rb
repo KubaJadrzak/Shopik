@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # typed: strict
 
-class ClientsController < ApplicationController
+class SavedPaymentMethodsController < ApplicationController
   include ClientErrors
 
   before_action :set_client, only: %i[show destroy authorize toggle_primary]
@@ -13,9 +13,9 @@ class ClientsController < ApplicationController
 
   #: -> void
   def destroy
-    raise client_error! unless @client&.destroy
+    raise client_error! unless @saved_payment_methods&.destroy
 
-    flash[:notice] = 'We have successfully deleted your Client!'
+    flash[:notice] = 'We have successfully deleted your Saved Payment Method!'
     respond_to do |format|
       format.turbo_stream do
         redirect_to account_path
@@ -27,21 +27,21 @@ class ClientsController < ApplicationController
   def authorize
     return unless request.post?
 
-    raise client_error! unless @client && !@client.mit?
+    raise client_error! unless @saved_payment_methods && !@saved_payment_methods.mit?
 
-    response = ::ClientProcessor::Authorize.new(@client).process
+    response = ::ClientProcessor::Authorize.new(@saved_payment_methods).process
 
     raise client_error! unless response.communication_success?
 
-    redirect_to client_path(@client), notice: 'Authorization success!'
+    redirect_to client_path(@saved_payment_methods), notice: 'Authorization success!'
   end
 
   #: -> void
   def toggle_primary
-    raise client_error! unless @client
+    raise client_error! unless @saved_payment_methods
 
-    if @client.primary?
-      @client.update(primary: false)
+    if @saved_payment_methods.primary?
+      @saved_payment_methods.update(primary: false)
       current_user.update(auto_renew: false)
     else
       current_auto_renew = current_user.auto_renew
@@ -50,7 +50,7 @@ class ClientsController < ApplicationController
       current_primary = current_user.primary_payment_method
       current_primary&.update(primary: false)
 
-      @client.update(primary: true)
+      @saved_payment_methods.update(primary: true)
       current_user.update(auto_renew: current_auto_renew)
     end
   end
@@ -59,11 +59,11 @@ class ClientsController < ApplicationController
 
   #: -> void
   def set_client
-    @client = ::Client.includes(:payments).find_by(uuid: params[:uuid]) #: ::Client?
+    @saved_payment_methods = ::SavedPaymentMethod.includes(:payments).find_by(uuid: params[:uuid]) #: ::SavedPaymentMethod?
   end
 
   #: -> void
   def set_payments
-    @payments = @client&.payments #: ActiveRecord::Relation?
+    @payments = @saved_payment_methods&.payments #: ActiveRecord::Relation?
   end
 end

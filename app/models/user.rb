@@ -9,7 +9,7 @@ class User < ApplicationRecord
 
   has_one :cart, dependent: :destroy
   has_many :orders, dependent: :destroy
-  has_many :clients, dependent: :destroy
+  has_many :saved_payment_methods, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
 
   has_many :order_payments, through: :orders, source: :payments
@@ -20,17 +20,20 @@ class User < ApplicationRecord
   broadcasts_refreshes
 
   scope :should_renew_subscription, -> {
-    where(auto_renew: true)
+    joins(:subscriptions)
+      .where(auto_renew: true)
+      .where(subscriptions: { state: 'Expired' })
       .where(
         subscriptions: {
           id: Subscription
-                .select('MAX(subscriptions.id)')
-                .where('subscriptions.user_id = users.id'),
+                .select('id')
+                .where('subscriptions.user_id = users.id')
+                .order(id: :desc)
+                .limit(1),
         },
       )
-      .joins(:subscriptions)
-      .where(subscriptions: { state: 'Expired' })
   }
+
 
   #: -> bool
   def active_subscription?
@@ -69,12 +72,12 @@ class User < ApplicationRecord
 
   #: -> bool
   def primary_payment_method?
-    clients.where(primary: true).exists?
+    mit_payment_method?.where(primary: true).exists?
   end
 
-  #: -> ::Client?
+  #: -> ::SavedPaymentMethod?
   def primary_payment_method
-    clients.find_by(primary: true)
+    mit_payment_method?.find_by(primary: true)
   end
 
   #: -> bool
@@ -84,7 +87,7 @@ class User < ApplicationRecord
 
   #: -> bool
   def mit_payment_method?
-    clients.where(state: 'MIT').exists?
+    mit_payment_method?.where(state: 'MIT').exists?
   end
 
   #: -> ActiveRecord::Relation

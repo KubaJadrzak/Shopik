@@ -13,7 +13,7 @@ test.describe('Order Retry with Saved Card', () => {
     await appFactories([
       ['create', 'product', { title: 'First Product' }],
       ['create', 'product', { title: 'Second Product' }],
-      ['create', 'client', 'primary', 'real',  { 'user_id': user.id }],
+      ['create', 'saved_payment_methods', 'primary', 'real',  { 'user_id': user.id }],
       ['create', 'order', { 'user_id': user.id }],
     ])
 

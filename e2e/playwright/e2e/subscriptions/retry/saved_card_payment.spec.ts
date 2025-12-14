@@ -10,7 +10,7 @@ test.describe('Subscription Retry with Saved Card', () => {
     ])
     await appFactories([
       ['create', 'subscription', 'new', { 'user_id': user.id }],
-      ['create', 'client', 'primary', 'real',  { 'user_id': user.id }],
+      ['create', 'saved_payment_methods', 'primary', 'real',  { 'user_id': user.id }],
     ])
     await login(page)
   })

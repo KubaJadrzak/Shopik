@@ -4,7 +4,7 @@ class CreateSubscriptions < ActiveRecord::Migration[8.0]
   def change
     create_table :subscriptions do |t|
       t.references :user, null: false, foreign_key: true
-      t.references :espago_client, foreign_key: true
+      t.references :espago_saved_payment_method, foreign_key: true
 
       t.date :start_date, null: false
       t.date :end_date, null: false

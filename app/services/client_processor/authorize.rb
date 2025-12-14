@@ -4,14 +4,14 @@
 module ClientProcessor
   class Authorize
 
-    #: (::Client) -> void
-    def initialize(client)
-      @client = client
+    #: (::SavedPaymentMethod) -> void
+    def initialize(saved_payment_methods)
+      @saved_payment_methods = saved_payment_methods
     end
 
     #: -> ::ClientProcessor::Response
     def process
-      request = Request::Authorize.new(@client)
+      request = Request::Authorize.new(@saved_payment_methods)
 
       response = request.process
 

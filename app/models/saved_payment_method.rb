@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # typed: strict
 
-class Client < ApplicationRecord
+class SavedPaymentMethod < ApplicationRecord
   belongs_to :user,  touch: true
   has_many :payments, -> { order(created_at: :desc) }, dependent: :destroy
 
@@ -28,6 +28,6 @@ class Client < ApplicationRecord
 
   #: -> void
   def generate_uuid
-    self.uuid = "cli_#{SecureRandom.uuid}"
+    self.uuid = "sav_#{SecureRandom.uuid}"
   end
 end

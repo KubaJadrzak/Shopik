@@ -8,7 +8,7 @@ class PaymentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_payment, only: %i[show reverse refund success rejected pending]
   before_action :set_payable, only: %i[new create]
-  before_action :set_clients, only: %i[new]
+  before_action :set_saved_payment_methods, only: %i[new]
 
   #: -> void
   def new
@@ -85,8 +85,8 @@ class PaymentsController < ApplicationController
   end
 
   #: -> void
-  def set_clients
-    @clients = current_user.clients #: ::ActiveRecord::Relation?
+  def set_saved_payment_methods
+    @saved_payment_methods = current_user.saved_payment_methods #: ::ActiveRecord::Relation?
   end
 
   #: -> void
@@ -125,7 +125,7 @@ class PaymentsController < ApplicationController
       :google_pay
     when 'apple_pay'
       :apple_pay
-    when ->(v) { v.start_with?('cli') }
+    when ->(v) { v.start_with?('sav') }
       :cit
     else
       raise payment_error!
@@ -162,7 +162,7 @@ class PaymentsController < ApplicationController
   def set_payment_means
     return params[:card_token] if params[:card_token]
 
-    params[:payment_method] if params[:payment_method].starts_with?('cli')
+    params[:payment_method] if params[:payment_method].starts_with?('sav')
   end
 
   #: (String) -> void

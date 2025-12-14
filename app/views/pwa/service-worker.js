@@ -10,11 +10,11 @@
 //   event.waitUntil(
 //     clients.matchAll({ type: "window" }).then((clientList) => {
 //       for (let i = 0; i < clientList.length; i++) {
-//         let client = clientList[i]
-//         let clientPath = (new URL(client.url)).pathname
+//         let saved_payment_methods = clientList[i]
+//         let clientPath = (new URL(saved_payment_methods.url)).pathname
 //
-//         if (clientPath == event.notification.data.path && "focus" in client) {
-//           return client.focus()
+//         if (clientPath == event.notification.data.path && "focus" in saved_payment_methods) {
+//           return saved_payment_methods.focus()
 //         }
 //       }
 //

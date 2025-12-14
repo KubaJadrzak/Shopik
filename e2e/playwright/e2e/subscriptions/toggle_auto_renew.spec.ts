@@ -10,13 +10,13 @@ test.describe('Toggle Auto Renew', () => {
     ])
     await appFactories([
       ['create', 'subscription', { 'user_id': user.id }],
-      ['create', 'client', 'primary', 'real',  { 'user_id': user.id }],
+      ['create', 'saved_payment_methods', 'primary', 'real',  { 'user_id': user.id }],
     ])
     await login(page)
   })
   test.describe('when user doesnt have primary payment method', () => {
     test('shows button to select primary payment method', async({ page }) => {
-      await appEval('Client.last.destroy')
+      await appEval('Saved_Payment_Method.last.destroy')
       await page.goto('/subscriptions/1')
       await expect(page.getByText('Select Payment Method')).toBeVisible()
     })
