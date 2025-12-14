@@ -75,6 +75,8 @@ class PaymentsController < ApplicationController
   #: -> void
   def set_payable
     payable_number = params[:payable_number]
+    raise payment_error! unless payable_number.present?
+
     if payable_number.start_with?('ord')
       @payable = Order.find_by(uuid: payable_number) #: ::Order? | ::Subscription?
     elsif payable_number.start_with?('sub')
@@ -112,6 +114,8 @@ class PaymentsController < ApplicationController
 
   #: -> Symbol | void
   def set_payment_method
+    raise payment_error! unless params[:payment_method]
+
     case params[:payment_method]
     when 'iframe'
       :iframe

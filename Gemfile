@@ -57,9 +57,12 @@ group :development, :test do
 
   gem 'factory_bot_rails'
 
-  gem 'rspec-rails', '~> 8.0.0'
-
   gem 'cypress-on-rails'
+
+  gem 'vcr'
+  gem 'webmock'
+
+  gem 'cuprite'
 end
 
 group :development do
@@ -70,11 +73,9 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem 'capybara'
   gem 'rails-controller-testing'
 
   gem 'database_cleaner-active_record'
-
 end
 
 gem 'devise'
@@ -95,12 +96,7 @@ gem 'dotenv-rails', groups: %i[development test]
 
 gem 'faraday-retry'
 
-gem 'webmock', group: [:test]
-
 gem 'sidekiq'
 gem 'sidekiq-scheduler'
 
-gem 'cuprite', group: %i[development test]
-
 gem 'byebug'
-gem 'htmlbeautifier'

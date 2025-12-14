@@ -1,0 +1,61 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sandbox.espago.com/api/secure_web_page_register
+    body:
+      encoding: UTF-8
+      string: '{"amount":"10.0","currency":"PLN","kind":"sale","title":"pay_839e4484-e4d6-4a70-9d8a-d11cb543aa13","description":"pay_839e4484-e4d6-4a70-9d8a-d11cb543aa13","positive_url":"http://localhost:3001/payments/pay_839e4484-e4d6-4a70-9d8a-d11cb543aa13/success","negative_url":"http://localhost:3001/payments/pay_839e4484-e4d6-4a70-9d8a-d11cb543aa13/rejected","session_id":"0af5eccb72fde66c91bbb847cc8b2ead","checksum":"a0dcbcfb59f1a48cb879830d34bd33c0","cof":"storing"}'
+    headers:
+      User-Agent:
+      - Faraday v2.13.1
+      Accept:
+      - application/vnd.espago.v3+json
+      Authorization:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: ''
+    headers:
+      Date:
+      - Mon, 15 Dec 2025 21:06:55 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"0cc67275f4113d55733d92e7ee939d99"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - f88deb29-2336-4882-ab54-a8e8a5b08c66
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'; base-uri 'none'; block-all-mixed-content; child-src 'self'
+        sandbox.espago.com sandbox-static.espago.com; connect-src 'self' sandbox.espago.com
+        sandbox-static.espago.com; font-src 'self' sandbox.espago.com sandbox-static.espago.com;
+        form-action 'self' sandbox.espago.com sandbox-static.espago.com; img-src 'self'
+        sandbox.espago.com sandbox-static.espago.com; manifest-src 'none'; media-src
+        'none'; object-src 'none'; script-src 'self' sandbox.espago.com sandbox-static.espago.com;
+        style-src 'self' sandbox.espago.com sandbox-static.espago.com; upgrade-insecure-requests;
+        worker-src 'none'; report-uri https://csp-report.espago.com/csp_app0_sandbox/store
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"id":"pay_9d0UKn7Ja4bY4ZF0","description":"pay_839e4484-e4d6-4a70-9d8a-d11cb543aa13","channel":"elavon","amount":"10.00","currency":"PLN","state":"new","client":"cli_9d0hfJ36vJbz50hG","created_at":1765832815,"redirect_url":"https://sandbox.espago.com/secure_web_page/pay_9d0UKn7Ja4bY4ZF0"}'
+  recorded_at: Mon, 15 Dec 2025 21:06:55 GMT
+recorded_with: VCR 6.3.1
