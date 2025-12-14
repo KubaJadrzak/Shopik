@@ -26,11 +26,11 @@ class DeviseController
     include ::ApplicationHelper
     include ::CartItemsHelper
     include ::CartsHelper
-    include ::ClientsHelper
     include ::OrderItemsHelper
     include ::OrdersHelper
     include ::PaymentsHelper
     include ::ProductsHelper
+    include ::SavedPaymentMethodsHelper
     include ::SubscriptionsHelper
     include ::UsersHelper
     include ::DeviseHelper

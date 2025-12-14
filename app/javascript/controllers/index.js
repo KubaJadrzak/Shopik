@@ -17,4 +17,4 @@ import PaymentController from "./payment_controller"
 application.register("payment", PaymentController)
 
 import PrimarySavedPaymentMethodToggleController from "./primary_saved_payment_method_toggle_controller"
-application.register("primary-saved-payment-methods-toggle", PrimarySavedPaymentMethodToggleController)
+application.register("primary-saved-payment-method-toggle", PrimarySavedPaymentMethodToggleController)

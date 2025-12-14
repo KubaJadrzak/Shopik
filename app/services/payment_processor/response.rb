@@ -84,7 +84,7 @@ module PaymentProcessor
 
     #: -> String?
     def espago_client_id
-      @body['saved_payment_methods']
+      @body['client']
     end
 
     #: -> String?
@@ -158,7 +158,7 @@ module PaymentProcessor
     end
 
     #: -> ::SavedPaymentMethod?
-    def saved_payment_methods
+    def saved_payment_method
       ::SavedPaymentMethod.find_by(espago_client_id: espago_client_id)
     end
 

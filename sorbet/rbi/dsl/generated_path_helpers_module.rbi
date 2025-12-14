@@ -10,13 +10,13 @@ module GeneratedPathHelpersModule
   include ::ActionDispatch::Routing::PolymorphicRoutes
 
   sig { params(args: T.untyped).returns(String) }
-  def account_clients_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
   def account_orders_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def account_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def account_saved_payment_methods_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def account_subscriptions_path(*args); end
@@ -25,7 +25,7 @@ module GeneratedPathHelpersModule
   def add_to_cart_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def authorize_client_path(*args); end
+  def authorize_saved_payment_method_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def back_request_path(*args); end
@@ -41,9 +41,6 @@ module GeneratedPathHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def cart_path(*args); end
-
-  sig { params(args: T.untyped).returns(String) }
-  def client_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def destroy_user_session_path(*args); end
@@ -205,6 +202,9 @@ module GeneratedPathHelpersModule
   def root_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def saved_payment_method_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def sidekiq_web_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
@@ -223,7 +223,7 @@ module GeneratedPathHelpersModule
   def toggle_auto_renew_user_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def toggle_primary_client_path(*args); end
+  def toggle_primary_saved_payment_method_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def turbo_recede_historical_location_path(*args); end

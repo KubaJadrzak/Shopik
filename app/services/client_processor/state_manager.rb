@@ -7,7 +7,7 @@ module ClientProcessor
     def initialize(response)
       @response = response
       @type = response.type #: Symbol?
-      @saved_payment_methods = response.saved_payment_methods #: ::SavedPaymentMethod?
+      @saved_payment_method = response.saved_payment_method #: ::SavedPaymentMethod?
     end
 
     #: -> void
@@ -17,10 +17,10 @@ module ClientProcessor
 
     #: -> void
     def authorize_client
-      return unless @saved_payment_methods && @response.communication_success?
+      return unless @saved_payment_method && @response.communication_success?
 
-      @saved_payment_methods.state = 'MIT Verified'
-      @saved_payment_methods.save(validate: false)
+      @saved_payment_method.state = 'MIT Verified'
+      @saved_payment_method.save(validate: false)
     end
   end
 end

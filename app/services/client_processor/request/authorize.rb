@@ -19,7 +19,7 @@ module ClientProcessor
       # @override
       #: -> String
       def url
-        "api/clients/#{@client.espago_client_id}/authorize"
+        "api/clients/#{@saved_payment_method.espago_client_id}/authorize"
       end
 
       # @override

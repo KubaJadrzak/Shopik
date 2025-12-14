@@ -72,12 +72,12 @@ class User < ApplicationRecord
 
   #: -> bool
   def primary_payment_method?
-    mit_payment_method?.where(primary: true).exists?
+    mit_payment_method.where(primary: true).exists?
   end
 
   #: -> ::SavedPaymentMethod?
   def primary_payment_method
-    mit_payment_method?.find_by(primary: true)
+    mit_payment_method.find_by(primary: true)
   end
 
   #: -> bool
@@ -85,9 +85,9 @@ class User < ApplicationRecord
     primary_payment_method? && subscriptions.exists?
   end
 
-  #: -> bool
-  def mit_payment_method?
-    mit_payment_method?.where(state: 'MIT').exists?
+  #: -> ActiveRecord::Relation
+  def mit_payment_method
+    saved_payment_methods.where(state: 'MIT')
   end
 
   #: -> ActiveRecord::Relation

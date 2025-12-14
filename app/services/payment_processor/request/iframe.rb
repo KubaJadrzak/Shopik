@@ -33,7 +33,6 @@ module PaymentProcessor
           positive_url: positive_url,
           negative_url: negative_url,
           card:         @payment_means,
-          client:       @payment.client,
           cof:          @payment.cof,
         }.compact
       end

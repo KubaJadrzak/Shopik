@@ -22,7 +22,7 @@ test.describe('Toggle Auto Renew', () => {
 
   test.describe('when payment method is verified for auto renew', () => {
     test('toggle button is enabled', async({ page }) => {
-      await appEval('Saved_Payment_Method.last.update_columns(status: \'MIT\')')
+      await appEval('Saved Payment Method.last.update_columns(status: \'MIT\')')
       await page.goto('espago/clients/1')
       await expect(page.locator('body')).toMatchAriaSnapshot('- checkbox')
       await page.locator('#primary').check()

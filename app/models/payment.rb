@@ -3,7 +3,7 @@
 
 class Payment < ApplicationRecord
   belongs_to :payable, polymorphic: true
-  belongs_to :saved_payment_methods, optional: true, touch: true
+  belongs_to :saved_payment_method, optional: true, touch: true
 
   validate :must_have_payable
   validate :prevent_duplicate_payment

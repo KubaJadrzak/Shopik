@@ -2,9 +2,9 @@
 # typed: strict
 
 class SavedPaymentMethodsController < ApplicationController
-  include ClientErrors
+  include SavedPaymentMethodErrors
 
-  before_action :set_client, only: %i[show destroy authorize toggle_primary]
+  before_action :set_saved_payment_method, only: %i[show destroy authorize toggle_primary]
   before_action :set_payments, only: %i[show]
   before_action :authenticate_user!
 
@@ -13,7 +13,7 @@ class SavedPaymentMethodsController < ApplicationController
 
   #: -> void
   def destroy
-    raise client_error! unless @saved_payment_methods&.destroy
+    raise saved_payment_method_error! unless @saved_payment_method&.destroy
 
     flash[:notice] = 'We have successfully deleted your Saved Payment Method!'
     respond_to do |format|
@@ -27,21 +27,21 @@ class SavedPaymentMethodsController < ApplicationController
   def authorize
     return unless request.post?
 
-    raise client_error! unless @saved_payment_methods && !@saved_payment_methods.mit?
+    raise saved_payment_method_error! unless @saved_payment_method && !@saved_payment_method.mit?
 
-    response = ::ClientProcessor::Authorize.new(@saved_payment_methods).process
+    response = ::ClientProcessor::Authorize.new(@saved_payment_method).process
 
-    raise client_error! unless response.communication_success?
+    raise saved_payment_method_error! unless response.communication_success?
 
-    redirect_to client_path(@saved_payment_methods), notice: 'Authorization success!'
+    redirect_to saved_payment_method_path(@saved_payment_method), notice: 'Authorization success!'
   end
 
   #: -> void
   def toggle_primary
-    raise client_error! unless @saved_payment_methods
+    raise saved_payment_method_error! unless @saved_payment_method
 
-    if @saved_payment_methods.primary?
-      @saved_payment_methods.update(primary: false)
+    if @saved_payment_method.primary?
+      @saved_payment_method.update(primary: false)
       current_user.update(auto_renew: false)
     else
       current_auto_renew = current_user.auto_renew
@@ -50,7 +50,7 @@ class SavedPaymentMethodsController < ApplicationController
       current_primary = current_user.primary_payment_method
       current_primary&.update(primary: false)
 
-      @saved_payment_methods.update(primary: true)
+      @saved_payment_method.update(primary: true)
       current_user.update(auto_renew: current_auto_renew)
     end
   end
@@ -58,12 +58,12 @@ class SavedPaymentMethodsController < ApplicationController
   private
 
   #: -> void
-  def set_client
-    @saved_payment_methods = ::SavedPaymentMethod.includes(:payments).find_by(uuid: params[:uuid]) #: ::SavedPaymentMethod?
+  def set_saved_payment_method
+    @saved_payment_method = ::SavedPaymentMethod.includes(:payments).find_by(uuid: params[:uuid]) #: ::SavedPaymentMethod?
   end
 
   #: -> void
   def set_payments
-    @payments = @saved_payment_methods&.payments #: ActiveRecord::Relation?
+    @payments = @saved_payment_method&.payments #: ActiveRecord::Relation?
   end
 end

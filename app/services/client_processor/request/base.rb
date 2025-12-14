@@ -8,21 +8,21 @@ module ClientProcessor
       extend T::Sig
 
       #: ::SavedPaymentMethod?
-      attr_reader :saved_payment_methods
+      attr_reader :saved_payment_method
 
       #: ::ClientProcessor::Response?
       attr_accessor :response
 
       #: (::SavedPaymentMethod) -> void
-      def initialize(saved_payment_methods)
-        @saved_payment_methods = saved_payment_methods
+      def initialize(saved_payment_method)
+        @saved_payment_method = saved_payment_method
       end
 
       #: -> ::ClientProcessor::Response
       def process
         base = ::EspagoClient.new.send(url, method: method, body: request)
         response = ::ClientProcessor::Response.build(base)
-        response.saved_payment_methods = @saved_payment_methods
+        response.saved_payment_method = @saved_payment_method
         response.type = type
         @response = response
       end

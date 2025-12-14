@@ -1,56 +1,56 @@
 <div class="card shadow">
   <div class="card-body">
-    <h5 class="card-title mb-4">Saved_Payment_Method Details</h5>
+    <h5 class="card-title mb-4">Saved Payment Method Details</h5>
     <div class="row">
-      <%= render "saved_payment_methods/show/card_details", title: 'Saved_Payment_Method Number' do %>
-        <%= saved_payment_methods.uuid %>
+      <%= render "saved_payment_methods/show/card_details", title: 'Saved Payment Method Number' do %>
+        <%= saved_payment_method.uuid %>
       <% end %>
       <div class="w-100 mb-2"></div>
       <%= render "saved_payment_methods/show/card_details", title: 'Status' do %>
-        <span class="badge <%= status_color(saved_payment_methods.state) %> w-50">
-          <%= saved_payment_methods.state %>
+        <span class="badge <%= status_color(saved_payment_method.state) %> w-50">
+          <%= saved_payment_method.state %>
         </span>
       <% end %>
       <div class="w-100 mb-2 d-lg-none"></div>
       <%= render "saved_payment_methods/show/card_details", title: 'Last4' do %>
-        <%= saved_payment_methods.last4 %>
+        <%= saved_payment_method.last4 %>
       <% end %>
       <div class="w-100 mb-2"></div>
       <%= render "saved_payment_methods/show/card_details", title: 'First Name' do %>
-        <%= saved_payment_methods.first_name %>
+        <%= saved_payment_method.first_name %>
       <% end %>
       <div class="w-100 mb-2 d-lg-none"></div>
       <%= render "saved_payment_methods/show/card_details", title: 'Last Name' do %>
-        <%= saved_payment_methods.last_name %>
+        <%= saved_payment_method.last_name %>
       <% end %>
       <div class="w-100 mb-2"></div>
-      <%= render "saved_payment_methods/show/card_details", title: 'Espago Saved_Payment_Method ID' do %>
-        <%= saved_payment_methods.espago_client_id %>
+      <%= render "saved_payment_methods/show/card_details", title: 'Espago Client ID' do %>
+        <%= saved_payment_method.espago_client_id %>
       <% end %>
       <div class="w-100 mb-2 d-lg-none"></div>
       <%= render "saved_payment_methods/show/card_details", title: 'Card Identifier' do %>
-        <%= saved_payment_methods.card_identifier %>
+        <%= saved_payment_method.card_identifier %>
       <% end %>
       <div class="w-100 mb-2"></div>
       <%= render "saved_payment_methods/show/card_details", title: 'Year' do %>
-        <%= saved_payment_methods.year %>
+        <%= saved_payment_method.year %>
       <% end %>
       <div class="w-100 mb-2 d-lg-none"></div>
       <%= render "saved_payment_methods/show/card_details", title: 'Month' do %>
-        <%= saved_payment_methods.month %>
+        <%= saved_payment_method.month %>
       <% end %>
       <div class="w-100 mb-2"></div>
       <%= render "saved_payment_methods/show/card_details", title: 'Primary' do %>
-        <div data-controller="primary-saved_payment_methods-toggle" data-primary-saved_payment_methods-toggle-url-value="<%= toggle_primary_client_path(saved_payment_methods) %>">
+        <div data-controller="primary-saved-payment-method-toggle" data-primary-saved-payment-method-toggle-url-value="<%= toggle_primary_saved_payment_method_path(saved_payment_method) %>">
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="primary-saved_payment_methods-toggle" <%= "checked" if saved_payment_methods.primary? %> <%= "disabled" unless saved_payment_methods.mit? %> data-action="change->primary-saved_payment_methods-toggle#toggle" >
-            <label class="form-check-label" for="primary-saved_payment_methods-toggle">
-              <% unless saved_payment_methods.mit? %>
+            <input class="form-check-input" type="checkbox" role="switch" id="primary-saved-payment-method-toggle" <%= "checked" if saved_payment_method.primary? %> <%= "disabled" unless saved_payment_method.mit? %> data-action="change->primary-saved-payment-method-toggle#toggle" >
+            <label class="form-check-label" for="primary-saved-payment-method-toggle">
+              <% unless saved_payment_method.mit? %>
                 <i
                     class="bi bi-info-circle text-muted"
                     data-bs-toggle="tooltip"
                     data-bs-placement="right"
-                    title="You need to Authorize your Payment Method in order to make it Primary"
+                    title="You need to Authorize your Saved Payment Method in order to make it Primary"
                   ></i>
               <% end %>
             </label>
@@ -59,7 +59,7 @@
       <% end %>
       <div class="w-100 mb-2 d-lg-none"></div>
       <%= render "saved_payment_methods/show/card_details", title: 'Company' do %>
-        <%= saved_payment_methods.company %>
+        <%= saved_payment_method.company %>
       <% end %>
     </div>
   </div>

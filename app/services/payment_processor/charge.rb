@@ -3,7 +3,6 @@
 
 module PaymentProcessor
   class Charge
-
     #: (payment: ::Payment, ?payment_means: String?) -> void
     def initialize(payment:, payment_means: nil)
       @payment = payment
@@ -30,7 +29,7 @@ module PaymentProcessor
       when 'iframe'
         Request::Iframe.new(payment: @payment, payment_means: @payment_means)
       when 'cit', 'mit'
-        Request::SavedPaymentMethod.new(payment: @payment, payment_means: @payment_means)
+        Request::Client.new(payment: @payment, payment_means: @payment_means)
       else
         Request::SecureWebPage.new(payment: @payment)
       end

@@ -344,20 +344,6 @@ class User
     sig { params(value: T.nilable(::Cart)).void }
     def cart=(value); end
 
-    sig { returns(T::Array[T.untyped]) }
-    def client_ids; end
-
-    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def client_ids=(ids); end
-
-    # This method is created by ActiveRecord on the `User` class because it declared `has_many :clients`.
-    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
-    sig { returns(::Client::PrivateCollectionProxy) }
-    def clients; end
-
-    sig { params(value: T::Enumerable[::Client]).void }
-    def clients=(value); end
-
     sig { params(args: T.untyped, blk: T.untyped).returns(::Cart) }
     def create_cart(*args, &blk); end
 
@@ -397,6 +383,20 @@ class User
 
     sig { void }
     def reset_cart; end
+
+    sig { returns(T::Array[T.untyped]) }
+    def saved_payment_method_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def saved_payment_method_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :saved_payment_methods`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::SavedPaymentMethod::PrivateCollectionProxy) }
+    def saved_payment_methods; end
+
+    sig { params(value: T::Enumerable[::SavedPaymentMethod]).void }
+    def saved_payment_methods=(value); end
 
     sig { returns(T::Array[T.untyped]) }
     def subscription_ids; end

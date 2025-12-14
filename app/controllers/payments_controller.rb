@@ -125,7 +125,7 @@ class PaymentsController < ApplicationController
       :google_pay
     when 'apple_pay'
       :apple_pay
-    when ->(v) { v.start_with?('sav') }
+    when ->(v) { v.start_with?('cli') }
       :cit
     else
       raise payment_error!
@@ -162,7 +162,7 @@ class PaymentsController < ApplicationController
   def set_payment_means
     return params[:card_token] if params[:card_token]
 
-    params[:payment_method] if params[:payment_method].starts_with?('sav')
+    params[:payment_method] if params[:payment_method].starts_with?('cli')
   end
 
   #: (String) -> void

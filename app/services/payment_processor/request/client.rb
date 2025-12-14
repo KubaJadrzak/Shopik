@@ -3,7 +3,7 @@
 
 module PaymentProcessor
   module Request
-    class Saved_Payment_Method < Base
+    class Client < Base
 
       # @override
       #: -> Symbol
@@ -27,13 +27,13 @@ module PaymentProcessor
       #: -> Hash[Symbol, untyped]
       def request
         {
-          amount:                @payment.amount,
-          currency:              @payment.currency,
-          description:           @payment.uuid,
-          positive_url:          positive_url,
-          negative_url:          negative_url,
-          saved_payment_methods: @payment_means,
-          cof:                   @payment.cof,
+          amount:       @payment.amount,
+          currency:     @payment.currency,
+          description:  @payment.uuid,
+          positive_url: positive_url,
+          negative_url: negative_url,
+          client:       @payment_means,
+          cof:          @payment.cof,
         }.compact
       end
 

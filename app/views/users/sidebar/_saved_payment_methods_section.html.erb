@@ -1,10 +1,10 @@
 <div id="order-history-section">
   <h4>Your Saved Payment Methods</h4>
   <% if @saved_payment_methods.any? %>
-    <% @saved_payment_methods.each do |saved_payment_methods| %>
+    <% @saved_payment_methods.each do |saved_payment_method| %>
       <div class="mb-4">
-        <%= link_to client_path(saved_payment_methods), class: "text-decoration-none text-reset" do %>
-          <%= render "saved_payment_methods/show/card", saved_payment_methods: saved_payment_methods %>
+        <%= link_to saved_payment_method_path(saved_payment_method), class: "text-decoration-none text-reset" do %>
+          <%= render "saved_payment_methods/show/card", saved_payment_method: saved_payment_method %>
         <% end %>
       </div>
     <% end %>

@@ -1,8 +1,8 @@
 <div class="container" style="max-width: 480px">
   <div class="card shadow p-4">
-    <h5 class="mb-4 text-center">Saved_Payment_Method Authorization</h5>
+    <h5 class="mb-4 text-center">Saved Payment Method Authorization</h5>
     <p class="mb-4 text-center">
-      In order to authorize your Saved_Payment_Method for Auto-Renew functionality we need to perform a transaction for <strong>1PLN</strong>.
+      In order to authorize your Saved Payment Method for Auto-Renew functionality we need to perform a transaction for <strong>1PLN</strong>.
       <br>
       <br>
       The transaction will be reversed immedietly afterwards and your funds returned to your bank account.
@@ -10,7 +10,7 @@
       <br>
       This is required in order to verify your card eligibility for Auto-Renew functionality.
     </p>
-    <%= form_with url: authorize_client_path(@saved_payment_methods) do |form| %>
+    <%= form_with url: authorize_saved_payment_method_path(@saved_payment_method) do |form| %>
       <%= form.submit "Authorize", class: "btn btn-primary w-100" %>
     <% end %>
   </div>

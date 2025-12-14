@@ -55,10 +55,10 @@ module PaymentProcessor
 
     #: -> void
     def attach_client
-      c = @response.saved_payment_methods
-      return unless @payment && @payment.saved_payment_methods.nil? && @response.success? && c
+      c = @response.saved_payment_method
+      return unless @payment && @payment.saved_payment_method.nil? && @response.success? && c
 
-      @payment.saved_payment_methods = c
+      @payment.saved_payment_method = c
     end
 
     #: -> void
@@ -76,7 +76,7 @@ module PaymentProcessor
 
     #: -> void
     def create_client
-      return unless @payment&.storing? && @response.success? && @response.saved_payment_methods.nil? && @response.espago_client_id
+      return unless @payment&.storing? && @response.success? && @response.saved_payment_method.nil? && @response.espago_client_id
 
       @payment.user.saved_payment_methods.create(
         state:            'CIT Verified',

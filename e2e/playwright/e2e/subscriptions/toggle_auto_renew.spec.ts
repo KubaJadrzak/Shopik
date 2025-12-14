@@ -16,7 +16,7 @@ test.describe('Toggle Auto Renew', () => {
   })
   test.describe('when user doesnt have primary payment method', () => {
     test('shows button to select primary payment method', async({ page }) => {
-      await appEval('Saved_Payment_Method.last.destroy')
+      await appEval('Saved Payment Method.last.destroy')
       await page.goto('/subscriptions/1')
       await expect(page.getByText('Select Payment Method')).toBeVisible()
     })

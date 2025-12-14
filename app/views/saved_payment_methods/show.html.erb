@@ -1,13 +1,13 @@
 <div class="d-flex flex justify-content-end mb-4">
   <%= link_to "Back", :back,
             class: "btn btn-primary me-2" %>
-  <% unless @client.mit? %>
-    <%= link_to "Authorize", authorize_client_path(@client),
+  <% unless @saved_payment_method.mit? %>
+    <%= link_to "Authorize", authorize_saved_payment_method_path(@saved_payment_method),
             class: "btn btn-success me-2" %>
   <% end %>
 </div>
-<%= render 'saved_payment_methods/show/card', client: @client %>
+<%= render 'saved_payment_methods/show/card', saved_payment_method: @saved_payment_method %>
 <%= render 'saved_payment_methods/show/payments' %>
 <div class="d-flex flex justify-content-end mt-4">
-  <%= button_to 'Delete', @client, method: :delete, class: "btn btn-secondary me-2" %>
+  <%= button_to 'Delete', @saved_payment_method, method: :delete, class: "btn btn-secondary me-2" %>
 </div>

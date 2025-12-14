@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 
   allow_browser versions: :modern
   rescue_from PaymentError, with: :handle_payment_error
-  rescue_from ClientError, with: :handle_client_error
+  rescue_from SavedPaymentMethodError, with: :handle_saved_payment_method_error
   rescue_from SubscriptionError, with: :handle_subscription_error
   rescue_from GenericError, with: :handle_generic_error
 
@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
     redirect_to account_path, alert: error.message
   end
 
-  def handle_client_error(error)
+  def handle_saved_payment_method_error(error)
     redirect_to account_path, alert: error.message
   end
 

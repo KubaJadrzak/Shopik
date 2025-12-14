@@ -346,10 +346,10 @@ class Payment
     def apple_pay?; end
 
     sig { void }
-    def client!; end
+    def cit!; end
 
     sig { returns(T::Boolean) }
-    def client?; end
+    def cit?; end
 
     sig { void }
     def google_pay!; end
@@ -374,6 +374,12 @@ class Payment
 
     sig { returns(T::Boolean) }
     def meest_paywall?; end
+
+    sig { void }
+    def mit!; end
+
+    sig { returns(T::Boolean) }
+    def mit?; end
 
     sig { void }
     def preauth!; end
@@ -413,26 +419,14 @@ class Payment
   end
 
   module GeneratedAssociationMethods
-    sig { params(args: T.untyped, blk: T.untyped).returns(::Client) }
-    def build_client(*args, &blk); end
+    sig { params(args: T.untyped, blk: T.untyped).returns(::SavedPaymentMethod) }
+    def build_saved_payment_method(*args, &blk); end
 
-    sig { returns(T.nilable(::Client)) }
-    def client; end
+    sig { params(args: T.untyped, blk: T.untyped).returns(::SavedPaymentMethod) }
+    def create_saved_payment_method(*args, &blk); end
 
-    sig { params(value: T.nilable(::Client)).void }
-    def client=(value); end
-
-    sig { returns(T::Boolean) }
-    def client_changed?; end
-
-    sig { returns(T::Boolean) }
-    def client_previously_changed?; end
-
-    sig { params(args: T.untyped, blk: T.untyped).returns(::Client) }
-    def create_client(*args, &blk); end
-
-    sig { params(args: T.untyped, blk: T.untyped).returns(::Client) }
-    def create_client!(*args, &blk); end
+    sig { params(args: T.untyped, blk: T.untyped).returns(::SavedPaymentMethod) }
+    def create_saved_payment_method!(*args, &blk); end
 
     sig { returns(T.untyped) }
     def payable; end
@@ -446,17 +440,29 @@ class Payment
     sig { returns(T::Boolean) }
     def payable_previously_changed?; end
 
-    sig { returns(T.nilable(::Client)) }
-    def reload_client; end
-
     sig { returns(T.untyped) }
     def reload_payable; end
 
-    sig { void }
-    def reset_client; end
+    sig { returns(T.nilable(::SavedPaymentMethod)) }
+    def reload_saved_payment_method; end
 
     sig { void }
     def reset_payable; end
+
+    sig { void }
+    def reset_saved_payment_method; end
+
+    sig { returns(T.nilable(::SavedPaymentMethod)) }
+    def saved_payment_method; end
+
+    sig { params(value: T.nilable(::SavedPaymentMethod)).void }
+    def saved_payment_method=(value); end
+
+    sig { returns(T::Boolean) }
+    def saved_payment_method_changed?; end
+
+    sig { returns(T::Boolean) }
+    def saved_payment_method_previously_changed?; end
   end
 
   module GeneratedAssociationRelationMethods
@@ -479,7 +485,7 @@ class Payment
     def awaiting(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
-    def client(*args, &blk); end
+    def cit(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def create_with(*args, &blk); end
@@ -554,13 +560,16 @@ class Payment
     def merge(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def mit(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def none(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def not_apple_pay(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
-    def not_client(*args, &blk); end
+    def not_cit(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def not_google_pay(*args, &blk); end
@@ -573,6 +582,9 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def not_meest_paywall(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def not_mit(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def not_preauth(*args, &blk); end
@@ -835,51 +847,6 @@ class Payment
 
     sig { void }
     def card_identifier_will_change!; end
-
-    sig { returns(T.nilable(::Integer)) }
-    def client_id; end
-
-    sig { params(value: T.nilable(::Integer)).returns(T.nilable(::Integer)) }
-    def client_id=(value); end
-
-    sig { returns(T::Boolean) }
-    def client_id?; end
-
-    sig { returns(T.nilable(::Integer)) }
-    def client_id_before_last_save; end
-
-    sig { returns(T.untyped) }
-    def client_id_before_type_cast; end
-
-    sig { returns(T::Boolean) }
-    def client_id_came_from_user?; end
-
-    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def client_id_change; end
-
-    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def client_id_change_to_be_saved; end
-
-    sig { params(from: T.nilable(::Integer), to: T.nilable(::Integer)).returns(T::Boolean) }
-    def client_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::Integer)) }
-    def client_id_in_database; end
-
-    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def client_id_previous_change; end
-
-    sig { params(from: T.nilable(::Integer), to: T.nilable(::Integer)).returns(T::Boolean) }
-    def client_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
-
-    sig { returns(T.nilable(::Integer)) }
-    def client_id_previously_was; end
-
-    sig { returns(T.nilable(::Integer)) }
-    def client_id_was; end
-
-    sig { void }
-    def client_id_will_change!; end
 
     sig { returns(T.nilable(::String)) }
     def cof; end
@@ -1555,9 +1522,6 @@ class Payment
     def restore_card_identifier!; end
 
     sig { void }
-    def restore_client_id!; end
-
-    sig { void }
     def restore_cof!; end
 
     sig { void }
@@ -1600,6 +1564,9 @@ class Payment
     def restore_response!; end
 
     sig { void }
+    def restore_saved_payment_method_id!; end
+
+    sig { void }
     def restore_state!; end
 
     sig { void }
@@ -1628,12 +1595,6 @@ class Payment
 
     sig { returns(T::Boolean) }
     def saved_change_to_card_identifier?; end
-
-    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
-    def saved_change_to_client_id; end
-
-    sig { returns(T::Boolean) }
-    def saved_change_to_client_id?; end
 
     sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
     def saved_change_to_cof; end
@@ -1719,6 +1680,12 @@ class Payment
     sig { returns(T::Boolean) }
     def saved_change_to_response?; end
 
+    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
+    def saved_change_to_saved_payment_method_id; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_saved_payment_method_id?; end
+
     sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_state; end
 
@@ -1742,6 +1709,51 @@ class Payment
 
     sig { returns(T::Boolean) }
     def saved_change_to_uuid?; end
+
+    sig { returns(T.nilable(::Integer)) }
+    def saved_payment_method_id; end
+
+    sig { params(value: T.nilable(::Integer)).returns(T.nilable(::Integer)) }
+    def saved_payment_method_id=(value); end
+
+    sig { returns(T::Boolean) }
+    def saved_payment_method_id?; end
+
+    sig { returns(T.nilable(::Integer)) }
+    def saved_payment_method_id_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def saved_payment_method_id_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def saved_payment_method_id_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
+    def saved_payment_method_id_change; end
+
+    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
+    def saved_payment_method_id_change_to_be_saved; end
+
+    sig { params(from: T.nilable(::Integer), to: T.nilable(::Integer)).returns(T::Boolean) }
+    def saved_payment_method_id_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::Integer)) }
+    def saved_payment_method_id_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::Integer), T.nilable(::Integer)])) }
+    def saved_payment_method_id_previous_change; end
+
+    sig { params(from: T.nilable(::Integer), to: T.nilable(::Integer)).returns(T::Boolean) }
+    def saved_payment_method_id_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::Integer)) }
+    def saved_payment_method_id_previously_was; end
+
+    sig { returns(T.nilable(::Integer)) }
+    def saved_payment_method_id_was; end
+
+    sig { void }
+    def saved_payment_method_id_will_change!; end
 
     sig { returns(::String) }
     def state; end
@@ -1933,9 +1945,6 @@ class Payment
     def will_save_change_to_card_identifier?; end
 
     sig { returns(T::Boolean) }
-    def will_save_change_to_client_id?; end
-
-    sig { returns(T::Boolean) }
     def will_save_change_to_cof?; end
 
     sig { returns(T::Boolean) }
@@ -1978,6 +1987,9 @@ class Payment
     def will_save_change_to_response?; end
 
     sig { returns(T::Boolean) }
+    def will_save_change_to_saved_payment_method_id?; end
+
+    sig { returns(T::Boolean) }
     def will_save_change_to_state?; end
 
     sig { returns(T::Boolean) }
@@ -2010,7 +2022,7 @@ class Payment
     def awaiting(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
-    def client(*args, &blk); end
+    def cit(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def create_with(*args, &blk); end
@@ -2085,13 +2097,16 @@ class Payment
     def merge(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def mit(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def none(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def not_apple_pay(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
-    def not_client(*args, &blk); end
+    def not_cit(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def not_google_pay(*args, &blk); end
@@ -2104,6 +2119,9 @@ class Payment
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def not_meest_paywall(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def not_mit(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def not_preauth(*args, &blk); end
