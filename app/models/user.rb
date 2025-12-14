@@ -87,7 +87,7 @@ class User < ApplicationRecord
 
   #: -> ActiveRecord::Relation
   def mit_payment_method
-    saved_payment_methods.where(state: 'MIT')
+    saved_payment_methods.where(state: 'MIT Verified')
   end
 
   #: -> ActiveRecord::Relation
