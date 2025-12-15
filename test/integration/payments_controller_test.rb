@@ -167,17 +167,47 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'REVERSE should reverse payment' do
+    reversable_payment = FactoryBot.create(:payment, :reversable, payable: @order)
+    VCR.use_cassette('REVERSE should reverse payment') do
+      post reverse_payment_path(reversable_payment)
+    end
+    assert_response :redirect
+    assert_includes response.location, 'http://www.example.com/orders/ord_'
+
+    assert_requested(:delete, 'https://sandbox.espago.com/api/charges/pay_9d0MB60taOJrWmqn', times: 1)
+
+    reversable_payment.reload
+    assert_equal 'reversed', reversable_payment.state
   end
 
   test 'REVERSE should redirect_to account_path and show alert when payment is not reversable' do
+    reversable_payment = FactoryBot.create(:payment, payable: @order)
+    post reverse_payment_path(reversable_payment)
 
+    assert_redirected_to account_path
+    assert_equal 'We are experiencing an issue with your payment!', flash[:alert]
   end
 
   test 'REFUND should refund payment' do
+    refundable_payment = FactoryBot.create(:payment, :refundable, payable: @order)
+    VCR.use_cassette('REFUND should refund payment') do
+      post refund_payment_path(refundable_payment)
+    end
 
+    assert_response :redirect
+    assert_includes response.location, 'http://www.example.com/orders/ord_'
+
+    assert_requested(:post, 'https://sandbox.espago.com/api/charges/pay_9d0qcbd9wGrf4WtM/refund', times: 1)
+
+    refundable_payment.reload
+    assert_equal 'refunded', refundable_payment.state
   end
 
   test 'REFUND should redirect_to account_path and show alert when payment is not refundable' do
+    refundable_payment = FactoryBot.create(:payment, payable: @order)
+    post reverse_payment_path(refundable_payment)
 
+    assert_redirected_to account_path
+    assert_equal 'We are experiencing an issue with your payment!', flash[:alert]
   end
 end
