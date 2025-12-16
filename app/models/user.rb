@@ -46,16 +46,6 @@ class User < ApplicationRecord
   end
 
   #: -> bool
-  def auto_renew_subscription?
-    subscriptions.where(auto_renew: true).exists?
-  end
-
-  #: -> Subscription?
-  def auto_renew_subscription
-    subscriptions.find_by(auto_renew: true)
-  end
-
-  #: -> bool
   def pending_subscription?
     subscriptions.where.not(state: %w[Active Expired]).exists?
   end

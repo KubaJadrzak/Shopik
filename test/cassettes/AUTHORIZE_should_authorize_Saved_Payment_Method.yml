@@ -1,0 +1,61 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sandbox.espago.com/api/clients/cli_9d0KbF38qp7MlxXu/authorize
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.13.1
+      Accept:
+      - application/vnd.espago.v3+json
+      Authorization:
+      Content-Length:
+      - '0'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: ''
+    headers:
+      Date:
+      - Tue, 16 Dec 2025 22:34:29 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"52ec74c3dfac271b750b287cccdcb16e"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'; base-uri 'none'; block-all-mixed-content; child-src 'self'
+        sandbox.espago.com sandbox-static.espago.com; connect-src 'self' sandbox.espago.com
+        sandbox-static.espago.com; font-src 'self' sandbox.espago.com sandbox-static.espago.com;
+        form-action 'self' sandbox.espago.com sandbox-static.espago.com; img-src 'self'
+        sandbox.espago.com sandbox-static.espago.com; manifest-src 'none'; media-src
+        'none'; object-src 'none'; script-src 'self' sandbox.espago.com sandbox-static.espago.com;
+        style-src 'self' sandbox.espago.com sandbox-static.espago.com; upgrade-insecure-requests;
+        worker-src 'none'; report-uri https://csp-report.espago.com/csp_app0_sandbox/store
+      X-Frame-Options:
+      - SAMEORIGIN
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"email":null,"id":"cli_9d0KbF38qp7MlxXu","created_at":1765924290,"description":null,"card":{"company":"VI","last4":"0006","year":2028,"month":1,"first_name":"John","last_name":"Doe","authorized":true,"issuer_response_code":"00","card_identifier":"cid_9cfzW0qxuoyOOi5h","created_at":1765924293},"deleted":false}'
+  recorded_at: Tue, 16 Dec 2025 22:34:29 GMT
+recorded_with: VCR 6.3.1

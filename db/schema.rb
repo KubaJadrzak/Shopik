@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_11_185245) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_16_232109) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -113,15 +113,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_11_185245) do
 
   create_table "subscriptions", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.integer "espago_saved_payment_method_id"
     t.date "start_date"
     t.date "end_date"
-    t.string "state", default: "new", null: false
+    t.string "state", default: "New", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "price", default: "4.99", null: false
     t.string "uuid", null: false
-    t.index ["espago_saved_payment_method_id"], name: "index_subscriptions_on_espago_saved_payment_method_id"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
     t.index ["uuid"], name: "index_subscriptions_on_uuid", unique: true
   end
@@ -149,6 +147,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_11_185245) do
   add_foreign_key "orders", "users"
   add_foreign_key "payments", "saved_payment_methods"
   add_foreign_key "saved_payment_methods", "users"
-  add_foreign_key "subscriptions", "saved_payment_methods", column: "espago_saved_payment_method_id"
   add_foreign_key "subscriptions", "users"
 end

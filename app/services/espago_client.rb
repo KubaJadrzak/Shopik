@@ -45,19 +45,19 @@ class EspagoClient
   rescue Faraday::ClientError => e
     handle_client_error(e)
   rescue Faraday::ServerError
-    PaymentProcessor::Response.new(connected: false, body: { error: 'server_error' })
+    ::Response::Base.new(connected: false, body: { error: 'server_error' })
   rescue Faraday::TimeoutError
-    PaymentProcessor::Response.new(connected: false, body: { error: 'timeout' })
+    ::Response::Base.new(connected: false, body: { error: 'timeout' })
   rescue Faraday::ConnectionFailed
-    PaymentProcessor::Response.new(connected: false, body: { error: 'connection_failed' })
+    ::Response::Base.new(connected: false, body: { error: 'connection_failed' })
   rescue Faraday::SSLError
-    PaymentProcessor::Response.new(connected: false, body: { error: 'ssl_error' })
+    ::Response::Base.new(connected: false, body: { error: 'ssl_error' })
   rescue Faraday::ParsingError
-    PaymentProcessor::Response.new(connected: false, body: { error: 'parsing_error' })
+    ::Response::Base.new(connected: false, body: { error: 'parsing_error' })
   rescue URI::InvalidURIError, URI::BadURIError
-    PaymentProcessor::Response.new(connected: false, body: { error: 'invalid_uri' })
+    ::Response::Base.new(connected: false, body: { error: 'invalid_uri' })
   rescue StandardError
-    PaymentProcessor::Response.new(connected: false, body: { error: 'unexpected_error' })
+    ::Response::Base.new(connected: false, body: { error: 'unexpected_error' })
   end
 
   private
@@ -67,12 +67,12 @@ class EspagoClient
     Base64.strict_encode64("#{@user}:#{@password}")
   end
 
-  #: (Faraday::ClientError | Faraday::ServerError exception) -> PaymentProcessor::Response
+  #: (Faraday::ClientError | Faraday::ServerError exception) -> ::Response::Base
   def handle_client_error(exception)
     status = exception.response[:status]
     body   = exception.response[:body]
 
-    PaymentProcessor::Response.new(
+    ::Response::Base.new(
       connected: true,
       status:    status,
       body:      body,
