@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   rescue_from PaymentError, with: :handle_payment_error
   rescue_from SavedPaymentMethodError, with: :handle_saved_payment_method_error
   rescue_from SubscriptionError, with: :handle_subscription_error
+  rescue_from OrderError, with: :handle_order_error
   rescue_from GenericError, with: :handle_generic_error
 
   def after_sign_in_path_for(resource)
@@ -35,7 +36,12 @@ class ApplicationController < ActionController::Base
     redirect_to account_path, alert: error.message
   end
 
+  def handle_order_error(error)
+    redirect_to account_path, alert: error.message
+  end
+
   def handle_generic_error(error)
     redirect_to root_path, alert: error.message
   end
+
 end

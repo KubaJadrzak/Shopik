@@ -12,7 +12,6 @@ class Order < ApplicationRecord
   validates :state, presence: true
   validates :shipping_address, presence: true
   validates :ordered_at, presence: true
-  validate :must_have_order_items
 
   before_create :generate_uuid
 
@@ -77,12 +76,4 @@ class Order < ApplicationRecord
   def generate_uuid
     self.uuid = "ord_#{SecureRandom.uuid}"
   end
-
-  #: -> void
-  def must_have_order_items
-    return unless order_items.empty?
-
-    errors.add(:base, 'order must have at least one order item.')
-  end
-
 end

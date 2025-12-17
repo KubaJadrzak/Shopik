@@ -2,6 +2,8 @@
 # frozen_string_literal: true
 
 class OrdersController < ApplicationController
+  include OrderErrors
+
   before_action :authenticate_user!
   before_action :ensure_cart_has_items, only: %i[new create]
   before_action :set_order, only: %i[show retry_payment cancel return]
@@ -25,38 +27,29 @@ class OrdersController < ApplicationController
       state:            'New',
       ordered_at:       Time.current,
     )
-
     @order.build_order_items_from_cart(current_user.cart)
-    if @order.save
-      current_user.cart_items.destroy_all
-      redirect_to new_payment_path(payable_number: @order.uuid)
-    else
-      redirect_to cart_path, alert: 'There was a problem with your order.'
-    end
+
+    raise order_error! unless @order.save
+
+    current_user.cart_items.destroy_all
+    redirect_to new_payment_path(payable_number: @order.uuid)
   end
 
   #: -> void
   def retry_payment
-    unless @order&.can_retry_payment?
-      redirect_to order_path(@order), alert: 'Cannot retry payment'
-      return
-    end
+    raise order_error! unless @order&.can_retry_payment?
 
     redirect_to new_payment_path(payable_number: @order.uuid)
   end
 
   #: -> void
   def cancel
-    return if @order&.can_reverse_payment?
-
-    redirect_to account_url, alert: 'We cannot process your order cancellation due to a technical issue'
+    raise order_error! unless @order&.can_reverse_payment?
   end
 
   #: -> void
   def return
-    return if @order&.can_refund_payment?
-
-    redirect_to account_url, alert: 'We cannot process your order return due to a technical issue'
+    raise order_error! unless @order&.can_refund_payment?
   end
 
   private
@@ -73,6 +66,6 @@ class OrdersController < ApplicationController
 
   #: -> void
   def ensure_cart_has_items
-    redirect_to cart_path if current_user.cart.empty?
+    raise order_error! if current_user.cart.empty?
   end
 end
