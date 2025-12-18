@@ -20,6 +20,7 @@ class OrdersController < ApplicationController
 
   #: -> void
   def create
+    byebug
     @order = current_user.orders.new(
       email:            order_params[:email],
       shipping_address: order_params[:shipping_address],
@@ -27,6 +28,7 @@ class OrdersController < ApplicationController
       state:            'New',
       ordered_at:       Time.current,
     )
+    byebug
     @order.build_order_items_from_cart(current_user.cart)
 
     raise order_error! unless @order.save

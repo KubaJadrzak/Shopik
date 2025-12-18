@@ -24,7 +24,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
     assert_requested(:post, 'https://sandbox.espago.com/api/secure_web_page_register', times: 1) do |req|
       body = JSON.parse(req.body)
 
-      assert_equal '10.0', body['amount']
+      assert_equal @order.amount.to_s, body['amount']
       assert_equal 'PLN', body['currency']
       assert_equal payment.uuid, body['description']
       assert body['positive_url'].end_with?('/success')
@@ -37,7 +37,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.location, 'https://sandbox.espago.com/secure_web_page/pay_'
 
     assert_equal 'new', payment.state
-    assert_equal 10.00, payment.amount
+    assert_equal @order.amount, payment.amount
     assert_equal 'secure_web_page', payment.payment_method
     assert payment.espago_payment_id
     assert payment.espago_client_id
@@ -47,7 +47,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
 
   test 'CREATE should create iframe payment when iframe payment method' do
     VCR.use_cassette('CREATE should create iframe payment when iframe payment method') do
-      espago_card_token = 'cc_9d0R4wtk6xkPEV67p' # if you rewrite cassette you will need to generate new espago_card_token
+      espago_card_token = 'cc_9d0R4wtk6xkPEV67p'
       post payments_path, params: {
         payable_number: @order.uuid,
         payment_method: 'iframe',
@@ -59,7 +59,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
     assert_requested(:post, 'https://sandbox.espago.com/api/charges', times: 1) do |req|
       body = JSON.parse(req.body)
 
-      assert_equal '10.0', body['amount']
+      assert_equal @order.amount.to_s, body['amount']
       assert_equal 'PLN', body['currency']
       assert_equal payment.uuid, body['description']
       assert body['positive_url'].end_with?('/success')
@@ -72,7 +72,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.location, 'https://sandbox.espago.com/secure_web_page/pay_'
 
     assert_equal 'new', payment.state
-    assert_equal 10.00, payment.amount
+    assert_equal @order.amount, payment.amount
     assert_equal 'iframe', payment.payment_method
     assert payment.espago_payment_id
     assert payment.espago_client_id
@@ -93,7 +93,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
     assert_requested(:post, 'https://sandbox.espago.com/api/charges', times: 1) do |req|
       body = JSON.parse(req.body)
 
-      assert_equal '10.0', body['amount']
+      assert_equal @order.amount.to_s, body['amount']
       assert_equal 'PLN', body['currency']
       assert_equal payment.uuid, body['description']
       assert body['positive_url'].end_with?('/success')
@@ -106,7 +106,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.location, 'https://sandbox.espago.com/secure_web_page/pay_'
 
     assert_equal 'new', payment.state
-    assert_equal 10.00, payment.amount
+    assert_equal @order.amount, payment.amount
     assert_equal 'cit', payment.payment_method
     assert payment.espago_payment_id
     assert payment.espago_client_id
@@ -127,7 +127,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
     assert_requested(:post, 'https://sandbox.espago.com/api/secure_web_page_register', times: 1) do |req|
       body = JSON.parse(req.body)
 
-      assert_equal '10.0', body['amount']
+      assert_equal @order.amount.to_s, body['amount']
       assert_equal 'PLN', body['currency']
       assert_equal payment.uuid, body['description']
       assert body['positive_url'].end_with?('/success')
@@ -140,7 +140,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.location, 'https://sandbox.espago.com/secure_web_page/pay_'
 
     assert_equal 'new', payment.state
-    assert_equal 10.00, payment.amount
+    assert_equal @order.amount, payment.amount
     assert_equal 'secure_web_page', payment.payment_method
     assert payment.espago_payment_id
     assert payment.espago_client_id
@@ -167,7 +167,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'REVERSE should reverse payment' do
-    reversable_payment = FactoryBot.create(:payment, :reversable, payable: @order)
+    reversable_payment = FactoryBot.create(:payment, state: 'executed', espago_payment_id: 'pay_9d0MB60taOJrWmqn', payable: @order)
     VCR.use_cassette('REVERSE should reverse payment') do
       post reverse_payment_path(reversable_payment)
     end
@@ -189,7 +189,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'REFUND should refund payment' do
-    refundable_payment = FactoryBot.create(:payment, :refundable, payable: @order)
+    refundable_payment = FactoryBot.create(:payment, state: 'finalized', espago_payment_id: 'pay_9d0qcbd9wGrf4WtM', payable: @order)
     VCR.use_cassette('REFUND should refund payment') do
       post refund_payment_path(refundable_payment)
     end
