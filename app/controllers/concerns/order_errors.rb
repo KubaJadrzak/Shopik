@@ -5,7 +5,7 @@ module OrderErrors
   extend ActiveSupport::Concern
 
 
-  def order_error!(message = 'We are experiencing an issue with your Order')
+  def order_error!(message = 'We are experiencing an issue with your Order!')
     raise OrderError, message
   end
 end
