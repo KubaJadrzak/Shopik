@@ -5,20 +5,17 @@ import { login, iframeFail, iframeSuccess, withSavedPaymentMethod } from '../../
 test.describe('Subscription Retry with Saved Card', () => {
   test.beforeEach(async ({ page }) => {
     await app('clean')
-    const [user] = await appFactories([
-      ['create', 'user'],
-    ])
     await appFactories([
-      ['create', 'subscription', 'new', { 'user_id': user.id }],
-      ['create', 'saved_payment_methods', 'primary', 'real',  { 'user_id': user.id }],
+      ['create', 'user', 'with_subscription', 'with_saved_payment_method'],
     ])
     await login(page)
   })
 
   test('success', async ({ page }) => {
     await page.goto('/account')
-    await page.getByRole('button', { name: 'Manage Subscription' }).click()
-    await page.getByRole('button', { name: 'Retry Payment' }).click()
+    await page.getByRole('link', { name: 'Subscriptions' }).click();
+    await page.getByRole('link', { name: 'Subscription Details' }).click();
+    await page.getByRole('button', { name: 'Retry Payment' }).click();
 
     withSavedPaymentMethod(page)
 
@@ -31,15 +28,16 @@ test.describe('Subscription Retry with Saved Card', () => {
 
   test('fail', async ({ page }) => {
     await page.goto('/account')
-    await page.getByRole('button', { name: 'Manage Subscription' }).click()
-    await page.getByRole('button', { name: 'Retry Payment' }).click()
+    await page.getByRole('link', { name: 'Subscriptions' }).click();
+    await page.getByRole('link', { name: 'Subscription Details' }).click();
+    await page.getByRole('button', { name: 'Retry Payment' }).click();
 
     withSavedPaymentMethod(page)
 
     iframeFail(page)
 
     const subscriptionNumber = await appEval('Subscription.last.uuid')
-    await expect(page.getByText('Payment failed!')).toBeVisible({ timeout: 20_000 })
+    await expect(page.getByText('Payment rejected!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(subscriptionNumber)).toBeVisible()
   })
 

@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test'
 import { app, appFactories, appEval } from '../../../support/on-rails'
-import { login, swpFail, swpSuccess } from '../../../support/command'
+import { fillCardIframe, login, iframeFail, iframeSuccess } from '../../../support/command'
 
-test.describe('Subscription Purchase with Secure Web Payment', () => {
+test.describe('Subscription Purchase with iFrame', () => {
   test.beforeEach(async ({ page }) => {
     await app('clean')
     await appFactories([['create', 'user']])
@@ -14,7 +14,9 @@ test.describe('Subscription Purchase with Secure Web Payment', () => {
     await page.getByRole('button', { name: 'Subscribe to Membership' }).click()
     await page.getByRole('button', { name: 'Go to Payment' }).click()
 
-    await swpSuccess(page)
+    await fillCardIframe(page)
+
+    await iframeSuccess(page)
 
     const subscriptionNumber = await appEval('Subscription.last.uuid')
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
@@ -26,10 +28,12 @@ test.describe('Subscription Purchase with Secure Web Payment', () => {
     await page.getByRole('button', { name: 'Subscribe to Membership' }).click()
     await page.getByRole('button', { name: 'Go to Payment' }).click()
 
-    await swpFail(page)
+    await fillCardIframe(page)
+
+    await iframeFail(page)
 
     const subscriptionNumber = await appEval('Subscription.last.uuid')
-    await expect(page.getByText('Payment failed!')).toBeVisible({ timeout: 20_000 })
+    await expect(page.getByText('Payment rejected!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(subscriptionNumber)).toBeVisible()
   })
 

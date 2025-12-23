@@ -28,4 +28,10 @@ FactoryBot.define do
       create(:saved_payment_method, user: user)
     end
   end
+
+  trait :with_subscription do
+    after(:create) do |user|
+      create(:subscription, user: user)
+    end
+  end
 end

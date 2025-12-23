@@ -1,4 +1,4 @@
-<% if @user.active_subscription? %>
+<% if @user.active_or_pending_subscription? %>
   <div class="mt-4 p-4 border rounded bg-light text-center">
     <h5 class="mb-2" style="color: #9B111E;">Membership</h5>
     <p class="mb-2 text-muted">You have an active Membership subscription!</p>
