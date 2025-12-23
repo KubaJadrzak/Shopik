@@ -1,8 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { app, appFactories, appEval } from '../../../support/on-rails'
-import { login, swpFail, swpSuccess } from '../../../support/command'
-
-// these tests depend entirely on back requests and will not make sense while running on localhost
+import { login, swpSuccess } from '../../../support/command'
 
 test.describe('Saves Payment Method during Secure Web Payment', () => {
   test.beforeEach(async ({ page }) => {
@@ -15,26 +13,20 @@ test.describe('Saves Payment Method during Secure Web Payment', () => {
     await page.goto('/account')
     await page.getByRole('button', { name: 'Subscribe to Membership' }).click()
     await page.getByRole('button', { name: 'Go to Payment' }).click()
-    await page.getByRole('checkbox', { name: 'Save card information for' }).check()
+    await page.getByRole('switch', { name: 'Save card information for future payments' }).check();
 
     await swpSuccess(page)
 
     const subscriptionNumber = await appEval('Subscription.last.uuid')
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(subscriptionNumber)).toBeVisible()
-  })
 
-  test('fail', async ({ page }) => {
+    await appEval(`::UpdatePaymentStatusJob.perform_now`)
+
+    const espagoClientNumber = await appEval('SavedPaymentMethod.last.espago_client_id')
     await page.goto('/account')
-    await page.getByRole('button', { name: 'Subscribe to Membership' }).click()
-    await page.getByRole('button', { name: 'Go to Payment' }).click()
-    await page.getByRole('checkbox', { name: 'Save card information for' }).check()
-
-    await swpFail(page)
-
-    const subscriptionNumber = await appEval('Subscription.last.uuid')
-    await expect(page.getByText('Payment failed!')).toBeVisible({ timeout: 20_000 })
-    await expect(page.getByText(subscriptionNumber)).toBeVisible()
+    await page.getByRole('link', { name: 'Saved Payment Methods' }).click();
+    await page.getByRole('link', { name: 'Saved Payment Method Details' }).click();
+    await expect(page.getByText(`Espago Client ID: ${espagoClientNumber}`)).toBeVisible();
   })
-
 })

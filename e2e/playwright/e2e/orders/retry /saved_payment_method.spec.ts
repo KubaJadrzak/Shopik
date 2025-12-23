@@ -7,7 +7,7 @@ test.describe('Order Retry with Saved Payment Method', () => {
     await app('clean')
 
     await appFactories([
-      ['create', 'user', 'with_order', 'with_cit_saved_payment_method']
+      ['create', 'user', 'with_order', 'with_saved_payment_method']
     ])
 
     await login(page)

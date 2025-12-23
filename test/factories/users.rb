@@ -23,7 +23,7 @@ FactoryBot.define do
     end
   end
 
-  trait :with_cit_saved_payment_method do
+  trait :with_saved_payment_method do
     after(:create) do |user|
       create(:saved_payment_method, user: user)
     end

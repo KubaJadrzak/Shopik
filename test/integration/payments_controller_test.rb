@@ -7,7 +7,7 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    @user = FactoryBot.create(:user, :with_order, :with_cit_saved_payment_method)
+    @user = FactoryBot.create(:user, :with_order, :with_saved_payment_method)
     @order = @user.orders.first
     sign_in @user
   end

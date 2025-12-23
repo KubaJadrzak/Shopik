@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 # typed: false
 
+VCR.eject_cassette if VCR.current_cassette
+VCR.turn_off!
+WebMock.disable! if defined?(WebMock)
+
 if defined?(DatabaseCleaner)
   # cleaning the database using database_cleaner
   DatabaseCleaner.strategy = :truncation

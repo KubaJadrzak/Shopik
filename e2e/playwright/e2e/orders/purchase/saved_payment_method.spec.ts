@@ -7,7 +7,7 @@ test.describe('Order Purchase with Saved Payment Method', () => {
     await app('clean')
 
     await appFactories([
-      ['create', 'user', 'with_cit_saved_payment_method'],
+      ['create', 'user', 'with_saved_payment_method'],
       ['create', 'product', { title: 'First Product' }],
       ['create', 'product', { title: 'Second Product' }],
     ])

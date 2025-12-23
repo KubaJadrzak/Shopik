@@ -1,6 +1,7 @@
 import { Page, expect } from '@playwright/test'
+import { appEval } from '../support/on-rails'
 
-export async function login(page) {
+export async function login(page: Page) {
   const baseURL =  'http://localhost:3001'
   try {
     const response = await page.request.post(`${baseURL}/sign_in_before_test`)
@@ -84,4 +85,19 @@ export async function withSavedPaymentMethod(page: Page) {
   await page.waitForTimeout(1000)
   await page.click('#pay_btn')
 
+}
+
+export async function createSavedPaymentMethod(page: Page) {
+  await page.goto('/account')
+  await page.getByRole('button', { name: 'Subscribe to Membership' }).click()
+  await page.getByRole('button', { name: 'Go to Payment' }).click()
+  await page.getByRole('switch', { name: 'Save card information for future payments' }).check();
+
+  await swpSuccess(page)
+
+  const subscriptionNumber = await appEval('Subscription.last.uuid')
+  await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
+  await expect(page.getByText(subscriptionNumber)).toBeVisible()
+
+  await appEval(`::UpdatePaymentStatusJob.perform_now`)
 }

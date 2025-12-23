@@ -63,12 +63,20 @@ group :development, :test do
   gem 'webmock'
 
   gem 'cuprite'
+
+  gem 'tapioca'
+
+  gem 'sorbet'
+
+  gem 'dotenv-rails'
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
 
   gem 'web-console'
+
+
 end
 
 group :test do
@@ -82,17 +90,12 @@ gem 'devise'
 
 gem 'pagy'
 
-gem 'sorbet', group: :development
-gem 'sorbet-runtime'
-gem 'tapioca', require: false, group: %i[development test]
 
 gem 'faraday'
 
 gem 'base64'
 
 gem 'digest'
-
-gem 'dotenv-rails', groups: %i[development test]
 
 gem 'faraday-retry'
 
