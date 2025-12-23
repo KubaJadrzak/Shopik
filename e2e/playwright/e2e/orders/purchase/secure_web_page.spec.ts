@@ -1,12 +1,13 @@
 import { test, expect } from '@playwright/test'
 import { app, appFactories, appEval } from '../../../support/on-rails'
-import { fillCardIframe, login, oneTimeFail, oneTimeSuccess } from '../../../support/command'
+import { login, swpSuccess, swpFail } from '../../../support/command'
 
-test.describe('Order Purchase with One Time Payment', () => {
+test.describe('Order Purchase with Secure Web Page', () => {
   test.beforeEach(async ({ page }) => {
     await app('clean')
-    await appFactories([['create', 'user']])
+
     await appFactories([
+      ['create', 'user'],
       ['create', 'product', { title: 'First Product' }],
       ['create', 'product', { title: 'Second Product' }],
     ])
@@ -26,9 +27,7 @@ test.describe('Order Purchase with One Time Payment', () => {
     await page.getByLabel('Shipping Address').fill('Shipping Address')
     await page.getByRole('button', { name: 'Go to Payment' }).click()
 
-    await fillCardIframe(page)
-
-    await oneTimeSuccess(page)
+    await swpSuccess(page)
 
     const orderNumber = await appEval('Order.last.uuid')
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
@@ -48,13 +47,10 @@ test.describe('Order Purchase with One Time Payment', () => {
     await page.getByLabel('Shipping Address').fill('Shipping Address')
     await page.getByRole('button', { name: 'Go to Payment' }).click()
 
-    await fillCardIframe(page)
-
-    await oneTimeFail(page)
+    await swpFail(page)
 
     const orderNumber = await appEval('Order.last.uuid')
-    await expect(page.getByText('Payment failed!')).toBeVisible({ timeout: 20_000 })
+    await expect(page.getByText('Payment rejected!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(orderNumber)).toBeVisible()
   })
-
 })

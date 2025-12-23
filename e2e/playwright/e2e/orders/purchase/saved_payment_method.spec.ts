@@ -1,19 +1,15 @@
 import { test, expect } from '@playwright/test'
 import { app, appFactories, appEval } from '../../../support/on-rails'
-import { login, oneTimeFail, oneTimeSuccess, payWithSavedCard } from '../../../support/command'
+import { login, iframeFail, iframeSuccess, withSavedPaymentMethod } from '../../../support/command'
 
-test.describe('Order Purchase with Saved Card', () => {
+test.describe('Order Purchase with Saved Payment Method', () => {
   test.beforeEach(async ({ page }) => {
     await app('clean')
 
-    const [user] = await appFactories([
-      ['create', 'user'],
-    ])
-
     await appFactories([
+      ['create', 'user', 'with_cit_saved_payment_method'],
       ['create', 'product', { title: 'First Product' }],
       ['create', 'product', { title: 'Second Product' }],
-      ['create', 'saved_payment_methods', 'primary', 'real',  { 'user_id': user.id }],
     ])
 
     await login(page)
@@ -32,9 +28,9 @@ test.describe('Order Purchase with Saved Card', () => {
     await page.getByLabel('Shipping Address').fill('Shipping Address')
     await page.getByRole('button', { name: 'Go to Payment' }).click()
 
-    await payWithSavedCard(page)
+    await withSavedPaymentMethod(page)
 
-    await oneTimeSuccess(page)
+    await iframeSuccess(page)
 
     const orderNumber = await appEval('Order.last.uuid')
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
@@ -54,12 +50,12 @@ test.describe('Order Purchase with Saved Card', () => {
     await page.getByLabel('Shipping Address').fill('Shipping Address')
     await page.getByRole('button', { name: 'Go to Payment' }).click()
 
-    await payWithSavedCard(page)
+    await withSavedPaymentMethod(page)
 
-    await oneTimeFail(page)
+    await iframeFail(page)
 
     const orderNumber = await appEval('Order.last.uuid')
-    await expect(page.getByText('Payment failed!')).toBeVisible({ timeout: 20_000 })
+    await expect(page.getByText('Payment rejected!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(orderNumber)).toBeVisible()
   })
 

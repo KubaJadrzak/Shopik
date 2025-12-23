@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { app, appFactories, appEval } from '../../../support/on-rails'
-import { fillCardIframe, login, oneTimeFail, oneTimeSuccess } from '../../../support/command'
+import { fillCardIframe, login, iframeFail, iframeSuccess } from '../../../support/command'
 
 test.describe('Subscription Retry with One Time Payment', () => {
   test.beforeEach(async ({ page }) => {
@@ -21,7 +21,7 @@ test.describe('Subscription Retry with One Time Payment', () => {
 
     await fillCardIframe(page)
 
-    await oneTimeSuccess(page)
+    await iframeSuccess(page)
 
     const subscriptionNumber = await appEval('Subscription.last.uuid')
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
@@ -35,7 +35,7 @@ test.describe('Subscription Retry with One Time Payment', () => {
 
     await fillCardIframe(page)
 
-    await oneTimeFail(page)
+    await iframeFail(page)
 
     const subscriptionNumber = await appEval('Subscription.last.uuid')
     await expect(page.getByText('Payment failed!')).toBeVisible({ timeout: 20_000 })

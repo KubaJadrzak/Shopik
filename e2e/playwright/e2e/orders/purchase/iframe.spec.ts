@@ -1,13 +1,12 @@
 import { test, expect } from '@playwright/test'
 import { app, appFactories, appEval } from '../../../support/on-rails'
-import { login, swpSuccess, swpFail } from '../../../support/command'
+import { fillCardIframe, login, iframeFail, iframeSuccess } from '../../../support/command'
 
-test.describe('Order Purchase with Secure Web Page', () => {
+test.describe('Order Purchase with iFrame', () => {
   test.beforeEach(async ({ page }) => {
     await app('clean')
-
+    await appFactories([['create', 'user']])
     await appFactories([
-      ['create', 'user'],
       ['create', 'product', { title: 'First Product' }],
       ['create', 'product', { title: 'Second Product' }],
     ])
@@ -15,7 +14,7 @@ test.describe('Order Purchase with Secure Web Page', () => {
   })
 
   test('success', async ({ page }) => {
-    await page.goto('/products')
+    await page.goto('/')
     await page.getByText('Add to Cart').first().click()
     await page.getByText('Add to Cart').nth(1).click()
     await page.getByAltText('Cart').click()
@@ -27,7 +26,9 @@ test.describe('Order Purchase with Secure Web Page', () => {
     await page.getByLabel('Shipping Address').fill('Shipping Address')
     await page.getByRole('button', { name: 'Go to Payment' }).click()
 
-    await swpSuccess(page)
+    await fillCardIframe(page)
+
+    await iframeSuccess(page)
 
     const orderNumber = await appEval('Order.last.uuid')
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
@@ -47,10 +48,13 @@ test.describe('Order Purchase with Secure Web Page', () => {
     await page.getByLabel('Shipping Address').fill('Shipping Address')
     await page.getByRole('button', { name: 'Go to Payment' }).click()
 
-    await swpFail(page)
+    await fillCardIframe(page)
+
+    await iframeFail(page)
 
     const orderNumber = await appEval('Order.last.uuid')
-    await expect(page.getByText('Payment failed!')).toBeVisible({ timeout: 20_000 })
+    await expect(page.getByText('Payment rejected!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(orderNumber)).toBeVisible()
   })
+
 })

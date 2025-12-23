@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { app, appFactories, appEval } from '../../../support/on-rails'
-import { login, oneTimeFail, oneTimeSuccess, payWithSavedCard } from '../../../support/command'
+import { login, iframeFail, iframeSuccess, withSavedPaymentMethod } from '../../../support/command'
 
 test.describe('Subscription Purchase with Saved Card', () => {
   test.beforeEach(async ({ page }) => {
@@ -24,9 +24,9 @@ test.describe('Subscription Purchase with Saved Card', () => {
     await page.getByRole('button', { name: 'Subscribe to Membership' }).click()
     await page.getByRole('button', { name: 'Go to Payment' }).click()
 
-    payWithSavedCard(page)
+    withSavedPaymentMethod(page)
 
-    oneTimeSuccess(page)
+    iframeSuccess(page)
 
     const subscriptionNumber = await appEval('Subscription.last.uuid')
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
@@ -38,9 +38,9 @@ test.describe('Subscription Purchase with Saved Card', () => {
     await page.getByRole('button', { name: 'Subscribe to Membership' }).click()
     await page.getByRole('button', { name: 'Go to Payment' }).click()
 
-    payWithSavedCard(page)
+    withSavedPaymentMethod(page)
 
-    oneTimeFail(page)
+    iframeFail(page)
 
     const subscriptionNumber = await appEval('Subscription.last.uuid')
     await expect(page.getByText('Payment failed!')).toBeVisible({ timeout: 20_000 })

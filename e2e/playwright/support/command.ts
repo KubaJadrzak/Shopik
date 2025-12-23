@@ -48,14 +48,14 @@ export async function swpFail(page: Page) {
   await page.getByText('Back to shop').click()
 }
 
-export async function oneTimeSuccess(page: Page) {
+export async function iframeSuccess(page: Page) {
   await page.waitForURL(/secure_web_page/)
   const secureFrame = page.frameLocator('iframe')
   await secureFrame.getByText('3D-Secure 2 Payment - simulation').waitFor()
   await secureFrame.locator('#confirm-btn').click()
 }
 
-export async function oneTimeFail(page: Page) {
+export async function iframeFail(page: Page) {
   await page.waitForURL(/secure_web_page/)
   const secureFrame = page.frameLocator('iframe')
   await secureFrame.getByText('3D-Secure 2 Payment - simulation').waitFor()
@@ -64,7 +64,7 @@ export async function oneTimeFail(page: Page) {
 
 export async function fillCardIframe(page: Page) {
   await expect(page.getByText('Choose Payment Method')).toBeVisible()
-  await page.getByLabel('One-time Payment').check()
+  await page.getByLabel('iFrame').check()
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(1000)
   await page.click('#pay_btn')
@@ -78,10 +78,9 @@ export async function fillCardIframe(page: Page) {
   await iframe.getByRole('button', { name: 'Pay' }).click()
 }
 
-export async function payWithSavedCard(page: Page) {
+export async function withSavedPaymentMethod(page: Page) {
   await expect(page.getByText('Choose Payment Method')).toBeVisible()
-  await page.getByLabel('•••• 1234').check()
-  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.locator('#client').check();
   await page.waitForTimeout(1000)
   await page.click('#pay_btn')
 

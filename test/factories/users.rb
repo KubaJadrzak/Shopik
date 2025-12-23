@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :user do
     sequence(:email) { |n| "jan.kowalski#{n}@example.com" }
@@ -5,6 +7,10 @@ FactoryBot.define do
     password { 'example123' }
     password_confirmation { 'example123' }
     auto_renew { false }
+
+    after(:create) do |user|
+      create(:cart, user: user)
+    end
   end
 
   trait :with_auto_renew do
