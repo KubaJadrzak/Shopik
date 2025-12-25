@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: delete
+    uri: https://sandbox.espago.com/api/clients/cli_9d050JomHmRWQFi2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.13.1
+      Accept:
+      - application/vnd.espago.v3+json
+      Authorization:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 204
+      message: ''
+    headers:
+      Date:
+      - Thu, 25 Dec 2025 17:26:56 GMT
+      Cache-Control:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'; base-uri 'none'; block-all-mixed-content; child-src 'self'
+        sandbox.espago.com sandbox-static.espago.com; connect-src 'self' sandbox.espago.com
+        sandbox-static.espago.com; font-src 'self' sandbox.espago.com sandbox-static.espago.com;
+        form-action 'self' sandbox.espago.com sandbox-static.espago.com; img-src 'self'
+        sandbox.espago.com sandbox-static.espago.com; manifest-src 'none'; media-src
+        'none'; object-src 'none'; script-src 'self' sandbox.espago.com sandbox-static.espago.com;
+        style-src 'self' sandbox.espago.com sandbox-static.espago.com; upgrade-insecure-requests;
+        worker-src 'none'; report-uri https://csp-report.espago.com/csp_app0_sandbox/store
+      X-Frame-Options:
+      - SAMEORIGIN
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Thu, 25 Dec 2025 17:26:56 GMT
+recorded_with: VCR 6.3.1

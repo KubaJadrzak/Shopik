@@ -96,4 +96,17 @@ class SavedPaymentMethodsControllerTest < ActionDispatch::IntegrationTest
     assert_equal true, @user.auto_renew
   end
 
+  test 'DELETE should delete Espago Client and delete Saved Payment Method' do
+    saved_payment_method = FactoryBot.create(:saved_payment_method, user: @user, espago_client_id: 'cli_9d050JomHmRWQFi2')
+    @user.save
+
+    assert_difference -> { SavedPaymentMethod.count }, -1 do
+      VCR.use_cassette('DELETE should delete Espago Client and delete Saved Payment Method') do
+        delete saved_payment_method_path(saved_payment_method)
+      end
+    end
+
+    assert_requested(:delete, 'https://sandbox.espago.com/api/clients/cli_9d050JomHmRWQFi2', times: 1)
+  end
+
 end
