@@ -3,11 +3,11 @@
 require 'test_helper'
 
 class UpdatePaymentStatusJobTest < ActiveJob::TestCase
-  test 'update payment status' do
+  test 'update payment status of payment with awaiting state' do
     payment = FactoryBot.create(:payment, state: 'new', espago_payment_id: 'pay_9d0vezjGTyA9iUYd')
     payable = payment.payable
 
-    VCR.use_cassette('update payment status') do
+    VCR.use_cassette('update payment status of payment with awaiting state') do
       UpdatePaymentStatusJob.perform_now
     end
 

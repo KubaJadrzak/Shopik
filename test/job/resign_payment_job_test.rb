@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class ResignPaymentJobTest < ActiveJob::TestCase
-  test 'resign payments which should be resigned' do
+  test 'resign payment in awaiting state and last updated more than 1 hour ago' do
     payment = FactoryBot.create(:payment, state: 'new', updated_at: 1.day.ago)
     payable = payment.payable
 
@@ -16,7 +16,7 @@ class ResignPaymentJobTest < ActiveJob::TestCase
     assert_equal 'Payment Resigned', payable.state
   end
 
-  test 'does not resign payments which should not be resigned' do
+  test 'does not resign payment which was updated less than 1 hour ago' do
     payment = FactoryBot.create(:payment, state: 'new', updated_at: Time.current)
     payable = payment.payable
 

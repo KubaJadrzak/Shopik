@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :saved_payment_method do
     association :user
-    state { 'CIT Verified ' }
+    state { 'MIT Verified' }
     last4 { '0006' }
     first_name { 'John ' }
     last_name { 'Doe' }
