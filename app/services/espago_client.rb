@@ -28,7 +28,7 @@ class EspagoClient
     end #: Faraday::Connection
   end
 
-  #: (String path, ?body: Hash[Symbol, untyped]?, ?method: Symbol) -> ::Response::Base
+  #: (String path, ?body: Hash[Symbol, untyped]?, ?method: Symbol) -> ::Response
   def send(path, body: nil, method: :get)
     response = @conn.send(method) do |req|
       req.url path
@@ -37,7 +37,7 @@ class EspagoClient
       req.body = body if body
     end
 
-    ::Response::Base.new(
+    ::Response.new(
       connected: true,
       status:    response.status,
       body:      response.body,
@@ -45,19 +45,19 @@ class EspagoClient
   rescue Faraday::ClientError => e
     handle_client_error(e)
   rescue Faraday::ServerError
-    ::Response::Base.new(connected: false, body: { error: 'server_error' })
+    ::Response.new(connected: false, body: { error: 'server_error' })
   rescue Faraday::TimeoutError
-    ::Response::Base.new(connected: false, body: { error: 'timeout' })
+    ::Response.new(connected: false, body: { error: 'timeout' })
   rescue Faraday::ConnectionFailed
-    ::Response::Base.new(connected: false, body: { error: 'connection_failed' })
+    ::Response.new(connected: false, body: { error: 'connection_failed' })
   rescue Faraday::SSLError
-    ::Response::Base.new(connected: false, body: { error: 'ssl_error' })
+    ::Response.new(connected: false, body: { error: 'ssl_error' })
   rescue Faraday::ParsingError
-    ::Response::Base.new(connected: false, body: { error: 'parsing_error' })
+    ::Response.new(connected: false, body: { error: 'parsing_error' })
   rescue URI::InvalidURIError, URI::BadURIError
-    ::Response::Base.new(connected: false, body: { error: 'invalid_uri' })
+    ::Response.new(connected: false, body: { error: 'invalid_uri' })
   rescue StandardError
-    ::Response::Base.new(connected: false, body: { error: 'unexpected_error' })
+    ::Response.new(connected: false, body: { error: 'unexpected_error' })
   end
 
   private
@@ -67,12 +67,12 @@ class EspagoClient
     Base64.strict_encode64("#{@user}:#{@password}")
   end
 
-  #: (Faraday::ClientError | Faraday::ServerError exception) -> ::Response::Base
+  #: (Faraday::ClientError | Faraday::ServerError exception) -> ::Response
   def handle_client_error(exception)
     status = exception.response[:status]
     body   = exception.response[:body]
 
-    ::Response::Base.new(
+    ::Response.new(
       connected: true,
       status:    status,
       body:      body,

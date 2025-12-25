@@ -13,6 +13,7 @@ module ClientProcessor
     #: -> void
     def process
       authorize_client if @type == :authorize
+      delete_client if @type == :delete
     end
 
     #: -> void
@@ -21,6 +22,13 @@ module ClientProcessor
 
       @saved_payment_method.state = 'MIT Verified'
       @saved_payment_method.save(validate: false)
+    end
+
+    #: -> void
+    def delete_client
+      return unless @saved_payment_method && @response.communication_success?
+
+      @saved_payment_method.destroy
     end
   end
 end

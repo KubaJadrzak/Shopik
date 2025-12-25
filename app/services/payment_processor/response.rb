@@ -3,11 +3,11 @@
 
 
 module PaymentProcessor
-  class Response < ::Response::Base
+  class Response < ::Response
     extend T::Sig
 
     class << self
-      #: (::Response::Base) -> ::PaymentProcessor::Response
+      #: (::Response) -> ::PaymentProcessor::Response
       def build(base)
         new(
           status:    base.status,

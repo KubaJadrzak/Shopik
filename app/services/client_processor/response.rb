@@ -2,10 +2,10 @@
 # frozen_string_literal: true
 
 module ClientProcessor
-  class Response < ::Response::Base
+  class Response < ::Response
 
     class << self
-      #: (::Response::Base) -> ::ClientProcessor::Response
+      #: (::Response) -> ::ClientProcessor::Response
       def build(base)
         new(
           status:    base.status,

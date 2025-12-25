@@ -13,7 +13,11 @@ class SavedPaymentMethodsController < ApplicationController
 
   #: -> void
   def destroy
-    raise saved_payment_method_error! unless @saved_payment_method&.destroy
+    raise saved_payment_method_error! unless @saved_payment_method
+
+    response = ::ClientProcessor::Delete.new(@saved_payment_method).process
+
+    raise saved_payment_method_error! unless response.communication_success?
 
     flash[:notice] = 'We have successfully deleted your Saved Payment Method!'
     respond_to do |format|
