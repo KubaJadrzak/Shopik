@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_16_232109) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_25_185601) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -145,7 +145,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_16_232109) do
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "users"
-  add_foreign_key "payments", "saved_payment_methods"
+  add_foreign_key "payments", "saved_payment_methods", on_delete: :nullify
   add_foreign_key "saved_payment_methods", "users"
   add_foreign_key "subscriptions", "users"
 end

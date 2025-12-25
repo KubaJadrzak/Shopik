@@ -3,7 +3,7 @@
 
 class SavedPaymentMethod < ApplicationRecord
   belongs_to :user,  touch: true
-  has_many :payments, -> { order(created_at: :desc) }, dependent: :destroy
+  has_many :payments, -> { order(created_at: :desc) }, dependent: :nullify
 
   before_create :generate_uuid
 
