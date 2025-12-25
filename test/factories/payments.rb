@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :payment do
-    association :payable
+    association :payable, factory: :order
     amount { 10.00 }
     state { 'new' }
     payment_method { 'secure_web_page' }

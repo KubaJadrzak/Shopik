@@ -490,7 +490,6 @@ DEPENDENCIES
   solid_cache
   solid_queue
   sorbet
-  sorbet-runtime
   sqlite3 (>= 2.1)
   stimulus-rails
   tapioca
