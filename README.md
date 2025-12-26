@@ -1,10 +1,17 @@
 Shopik was created primarly to learn and expand my knowledge about Ruby on Rails. Currently the project contains:
 
-- Extensive integration with Espago Payment Gateway, including: Secure Web Page payments, One-Time Payments via iFrame, Recurring Payments, saving Payment Methods, using saved Payment Method to perform CIT and MIT transactions as well as reversing and refunding Payments
-- Jobs implemented via Sidekiq
-- Unit and Request tests implemented via RSpec
-- End-to-End tests implemented via Playwright
-- Github Actions configured with Sorbet typecheck and RSpec/Playwright tests
+- Extensive integration with Espago Payment Gateway, including:
+    - Secure Web Page payments,
+    - payments via iFrame,
+    - capability to save Payment Methods,
+    - CIT and MIT payments using saved Payment Methods,
+    - capability to delete saved Payment Methods,
+    - capability to refund and reverse payments,
+    - jobs implemented via Sidekiq,
+    - unit and integration tests implemented via minitest,
+    - VCR cassettes for integration tests,
+    - End-to-End tests implemented via Playwright,
+    - Github Actions configured with Sorbet typecheck and tests,
 
 
 ### Prerequisites:
@@ -77,13 +84,13 @@ This command will start all necessary services, including rails server and sidek
 
 Shopik is dependent on asynchronous requests received from Espago for updating the status of payments. Due to this fact, in order to function properly, the app has to be hosted online on services such as `ngrok`.
 
-### RSpec: 
+### Minitest: 
 
-shopik is using `RSpec` tests. You can run test suite with: `bin/rspec`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some tests make real requests to Espago and will otherwise fail.
+shopik is using `Minitest` tests. You can run test suite with: `bin/test`.
 
 ### Playwright: 
 
-shopik is using `Playwright` tests. You can run test suite with: `bin/playwright`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some tests make real requests to Espago and will otherwise fail.
+shopik is using `Playwright` tests. You can run test suite with: `bin/playwright`. Make sure that `.env.test` and `Rails credentials` are configured properly, as some end-to-end tests make real requests to Espago and will otherwise fail. You can open UI version with command `bin/playwright --ui`
 
 ### Sorbet/Tapioca:
 
