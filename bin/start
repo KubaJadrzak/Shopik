@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ "$NO_RAILS" != "true" ]; then
+  exec bin/rails server
+else
+  exec sh -c 'while true; do sleep 3600; done'
+fi
