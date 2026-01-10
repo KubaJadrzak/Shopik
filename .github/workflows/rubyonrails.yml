@@ -53,7 +53,7 @@ jobs:
       - name: Run Sorbet
         run: bundle exec srb tc
 
-      - name: Run Minites
+      - name: Run Minitest
         run: bin/test
 
       - name: Install Playwright browsers
