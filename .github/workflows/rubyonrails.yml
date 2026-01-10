@@ -53,8 +53,8 @@ jobs:
       - name: Run Sorbet
         run: bundle exec srb tc
 
-      - name: Run RSpec tests
-        run: bin/rspec
+      - name: Run Minites
+        run: bin/test
 
       - name: Install Playwright browsers
         run: npx playwright install
