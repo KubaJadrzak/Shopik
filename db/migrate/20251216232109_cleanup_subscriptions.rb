@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CleanupSubscriptions < ActiveRecord::Migration[8.0]
   def change
     remove_foreign_key :subscriptions, :saved_payment_methods

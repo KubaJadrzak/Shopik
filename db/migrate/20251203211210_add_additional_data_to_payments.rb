@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddAdditionalDataToPayments < ActiveRecord::Migration[8.0]
   def change
     add_column :payments, :card_identifier, :string
