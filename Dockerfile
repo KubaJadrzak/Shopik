@@ -69,5 +69,5 @@ RUN groupadd --system --gid 1000 rails && \
     chown -R rails:rails db log storage tmp
 USER 1000:1000
 
-ENTRYPOINT []
+ENTRYPOINT ["./bin/docker-entrypoint"]
 CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
