@@ -64,10 +64,6 @@ group :development, :test do
 
   gem 'cuprite'
 
-  gem 'tapioca'
-
-  gem 'sorbet'
-
   gem 'dotenv-rails'
 end
 
@@ -75,8 +71,6 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
 
   gem 'web-console'
-
-
 end
 
 group :test do
@@ -90,7 +84,6 @@ gem 'devise'
 
 gem 'pagy'
 
-
 gem 'faraday'
 
 gem 'base64'
@@ -100,6 +93,11 @@ gem 'digest'
 gem 'faraday-retry'
 
 gem 'sidekiq'
+
 gem 'sidekiq-scheduler'
 
 gem 'byebug'
+
+gem 'sorbet'
+
+gem 'tapioca'

@@ -35,14 +35,14 @@ RUN apt-get update -qq && \
 
 # Install JavaScript dependencies
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y nodejs npm yarn && \
-    rm -rf /var/lib/apt/lists/
-
+    apt-get install --no-install-recommends -y nodejs npm && \
+    npm install -g yarn && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
 RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
 # Install node modules
 COPY package.json yarn.lock ./
