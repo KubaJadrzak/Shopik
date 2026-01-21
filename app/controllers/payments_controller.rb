@@ -173,6 +173,10 @@ class PaymentsController < ApplicationController
   def handle_response(subject)
     raise payment_error! unless @response
 
+    if @response.iframe3?
+      render json: { token: @response.payment_token, payment: @response.espago_payment_id } and return
+    end
+
     return redirect_to @response.redirect_url, allow_other_host: true if @response.redirect?
 
     if @response.success?

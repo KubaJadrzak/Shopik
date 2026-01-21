@@ -75,4 +75,7 @@ Rails.application.configure do
   config.hosts << 'ruling-special-liger.ngrok-free.app'
 
   Rails.application.routes.default_url_options[:host] = ENV.fetch('APP_HOST_URL')
+
+  config.assets.compile = true
+  config.assets.debug = true
 end

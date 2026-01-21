@@ -10,6 +10,7 @@ export default class extends Controller {
   connect() {
     this.loadEspagoMain()
       .then(() => this.loadIframe())
+      .then(() => this.loadIframe3())
       .then(() => this.initializePayment())
       .catch(error => console.error("Error:", error))
   }
@@ -26,6 +27,10 @@ export default class extends Controller {
       "data-live": 'false',
       "data-button": "Pay"
     })
+  }
+
+  loadIframe3() {
+    return this.loadScript('https://js.espago.com/espagoFrame.js')
   }
 
   loadScript(src, attrs = {}) {
@@ -55,7 +60,6 @@ export default class extends Controller {
   updatePaymentMethod() {
     const checked = this.paymentMethodTargets.find(r => r.checked)
     this.selectedPaymentMethod = checked ? checked.value : 'secure_web_page'
-
     if (checked && checked.value.startsWith("cli")) {
       this.saveCardTargets.forEach(c => {
         c.checked = false
@@ -74,10 +78,14 @@ export default class extends Controller {
 
   processPayment() {
     this.updateForm()
-    if (this.selectedPaymentMethod == 'iframe') {
-      showEspagoFrame()
-    } else {
-      this.formBtnTarget.click()
+    console.log(this.selectedPaymentMethod)
+    switch(this.selectedPaymentMethod) {
+      case 'iframe':
+        return showEspagoFrame()
+      case 'iframe3':
+        return this.initializeIframe3()
+      default:
+        this.formBtnTarget.click()
     }
   }
 
@@ -89,5 +97,47 @@ export default class extends Controller {
       saveCardInput.value = "storing"
       this.formTarget.appendChild(saveCardInput)
     }
+  }
+
+  async initializeIframe3() {
+    const formData = new FormData(this.formTarget)
+
+    const response = await fetch(this.formTarget.action, {
+      method: this.formTarget.method || "POST",
+      body: formData,
+      headers: {
+        "Accept": "application/json",
+        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
+      }
+    })
+
+    const data = await response.json()
+    await this.showIframe3(data)
+  }
+
+  async showIframe3(data) {
+    const onPaymentResult = function (result) {
+         console.log(`Payment ${result.payment_id} finished with state ${result.state}`);
+    };
+    const onError = function (errorMessage) {
+        console.log("Something went wrong: " + errorMessage);
+    };
+    const onClose = function () {
+        console.log("Modal closed.");
+    };
+    const espagoFrame = new EspagoFrame({
+        key: this.publicKeyValue,
+        env: "sandbox",
+        payment: data.payment,
+        token: data.token
+    })
+
+    await espagoFrame.init()
+
+    espagoFrame.open({
+      onPaymentResult: onPaymentResult,
+      onError: onError,
+      onClose: onClose
+    })
   }
 }

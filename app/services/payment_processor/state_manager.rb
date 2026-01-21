@@ -23,8 +23,8 @@ module PaymentProcessor
       @payment.response = @response.body.to_json
 
       case @type
-      when :charge, :check
-        handle_charge_and_check
+      when :charge, :check, :iframe3
+        handle_charge
         create_client
       end
 
@@ -32,7 +32,7 @@ module PaymentProcessor
     end
 
     #: -> void
-    def handle_charge_and_check
+    def handle_charge
       return unless @payment
 
       espago_payment_id = @response.espago_payment_id

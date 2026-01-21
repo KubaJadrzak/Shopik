@@ -16,6 +16,8 @@ module PaymentProcessor
 
       response = request.process
 
+      byebug
+
       StateManager.new(response).process
 
       response
@@ -30,6 +32,8 @@ module PaymentProcessor
         Request::Iframe.new(payment: @payment, payment_means: @payment_means)
       when 'cit', 'mit'
         Request::Client.new(payment: @payment, payment_means: @payment_means)
+      when 'iframe3'
+        Request::Iframe3.new(payment: @payment)
       else
         Request::SecureWebPage.new(payment: @payment)
       end

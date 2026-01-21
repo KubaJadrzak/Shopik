@@ -1,10 +1,8 @@
 #!/usr/bin/env sh
 
-# Default NO_RAILS to false if not set from outside
 : "${NO_RAILS:=false}"
-
-# Default PORT to 3000 if not set
 : "${PORT:=3000}"
 
-# Execute foreman with the Procfile.dev
-exec foreman start -f Procfile.dev --env /dev/null "$@"
+export NO_RAILS PORT  # <-- make both visible to Foreman and child processes
+
+exec foreman start -f Procfile.dev "$@"
