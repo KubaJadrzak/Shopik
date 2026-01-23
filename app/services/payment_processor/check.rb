@@ -8,13 +8,15 @@ module PaymentProcessor
       @payment = payment
     end
 
-    #: -> void
+    #: -> PaymentProcessor::Response
     def process
       request = Request::Check.new(payment: @payment)
 
       response = request.process
 
       StateManager.new(response).process
+
+      response
     end
   end
 end

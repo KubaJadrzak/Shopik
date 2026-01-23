@@ -124,71 +124,42 @@ export default class extends Controller {
     })
     await espagoFrame.init()
 
-    const onPaymentResult = (result) => {
-      const form = document.createElement("form")
-      form.method = "POST"
-      form.action = "/payments/iframe3_callback"
+    const onPaymentResult = (result) =>
+      this.submitIframe3Result({ espago_payment_id: data.payment })
 
-      const response = document.createElement("input")
-      response.type = "hidden"
-      response.name = "finished"
-      response.value = result.payment_id
-      form.appendChild(response)
+    const onError = () =>
+      this.submitIframe3Result({ espago_payment_id: data.payment })
 
-      const csrfInput = document.createElement("input")
-      csrfInput.type = "hidden"
-      csrfInput.name = "authenticity_token"
-      csrfInput.value = document.querySelector('meta[name="csrf-token"]').content
-      form.appendChild(csrfInput)
-
-      document.body.appendChild(form)
-      form.submit()
-    }
-
-    const onError = () => {
-      const form = document.createElement("form")
-      form.method = "POST"
-      form.action = "/payments/iframe3_callback"
-
-      const response = document.createElement("input")
-      response.type = "hidden"
-      response.name = "unfinished"
-      form.appendChild(response)
-
-      const csrfInput = document.createElement("input")
-      csrfInput.type = "hidden"
-      csrfInput.name = "authenticity_token"
-      csrfInput.value = document.querySelector('meta[name="csrf-token"]').content
-      form.appendChild(csrfInput)
-
-      document.body.appendChild(form)
-      form.submit()
-    };
-
-    const onClose = () => {
-      const form = document.createElement("form")
-      form.method = "POST"
-      form.action = "/payments/iframe3_callback"
-
-      const response = document.createElement("input")
-      response.type = "hidden"
-      response.name = "unfinished"
-      form.appendChild(response)
-
-      const csrfInput = document.createElement("input")
-      csrfInput.type = "hidden"
-      csrfInput.name = "authenticity_token"
-      csrfInput.value = document.querySelector('meta[name="csrf-token"]').content
-      form.appendChild(csrfInput)
-
-      document.body.appendChild(form)
-      form.submit()
-    };
+    const onClose = () =>
+      this.submitIframe3Result({ espago_payment_id: data.payment })
 
     espagoFrame.open({
       onPaymentResult: onPaymentResult,
       onError: onError,
       onClose: onClose
     })
+  }
+
+  submitIframe3Result(payload = {}) {
+    const form = document.createElement("form")
+    form.method = "POST"
+    form.action = "/payments/iframe3_callback"
+
+    Object.entries(payload).forEach(([name, value]) => {
+      const input = document.createElement("input")
+      input.type = "hidden"
+      input.name = name
+      input.value = value
+      form.appendChild(input)
+    })
+
+    const csrf = document.createElement("input")
+    csrf.type = "hidden"
+    csrf.name = "authenticity_token"
+    csrf.value = document.querySelector('meta[name="csrf-token"]').content
+    form.appendChild(csrf)
+
+    document.body.appendChild(form)
+    form.submit()
   }
 }

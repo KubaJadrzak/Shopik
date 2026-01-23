@@ -65,6 +65,17 @@ class PaymentsController < ApplicationController
     handle_final_redirect(message: 'Payment rejected!', alert: true)
   end
 
+  #: -> void
+  def iframe3_callback
+    @payment = ::Payment.find_by(espago_payment_id: params[:espago_payment_id])
+    raise payment_error! unless @payment
+
+    @response = check_payment
+
+    handle_response('payment')
+  end
+
+
   private
 
   #: -> void
@@ -200,4 +211,12 @@ class PaymentsController < ApplicationController
 
     redirect_to polymorphic_path(@payment.payable), flash_type => message
   end
+
+  #: -> PaymentProcessor::Response
+  def check_payment
+    raise payment_error! unless @payment
+
+    PaymentProcessor::Check.new(@payment).process
+  end
+
 end

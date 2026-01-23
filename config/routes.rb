@@ -61,6 +61,10 @@ Rails.application.routes.draw do
       get :pending
       get :rejected
     end
+
+    collection do
+      post :iframe3_callback
+    end
   end
 
   post '/back_request',   to: 'back_requests#receive', as: 'back_request'
