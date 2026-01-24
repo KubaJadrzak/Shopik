@@ -2,7 +2,9 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = {
-    publicKey: String
+    publicKey: String,
+    espagoPaymentToken: String,
+    espagoPaymentId: String
   }
 
   static targets = ["form", "formBtn", "paymentMethod", "saveCard"]
@@ -42,23 +44,23 @@ export default class extends Controller {
     })
   }
 
-  async showIframe3(data) {
-    const espagoFrame = new EspagoFrame({ 
+  async showIframe3() {
+    const espagoFrame = new EspagoFrame({
         key: this.publicKeyValue,
         env: "sandbox",
-        payment: data.payment,
-        token: data.token
+        payment: this.espagoPaymentId,
+        token: this.espagoPaymentToken
     })
     await espagoFrame.init()
 
     const onPaymentResult = () =>
-      this.submitIframe3Result({ espago_payment_id: data.payment })
+      this.submitIframe3Result({ espago_payment_id: this.espagoPaymentId })
 
     const onError = () =>
-      this.submitIframe3Result({ espago_payment_id: data.payment })
+      this.submitIframe3Result({ espago_payment_id: this.espagoPaymentId })
 
     const onClose = () =>
-      this.submitIframe3Result({ espago_payment_id: data.payment })
+      this.submitIframe3Result({ espago_payment_id: this.espagoPaymentId })
 
     espagoFrame.open({
       onPaymentResult: onPaymentResult,

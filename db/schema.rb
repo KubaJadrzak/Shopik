@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_25_185601) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_24_133252) do
   create_table "cart_items", force: :cascade do |t|
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
@@ -75,6 +75,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_25_185601) do
     t.string "espago_client_id"
     t.string "card_identifier"
     t.string "transaction_id"
+    t.string "espago_payment_token"
     t.index ["card_identifier"], name: "index_payments_on_card_identifier"
     t.index ["payable_type", "payable_id"], name: "index_payments_on_payable"
     t.index ["saved_payment_method_id"], name: "index_payments_on_saved_payment_method_id"

@@ -39,6 +39,7 @@ module PaymentProcessor
       espago_client_id = @response.espago_client_id
       card_identifier = @response.card_identifier
       transaction_id = @response.transaction_id
+      espago_payment_token = @response.espago_payment_token
 
       attrs = {
         reject_reason:        @response.reject_reason,
@@ -49,6 +50,7 @@ module PaymentProcessor
       attrs[:espago_client_id] = espago_client_id if espago_client_id
       attrs[:card_identifier] = card_identifier if card_identifier
       attrs[:transaction_id] = transaction_id if transaction_id
+      attrs[:espago_payment_token] = espago_payment_token if espago_payment_token
 
       @payment.update(attrs)
     end

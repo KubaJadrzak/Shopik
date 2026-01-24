@@ -37,7 +37,7 @@ module PaymentProcessor
     def iframe3?
       return false unless communication_success?
 
-      state == 'new' && payment_token.present? && type == :iframe3
+      state == 'new' && espago_payment_token.present? && type == :iframe3
     end
 
     #: -> bool
@@ -120,6 +120,11 @@ module PaymentProcessor
     end
 
     #: -> String?
+    def espago_payment_token
+      @body['payment_token']
+    end
+
+    #: -> String?
     def card_company
       @body.dig('card', 'company')
     end
@@ -162,11 +167,6 @@ module PaymentProcessor
     #: -> ::Payment?
     def payment
       @payment || ::Payment.find_by(uuid: payment_uuid)
-    end
-
-    #: -> String?
-    def payment_token
-      @body['payment_token']
     end
 
     #: -> ::SavedPaymentMethod?

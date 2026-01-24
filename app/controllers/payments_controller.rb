@@ -21,6 +21,11 @@ class PaymentsController < ApplicationController
   def show; end
 
   #: -> void
+  def iframe3
+    @payment = ::Payment.find_by(espago_payment_id: params[:espago_payment_id])
+  end
+
+  #: -> void
   def create
     raise payment_error! unless @payable
 
