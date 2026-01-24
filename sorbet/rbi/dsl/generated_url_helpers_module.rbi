@@ -55,6 +55,12 @@ module GeneratedUrlHelpersModule
   def edit_user_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def iframe3_callback_payments_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def iframe3_payment_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def new_order_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }

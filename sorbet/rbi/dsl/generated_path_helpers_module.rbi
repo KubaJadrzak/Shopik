@@ -55,6 +55,12 @@ module GeneratedPathHelpersModule
   def edit_user_registration_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def iframe3_callback_payments_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def iframe3_payment_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def new_order_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }

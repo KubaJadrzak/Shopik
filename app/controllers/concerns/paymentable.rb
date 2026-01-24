@@ -134,10 +134,7 @@ module Paymentable
   def handle_response(subject)
     paymentable_error! unless @payment_response.present?
 
-
-    if @payment_response.iframe3?
-      render json: { token: @payment_response.payment_token, payment: @payment_response.espago_payment_id } and return
-    end
+    return redirect_to iframe3_payment_path(@payment) if @payment_response.iframe3?
 
     return redirect_to @payment_response.redirect_url, allow_other_host: true if @payment_response.redirect?
 

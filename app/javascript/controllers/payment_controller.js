@@ -10,7 +10,6 @@ export default class extends Controller {
   connect() {
     this.loadEspagoMain()
       .then(() => this.loadIframe())
-      .then(() => this.loadIframe3())
       .then(() => this.initializePayment())
       .catch(error => console.error("Error:", error))
   }
@@ -27,10 +26,6 @@ export default class extends Controller {
       "data-live": 'false',
       "data-button": "Pay"
     })
-  }
-
-  loadIframe3() {
-    return this.loadScript('https://js.espago.com/espagoFrame.js')
   }
 
   loadScript(src, attrs = {}) {
@@ -83,7 +78,7 @@ export default class extends Controller {
       case 'iframe':
         return showEspagoFrame()
       case 'iframe3':
-        return this.initializeIframe3()
+        return this.formBtnTarget.click()
       default:
         this.formBtnTarget.click()
     }
@@ -97,75 +92,5 @@ export default class extends Controller {
       saveCardInput.value = "storing"
       this.formTarget.appendChild(saveCardInput)
     }
-  }
-
-  async initializeIframe3() {
-    const formData = new FormData(this.formTarget)
-
-    const response = await fetch(this.formTarget.action, {
-      method: this.formTarget.method || "POST",
-      body: formData,
-      headers: {
-        "Accept": "application/json",
-        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
-      }
-    })
-
-    const data = await response.json()
-
-    if (data.redirect_url) {
-      window.location.href = data.redirect_url
-      return
-    }
-
-    await this.showIframe3(data)
-  }
-
-  async showIframe3(data) {
-    const espagoFrame = new EspagoFrame({ 
-        key: this.publicKeyValue,
-        env: "sandbox",
-        payment: data.payment,
-        token: data.token
-    })
-    await espagoFrame.init()
-
-    const onPaymentResult = () =>
-      this.submitIframe3Result({ espago_payment_id: data.payment })
-
-    const onError = () =>
-      this.submitIframe3Result({ espago_payment_id: data.payment })
-
-    const onClose = () =>
-      this.submitIframe3Result({ espago_payment_id: data.payment })
-
-    espagoFrame.open({
-      onPaymentResult: onPaymentResult,
-      onError: onError,
-      onClose: onClose
-    })
-  }
-
-  submitIframe3Result(payload = {}) {
-    const form = document.createElement("form")
-    form.method = "POST"
-    form.action = "/payments/iframe3_callback"
-
-    Object.entries(payload).forEach(([name, value]) => {
-      const input = document.createElement("input")
-      input.type = "hidden"
-      input.name = name
-      input.value = value
-      form.appendChild(input)
-    })
-
-    const csrf = document.createElement("input")
-    csrf.type = "hidden"
-    csrf.name = "authenticity_token"
-    csrf.value = document.querySelector('meta[name="csrf-token"]').content
-    form.appendChild(csrf)
-
-    document.body.appendChild(form)
-    form.submit()
   }
 }

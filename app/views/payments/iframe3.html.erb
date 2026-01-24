@@ -1,7 +1,8 @@
-<div class="payment-page" data-controller="iframe3"
-     data-iframe3-espago_payment-id-value="<%= @payment.espago_payment_id %>"
-     data-iframe3-espago_payment-token-value="<%= @payment.espago_payment_token %>">
-  <div class="payment-status mb-4">
+<div class="iframe3" data-controller="iframe3"
+     data-iframe3-public-key-value="<%= @espago_public_key %>"
+     data-iframe3-espago-payment-id-value="<%= @payment.espago_payment_id %>"
+     data-iframe3-espago-payment-token-value="<%= @payment.espago_payment_token %>">
+  <div>
     <p>Your payment is being processed...</p>
   </div>
 </div>

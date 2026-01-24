@@ -6,7 +6,7 @@ class PaymentsController < ApplicationController
   include Paymentable
 
   before_action :authenticate_user!
-  before_action :set_payment, only: %i[show reverse refund success rejected pending]
+  before_action :set_payment, only: %i[show reverse refund success rejected pending iframe3]
   before_action :set_payable, only: %i[new create]
   before_action :set_saved_payment_methods, only: %i[new]
 
@@ -22,7 +22,7 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def iframe3
-    @payment = ::Payment.find_by(espago_payment_id: params[:espago_payment_id])
+    @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY') #: String?
   end
 
   #: -> void

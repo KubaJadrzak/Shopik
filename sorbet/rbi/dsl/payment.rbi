@@ -1087,6 +1087,51 @@ class Payment
     sig { void }
     def espago_payment_id_will_change!; end
 
+    sig { returns(T.nilable(::String)) }
+    def espago_payment_token; end
+
+    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    def espago_payment_token=(value); end
+
+    sig { returns(T::Boolean) }
+    def espago_payment_token?; end
+
+    sig { returns(T.nilable(::String)) }
+    def espago_payment_token_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def espago_payment_token_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def espago_payment_token_came_from_user?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def espago_payment_token_change; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def espago_payment_token_change_to_be_saved; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def espago_payment_token_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def espago_payment_token_in_database; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def espago_payment_token_previous_change; end
+
+    sig { params(from: T.nilable(::String), to: T.nilable(::String)).returns(T::Boolean) }
+    def espago_payment_token_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::String)) }
+    def espago_payment_token_previously_was; end
+
+    sig { returns(T.nilable(::String)) }
+    def espago_payment_token_was; end
+
+    sig { void }
+    def espago_payment_token_will_change!; end
+
     sig { returns(::Integer) }
     def id; end
 
@@ -1537,6 +1582,9 @@ class Payment
     def restore_espago_payment_id!; end
 
     sig { void }
+    def restore_espago_payment_token!; end
+
+    sig { void }
     def restore_id!; end
 
     sig { void }
@@ -1625,6 +1673,12 @@ class Payment
 
     sig { returns(T::Boolean) }
     def saved_change_to_espago_payment_id?; end
+
+    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    def saved_change_to_espago_payment_token; end
+
+    sig { returns(T::Boolean) }
+    def saved_change_to_espago_payment_token?; end
 
     sig { returns(T.nilable([::Integer, ::Integer])) }
     def saved_change_to_id; end
@@ -1958,6 +2012,9 @@ class Payment
 
     sig { returns(T::Boolean) }
     def will_save_change_to_espago_payment_id?; end
+
+    sig { returns(T::Boolean) }
+    def will_save_change_to_espago_payment_token?; end
 
     sig { returns(T::Boolean) }
     def will_save_change_to_id?; end

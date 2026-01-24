@@ -60,6 +60,7 @@ Rails.application.routes.draw do
       get :success
       get :pending
       get :rejected
+      get :iframe3
     end
 
     collection do

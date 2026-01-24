@@ -7,12 +7,10 @@ export default class extends Controller {
     espagoPaymentId: String
   }
 
-  static targets = ["form", "formBtn", "paymentMethod", "saveCard"]
-
   connect() {
     this.loadEspagoMain()
       .then(() => this.loadIframe3())
-      .then(() => this.showIframe3)
+      .then(() => this.showIframe3())
       .catch(error => console.error("Error:", error))
   }
 
@@ -48,19 +46,19 @@ export default class extends Controller {
     const espagoFrame = new EspagoFrame({
         key: this.publicKeyValue,
         env: "sandbox",
-        payment: this.espagoPaymentId,
-        token: this.espagoPaymentToken
+        payment: this.espagoPaymentIdValue,
+        token: this.espagoPaymentTokenValue
     })
     await espagoFrame.init()
 
     const onPaymentResult = () =>
-      this.submitIframe3Result({ espago_payment_id: this.espagoPaymentId })
+      this.submitIframe3Result({ espago_payment_id: this.espagoPaymentIdValue })
 
     const onError = () =>
-      this.submitIframe3Result({ espago_payment_id: this.espagoPaymentId })
+      this.submitIframe3Result({ espago_payment_id: this.espagoPaymentIdValue })
 
     const onClose = () =>
-      this.submitIframe3Result({ espago_payment_id: this.espagoPaymentId })
+      this.submitIframe3Result({ espago_payment_id: this.espagoPaymentIdValue })
 
     espagoFrame.open({
       onPaymentResult: onPaymentResult,

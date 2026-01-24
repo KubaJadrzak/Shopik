@@ -13,6 +13,9 @@ application.register("flash", FlashController)
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
+import Iframe3Controller from "./iframe3_controller"
+application.register("iframe3", Iframe3Controller)
+
 import PaymentController from "./payment_controller"
 application.register("payment", PaymentController)
 
