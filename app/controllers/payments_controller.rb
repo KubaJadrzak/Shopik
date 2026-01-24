@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 # typed: strict
 
-
 class PaymentsController < ApplicationController
-  include PaymentErrors
+  include Errors::PaymentErrors
+  include Paymentable
 
   before_action :authenticate_user!
   before_action :set_payment, only: %i[show reverse refund success rejected pending]
@@ -25,9 +25,10 @@ class PaymentsController < ApplicationController
     raise payment_error! unless @payable
 
     set_payment_params
+
     raise payment_error! unless create_payment
 
-    @response = charge_payment #: PaymentProcessor::Response?
+    @payment_response = charge_payment #: PaymentProcessor::Response?
 
     handle_response('payment')
   end
@@ -36,7 +37,7 @@ class PaymentsController < ApplicationController
   def reverse
     raise payment_error! unless @payment&.reversable?
 
-    @response = ::PaymentProcessor::Reverse.new(@payment).process
+    @payment_response = ::PaymentProcessor::Reverse.new(@payment).process #: PaymentProcessor::Response?
 
     handle_response('Cancellation')
   end
@@ -45,24 +46,9 @@ class PaymentsController < ApplicationController
   def refund
     raise payment_error! unless @payment&.refundable?
 
-    @response = ::PaymentProcessor::Refund.new(@payment).process
+    @payment_response = ::PaymentProcessor::Refund.new(@payment).process #: PaymentProcessor::Response?
 
     handle_response('Return')
-  end
-
-  #: -> void
-  def success
-    handle_final_redirect(message: 'Payment successful!')
-  end
-
-  #: -> void
-  def pending
-    handle_final_redirect(message: 'Payment is being processed!', alert: true)
-  end
-
-  #: -> void
-  def rejected
-    handle_final_redirect(message: 'Payment rejected!', alert: true)
   end
 
   #: -> void
@@ -70,7 +56,7 @@ class PaymentsController < ApplicationController
     @payment = ::Payment.find_by(espago_payment_id: params[:espago_payment_id])
     raise payment_error! unless @payment
 
-    @response = check_payment
+    @payment_response = check_payment #: PaymentProcessor::Response?
 
     handle_response('payment')
   end
@@ -83,140 +69,10 @@ class PaymentsController < ApplicationController
     @payment = Payment.find_by(uuid: params[:uuid]) #: ::Payment?
   end
 
-  #: -> void
-  def set_payable
-    payable_number = params[:payable_number]
-    raise payment_error! unless payable_number.present?
-
-    if payable_number.start_with?('ord')
-      @payable = Order.find_by(uuid: payable_number) #: ::Order? | ::Subscription?
-    elsif payable_number.start_with?('sub')
-      @payable = Subscription.find_by(uuid: payable_number)
-    else
-      raise payment_error!
-    end
-  end
-
-  #: -> void
-  def set_saved_payment_methods
-    @saved_payment_methods = current_user.saved_payment_methods #: ::ActiveRecord::Relation?
-  end
-
-  #: -> void
-  def set_payment_params
-    raise payment_error! unless @payable
-
-    @amount = @payable.amount #: BigDecimal?
-    @cof = set_cof #: Symbol?
-    @payment_method = set_payment_method #: Symbol | void
-  end
-
-  #: -> Symbol?
-  def set_cof
-    case params[:cof] # rubocop:disable Style/HashLikeCase
-    when 'storing'
-      :storing
-    when 'recurring'
-      :recurring
-    when 'unscheduled'
-      :unscheduled
-    end
-  end
-
-  #: -> Symbol | void
-  def set_payment_method
-    raise payment_error! unless params[:payment_method]
-
-    case params[:payment_method]
-    when 'iframe'
-      :iframe
-    when 'secure_web_page'
-      :secure_web_page
-    when 'iframe3'
-      :iframe3
-    when 'meest_paywall'
-      :meest_paywall
-    when 'google_pay'
-      :google_pay
-    when 'apple_pay'
-      :apple_pay
-    when ->(v) { v.start_with?('cli') }
-      :cit
-    else
-      raise payment_error!
-    end
-  end
-
-  #: -> bool
-  def create_payment
-    raise payment_error! unless @payable
-
-    @payment = @payable.payments.create(
-      amount:         @amount,
-      state:          'new',
-      cof:            @cof,
-      payment_method: @payment_method,
-      currency:       'PLN',
-      kind:           :sale,
-    )
-
-    @payment.persisted?
-  end
-
-  #: -> PaymentProcessor::Response?
-  def charge_payment
-    raise payment_error! unless @payment
-
-    PaymentProcessor::Charge.new(
-      payment:       @payment,
-      payment_means: set_payment_means,
-    ).process
-  end
-
-  #: -> String?
-  def set_payment_means
-    return params[:card_token] if params[:card_token]
-
-    params[:payment_method] if params[:payment_method].starts_with?('cli')
-  end
-
-  #: (String) -> void
-  def handle_response(subject)
-    raise payment_error! unless @response
-
-    if @response.iframe3?
-      render json: { token: @response.payment_token, payment: @response.espago_payment_id } and return
-    end
-
-    return redirect_to @response.redirect_url, allow_other_host: true if @response.redirect?
-
-    if @response.success?
-      handle_final_redirect(message: "#{subject.capitalize} successful!")
-    elsif @response.pending?
-      handle_final_redirect(message: "#{subject.capitalize} is being processed!", alert: true)
-    elsif @response.rejected? || @response.failure?
-      handle_final_redirect(message: "#{subject.capitalize} rejected!", alert: true)
-    elsif @response.uncertain?
-      handle_final_redirect(message: "We are experiencing an issue with your #{subject}!", alert: true)
-    else
-      raise !payment_error!
-    end
-  end
-
-  #: (message: String, ?alert: bool) -> void
-  def handle_final_redirect(message:, alert: false)
-    raise payment_error! unless @payment
-
-    flash_type = alert ? :alert : :notice
-
-    redirect_to polymorphic_path(@payment.payable), flash_type => message
-  end
-
-  #: -> PaymentProcessor::Response
-  def check_payment
-    raise payment_error! unless @payment
-
-    PaymentProcessor::Check.new(@payment).process
+  # @override
+  #: -> bot
+  def paymentable_error!
+    payment_error!
   end
 
 end

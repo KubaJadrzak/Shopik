@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module OrderErrors
+module Errors::OrderErrors
   include Kernel
   extend ActiveSupport::Concern
 

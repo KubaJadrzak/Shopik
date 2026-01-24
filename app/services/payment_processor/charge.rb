@@ -16,8 +16,6 @@ module PaymentProcessor
 
       response = request.process
 
-      byebug
-
       StateManager.new(response).process
 
       response

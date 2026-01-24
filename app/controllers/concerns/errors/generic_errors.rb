@@ -1,7 +1,7 @@
 # typed: true
 # frozen_string_literal: true
 
-module GenericErrors
+module Errors::GenericErrors
   include Kernel
   extend ActiveSupport::Concern
 

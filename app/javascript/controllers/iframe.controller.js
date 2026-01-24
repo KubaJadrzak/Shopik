@@ -9,9 +9,8 @@ export default class extends Controller {
 
   connect() {
     this.loadEspagoMain()
-      .then(() => this.loadIframe())
       .then(() => this.loadIframe3())
-      .then(() => this.initializePayment())
+      .then(() => this.showIframe3)
       .catch(error => console.error("Error:", error))
   }
 
@@ -19,15 +18,6 @@ export default class extends Controller {
     return this.loadScript("https://js.espago.com/espago-1.3.js")
   }
 
-  loadIframe() {
-    return this.loadScript("https://js.espago.com/iframe.js", {
-      async: true,
-      "data-id": "EspagoFrameScript",
-      "data-key": this.publicKeyValue,
-      "data-live": 'false',
-      "data-button": "Pay"
-    })
-  }
 
   loadIframe3() {
     return this.loadScript('https://js.espago.com/espagoFrame.js')
@@ -50,75 +40,6 @@ export default class extends Controller {
 
       document.body.appendChild(script)
     })
-  }
-
-  initializePayment() {
-    this.updatePaymentMethod()
-    this.updateSaveCard()
-  }
-
-  updatePaymentMethod() {
-    const checked = this.paymentMethodTargets.find(r => r.checked)
-    this.selectedPaymentMethod = checked ? checked.value : 'secure_web_page'
-    if (checked && checked.value.startsWith("cli")) {
-      this.saveCardTargets.forEach(c => {
-        c.checked = false
-        c.disabled = true
-      })
-    } else {
-      this.saveCardTargets.forEach(c => {
-        c.disabled = false
-      })
-    }
-  }
-
-  updateSaveCard() {
-    this.saveCard = this.saveCardTargets.some(c => c.checked)
-  }
-
-  processPayment() {
-    this.updateForm()
-    console.log(this.selectedPaymentMethod)
-    switch(this.selectedPaymentMethod) {
-      case 'iframe':
-        return showEspagoFrame()
-      case 'iframe3':
-        return this.initializeIframe3()
-      default:
-        this.formBtnTarget.click()
-    }
-  }
-
-  updateForm() {
-    if (this.saveCard == true) {
-      const saveCardInput = document.createElement("input")
-      saveCardInput.type = "hidden"
-      saveCardInput.name = "cof"
-      saveCardInput.value = "storing"
-      this.formTarget.appendChild(saveCardInput)
-    }
-  }
-
-  async initializeIframe3() {
-    const formData = new FormData(this.formTarget)
-
-    const response = await fetch(this.formTarget.action, {
-      method: this.formTarget.method || "POST",
-      body: formData,
-      headers: {
-        "Accept": "application/json",
-        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
-      }
-    })
-
-    const data = await response.json()
-
-    if (data.redirect_url) {
-      window.location.href = data.redirect_url
-      return
-    }
-
-    await this.showIframe3(data)
   }
 
   async showIframe3(data) {

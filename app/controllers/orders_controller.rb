@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 class OrdersController < ApplicationController
-  include OrderErrors
+  include Errors::OrderErrors
 
   before_action :authenticate_user!
   before_action :ensure_cart_has_items, only: %i[new create]

@@ -2,7 +2,7 @@
 # typed: strict
 
 class UsersController < ApplicationController
-  include GenericErrors
+  include Errors::GenericErrors
 
   before_action :authenticate_user!, only: [:account]
 

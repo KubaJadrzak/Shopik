@@ -1,7 +1,7 @@
 # typed: true
 # frozen_string_literal: true
 
-module SavedPaymentMethodErrors
+module Errors::SavedPaymentMethodErrors
   include Kernel
   extend ActiveSupport::Concern
 

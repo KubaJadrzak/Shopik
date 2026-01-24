@@ -65,7 +65,7 @@ export async function iframeFail(page: Page) {
 
 export async function fillCardIframe(page: Page) {
   await expect(page.getByText('Choose Payment Method')).toBeVisible()
-  await page.getByLabel('iFrame').check()
+  await page.getByRole('radio', { name: 'iFrame', exact: true }).check()
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(1000)
   await page.click('#pay_btn')

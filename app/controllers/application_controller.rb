@@ -24,8 +24,17 @@ class ApplicationController < ActionController::Base
 
   private
 
+
   def handle_payment_error(error)
-    redirect_to account_path, alert: error.message
+    redirect_url = account_path
+    alert_message = error.message
+
+    if request.xhr? || request.format.json?
+      render json: { redirect_url: redirect_url, alert: alert_message }, status: :unprocessable_entity
+    else
+
+      redirect_to redirect_url, alert: alert_message
+    end
   end
 
   def handle_saved_payment_method_error(error)

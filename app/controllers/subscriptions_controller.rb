@@ -3,7 +3,7 @@
 
 
 class SubscriptionsController < ApplicationController
-  include SubscriptionErrors
+  include Errors::SubscriptionErrors
 
   before_action :authenticate_user!
   before_action :set_subscription, only: %i[show retry_payment]

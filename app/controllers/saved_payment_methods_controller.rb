@@ -2,7 +2,7 @@
 # typed: strict
 
 class SavedPaymentMethodsController < ApplicationController
-  include SavedPaymentMethodErrors
+  include Errors::SavedPaymentMethodErrors
 
   before_action :set_saved_payment_method, only: %i[show destroy authorize toggle_primary]
   before_action :set_payments, only: %i[show]

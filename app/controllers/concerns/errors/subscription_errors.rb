@@ -1,7 +1,7 @@
 # typed: true
 # frozen_string_literal: true
 
-module SubscriptionErrors
+module Errors::SubscriptionErrors
   include Kernel
   extend ActiveSupport::Concern
 
