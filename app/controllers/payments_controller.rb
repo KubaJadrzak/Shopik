@@ -14,7 +14,7 @@ class PaymentsController < ApplicationController
   def new
     raise payment_error! unless @payable
 
-    @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY') #: String?
+    espago_public_key
   end
 
   #: -> void
@@ -22,7 +22,9 @@ class PaymentsController < ApplicationController
 
   #: -> void
   def iframe3
-    @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY') #: String?
+    raise payment_error! unless @payment
+
+    espago_public_key
   end
 
   #: -> void
@@ -66,18 +68,19 @@ class PaymentsController < ApplicationController
     handle_response('payment')
   end
 
-
-  private
-
   #: -> void
-  def set_payment
-    @payment = Payment.find_by(uuid: params[:uuid]) #: ::Payment?
+  def success
+    handle_final_redirect(message: 'Payment successful!')
   end
 
-  # @override
-  #: -> bot
-  def paymentable_error!
-    payment_error!
+  #: -> void
+  def pending
+    handle_final_redirect(message: 'Payment is being processed!', alert: true)
+  end
+
+  #: -> void
+  def rejected
+    handle_final_redirect(message: 'Payment rejected!', alert: true)
   end
 
 end

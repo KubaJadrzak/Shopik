@@ -3,7 +3,7 @@
 
 module PaymentProcessor
   class Charge
-    #: (payment: ::Payment, ?payment_means: String?) -> void
+    #: (payment: ::Payment, ?payment_means: (String | Hash[Symbol, String])?) -> void
     def initialize(payment:, payment_means: nil)
       @payment = payment
       @payment_means = payment_means
@@ -32,6 +32,10 @@ module PaymentProcessor
         Request::Client.new(payment: @payment, payment_means: @payment_means)
       when 'iframe3'
         Request::Iframe3.new(payment: @payment)
+      when 'apple_pay'
+        Request::ApplePay.new(payment: @payment, payment_means: @payment_means)
+      when 'google_pay'
+        Request::GooglePay.new(payment: @payment, payment_means: @payment_means)
       else
         Request::SecureWebPage.new(payment: @payment)
       end

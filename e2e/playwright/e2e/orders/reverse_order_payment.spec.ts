@@ -34,7 +34,6 @@ test.describe('Reverse Order Payment', () => {
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(orderNumber)).toBeVisible()
 
-    await appEval(`::UpdatePaymentStatusJob.perform_now`)
     await page.getByText('Cancel Order').click()
     await page.getByRole('button', { name: 'Cancel Order' }).click()
     await expect(page.getByText('Cancellation successful!', { exact: true })).toBeVisible()

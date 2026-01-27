@@ -69,7 +69,7 @@ export async function fillCardIframe(page: Page) {
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(1000)
   await page.click('#pay_btn')
-  const iframe = page.frameLocator('iframe')
+  const iframe = page.frameLocator('#EspagoFrame')
   await iframe.getByLabel('Imię').fill('Jan')
   await iframe.getByLabel('Nazwisko').fill('Kowalski')
   await iframe.getByLabel('Numer karty').fill('4012000000020006')
@@ -98,6 +98,48 @@ export async function createSavedPaymentMethod(page: Page) {
   const subscriptionNumber = await appEval('Subscription.last.uuid')
   await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
   await expect(page.getByText(subscriptionNumber)).toBeVisible()
+}
 
-  await appEval(`::UpdatePaymentStatusJob.perform_now`)
+export async function iframe3Success(page: Page) {
+  await page.getByText('iFrame 3.0').click();
+  await page.getByText('Pay', { exact: true }).click();
+  await page.locator('#espagoFrame').contentFrame().locator('#test-cards-modal-btn').click();
+  await page.locator('#espagoFrame').contentFrame().getByText('0000 0002 0006 01/2029 CVV: 123').click();
+  await page.locator('#espagoFrame').contentFrame().locator('#submit_payment').click()
+  await page.locator('#espagoFrame').contentFrame().locator('iframe[title="3D-Secure Authorization"]').contentFrame().getByText('Confirm', { exact: true }).click();
+  await expect(page.locator('#espagoFrame').contentFrame().getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
+  await page.locator('#espagoFrame').contentFrame().getByRole('button', { name: 'Back to shop' }).click();
+}
+
+export async function iframe3Fail(page: Page) {
+  await page.getByText('iFrame 3.0').click();
+  await page.getByText('Pay', { exact: true }).click();
+  await page.locator('#espagoFrame').contentFrame().locator('#test-cards-modal-btn').click();
+  await page.locator('#espagoFrame').contentFrame().getByText('0000 0002 0006 12/2029 CVV: 683').click();
+  await page.locator('#espagoFrame').contentFrame().locator('#submit_payment').click()
+  await page.locator('#espagoFrame').contentFrame().locator('iframe[title="3D-Secure Authorization"]').contentFrame().getByText('Confirm', { exact: true }).click();
+  await expect(page.locator('#espagoFrame').contentFrame().getByText('Payment declined!')).toBeVisible({ timeout: 20_000 })
+  await page.locator('#espagoFrame').contentFrame().getByRole('button', { name: 'Back to shop' }).click();
+}
+
+export async function googlePaySuccess(page: Page) {
+  await page.getByText('iFrame 3.0').click();
+  await page.getByText('Pay', { exact: true }).click();
+  await page.locator('#espagoFrame').contentFrame().locator('#test-cards-modal-btn').click();
+  await page.locator('#espagoFrame').contentFrame().getByText('0000 0002 0006 12/2029 CVV: 683').click();
+  await page.locator('#espagoFrame').contentFrame().locator('#submit_payment').click()
+  await page.locator('#espagoFrame').contentFrame().locator('iframe[title="3D-Secure Authorization"]').contentFrame().getByText('Confirm', { exact: true }).click();
+  await expect(page.locator('#espagoFrame').contentFrame().getByText('Payment declined!')).toBeVisible({ timeout: 20_000 })
+  await page.locator('#espagoFrame').contentFrame().getByRole('button', { name: 'Back to shop' }).click();
+}
+
+export async function googlePayFail(page: Page) {
+  await page.getByText('iFrame 3.0').click();
+  await page.getByText('Pay', { exact: true }).click();
+  await page.locator('#espagoFrame').contentFrame().locator('#test-cards-modal-btn').click();
+  await page.locator('#espagoFrame').contentFrame().getByText('0000 0002 0006 12/2029 CVV: 683').click();
+  await page.locator('#espagoFrame').contentFrame().locator('#submit_payment').click()
+  await page.locator('#espagoFrame').contentFrame().locator('iframe[title="3D-Secure Authorization"]').contentFrame().getByText('Confirm', { exact: true }).click();
+  await expect(page.locator('#espagoFrame').contentFrame().getByText('Payment declined!')).toBeVisible({ timeout: 20_000 })
+  await page.locator('#espagoFrame').contentFrame().getByRole('button', { name: 'Back to shop' }).click();
 }

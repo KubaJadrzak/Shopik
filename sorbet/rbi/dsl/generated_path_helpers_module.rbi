@@ -25,6 +25,9 @@ module GeneratedPathHelpersModule
   def add_to_cart_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def apple_pay_payment_path(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def authorize_saved_payment_method_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }

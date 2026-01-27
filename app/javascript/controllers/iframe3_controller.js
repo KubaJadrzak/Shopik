@@ -79,13 +79,17 @@ export default class extends Controller {
       input.value = value
       form.appendChild(input)
     })
+    
+    const csrfToken =
+      document.querySelector('meta[name="csrf-token"]')?.content
 
-    const csrf = document.createElement("input")
-    csrf.type = "hidden"
-    csrf.name = "authenticity_token"
-    csrf.value = document.querySelector('meta[name="csrf-token"]').content
-    form.appendChild(csrf)
-
+    if (csrfToken) {
+      const csrf = document.createElement("input")
+      csrf.type = "hidden"
+      csrf.name = "authenticity_token"
+      csrf.value = csrfToken
+      form.appendChild(csrf)
+    }
     document.body.appendChild(form)
     form.submit()
   }

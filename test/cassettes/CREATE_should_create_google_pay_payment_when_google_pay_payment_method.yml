@@ -1,0 +1,62 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sandbox.espago.com/api/charges
+    body:
+      encoding: UTF-8
+      string: '{"channel":"elavon_google_pay","amount":"10.0","currency":"PLN","description":"pay_d94b6be7-ed39-4129-aa42-3a120425a663","positive_url":"http://localhost:3001/payments/pay_d94b6be7-ed39-4129-aa42-3a120425a663/success","negative_url":"http://localhost:3001/payments/pay_d94b6be7-ed39-4129-aa42-3a120425a663/rejected","google_pay":{"authMethod":"PAN_ONLY","pan":"4111111111111111","expirationYear":"2027-01-25
+        18:32:49 UTC","expirationMonth":1}}'
+    headers:
+      User-Agent:
+      - Faraday v2.13.1
+      Accept:
+      - application/vnd.espago.v3+json
+      Authorization:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: ''
+    headers:
+      Date:
+      - Sun, 25 Jan 2026 18:32:50 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"a8f96cb90e82e4cfb92a88002e0f7cb5"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'; base-uri 'none'; block-all-mixed-content; child-src 'self'
+        sandbox.espago.com sandbox-static.espago.com; connect-src 'self' sandbox.espago.com
+        sandbox-static.espago.com; font-src 'self' sandbox.espago.com sandbox-static.espago.com;
+        form-action 'self' sandbox.espago.com sandbox-static.espago.com; img-src 'self'
+        sandbox.espago.com sandbox-static.espago.com; manifest-src 'none'; media-src
+        'none'; object-src 'none'; script-src 'self' sandbox.espago.com sandbox-static.espago.com;
+        style-src 'self' sandbox.espago.com sandbox-static.espago.com; upgrade-insecure-requests;
+        worker-src 'none'; report-uri https://csp-report.espago.com/csp_app0_sandbox/store
+      X-Frame-Options:
+      - SAMEORIGIN
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"id":"pay_a29bTQ-pchs03bN-","description":"pay_d94b6be7-ed39-4129-aa42-3a120425a663","channel":"elavon_google_pay","amount":"10.00","currency":"PLN","state":"new","client":"cli_a29xRb-1UQWu8tT9","created_at":1769365969,"card":{"company":"VI","last4":"1111","year":2027,"month":1,"created_at":1769365969},"issuer_response_code":"","transaction_id":"tr_a299Wx6d8","redirect_url":"https://sandbox.espago.com/secure_web_page/pay_a29bTQ-pchs03bN-"}'
+  recorded_at: Sun, 25 Jan 2026 18:32:50 GMT
+recorded_with: VCR 6.3.1

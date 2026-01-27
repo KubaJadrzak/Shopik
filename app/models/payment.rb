@@ -119,7 +119,7 @@ class Payment < ApplicationRecord
     return unless Payment.where(payable: payable).awaiting.exists? ||
                   Payment.where(payable: payable).successful.exists?
 
-    errors.add(:base, 'Cannot create new payment: order already has an awaiting or successful payment')
+    errors.add(:base, 'Cannot create new payment: payable already has an awaiting or successful payment')
   end
 
   #: -> void

@@ -1,47 +1,31 @@
 # typed: strict
 # frozen_string_literal: true
 
+# @requires_ancestor: ApplicationController
 module Paymentable
-  extend T::Sig
-  extend T::Helpers
-
-  requires_ancestor { ApplicationController }
-  abstract!
+  include Errors::PaymentErrors
 
   #: PaymentProcessor::Response?
   attr_accessor :payment_response
 
-  #: -> void
-  def success
-    handle_final_redirect(message: 'Payment successful!')
-  end
-
-  #: -> void
-  def pending
-    handle_final_redirect(message: 'Payment is being processed!', alert: true)
-  end
-
-  #: -> void
-  def rejected
-    handle_final_redirect(message: 'Payment rejected!', alert: true)
-  end
-
   private
 
-  sig { abstract.returns(T.noreturn) }
-  def paymentable_error!; end
+  #: -> void
+  def set_payment
+    @payment = Payment.find_by(uuid: params[:uuid]) #: ::Payment?
+  end
 
   #: -> void
   def set_payable
     payable_number = params[:payable_number]
-    paymentable_error! unless payable_number.present?
+    raise payment_error! unless payable_number.present?
 
     if payable_number.start_with?('ord')
       @payable = Order.find_by(uuid: payable_number) #: ::Order? | ::Subscription?
     elsif payable_number.start_with?('sub')
       @payable = Subscription.find_by(uuid: payable_number)
     else
-      paymentable_error!
+      raise payment_error!
     end
   end
 
@@ -52,7 +36,7 @@ module Paymentable
 
   #: -> void
   def set_payment_params
-    paymentable_error! unless @payable
+    raise payment_error! unless @payable
 
     @amount = @payable.amount #: BigDecimal?
     @cof = set_cof #: Symbol?
@@ -73,7 +57,7 @@ module Paymentable
 
   #: -> Symbol | void
   def set_payment_method
-    paymentable_error! unless params[:payment_method]
+    raise payment_error! unless params[:payment_method]
 
     case params[:payment_method]
     when 'iframe'
@@ -91,13 +75,13 @@ module Paymentable
     when ->(v) { v.start_with?('cli') }
       :cit
     else
-      paymentable_error!
+      raise payment_error!
     end
   end
 
   #: -> bool
   def create_payment
-    paymentable_error! unless @payable
+    raise payment_error! unless @payable
 
     @payment = @payable.payments.create(
       amount:         @amount,
@@ -108,14 +92,14 @@ module Paymentable
       kind:           :sale,
     ) #: ::Payment?
 
-    paymentable_error! unless @payment
+    raise payment_error! unless @payment
 
     @payment.persisted?
   end
 
   #: -> PaymentProcessor::Response?
   def charge_payment
-    paymentable_error! unless @payment
+    raise payment_error! unless @payment
 
     PaymentProcessor::Charge.new(
       payment:       @payment,
@@ -123,16 +107,20 @@ module Paymentable
     ).process
   end
 
-  #: -> String?
+  #: -> (String | Hash[Symbol, String])?
   def set_payment_means
     return params[:card_token] if params[:card_token]
 
-    params[:payment_method] if params[:payment_method].starts_with?('cli')
+    return params[:payment_method] if params[:payment_method].starts_with?('cli')
+
+    return google_pay_payload if params[:payment_method] == 'google_pay'
+
+    apple_pay_payload if params[:payment_method] == 'apple_pay'
   end
 
   #: (String) -> void
   def handle_response(subject)
-    paymentable_error! unless @payment_response.present?
+    raise payment_error! unless @payment_response.present?
 
     return redirect_to iframe3_payment_path(@payment) if @payment_response.iframe3?
 
@@ -147,13 +135,15 @@ module Paymentable
     elsif @payment_response.uncertain?
       handle_final_redirect(message: "We are experiencing an issue with your #{subject}!", alert: true)
     else
-      paymentable_error!
+      raise payment_error!
     end
   end
 
   #: (message: String, ?alert: bool) -> void
   def handle_final_redirect(message:, alert: false)
-    paymentable_error! unless @payment
+    raise payment_error! unless @payment
+
+    check_payment
 
     flash_type = alert ? :alert : :notice
 
@@ -162,8 +152,36 @@ module Paymentable
 
   #: -> PaymentProcessor::Response
   def check_payment
-    paymentable_error! unless @payment
+    raise payment_error! unless @payment
 
     PaymentProcessor::Check.new(@payment).process
   end
+
+  #: -> String?
+  def espago_public_key
+    @espago_public_key = ENV.fetch('ESPAGO_PUBLIC_KEY') #: String?
+  end
+
+  #: -> Hash[Symbol, String]
+  def google_pay_payload
+    {
+      authMethod:      'PAN_ONLY',
+      pan:             '4111111111111111',
+      expirationYear:  1.year.from_now,
+      expirationMonth: 1,
+    }
+  end
+
+  #: -> Hash[Symbol, String]
+  def apple_pay_payload
+    expiration_date = 1.year.from_now.strftime('%y%m%d')
+
+    {
+      applicationPrimaryAccountNumber: '4012000000020006',
+      applicationExpirationDate:       expiration_date,
+      onlinePaymentCryptogram:         'p0OLurz61yKfROy808cg+FqXnCQ=',
+      eciIndicator:                    '05',
+    }
+  end
+
 end

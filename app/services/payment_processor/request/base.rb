@@ -13,7 +13,7 @@ module PaymentProcessor
       #: ::PaymentProcessor::Response?
       attr_accessor :response
 
-      #: (payment: ::Payment, ?payment_means: String?) -> void
+      #: (payment: ::Payment, ?payment_means: (String | Hash[Symbol, String])?) -> void
       def initialize(payment:, payment_means: nil)
         @payment = payment
         @payment_means = payment_means

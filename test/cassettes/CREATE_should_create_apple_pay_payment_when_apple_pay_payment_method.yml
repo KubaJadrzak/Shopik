@@ -1,0 +1,117 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://sandbox.espago.com/api/charges
+    body:
+      encoding: UTF-8
+      string: '{"channel":"elavon_apple_pay","amount":"10.0","currency":"PLN","description":"pay_8e88876f-9976-434d-9aa7-fbaebbe904e0","positive_url":"http://localhost:3001/payments/pay_8e88876f-9976-434d-9aa7-fbaebbe904e0/success","negative_url":"http://localhost:3001/payments/pay_8e88876f-9976-434d-9aa7-fbaebbe904e0/rejected","apple_pay":{"applicationPrimaryAccountNumber":"4012000000020006","applicationExpirationDate":"270126","onlinePaymentCryptogram":"p0OLurz61yKfROy808cg+FqXnCQ=","eciIndicator":"05"}}'
+    headers:
+      User-Agent:
+      - Faraday v2.13.1
+      Accept:
+      - application/vnd.espago.v3+json
+      Authorization:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 201
+      message: ''
+    headers:
+      Date:
+      - Mon, 26 Jan 2026 14:31:57 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"56072db6a8eb92a8b2be59e63114e2bb"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'; base-uri 'none'; block-all-mixed-content; child-src 'self'
+        sandbox.espago.com sandbox-static.espago.com; connect-src 'self' sandbox.espago.com
+        sandbox-static.espago.com; font-src 'self' sandbox.espago.com sandbox-static.espago.com;
+        form-action 'self' sandbox.espago.com sandbox-static.espago.com; img-src 'self'
+        sandbox.espago.com sandbox-static.espago.com; manifest-src 'none'; media-src
+        'none'; object-src 'none'; script-src 'self' sandbox.espago.com sandbox-static.espago.com;
+        style-src 'self' sandbox.espago.com sandbox-static.espago.com; upgrade-insecure-requests;
+        worker-src 'none'; report-uri https://csp-report.espago.com/csp_app0_sandbox/store
+      X-Frame-Options:
+      - SAMEORIGIN
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"id":"pay_a29zMWhroJ8j9BZv","description":"pay_8e88876f-9976-434d-9aa7-fbaebbe904e0","channel":"elavon_apple_pay","amount":"10.00","currency":"PLN","state":"executed","client":"cli_a29rum540IdMdLQG","created_at":1769437916,"apple_pay_application":{"company":"VI","pan_last4":"0006","exp_year":2027,"exp_month":1,"created_at":1769437916},"issuer_response_code":"00","reversable":true,"transaction_id":"tr_a29z2FyMa"}'
+  recorded_at: Mon, 26 Jan 2026 14:31:57 GMT
+- request:
+    method: get
+    uri: https://sandbox.espago.com/api/charges/pay_a29zMWhroJ8j9BZv
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v2.13.1
+      Accept:
+      - application/vnd.espago.v3+json
+      Authorization:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Date:
+      - Mon, 26 Jan 2026 14:31:57 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Etag:
+      - W/"56072db6a8eb92a8b2be59e63114e2bb"
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Download-Options:
+      - noopen
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'; base-uri 'none'; block-all-mixed-content; child-src 'self'
+        sandbox.espago.com sandbox-static.espago.com; connect-src 'self' sandbox.espago.com
+        sandbox-static.espago.com; font-src 'self' sandbox.espago.com sandbox-static.espago.com;
+        form-action 'self' sandbox.espago.com sandbox-static.espago.com; img-src 'self'
+        sandbox.espago.com sandbox-static.espago.com; manifest-src 'none'; media-src
+        'none'; object-src 'none'; script-src 'self' sandbox.espago.com sandbox-static.espago.com;
+        style-src 'self' sandbox.espago.com sandbox-static.espago.com; upgrade-insecure-requests;
+        worker-src 'none'; report-uri https://csp-report.espago.com/csp_app0_sandbox/store
+      X-Frame-Options:
+      - SAMEORIGIN
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '{"id":"pay_a29zMWhroJ8j9BZv","description":"pay_8e88876f-9976-434d-9aa7-fbaebbe904e0","channel":"elavon_apple_pay","amount":"10.00","currency":"PLN","state":"executed","client":"cli_a29rum540IdMdLQG","created_at":1769437916,"apple_pay_application":{"company":"VI","pan_last4":"0006","exp_year":2027,"exp_month":1,"created_at":1769437916},"issuer_response_code":"00","reversable":true,"transaction_id":"tr_a29z2FyMa"}'
+  recorded_at: Mon, 26 Jan 2026 14:31:57 GMT
+recorded_with: VCR 6.3.1

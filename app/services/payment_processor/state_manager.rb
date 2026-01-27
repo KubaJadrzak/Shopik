@@ -19,8 +19,11 @@ module PaymentProcessor
       attach_client
       update_payable
 
-      @payment.state = @response.state
-      @payment.response = @response.body.to_json
+      state = @response.state
+      json = @response.body.to_json
+
+      @payment.state = state if state
+      @payment.response = json if json
 
       case @type
       when :charge, :check, :iframe3

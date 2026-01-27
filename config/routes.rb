@@ -61,6 +61,7 @@ Rails.application.routes.draw do
       get :pending
       get :rejected
       get :iframe3
+      get :apple_pay
     end
 
     collection do

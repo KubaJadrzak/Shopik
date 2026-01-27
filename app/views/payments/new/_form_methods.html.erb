@@ -49,6 +49,16 @@
     iFrame 3.0
   </label>
 </div>
+<div class="mt-4">
+  <div
+    data-controller="google-pay"
+    data-google-pay-amount-value="<%= @payable.amount %>"
+  >
+  </div>
+  <div id="apple-pay-button"
+    data-controller="apple-pay"
+  ></div>
+</div>
 <hr>
 <div class="form-check form-switch">
   <input class="form-check-input"

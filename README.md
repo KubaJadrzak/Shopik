@@ -1,17 +1,29 @@
-Shopik was created primarly to learn and expand my knowledge about Ruby on Rails. Currently the project contains:
+The primary purpose of this project is complete and secure integration with `Payment Service Provider - Espago`. Currently the project contains below functionality and is hosted [here](https://shopik.kubajadrzak.com/):
 
-- Extensive integration with Espago Payment Gateway, including:
+- Extensive integration with [Espago Payment Gateway](https://start.espago.com/pl/docs), including:
     - Secure Web Page payments,
     - payments via iFrame,
+    - payments via iFrame 3.0,
+    - payments via Google Pay,
+    - payments via Apple Pay (with simulated modal because Apple Pay requires you to sign a blood oath to use real modal even in sandbox),
     - capability to save Payment Methods,
     - CIT and MIT payments using saved Payment Methods,
     - capability to delete saved Payment Methods,
     - capability to refund and reverse payments,
+<img width="549" height="598" alt="image" src="https://github.com/user-attachments/assets/8b7043a8-c86c-4c57-8dd2-c733910fa4f2" />
+
+- App is using:
+    - Ruby on Rails with newest Turbo 8 functionality (utilizing `broadcasts_refreshes`)
+    - Stimulus controllers for JavaScript on the frontend
     - jobs implemented via Sidekiq,
     - unit and integration tests implemented via minitest,
     - VCR cassettes for integration tests,
     - End-to-End tests implemented via Playwright,
     - Github Actions configured with Sorbet typecheck and tests,
+- App is deployed via:
+    - AWS Lightsail
+    - Nginx
+    - Docker.
 
 
 ### Prerequisites:
@@ -76,9 +88,13 @@ bin/dev
 ```
 This command will start all necessary services, including rails server and sidekiq background jobs
 
+### Google Pay and Apple Pay
+
+Shopik is displaying real `Google Pay` and `Apple Pay` buttons via their respective SDKs (although the token generation itself is simulated for obvious reasons). `Apple Pay` requires the website on which the button is displayed to be secure (`HTTPS`). Due to this fact, it is best to host the app on online services such as `ngrok` for proper functionality as the button will not appear on localhost.
+
 ### Asynchronous requests
 
-Shopik is dependent on asynchronous requests received from Espago for updating the status of payments. Due to this fact, in order to function properly, the app has to be hosted online on services such as `ngrok`.
+Shopik is dependent on asynchronous requests received from Espago for updating the status of payments (although Shopik has jobs which will eventually synchronize status of payments even while running on localhost). Due to this fact, in order to function properly, the app has to be hosted online on services such as `ngrok`. 
 
 ### Minitest: 
 

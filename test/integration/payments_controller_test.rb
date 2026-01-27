@@ -12,6 +12,120 @@ class PaymentsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
   end
 
+  test 'CREATE should create  apple pay payment when apple pay payment method' do
+    VCR.use_cassette('CREATE should create  apple pay payment when apple pay payment method') do
+      post payments_path, params: {
+        payable_number: @order.uuid,
+        payment_method: 'apple_pay',
+      }
+    end
+    payment = ::Payment.first
+
+    assert_requested(:post, 'https://sandbox.espago.com/api/charges', times: 1) do |req|
+      body = JSON.parse(req.body)
+      expiration_date = 1.year.from_now.strftime('%y%m%d')
+
+      expected = {
+        'applicationPrimaryAccountNumber' => '4012000000020006',
+        'applicationExpirationDate'       => expiration_date,
+        'onlinePaymentCryptogram'         => 'p0OLurz61yKfROy808cg+FqXnCQ=',
+        'eciIndicator'                    => '05',
+      }
+
+      assert_equal @order.amount.to_s, body['amount']
+      assert_equal 'PLN', body['currency']
+      assert_equal payment.uuid, body['description']
+      assert_equal expected, body['apple_pay']
+      assert_nil body['client']
+      assert_nil body['cof']
+    end
+
+    assert_response :redirect
+    assert_includes response.location, 'http://www.example.com/orders/ord_'
+
+    assert_equal 'executed', payment.state
+    assert_equal @order.amount, payment.amount
+    assert_equal 'apple_pay', payment.payment_method
+    assert payment.espago_payment_id
+    assert payment.espago_client_id
+    assert payment.response
+    assert_nil payment.cof
+    assert_nil payment.espago_payment_token
+  end
+
+  test 'CREATE should create google pay payment when google pay payment method' do
+    VCR.use_cassette('CREATE should create google pay payment when google pay payment method') do
+      post payments_path, params: {
+        payable_number: @order.uuid,
+        payment_method: 'google_pay',
+      }
+    end
+    payment = ::Payment.first
+
+    assert_requested(:post, 'https://sandbox.espago.com/api/charges', times: 1) do |req|
+      body = JSON.parse(req.body)
+
+      expected = {
+        'authMethod'      => 'PAN_ONLY',
+        'pan'             => '4111111111111111',
+        'expirationYear'  => 1.year.from_now.strftime('%Y-%m-%d %H:%M:%S UTC'),
+        'expirationMonth' => 1,
+      }
+
+      assert_equal @order.amount.to_s, body['amount']
+      assert_equal 'PLN', body['currency']
+      assert_equal payment.uuid, body['description']
+      assert_equal expected, body['google_pay']
+      assert_nil body['client']
+      assert_nil body['cof']
+    end
+
+    assert_response :redirect
+    assert_includes response.location, 'https://sandbox.espago.com/secure_web_page/pay_'
+
+    assert_equal 'new', payment.state
+    assert_equal @order.amount, payment.amount
+    assert_equal 'google_pay', payment.payment_method
+    assert payment.espago_payment_id
+    assert payment.espago_client_id
+    assert payment.response
+    assert_nil payment.cof
+    assert_nil payment.espago_payment_token
+  end
+
+
+  test 'CREATE should initialize iframe3 payment when iframe3 payment method' do
+    VCR.use_cassette('CREATE should initialize iframe3 payment when iframe3 payment method') do
+      post payments_path, params: {
+        payable_number: @order.uuid,
+        payment_method: 'iframe3',
+      }
+    end
+    payment = ::Payment.first
+
+    assert_requested(:post, 'https://sandbox.espago.com/api/charges/init', times: 1) do |req|
+      body = JSON.parse(req.body)
+
+      assert_equal @order.amount.to_s, body['amount']
+      assert_equal 'PLN', body['currency']
+      assert_equal payment.uuid, body['description']
+      assert_nil body['client']
+      assert_nil body['cof']
+    end
+
+    assert_response :redirect
+    assert_includes response.location, "http://www.example.com/payments/#{payment.uuid}/iframe3"
+
+    assert_equal 'new', payment.state
+    assert_equal @order.amount, payment.amount
+    assert_equal 'iframe3', payment.payment_method
+    assert payment.espago_payment_id
+    assert payment.espago_client_id
+    assert payment.response
+    assert_nil payment.cof
+    assert_equal '0728fb72-db08-4288-9e77-c30400e868bb', payment.espago_payment_token
+  end
+
   test 'CREATE should create secure web page payment when secure web page payment method' do
     VCR.use_cassette('CREATE should create secure web page payment when secure web page payment method') do
       post payments_path, params: {

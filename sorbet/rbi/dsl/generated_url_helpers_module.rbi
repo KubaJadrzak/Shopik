@@ -25,6 +25,9 @@ module GeneratedUrlHelpersModule
   def add_to_cart_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def apple_pay_payment_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def authorize_saved_payment_method_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }

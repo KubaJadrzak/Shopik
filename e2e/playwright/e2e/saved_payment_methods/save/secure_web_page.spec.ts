@@ -21,8 +21,6 @@ test.describe('Saves Payment Method during Secure Web Payment', () => {
     await expect(page.getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
     await expect(page.getByText(subscriptionNumber)).toBeVisible()
 
-    await appEval(`::UpdatePaymentStatusJob.perform_now`)
-
     const espagoClientNumber = await appEval('SavedPaymentMethod.last.espago_client_id')
     await page.goto('/account')
     await page.getByRole('link', { name: 'Saved Payment Methods' }).click();
