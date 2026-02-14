@@ -90,7 +90,8 @@ This command will start all necessary services, including rails server and sidek
 
 ### Google Pay and Apple Pay
 
-Shopik is displaying real `Google Pay` and `Apple Pay` buttons via their respective SDKs (although the token generation itself is simulated for obvious reasons). `Apple Pay` requires the website on which the button is displayed to be secure (`HTTPS`). Due to this fact, it is best to host the app on online services such as `ngrok` for proper functionality as the button will not appear on localhost. Furthermore it is entirely possible for the button to be missing depending on the browser or device, when either `Google` or `Apple` deems that the environment is unsafe. This is expected behaviour, but quite annoying. I should probably create a simulated buttons for when proper ones are not displayed or you should just trust me that this is not my fault :P
+Shopik is displaying real `Google Pay` and `Apple Pay` buttons via their respective SDKs (although the token generation itself is simulated for obvious reasons). `Apple Pay` requires the website on which the button is displayed to be secure (`HTTPS`). Due to this fact, it is best to host the app on online services such as `ngrok` for proper functionality as the button will not appear on localhost. 
+Furthermore it is entirely possible for the button to be missing depending on the browser or device, when either `Google` or `Apple` deems that the environment is unsafe. This is expected behaviour, but quite annoying. I should probably create a simulated buttons for when proper ones are not displayed or you can just trust me that this is not my fault :P
 
 ### Asynchronous requests
 
