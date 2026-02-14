@@ -14,6 +14,7 @@ The primary purpose of this project is complete and secure integration with `Pay
 
 - App is using:
     - Ruby on Rails with newest Turbo 8 functionality (utilizing `broadcasts_refreshes`)
+    - Sorbet with Tapioca :D
     - Stimulus controllers for JavaScript on the frontend
     - jobs implemented via Sidekiq,
     - unit and integration tests implemented via minitest,
@@ -24,6 +25,8 @@ The primary purpose of this project is complete and secure integration with `Pay
     - AWS Lightsail
     - Nginx
     - Docker.
+
+The code in general is actually written quite nicely in my opinion :)
 
 
 ### Prerequisites:
