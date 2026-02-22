@@ -2,7 +2,7 @@ import { Page, expect } from '@playwright/test'
 import { appEval } from '../support/on-rails'
 
 export async function login(page: Page) {
-  const baseURL =  'http://localhost:3001'
+  const baseURL = 'http://localhost:3001'
   try {
     const response = await page.request.post(`${baseURL}/sign_in_before_test`)
     if (!response.ok()) {
@@ -104,7 +104,7 @@ export async function iframe3Success(page: Page) {
   await page.getByText('iFrame 3.0').click();
   await page.getByText('Pay', { exact: true }).click();
   await page.locator('#espagoFrame').contentFrame().locator('#test-cards-modal-btn').click();
-  await page.locator('#espagoFrame').contentFrame().getByText('0000 0002 0006 01/2029 CVV: 123').click();
+  await page.locator('#espagoFrame').contentFrame().getByText('0000 0002 000601/2029 CVV: 123').click();
   await page.locator('#espagoFrame').contentFrame().locator('#submit_payment').click()
   await page.locator('#espagoFrame').contentFrame().locator('iframe[title="3D-Secure Authorization"]').contentFrame().getByText('Confirm', { exact: true }).click();
   await expect(page.locator('#espagoFrame').contentFrame().getByText('Payment successful!')).toBeVisible({ timeout: 20_000 })
@@ -115,29 +115,7 @@ export async function iframe3Fail(page: Page) {
   await page.getByText('iFrame 3.0').click();
   await page.getByText('Pay', { exact: true }).click();
   await page.locator('#espagoFrame').contentFrame().locator('#test-cards-modal-btn').click();
-  await page.locator('#espagoFrame').contentFrame().getByText('0000 0002 0006 12/2029 CVV: 683').click();
-  await page.locator('#espagoFrame').contentFrame().locator('#submit_payment').click()
-  await page.locator('#espagoFrame').contentFrame().locator('iframe[title="3D-Secure Authorization"]').contentFrame().getByText('Confirm', { exact: true }).click();
-  await expect(page.locator('#espagoFrame').contentFrame().getByText('Payment declined!')).toBeVisible({ timeout: 20_000 })
-  await page.locator('#espagoFrame').contentFrame().getByRole('button', { name: 'Back to shop' }).click();
-}
-
-export async function googlePaySuccess(page: Page) {
-  await page.getByText('iFrame 3.0').click();
-  await page.getByText('Pay', { exact: true }).click();
-  await page.locator('#espagoFrame').contentFrame().locator('#test-cards-modal-btn').click();
-  await page.locator('#espagoFrame').contentFrame().getByText('0000 0002 0006 12/2029 CVV: 683').click();
-  await page.locator('#espagoFrame').contentFrame().locator('#submit_payment').click()
-  await page.locator('#espagoFrame').contentFrame().locator('iframe[title="3D-Secure Authorization"]').contentFrame().getByText('Confirm', { exact: true }).click();
-  await expect(page.locator('#espagoFrame').contentFrame().getByText('Payment declined!')).toBeVisible({ timeout: 20_000 })
-  await page.locator('#espagoFrame').contentFrame().getByRole('button', { name: 'Back to shop' }).click();
-}
-
-export async function googlePayFail(page: Page) {
-  await page.getByText('iFrame 3.0').click();
-  await page.getByText('Pay', { exact: true }).click();
-  await page.locator('#espagoFrame').contentFrame().locator('#test-cards-modal-btn').click();
-  await page.locator('#espagoFrame').contentFrame().getByText('0000 0002 0006 12/2029 CVV: 683').click();
+  await page.locator('#espagoFrame').contentFrame().getByText('0000 0002 000612/2029 CVV: 683').click();
   await page.locator('#espagoFrame').contentFrame().locator('#submit_payment').click()
   await page.locator('#espagoFrame').contentFrame().locator('iframe[title="3D-Secure Authorization"]').contentFrame().getByText('Confirm', { exact: true }).click();
   await expect(page.locator('#espagoFrame').contentFrame().getByText('Payment declined!')).toBeVisible({ timeout: 20_000 })

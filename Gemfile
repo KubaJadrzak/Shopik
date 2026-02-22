@@ -101,3 +101,5 @@ gem 'byebug'
 gem 'sorbet'
 
 gem 'tapioca'
+
+gem 'sofia'
