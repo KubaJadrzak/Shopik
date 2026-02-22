@@ -13,6 +13,7 @@ The primary purpose of this project is complete and secure integration with `Pay
 <img width="549" height="598" alt="image" src="https://github.com/user-attachments/assets/8b7043a8-c86c-4c57-8dd2-c733910fa4f2" />
 
 - App is using:
+    - [Sofia](https://github.com/KubaJadrzak/sofia) as HTTP client abstraction layer. This is very important because I am the author of Sofia :P
     - Ruby on Rails with newest Turbo 8 functionality (utilizing `broadcasts_refreshes`)
     - Sorbet with Tapioca :D
     - Stimulus controllers for JavaScript on the frontend
