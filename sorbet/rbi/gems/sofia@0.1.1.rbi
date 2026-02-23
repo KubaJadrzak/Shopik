@@ -126,8 +126,8 @@ class Sofia::Error::Base < ::StandardError; end
 # source://sofia//lib/sofia/error/connection_failed.rb#6
 class Sofia::Error::ConnectionFailed < ::Sofia::Error::Base; end
 
-# source://sofia//lib/sofia/error/invalid_json.rb#6
-class Sofia::Error::InvalidJSON < ::Sofia::Error::Base; end
+# source://sofia//lib/sofia/error/parser_error.rb#6
+class Sofia::Error::ParserError < ::Sofia::Error::Base; end
 
 # source://sofia//lib/sofia/error/ssl_error.rb#6
 class Sofia::Error::SSLError < ::Sofia::Error::Base; end
