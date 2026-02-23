@@ -10,7 +10,8 @@ The primary purpose of this project is complete and secure integration with `Pay
     - CIT and MIT payments using saved Payment Methods,
     - capability to delete saved Payment Methods,
     - capability to refund and reverse payments,
-<img width="549" height="598" alt="image" src="https://github.com/user-attachments/assets/8b7043a8-c86c-4c57-8dd2-c733910fa4f2" />
+<img width="543" height="626" alt="Zrzut ekranu z 2026-02-23 20-23-02" src="https://github.com/user-attachments/assets/909def7f-88d6-4a38-b2d7-c83b9bcdae2f" />
+
 
 - App is using:
     - [Sofia](https://github.com/KubaJadrzak/sofia) as HTTP client abstraction layer. This is very important because I am the author of Sofia :P
@@ -94,8 +95,7 @@ This command will start all necessary services, including rails server and sidek
 
 ### Google Pay and Apple Pay
 
-Shopik is displaying real `Google Pay` and `Apple Pay` buttons via their respective SDKs (although the token generation itself is simulated for obvious reasons). `Apple Pay` requires the website on which the button is displayed to be secure (`HTTPS`). Due to this fact, it is best to host the app on online services such as `ngrok` for proper functionality as the button will not appear on localhost. 
-Furthermore it is entirely possible for the button to be missing depending on the browser or device, when either `Google` or `Apple` deems that the environment is unsafe. This is expected behaviour, but quite annoying. I should probably create a simulated buttons for when proper ones are not displayed or you can just trust me that this is not my fault :P
+Shopik is displaying real `Google Pay` and `Apple Pay` buttons via their respective SDKs (although the token generation itself is simulated for obvious reasons). `Apple Pay` requires the website on which the button is displayed to be secure (`HTTPS`). Due to this fact, it is best to host the app on online services such as `ngrok` for proper functionality. In case the real SDK deems the current environment is not safe to display the buttons, a fake simulated buttons will be displayed, although they do not look as good as real ones :P.
 
 ### Asynchronous requests
 
