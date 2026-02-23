@@ -4,7 +4,9 @@ import * as bootstrap from "bootstrap"
 export default class extends Controller {
 
   async connect() {
+  if (this.shouldUseRealApplePay()) {
     await this.loadApplePaySdk()
+  }
     this.addApplePayButton()
   }
 
@@ -25,12 +27,14 @@ export default class extends Controller {
   }
 
   addApplePayButton() {
-    const button = this.createApplePayButton()
+    const button = this.isApplePayAvailable() ? this.createApplePayButton() : this.createSimulatedApplePayButton()
+
     button.addEventListener("click", (e) => {
       e.preventDefault()
       this.showApplePayModal()
       this.addApplePayButtonModal()
     })
+
     this.element.appendChild(button)
   }
 
@@ -38,9 +42,9 @@ export default class extends Controller {
     const container = document.querySelector("#applePayModal .apple-pay-modal-button")
     if (!container) return
 
-    if (container.querySelector("apple-pay-button")) return
+    if (container.querySelector(".simulated-apple-pay, apple-pay-button")) return
 
-    const button = this.createApplePayButton()
+    const button = this.isApplePayAvailable() ? this.createApplePayButton() : this.createSimulatedApplePayButton()
     button.addEventListener("click", (e) => {
       e.preventDefault()
       const paymentInput = document.querySelector('input[name="payment_method"]')
@@ -67,10 +71,36 @@ export default class extends Controller {
     return button
   }
 
+  createSimulatedApplePayButton() {
+    const button = document.createElement("button")
+    button.type = "button"
+    button.className = "simulated-apple-pay"
+    button.innerHTML = "Apple Pay (Simulated)"
+
+    button.style.width = "100%"
+    button.style.height = "40px"
+    button.style.background = "black"
+    button.style.color = "white"
+    button.style.border = "none"
+    button.style.borderRadius = "3px"
+    button.style.fontSize = "16px"
+    button.style.cursor = "pointer"
+
+    return button
+  }
+
   showApplePayModal() {
     const modalEl = document.getElementById("applePayModal")
     const modal = new bootstrap.Modal(modalEl)
     modal.show()
   }
 
+  isApplePayAvailable() {
+    return (window.ApplePaySession && ApplePaySession.canMakePayments())
+  }
+
+  shouldUseRealApplePay() {
+    return window.location.protocol === "https:"
+  }
 }
+

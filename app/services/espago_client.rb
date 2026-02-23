@@ -33,7 +33,7 @@ class EspagoClient
     ::Response.new(connected: false, body: { error: 'connection_failed' })
   rescue Sofia::Error::SSLError
     ::Response.new(connected: false, body: { error: 'ssl_error' })
-  rescue Sofia::Error::InvalidJSON
+  rescue Sofia::Error::ParserError
     ::Response.new(connected: false, body: { error: 'parsing_error' })
   rescue URI::InvalidURIError, URI::BadURIError
     ::Response.new(connected: false, body: { error: 'invalid_uri' })
