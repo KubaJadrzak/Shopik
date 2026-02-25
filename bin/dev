@@ -3,6 +3,6 @@
 : "${NO_RAILS:=false}"
 : "${PORT:=3000}"
 
-export NO_RAILS PORT  # <-- make both visible to Foreman and child processes
+export NO_RAILS PORT
 
 exec foreman start -f Procfile.dev "$@"

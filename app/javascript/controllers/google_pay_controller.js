@@ -64,11 +64,12 @@ export default class extends Controller {
 
     console.log("Google Pay token:", token)
 
-    const paymentInput = document.querySelector('input[name="payment_method"]')
-    if (paymentInput) {
-      paymentInput.value = "google_pay"
-      paymentInput.id = 'google_pay'
-    }
+    document
+      .querySelectorAll('input[name="payment_method"]')
+      .forEach(r => r.checked = false)
+
+    const googleRadio = document.querySelector('#google_pay')
+    googleRadio.checked = true
 
     const submitBtn = document.querySelector('#espago_form [data-payment-target="formBtn"]')
     if (submitBtn) submitBtn.click()

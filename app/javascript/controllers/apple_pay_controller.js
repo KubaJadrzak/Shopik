@@ -47,11 +47,12 @@ export default class extends Controller {
     const button = this.isApplePayAvailable() ? this.createApplePayButton() : this.createSimulatedApplePayButton()
     button.addEventListener("click", (e) => {
       e.preventDefault()
-      const paymentInput = document.querySelector('input[name="payment_method"]')
-      if (paymentInput) {
-        paymentInput.value = "apple_pay"
-        paymentInput.id = 'apple_pay'
-      }
+      document
+        .querySelectorAll('input[name="payment_method"]')
+        .forEach(r => r.checked = false)
+
+      const appleRadio = document.querySelector('#apple_pay')
+      appleRadio.checked = true
 
       const submitBtn = document.querySelector('#espago_form [data-payment-target="formBtn"]')
       if (submitBtn) submitBtn.click()
