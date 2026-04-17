@@ -10,7 +10,7 @@ class EspagoClient
     @user = Rails.application.credentials.dig(:espago, :app_id) #: String
     @password = Rails.application.credentials.dig(:espago, :password) #: String
 
-    @client = Sofia.new(base_url: base_url) #: Sofia::Client
+    @client = Sofia.new(base_url: base_url, adapter: :soren) #: Sofia::Client
   end
 
   #: (String path, ?body: Hash[Symbol, untyped]?, ?method: Symbol) -> ::Response
