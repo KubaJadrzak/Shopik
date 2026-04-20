@@ -2,7 +2,6 @@
   <% alert_type = type == 'notice' ? 'alert-success' : 'alert-danger' %>
   <div class="alert <%= alert_type %> alert-dismissible fade show shadow position-fixed mt-4 top-0 start-50 translate-middle-x flash-message"
     data-controller="flash"
-    data-action="animationend->flash#remove"
     style='min-width: 320px;'>
     <div><%= message %></div>
     <button type="button" class="btn-close" data-action="flash#remove" aria-label="Close"></button>

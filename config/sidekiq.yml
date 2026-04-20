@@ -2,9 +2,9 @@
   :schedule:
     expire_subscriptions:
       cron: "0 0 * * * *"
-      class: Espago::ExpireSubscriptionJob
+      class: ExpireSubscriptionJob
       queue: default
     finalize_payments_job:
       cron: "0 0 * * * *"
-      class: Espago::FinalizePaymentJob
+      class: FinalizePaymentJob
       queue: default
