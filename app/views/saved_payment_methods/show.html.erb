@@ -1,5 +1,5 @@
 <div class="d-flex flex justify-content-end mb-4">
-  <%= link_to "Back", :back,
+  <%= link_to "Back to Saved Payment Methods", account_saved_payment_methods_path,
             class: "btn btn-primary me-2" %>
   <% unless @saved_payment_method.mit? %>
     <%= link_to "Authorize", authorize_saved_payment_method_path(@saved_payment_method),
